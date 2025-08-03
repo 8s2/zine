@@ -8,7 +8,6 @@
   ],
   "client": [
     "client.AllayEntityModelMixin",
-    "client.EntityRenderDispatcherMixin",
     "client.ModelMixin"
   ],
   "injectors": {

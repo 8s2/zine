@@ -7,6 +7,8 @@ import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateMo
 import net.fabricmc.fabric.api.client.model.loading.v1.ExtraModelKey;
 import net.fabricmc.fabric.api.client.model.loading.v1.UnbakedModelDeserializer;
 import net.fabricmc.fabric.api.client.rendering.v1.AtlasSourceRegistry;
+import net.minecraft.client.gui.hud.debug.DebugHudEntries;
+import net.minecraft.client.gui.hud.debug.DebugHudEntry;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.item.model.ItemModel;
 import net.minecraft.client.render.item.model.ItemModelTypes;
@@ -77,6 +79,16 @@ public interface ClientRegistryHelper {
      */
     default <T extends BooleanProperty> MapCodec<T> booleanProperty(String name, MapCodec<T> codec) {
         return this.register(name, codec, BooleanProperties.ID_MAPPER::put);
+    }
+
+    /**
+     * @param name the name of the debug hud entry
+     * @param debugHudEntry the debug hud entry
+     * @return the registered debug hud entry
+     * @param <T> the type of the debug hud entry
+     */
+    default <T extends DebugHudEntry> T debugHudEntry(String name, T debugHudEntry) {
+        return this.register(name, debugHudEntry, DebugHudEntries::register);
     }
 
     /**

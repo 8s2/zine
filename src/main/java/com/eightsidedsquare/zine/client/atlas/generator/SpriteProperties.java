@@ -13,6 +13,7 @@ import net.minecraft.resource.metadata.ResourceMetadataSerializer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.Codecs;
 
+import java.util.List;
 import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
@@ -43,18 +44,18 @@ public record SpriteProperties(int width, int height, int frames, int frameTime,
         return new SpriteDimensions(this.width, this.height);
     }
 
-    public ResourceMetadata getResourceMetadata() {
-        return this.resourceMetadata(new AnimationResourceMetadata(
+    public AnimationResourceMetadata getAnimationResourceMetadata() {
+        return new AnimationResourceMetadata(
                 Optional.empty(),
                 Optional.empty(),
                 Optional.empty(),
                 this.frameTime,
                 this.interpolate
-        ));
+        );
     }
 
     public SpriteContents createContents(Identifier id, NativeImage nativeImage) {
-        return new SpriteContents(id, this.getDimensions(), nativeImage, this.getResourceMetadata());
+        return new SpriteContents(id, this.getDimensions(), nativeImage, Optional.of(this.getAnimationResourceMetadata()), List.of());
     }
 
     private ResourceMetadata resourceMetadata(AnimationResourceMetadata animationMetadata) {

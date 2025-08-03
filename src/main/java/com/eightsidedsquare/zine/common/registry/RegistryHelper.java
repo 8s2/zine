@@ -43,7 +43,6 @@ import net.minecraft.entity.data.TrackedDataHandler;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.spawn.SpawnCondition;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BlockItem;
@@ -294,8 +293,8 @@ public interface RegistryHelper {
      * @param entityType the entity type to be spawned by the spawn egg
      * @return the registered spawn egg item
      */
-    default SpawnEggItem item(String name, EntityType<? extends MobEntity> entityType) {
-        return this.item(name, new Item.Settings(), settings -> new SpawnEggItem(entityType, settings));
+    default SpawnEggItem item(String name, EntityType<?> entityType) {
+        return this.item(name, new Item.Settings().spawnEgg(entityType), SpawnEggItem::new);
     }
 
     /**
@@ -1907,12 +1906,13 @@ public interface RegistryHelper {
     /**
      * @param name the name of the ticket type
      * @param expiryTicks the duration of chunk tickets of this type
-     * @param persist {@code true} if chunk tickets of this type should be serialized
-     * @param use the use of the ticket type
+     * @param flags packed int flags of the ticket type, such as {@link ChunkTicketType#SERIALIZE},
+     *              {@link ChunkTicketType#FOR_LOADING}, {@link ChunkTicketType#FOR_SIMULATION},
+     *              {@link ChunkTicketType#RESETS_IDLE_TIMEOUT}, and {@link ChunkTicketType#CAN_EXPIRE_BEFORE_LOAD}
      * @return the registered ticket type
      */
-    default ChunkTicketType ticketType(String name, long expiryTicks, boolean persist, ChunkTicketType.Use use) {
-        return this.register(Registries.TICKET_TYPE, name, new ChunkTicketType(expiryTicks, persist, use));
+    default ChunkTicketType ticketType(String name, long expiryTicks, int flags) {
+        return this.register(Registries.TICKET_TYPE, name, new ChunkTicketType(expiryTicks, flags));
     }
 
     /**

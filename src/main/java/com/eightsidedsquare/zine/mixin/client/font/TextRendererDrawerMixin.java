@@ -24,11 +24,12 @@ public abstract class TextRendererDrawerMixin implements ZineOutlinable {
         this.outlineColor = outlineColor;
     }
 
-    @ModifyExpressionValue(method = "accept", at = @At(value = "NEW", target = "(FFIILnet/minecraft/client/font/BakedGlyph;Lnet/minecraft/text/Style;FF)Lnet/minecraft/client/font/BakedGlyph$DrawnGlyph;"))
-    private BakedGlyph.DrawnGlyph zine$applyOutlineColor(BakedGlyph.DrawnGlyph glyph) {
-        if(this.zine$hasOutline()) {
-            glyph.zine$setOutlineColor(this.zine$getOutlineColor());
-        }
-        return glyph;
-    }
+    // TODO: Update
+//    @ModifyExpressionValue(method = "accept", at = @At(value = "NEW", target = "(FFIILnet/minecraft/client/font/BakedGlyph;Lnet/minecraft/text/Style;FF)Lnet/minecraft/client/font/BakedGlyph$DrawnGlyph;"))
+//    private BakedGlyph.DrawnGlyph zine$applyOutlineColor(BakedGlyph.DrawnGlyph glyph) {
+//        if(this.zine$hasOutline()) {
+//            glyph.zine$setOutlineColor(this.zine$getOutlineColor());
+//        }
+//        return glyph;
+//    }
 }

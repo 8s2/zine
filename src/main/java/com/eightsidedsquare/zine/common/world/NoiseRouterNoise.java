@@ -18,7 +18,7 @@ public enum NoiseRouterNoise implements StringIdentifiable {
     EROSION("erosion", NoiseRouter::erosion),
     DEPTH("depth", NoiseRouter::depth),
     RIDGES("ridges", NoiseRouter::ridges),
-    INITIAL_DENSITY_WITHOUT_JAGGEDNESS("initial_density_without_jaggedness", NoiseRouter::initialDensityWithoutJaggedness),
+    PRELIMINARY_SURFACE_LEVEL("preliminary_surface_level", NoiseRouter::preliminarySurfaceLevel),
     FINAL_DENSITY("final_density", NoiseRouter::finalDensity),
     VEIN_TOGGLE("vein_toggle", NoiseRouter::veinToggle),
     VEIN_RIDGED("vein_ridged", NoiseRouter::veinRidged),

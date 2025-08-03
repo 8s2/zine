@@ -47,8 +47,8 @@ public class Interpolations {
 
     private static Transformation.Interpolation easing(Double2DoubleFunction easing) {
         return (output, delta, keyframes, start, end, scale) -> {
-            Vector3f vector3f = keyframes[start].target();
-            Vector3f vector3f2 = keyframes[end].target();
+            Vector3f vector3f = keyframes[start].preTarget();
+            Vector3f vector3f2 = keyframes[end].postTarget();
 
             double eased = delta <= 0 ? 0 : delta >= 1 ? 1 : easing.apply((double) delta);
             return output.set(

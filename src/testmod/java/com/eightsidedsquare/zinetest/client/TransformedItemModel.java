@@ -1,6 +1,7 @@
 package com.eightsidedsquare.zinetest.client;
 
 import com.mojang.serialization.MapCodec;
+import net.minecraft.class_11566;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.ItemModelManager;
 import net.minecraft.client.render.item.ItemRenderState;
@@ -16,11 +17,15 @@ import org.jetbrains.annotations.Nullable;
 public class TransformedItemModel implements ItemModel {
 
     @Override
-    public void update(ItemRenderState state, ItemStack stack, ItemModelManager resolver, ItemDisplayContext displayContext, @Nullable ClientWorld world, @Nullable LivingEntity user, int seed) {
+    public void update(ItemRenderState state, ItemStack stack, ItemModelManager resolver, ItemDisplayContext displayContext, @Nullable ClientWorld world, @Nullable class_11566 owner, int seed) {
         state.addModelKey(this);
         ItemStack itemStack = Items.MACE.getDefaultStack();
-        resolver.update(state, itemStack, displayContext, world, user, seed);
+        resolver.update(state, itemStack, displayContext, world, owner, seed);
         state.markAnimated();
+        if(owner == null) {
+            return;
+        }
+        LivingEntity user = owner.method_72393();
         if(user == null) {
             return;
         }

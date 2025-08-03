@@ -13,7 +13,6 @@ import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.SpriteContents;
 import net.minecraft.client.texture.atlas.AtlasSource;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.metadata.ResourceMetadata;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
@@ -93,7 +92,7 @@ public class RemapAtlasSource implements AtlasSource {
                         float v = y / (float) height;
                         nativeImage.setColorArgb(x, y, sampler.sample(pixelData[j], u, v));
                     }
-                    return new SpriteContents(texture, mappingData.getDimensions(), nativeImage, ResourceMetadata.NONE);
+                    return new SpriteContents(texture, mappingData.getDimensions(), nativeImage);
                 });
             }
         }

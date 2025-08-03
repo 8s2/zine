@@ -12,7 +12,6 @@ import net.minecraft.client.texture.SpriteContents;
 import net.minecraft.client.texture.SpriteDimensions;
 import net.minecraft.client.texture.atlas.AtlasSource;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.metadata.ResourceMetadata;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 
@@ -177,7 +176,7 @@ public class ConnectedTexturesAtlasSource implements AtlasSource {
                 NativeImage nativeImage = AtlasSourceUtil.createNativeImage(width, height, (index, x, y, u, v) ->
                         (x >= halfWidth ? (y >= halfHeight ? se : ne) : (y >= halfHeight ? sw : nw)).data()[index]
                 );
-                return new SpriteContents(texture, dimensions, nativeImage, ResourceMetadata.NONE);
+                return new SpriteContents(texture, dimensions, nativeImage);
             });
         }
     }
