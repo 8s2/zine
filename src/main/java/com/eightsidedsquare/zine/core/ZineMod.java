@@ -2,7 +2,9 @@ package com.eightsidedsquare.zine.core;
 
 import com.eightsidedsquare.zine.common.advancement.VanillaAdvancementModificationsImpl;
 import com.eightsidedsquare.zine.common.block.ModifyBlockSoundGroupContextImpl;
+import com.eightsidedsquare.zine.common.entity.spawn.DimensionSpawnCondition;
 import com.eightsidedsquare.zine.common.entity.spawn.NoiseSpawnCondition;
+import com.eightsidedsquare.zine.common.entity.spawn.SpawnReasonSpawnCondition;
 import com.eightsidedsquare.zine.common.registry.RegistryHelper;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
@@ -25,5 +27,7 @@ public class ZineMod implements ModInitializer {
         ModifyBlockSoundGroupContextImpl.registerEvents();
 
         REGISTRY.spawnCondition("noise", NoiseSpawnCondition.CODEC);
+        REGISTRY.spawnCondition("spawn_reason", SpawnReasonSpawnCondition.CODEC);
+        REGISTRY.spawnCondition("dimension", DimensionSpawnCondition.CODEC);
     }
 }

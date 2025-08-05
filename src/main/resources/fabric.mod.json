@@ -298,6 +298,7 @@
       "net/minecraft/class_10692": ["com/eightsidedsquare/zine/common/entity/spawn/ZineBiomeSpawnCondition"],
       "net/minecraft/class_10693": ["com/eightsidedsquare/zine/common/entity/variant/ZineModelAndTexture<TT;>"],
       "net/minecraft/class_10694": ["com/eightsidedsquare/zine/common/entity/spawn/ZineMoonBrightnessSpawnCondition"],
+      "net/minecraft/class_10701": ["com/eightsidedsquare/zine/common/entity/spawn/ZineSpawnContext"],
       "net/minecraft/class_10703": ["com/eightsidedsquare/zine/common/entity/spawn/ZineStructureSpawnCondition"],
       "net/minecraft/class_10726": ["com/eightsidedsquare/zine/common/entity/variant/ZineAssetInfo"],
       "net/minecraft/class_10731": ["com/eightsidedsquare/zine/common/entity/variant/ZineCowVariant"],
