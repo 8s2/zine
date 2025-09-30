@@ -8,7 +8,7 @@ public interface ZineModelAndTexture<T> {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setAsset(AssetInfo asset) {
+    default void zine$setAsset(AssetInfo.TextureAssetInfo asset) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 

@@ -12,4 +12,12 @@ public interface ZineMutableText {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
+    default <T> MutableText zine$withCustomAttribute(CustomStyleAttribute<T> attribute, T value) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default MutableText zine$withCustomAttributes(CustomStyleAttributeContainer attributes) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
 }

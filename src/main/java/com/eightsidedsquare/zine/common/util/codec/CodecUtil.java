@@ -1,5 +1,6 @@
 package com.eightsidedsquare.zine.common.util.codec;
 
+import com.eightsidedsquare.zine.common.entity.SpawnReasonIds;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -12,18 +13,21 @@ import net.minecraft.state.property.Property;
 import net.minecraft.storage.ReadView;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.EulerAngle;
+import org.apache.commons.lang3.mutable.*;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public final class CodecUtil {
 
-    public static final Codec<Character> CHARACTER = Codec.string(1, 1).xmap(
-            string -> string.charAt(0),
-            String::valueOf
-    );
+    public static final Codec<Character> CHARACTER = Codec.string(1, 1).xmap(string -> string.charAt(0), String::valueOf);
     public static final Codec<EulerAngle> EULER_ANGLE = RecordCodecBuilder.create(instance -> instance.group(
             Codec.FLOAT.optionalFieldOf("pitch", 0f).forGetter(EulerAngle::pitch),
             Codec.FLOAT.optionalFieldOf("yaw", 0f).forGetter(EulerAngle::yaw),
@@ -48,8 +52,19 @@ public final class CodecUtil {
             color -> Optional.of(TextColor.fromRgb(color)),
             textColor -> textColor.getRgb() | 0xff000000
     );
-    public static final Codecs.IdMapper<Identifier, SpawnReason> SPAWN_REASON_IDS = createSpawnReasonIds();
-    public static final Codec<SpawnReason> SPAWN_REASON = SPAWN_REASON_IDS.getCodec(Identifier.CODEC);
+    public static final Codec<SpawnReason> SPAWN_REASON = SpawnReasonIds.IDS.getCodec(Identifier.CODEC);
+    public static final Codec<Box> CODEC = Codec.DOUBLE.listOf().comapFlatMap(
+            vertices -> Util.decodeFixedLengthList(vertices, 6)
+                    .map(list -> new Box(list.getFirst(), list.get(1), list.get(2), list.get(3), list.get(4), list.get(5))),
+            box -> List.of(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ)
+    );
+    public static final Codec<MutableBoolean> MUTABLE_BOOLEAN = Codec.BOOL.xmap(MutableBoolean::new, MutableBoolean::booleanValue);
+    public static final Codec<MutableByte> MUTABLE_BYTE = Codec.BYTE.xmap(MutableByte::new, MutableByte::byteValue);
+    public static final Codec<MutableShort> MUTABLE_SHORT = Codec.SHORT.xmap(MutableShort::new, MutableShort::shortValue);
+    public static final Codec<MutableInt> MUTABLE_INT = Codec.INT.xmap(MutableInt::new, MutableInt::intValue);
+    public static final Codec<MutableLong> MUTABLE_LONG = Codec.LONG.xmap(MutableLong::new, MutableLong::longValue);
+    public static final Codec<MutableFloat> MUTABLE_FLOAT = Codec.FLOAT.xmap(MutableFloat::new, MutableFloat::floatValue);
+    public static final Codec<MutableDouble> MUTABLE_DOUBLE = Codec.DOUBLE.xmap(MutableDouble::new, MutableDouble::doubleValue);
 
     /**
      * Creates a list codec that can deserialize single elements as a list,
@@ -107,28 +122,8 @@ public final class CodecUtil {
         view.read(key, codec).ifPresent(map::putAll);
     }
 
-    private static Codecs.IdMapper<Identifier, SpawnReason> createSpawnReasonIds() {
-        Codecs.IdMapper<Identifier, SpawnReason> ids = new Codecs.IdMapper<>();
-        ids.put(Identifier.ofVanilla("natural"), SpawnReason.NATURAL);
-        ids.put(Identifier.ofVanilla("chunk_generation"), SpawnReason.CHUNK_GENERATION);
-        ids.put(Identifier.ofVanilla("spawner"), SpawnReason.SPAWNER);
-        ids.put(Identifier.ofVanilla("structure"), SpawnReason.STRUCTURE);
-        ids.put(Identifier.ofVanilla("breeding"), SpawnReason.BREEDING);
-        ids.put(Identifier.ofVanilla("mob_summoned"), SpawnReason.MOB_SUMMONED);
-        ids.put(Identifier.ofVanilla("jockey"), SpawnReason.JOCKEY);
-        ids.put(Identifier.ofVanilla("event"), SpawnReason.EVENT);
-        ids.put(Identifier.ofVanilla("conversion"), SpawnReason.CONVERSION);
-        ids.put(Identifier.ofVanilla("reinforcement"), SpawnReason.REINFORCEMENT);
-        ids.put(Identifier.ofVanilla("triggered"), SpawnReason.TRIGGERED);
-        ids.put(Identifier.ofVanilla("bucket"), SpawnReason.BUCKET);
-        ids.put(Identifier.ofVanilla("spawn_item_use"), SpawnReason.SPAWN_ITEM_USE);
-        ids.put(Identifier.ofVanilla("command"), SpawnReason.COMMAND);
-        ids.put(Identifier.ofVanilla("dispenser"), SpawnReason.DISPENSER);
-        ids.put(Identifier.ofVanilla("patrol"), SpawnReason.PATROL);
-        ids.put(Identifier.ofVanilla("trial_spawner"), SpawnReason.TRIAL_SPAWNER);
-        ids.put(Identifier.ofVanilla("load"), SpawnReason.LOAD);
-        ids.put(Identifier.ofVanilla("dimension_travel"), SpawnReason.DIMENSION_TRAVEL);
-        return ids;
+    public static <T> Codec<MutableObject<T>> mutable(Codec<T> codec) {
+        return codec.xmap(MutableObject::new, MutableObject::getValue);
     }
 
     private CodecUtil() {

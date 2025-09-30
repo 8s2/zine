@@ -30,17 +30,17 @@ public abstract class WolfVariantMixin implements ZineWolfVariant, ZineWolfVaria
     }
 
     @Override
-    public void zine$setWild(AssetInfo wild) {
+    public void zine$setWild(AssetInfo.TextureAssetInfo wild) {
         this.assetInfo.zine$setWild(wild);
     }
 
     @Override
-    public void zine$setTame(AssetInfo tame) {
+    public void zine$setTame(AssetInfo.TextureAssetInfo tame) {
         this.assetInfo.zine$setTame(tame);
     }
 
     @Override
-    public void zine$setAngry(AssetInfo angry) {
+    public void zine$setAngry(AssetInfo.TextureAssetInfo angry) {
         this.assetInfo.zine$setAngry(angry);
     }
 }

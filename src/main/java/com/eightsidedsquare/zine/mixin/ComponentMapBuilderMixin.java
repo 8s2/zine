@@ -20,8 +20,7 @@ public abstract class ComponentMapBuilderMixin implements ZineComponentMapBuilde
     @SuppressWarnings("unchecked")
     @Override
     public <T> @Nullable T zine$get(ComponentType<T> type) {
-        Object value = this.components.get(type);
-        return value == null ? null : (T) value;
+        return (T) this.components.get(type);
     }
 
     @Override

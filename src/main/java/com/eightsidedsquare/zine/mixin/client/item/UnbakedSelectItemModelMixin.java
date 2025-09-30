@@ -1,7 +1,6 @@
 package com.eightsidedsquare.zine.mixin.client.item;
 
 import com.eightsidedsquare.zine.client.item.ZineUnbakedSelectItemModel;
-import com.eightsidedsquare.zine.common.util.ZineUtil;
 import net.minecraft.client.render.item.model.ItemModel;
 import net.minecraft.client.render.item.model.SelectItemModel;
 import net.minecraft.client.render.item.property.select.SelectProperty;
@@ -35,14 +34,14 @@ public abstract class UnbakedSelectItemModelMixin implements ZineUnbakedSelectIt
     @Override
     public <P extends SelectProperty<T>, T> void zine$addCases(SelectProperty.Type<P, T> type, List<SelectItemModel.SwitchCase<T>> switchCases) {
         this.zine$handleUnbakedSwitch(type, unbakedSwitch ->
-                unbakedSwitch.cases = ZineUtil.addAllOrUnfreeze(unbakedSwitch.cases, switchCases)
+                unbakedSwitch.zine$addCases(switchCases)
         );
     }
 
     @Override
     public <P extends SelectProperty<T>, T> void zine$addCase(SelectProperty.Type<P, T> type, List<T> values, ItemModel.Unbaked model) {
         this.zine$handleUnbakedSwitch(type, unbakedSwitch ->
-                unbakedSwitch.cases = ZineUtil.addOrUnfreeze(unbakedSwitch.cases, new SelectItemModel.SwitchCase<>(values, model))
+                unbakedSwitch.zine$addCase(new SelectItemModel.SwitchCase<>(values, model))
         );
     }
 

@@ -15,7 +15,7 @@ public abstract class ModelAndTextureMixin<T> implements ZineModelAndTexture<T> 
     private T model;
 
     @Shadow @Final @Mutable
-    private AssetInfo asset;
+    private AssetInfo.TextureAssetInfo asset;
 
     @Override
     public void zine$setModel(T model) {
@@ -23,7 +23,7 @@ public abstract class ModelAndTextureMixin<T> implements ZineModelAndTexture<T> 
     }
 
     @Override
-    public void zine$setAsset(AssetInfo asset) {
+    public void zine$setAsset(AssetInfo.TextureAssetInfo asset) {
         this.asset = asset;
     }
 }

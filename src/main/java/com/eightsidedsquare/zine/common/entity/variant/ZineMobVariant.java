@@ -5,7 +5,7 @@ import net.minecraft.util.AssetInfo;
 
 public interface ZineMobVariant {
 
-    default void zine$setAssetInfo(AssetInfo assetInfo) {
+    default void zine$setAssetInfo(AssetInfo.TextureAssetInfo assetInfo) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 

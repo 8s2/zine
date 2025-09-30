@@ -1,7 +1,11 @@
 package com.eightsidedsquare.zine.common.registry;
 
 import com.eightsidedsquare.zine.common.recipe.RecipeTypeImpl;
+import com.eightsidedsquare.zine.common.text.CustomStyleAttribute;
+import com.eightsidedsquare.zine.common.text.TextUtil;
+import com.eightsidedsquare.zine.common.text.TextUtilImpl;
 import com.eightsidedsquare.zine.common.util.codec.RegistryCodecGroup;
+import com.eightsidedsquare.zine.core.ZineRegistries;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.serialization.Codec;
@@ -9,13 +13,12 @@ import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
+import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricTrackedDataRegistry;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.advancement.criterion.Criterion;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DecoratedPotPattern;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
@@ -85,6 +88,8 @@ import net.minecraft.scoreboard.number.NumberFormat;
 import net.minecraft.scoreboard.number.NumberFormatType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.server.dedicated.management.IncomingRpcMethod;
+import net.minecraft.server.dedicated.management.OutgoingRpcMethod;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
@@ -103,9 +108,13 @@ import net.minecraft.structure.rule.RuleTest;
 import net.minecraft.structure.rule.RuleTestType;
 import net.minecraft.structure.rule.blockentity.RuleBlockEntityModifier;
 import net.minecraft.structure.rule.blockentity.RuleBlockEntityModifierType;
+import net.minecraft.test.TestContext;
 import net.minecraft.test.TestEnvironmentDefinition;
 import net.minecraft.test.TestInstance;
+import net.minecraft.text.NbtDataSource;
 import net.minecraft.text.Text;
+import net.minecraft.text.TextContent;
+import net.minecraft.text.object.TextObjectContents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.floatprovider.FloatProvider;
@@ -115,6 +124,7 @@ import net.minecraft.util.math.intprovider.IntProviderType;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.village.VillagerType;
 import net.minecraft.world.biome.source.BiomeSource;
+import net.minecraft.world.debug.DebugSubscriptionType;
 import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.event.PositionSource;
 import net.minecraft.world.event.PositionSourceType;
@@ -590,7 +600,7 @@ public interface RegistryHelper {
      * @param <T> the type of the particle type's particle effect
      */
     default <T extends ParticleEffect> ParticleType<T> particle(String name, MapCodec<T> codec, PacketCodec<? super RegistryByteBuf, T> packetCodec) {
-        return this.particle(name, FabricParticleTypes.complex(codec, packetCodec));
+        return this.particle(name, false, codec, packetCodec);
     }
 
     /**
@@ -616,7 +626,7 @@ public interface RegistryHelper {
      * @param <T> the type of the particle type's particle effect
      */
     default <T extends ParticleEffect> ParticleType<T> particle(String name, Function<ParticleType<T>, MapCodec<T>> codecGetter, Function<ParticleType<T>, PacketCodec<? super RegistryByteBuf, T>> packetCodecGetter) {
-        return this.particle(name, FabricParticleTypes.complex(codecGetter, packetCodecGetter));
+        return this.particle(name, false, codecGetter, packetCodecGetter);
     }
 
     /**
@@ -1936,6 +1946,15 @@ public interface RegistryHelper {
     }
 
     /**
+     * @param name the name of the test function
+     * @param testFunction the test function to register
+     * @return the registered test function
+     */
+    default Consumer<TestContext> testFunction(String name, Consumer<TestContext> testFunction) {
+        return this.register(Registries.TEST_FUNCTION, name, testFunction);
+    }
+
+    /**
      * @param name the name of the spawn condition
      * @param codec the codec of the spawn condition
      * @return the registered spawn condition codec
@@ -1986,6 +2005,79 @@ public interface RegistryHelper {
     }
 
     /**
+     * @param name the name of the debug subscription
+     * @param type the debug subscription type to register
+     * @return the registered debug subscription
+     * @param <T> the type of debug subscription
+     */
+    default <T> DebugSubscriptionType<T> debugSubscription(String name, DebugSubscriptionType<T> type) {
+        return this.register(Registries.DEBUG_SUBSCRIPTION, name, type);
+    }
+
+    /**
+     * @param name the name of the debug subscription
+     * @return the registered debug subscription
+     * @param <T> the type of debug subscription
+     */
+    default <T> DebugSubscriptionType<T> debugSubscription(String name) {
+        return this.debugSubscription(name, new DebugSubscriptionType<>(null));
+    }
+
+    /**
+     * @param name the name of the debug subscription
+     * @param packetCodec the packet codec of the debug subscription
+     * @return the registered debug subscription
+     * @param <T> the type of debug subscription
+     */
+    default <T> DebugSubscriptionType<T> debugSubscription(String name, @Nullable PacketCodec<? super RegistryByteBuf, T> packetCodec) {
+        return this.debugSubscription(name, new DebugSubscriptionType<>(packetCodec));
+    }
+
+    /**
+     * @param name the name of the debug subscription
+     * @param packetCodec the packet codec of the debug subscription
+     * @param expiry the expiry of the debug subscription
+     * @return the registered debug subscription
+     * @param <T> the type of debug subscription
+     */
+    default <T> DebugSubscriptionType<T> debugSubscription(String name, @Nullable PacketCodec<? super RegistryByteBuf, T> packetCodec, int expiry) {
+        return this.debugSubscription(name, new DebugSubscriptionType<>(packetCodec, expiry));
+    }
+
+    /**
+     * @param name the name of the incoming rpc method
+     * @param builder the builder for the incoming rpc method
+     * @return the registered incoming rpc method
+     * @param <T> the type of incoming rpc method
+     */
+    default <T extends IncomingRpcMethod> T incomingRpcMethod(String name, IncomingRpcMethod.Builder<T> builder) {
+        Identifier id = this.id(name);
+        return this.register(Registries.INCOMING_RPC_METHOD, name, builder.build());
+    }
+
+    /**
+     * @param name the name of the outgoing rpc method
+     * @param builder the builder for the outgoing rpc method
+     * @return the registered outgoing rpc method
+     * @param <T> the type of outgoing rpc method
+     */
+    default <T extends OutgoingRpcMethod<?, ?>> T outgoingRpcMethod(String name, OutgoingRpcMethod.Builder<T> builder) {
+        Identifier id = this.id(name);
+        return this.register(Registries.OUTGOING_RPC_METHOD, name, builder.build());
+    }
+
+    /**
+     * @param name the name of the custom style attribute
+     * @param codec the codec of the custom style attribute
+     * @param cache {@code true} if codec decode results should be cached
+     * @return the registered custom style attribute
+     * @param <T> the type of the custom style attribute
+     */
+    default <T> CustomStyleAttribute<T> customStyleAttribute(String name, Codec<T> codec, boolean cache) {
+        return this.register(ZineRegistries.CUSTOM_STYLE_ATTRIBUTES, name, new CustomStyleAttribute<>(codec, cache));
+    }
+
+    /**
      * @param name the name of the tracked data handler
      * @param trackedDataHandler the tracked data handler to register
      * @return the registered tracked data handler
@@ -2004,6 +2096,58 @@ public interface RegistryHelper {
      */
     default <T> TrackedDataHandler<T> trackedDataHandler(String name, PacketCodec<? super RegistryByteBuf, T> codec) {
         return this.trackedDataHandler(name, TrackedDataHandler.create(codec));
+    }
+
+    /**
+     * @param name the name of the text content
+     * @param codec the codec of the text content
+     * @return the registered text content codec
+     * @param <T> the type of text content
+     */
+    default <T extends TextContent> MapCodec<T> textContent(String name, MapCodec<T> codec) {
+        TextUtil.registerTextContent(this.id(name), codec);
+        return codec;
+    }
+
+    /**
+     * @param name the name of the text object contents
+     * @param codec the codec of the text object contents
+     * @return the registered text object contents codec
+     * @param <T> the type of text object contents
+     */
+    default <T extends TextObjectContents> MapCodec<T> textObjectContents(String name, MapCodec<T> codec) {
+        TextUtil.registerTextObjectContents(this.id(name), codec);
+        return codec;
+    }
+
+    /**
+     * @param name the name of the nbt data source
+     * @param codec the codec of the nbt data source
+     * @return the registered nbt data source codec
+     * @param <T> the type of nbt data source
+     */
+    default <T extends NbtDataSource> MapCodec<T> nbtDataSource(String name, MapCodec<T> codec) {
+        TextUtilImpl.registerNbtDataSource(this.id(name), codec);
+        return codec;
+    }
+
+    /**
+     * @param name the name of the block set type
+     * @param builder the builder for the block set type
+     * @return the registered block set type
+     */
+    default BlockSetType blockSetType(String name, BlockSetTypeBuilder builder) {
+        return builder.register(this.id(name));
+    }
+
+    /**
+     * @param name the name of the wood type
+     * @param builder the builder for the wood type
+     * @param blockSetType the block set type for the wood type
+     * @return the registered wood type
+     */
+    default WoodType woodType(String name, WoodTypeBuilder builder, BlockSetType blockSetType) {
+        return builder.register(this.id(name), blockSetType);
     }
 
     private <T extends Block> T registerBlockItem(String name, T block) {

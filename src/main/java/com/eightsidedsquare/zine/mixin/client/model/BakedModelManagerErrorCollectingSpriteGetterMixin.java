@@ -1,10 +1,10 @@
 package com.eightsidedsquare.zine.mixin.client.model;
 
-import com.eightsidedsquare.zine.client.util.SpriteIds;
 import net.minecraft.client.render.model.ErrorCollectingSpriteGetter;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteLoader;
 import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.util.Atlases;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,7 +19,7 @@ public abstract class BakedModelManagerErrorCollectingSpriteGetterMixin implemen
 
     @Override
     public Sprite zine$get(SpriteIdentifier id) {
-        if (id.getAtlasId().equals(SpriteIds.BLOCK_ATLAS)) {
+        if (id.getAtlasId().equals(Atlases.BLOCKS)) {
             Sprite sprite = this.field_61871.getSprite(id.getTextureId());
             if (sprite != null) {
                 return sprite;

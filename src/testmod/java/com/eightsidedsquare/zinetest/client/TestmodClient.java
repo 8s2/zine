@@ -153,7 +153,6 @@ public class TestmodClient implements ClientModInitializer {
                 TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
                 MutableText text = Text.literal("ABC 123").formatted(Formatting.ITALIC, Formatting.BOLD);
                 ctx.drawText(textRenderer, text, 10, 10, -1, false);
-                ctx.zine$prepareOutlineColor(0xffff0000);
                 ctx.drawText(textRenderer, text, 10, 20, -1, false);
             });
         }

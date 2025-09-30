@@ -2,6 +2,7 @@ package com.eightsidedsquare.zine.mixin.client.item;
 
 import com.eightsidedsquare.zine.client.item.ZineItemRenderStateLayerRenderState;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.item.ItemRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import org.jetbrains.annotations.Nullable;
@@ -29,14 +30,14 @@ public abstract class ItemRenderStateLayerRenderStateMixin implements ZineItemRe
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/json/Transformation;apply(ZLnet/minecraft/client/util/math/MatrixStack$Entry;)V"))
-    private void zine$applyMatrixTransformationBefore(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
+    private void zine$applyMatrixTransformationBefore(MatrixStack matrices, OrderedRenderCommandQueue queue, int light, int overlay, int i, CallbackInfo ci) {
         if(this.transformBeforeDisplayTransforms && this.matrixTransformation != null) {
             this.matrixTransformation.accept(matrices);
         }
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/model/json/Transformation;apply(ZLnet/minecraft/client/util/math/MatrixStack$Entry;)V", shift = At.Shift.AFTER))
-    private void zine$applyMatrixTransformationAfter(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
+    private void zine$applyMatrixTransformationAfter(MatrixStack matrices, OrderedRenderCommandQueue queue, int light, int overlay, int i, CallbackInfo ci) {
         if(!this.transformBeforeDisplayTransforms && this.matrixTransformation != null) {
             this.matrixTransformation.accept(matrices);
         }

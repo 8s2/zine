@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.doubles.Double2DoubleFunction;
 import net.minecraft.client.render.entity.animation.Transformation;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 /**
  * @author EightSidedSquare
@@ -47,8 +48,8 @@ public class Interpolations {
 
     private static Transformation.Interpolation easing(Double2DoubleFunction easing) {
         return (output, delta, keyframes, start, end, scale) -> {
-            Vector3f vector3f = keyframes[start].preTarget();
-            Vector3f vector3f2 = keyframes[end].postTarget();
+            Vector3fc vector3f = keyframes[start].preTarget();
+            Vector3fc vector3f2 = keyframes[end].postTarget();
 
             double eased = delta <= 0 ? 0 : delta >= 1 ? 1 : easing.apply((double) delta);
             return output.set(

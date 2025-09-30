@@ -1,35 +1,66 @@
 package com.eightsidedsquare.zine.mixin.client.font;
 
-import com.eightsidedsquare.zine.client.font.ZineOutlinable;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.client.font.BakedGlyph;
+import com.eightsidedsquare.zine.core.ZineCustomStyleAttributes;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.font.TextRenderer;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import net.minecraft.text.Style;
+import net.minecraft.util.math.ColorHelper;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(TextRenderer.Drawer.class)
-public abstract class TextRendererDrawerMixin implements ZineOutlinable {
+public abstract class TextRendererDrawerMixin {
 
-    @Unique
-    private int outlineColor;
+    @Shadow @Final
+    TextRenderer field_24240;
+    @Shadow
+    float x;
+    @Shadow
+    float y;
+    @Shadow @Final @Mutable
+    private int color;
 
-    @Override
-    public int zine$getOutlineColor() {
-        return this.outlineColor;
+    @SuppressWarnings("ConstantValue")
+    @Inject(method = "accept(ILnet/minecraft/text/Style;I)Z", at = @At("HEAD"))
+    private void zine$acceptOutline(int index, Style style, int codePoint, CallbackInfoReturnable<Boolean> cir) {
+        Integer outlineColor = style.zine$getCustomAttribute(ZineCustomStyleAttributes.OUTLINE);
+        if(outlineColor != null) {
+            float originalX = this.x;
+            float originalY = this.y;
+            int originalColor = this.color;
+            float alpha = ColorHelper.getAlphaFloat(originalColor) * ColorHelper.getAlphaFloat(outlineColor);
+            this.color = ColorHelper.withAlpha(alpha, originalColor);
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    if (x != 0 || y != 0) {
+                        float[] advance = new float[]{originalX};
+                        ((TextRendererAccessor) this.field_24240).zine$invokeAcceptOutline(
+                                (TextRenderer.Drawer) (Object) this,
+                                advance,
+                                x,
+                                originalY,
+                                y,
+                                outlineColor,
+                                index,
+                                style,
+                                codePoint
+                        );
+                    }
+                }
+            }
+            this.x = originalX;
+            this.y = originalY;
+            this.color = originalColor;
+        }
     }
 
-    @Override
-    public void zine$setOutlineColor(int outlineColor) {
-        this.outlineColor = outlineColor;
+    @ModifyReturnValue(method = "getShadowColor", at = @At("RETURN"))
+    private int zine$getShadowColor(int original, Style style, int textColor) {
+        if(original != 0 && style.zine$containsCustomAttribute(ZineCustomStyleAttributes.OUTLINE)) {
+            return 0;
+        }
+        return original;
     }
-
-    // TODO: Update
-//    @ModifyExpressionValue(method = "accept", at = @At(value = "NEW", target = "(FFIILnet/minecraft/client/font/BakedGlyph;Lnet/minecraft/text/Style;FF)Lnet/minecraft/client/font/BakedGlyph$DrawnGlyph;"))
-//    private BakedGlyph.DrawnGlyph zine$applyOutlineColor(BakedGlyph.DrawnGlyph glyph) {
-//        if(this.zine$hasOutline()) {
-//            glyph.zine$setOutlineColor(this.zine$getOutlineColor());
-//        }
-//        return glyph;
-//    }
 }

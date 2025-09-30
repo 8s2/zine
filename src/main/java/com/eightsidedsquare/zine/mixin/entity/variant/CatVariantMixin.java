@@ -13,13 +13,13 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class CatVariantMixin implements ZineMobVariant {
 
     @Shadow @Final @Mutable
-    private AssetInfo assetInfo;
+    private AssetInfo.TextureAssetInfo assetInfo;
 
     @Shadow @Final @Mutable
     private SpawnConditionSelectors spawnConditions;
 
     @Override
-    public void zine$setAssetInfo(AssetInfo assetInfo) {
+    public void zine$setAssetInfo(AssetInfo.TextureAssetInfo assetInfo) {
         this.assetInfo = assetInfo;
     }
 

@@ -3,8 +3,6 @@ accessible class net/minecraft/client/item/ItemAssetsLoader$Definition
 accessible field net/minecraft/client/item/ItemAsset model Lnet/minecraft/client/render/item/model/ItemModel$Unbaked;
 mutable field net/minecraft/client/item/ItemAsset model Lnet/minecraft/client/render/item/model/ItemModel$Unbaked;
 accessible field net/minecraft/client/render/model/json/JsonUnbakedModel GSON Lcom/google/gson/Gson;
-accessible field net/minecraft/client/render/item/model/SelectItemModel$UnbakedSwitch cases Ljava/util/List;
-mutable field net/minecraft/client/render/item/model/SelectItemModel$UnbakedSwitch cases Ljava/util/List;
 accessible method net/minecraft/entity/effect/StatusEffect <init> (Lnet/minecraft/entity/effect/StatusEffectCategory;I)V
 accessible method net/minecraft/entity/effect/StatusEffect <init> (Lnet/minecraft/entity/effect/StatusEffectCategory;ILnet/minecraft/particle/ParticleEffect;)V
 accessible method net/minecraft/world/poi/PointOfInterestTypes getStatesOfBlock (Lnet/minecraft/block/Block;)Ljava/util/Set;
@@ -20,8 +18,13 @@ accessible method net/minecraft/client/data/VariantsBlockModelDefinitionCreator 
 accessible method net/minecraft/client/data/BlockStateVariantMap getVariants ()Ljava/util/Map;
 accessible method net/minecraft/client/render/entity/LivingEntityRenderer addFeature (Lnet/minecraft/client/render/entity/feature/FeatureRenderer;)Z
 accessible field net/minecraft/client/render/entity/LivingEntityRenderer itemModelResolver Lnet/minecraft/client/item/ItemModelManager;
-accessible field net/minecraft/client/render/entity/EntityRenderer dispatcher Lnet/minecraft/client/render/entity/EntityRenderDispatcher;
+accessible field net/minecraft/client/render/entity/EntityRenderer dispatcher Lnet/minecraft/client/render/entity/EntityRenderManager;
 accessible field net/minecraft/client/gui/screen/Screen client Lnet/minecraft/client/MinecraftClient;
 accessible method net/minecraft/client/gui/screen/ingame/HandledScreen addTooltipSubmenuHandler (Lnet/minecraft/client/gui/tooltip/TooltipSubmenuHandler;)V
 accessible field net/minecraft/block/AbstractBlock soundGroup Lnet/minecraft/sound/BlockSoundGroup;
 mutable field net/minecraft/block/AbstractBlock soundGroup Lnet/minecraft/sound/BlockSoundGroup;
+accessible field net/minecraft/client/network/PlayerListEntry texturesSupplier Ljava/util/function/Supplier;
+accessible class net/minecraft/client/font/BakedGlyphImpl$DrawnGlyph
+accessible field net/minecraft/text/object/TextObjectContentTypes ID_MAPPER Lnet/minecraft/util/dynamic/Codecs$IdMapper;
+accessible field net/minecraft/text/NbtDataSourceTypes ID_MAPPER Lnet/minecraft/util/dynamic/Codecs$IdMapper;
+accessible method net/minecraft/server/dedicated/management/OutgoingRpcMethod$Builder build ()Lnet/minecraft/server/dedicated/management/OutgoingRpcMethod;

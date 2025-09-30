@@ -12,26 +12,26 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class WolfVariantWolfAssetInfoMixin implements ZineWolfVariantWolfAssetInfo {
 
     @Shadow @Final @Mutable
-    private AssetInfo wild;
+    private AssetInfo.TextureAssetInfo wild;
 
     @Shadow @Final @Mutable
-    private AssetInfo tame;
+    private AssetInfo.TextureAssetInfo tame;
 
     @Shadow @Final @Mutable
-    private AssetInfo angry;
+    private AssetInfo.TextureAssetInfo angry;
 
     @Override
-    public void zine$setWild(AssetInfo wild) {
+    public void zine$setWild(AssetInfo.TextureAssetInfo wild) {
         this.wild = wild;
     }
 
     @Override
-    public void zine$setTame(AssetInfo tame) {
+    public void zine$setTame(AssetInfo.TextureAssetInfo tame) {
         this.tame = tame;
     }
 
     @Override
-    public void zine$setAngry(AssetInfo angry) {
+    public void zine$setAngry(AssetInfo.TextureAssetInfo angry) {
         this.angry = angry;
     }
 }

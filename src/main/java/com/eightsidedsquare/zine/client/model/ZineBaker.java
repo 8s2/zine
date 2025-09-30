@@ -6,6 +6,7 @@ import net.minecraft.client.render.model.ModelTextures;
 import net.minecraft.client.render.model.SimpleModel;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.util.Atlases;
 import net.minecraft.util.Identifier;
 
 public interface ZineBaker {
@@ -39,7 +40,7 @@ public interface ZineBaker {
     }
 
     default SpriteFinder zine$getBlockSpriteFinder() {
-        return this.zine$getSpriteFinder(SpriteIds.BLOCK_ATLAS);
+        return this.zine$getSpriteFinder(Atlases.BLOCKS);
     }
 
 }
