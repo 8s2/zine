@@ -82,7 +82,7 @@ public class GeneratorAtlasSource implements AtlasSource {
                     }
                 }
             }
-            return this.properties.createContents(this.outputId, nativeImage);
+            return this.properties.createContents(this.outputId, nativeImage, false);
         });
     }
 

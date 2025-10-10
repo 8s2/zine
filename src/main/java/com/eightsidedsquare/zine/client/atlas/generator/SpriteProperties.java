@@ -54,8 +54,9 @@ public record SpriteProperties(int width, int height, int frames, int frameTime,
         );
     }
 
-    public SpriteContents createContents(Identifier id, NativeImage nativeImage) {
-        return new SpriteContents(id, this.getDimensions(), nativeImage, Optional.of(this.getAnimationResourceMetadata()), List.of());
+    // TODO map bool
+    public SpriteContents createContents(Identifier id, NativeImage nativeImage, boolean bl) {
+        return new SpriteContents(id, this.getDimensions(), nativeImage, Optional.of(this.getAnimationResourceMetadata()), List.of(), bl);
     }
 
     private ResourceMetadata resourceMetadata(AnimationResourceMetadata animationMetadata) {

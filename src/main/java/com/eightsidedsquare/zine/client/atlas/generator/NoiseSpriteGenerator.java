@@ -11,13 +11,15 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.math.random.Random;
 import org.joml.Vector2f;
+import org.joml.Vector2fc;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 public record NoiseSpriteGenerator(Gradient gradient,
                                    DoublePerlinNoiseSampler.NoiseParameters parameters,
                                    long seed,
-                                   Vector2f scale,
-                                   Vector3f velocity,
+                                   Vector2fc scale,
+                                   Vector3fc velocity,
                                    float blendMargin) implements SpriteGenerator {
 
     public static final MapCodec<NoiseSpriteGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -75,7 +77,7 @@ public record NoiseSpriteGenerator(Gradient gradient,
     }
 
     private float value(DoublePerlinNoiseSampler sampler, float u, float v, float w) {
-        double value = sampler.sample(u * this.scale.x + this.velocity.x * w, v * this.scale.y + this.velocity.y * w, this.velocity.z * w);
+        double value = sampler.sample(u * this.scale.x() + this.velocity.x() * w, v * this.scale.y() + this.velocity.y() * w, this.velocity.z() * w);
         return (float) (value + 1) * 0.5f;
     }
 

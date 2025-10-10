@@ -1774,7 +1774,7 @@ public interface RegistryHelper {
      * @param <T> the type of data component predicate
      */
     default <T extends ComponentPredicate> ComponentPredicate.Type<T> dataComponentPredicate(String name, Codec<T> codec) {
-        return this.register(Registries.DATA_COMPONENT_PREDICATE_TYPE, name, new ComponentPredicate.Type<>(codec));
+        return this.register(Registries.DATA_COMPONENT_PREDICATE_TYPE, name, new ComponentPredicate.class_12169<>(codec));
     }
 
     /**

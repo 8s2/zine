@@ -29,7 +29,7 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": "${minecraft_version}"
+    "minecraft": ">=1.21.11-"
   },
   "custom": {
     "loom:injected_interfaces": {
@@ -280,7 +280,6 @@
       "net/minecraft/class_10400": ["com/eightsidedsquare/zine/client/item/tint/ZineGrassTintSource"],
       "net/minecraft/class_10403": ["com/eightsidedsquare/zine/client/item/tint/ZineMapColorTintSource"],
       "net/minecraft/class_10404": ["com/eightsidedsquare/zine/client/item/tint/ZinePotionTintSource"],
-      "net/minecraft/class_10405": ["com/eightsidedsquare/zine/client/data/ZineItemModelOutput"],
       "net/minecraft/class_10430\u0024class_10431": ["com/eightsidedsquare/zine/client/item/ZineUnbakedBasicItemModel"],
       "net/minecraft/class_10435\u0024class_10436": ["com/eightsidedsquare/zine/client/item/ZineUnbakedCompositeItemModel"],
       "net/minecraft/class_10437\u0024class_10438": ["com/eightsidedsquare/zine/client/item/ZineUnbakedConditionItemModel"],

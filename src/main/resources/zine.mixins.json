@@ -112,8 +112,6 @@
   "client": [
     "client.InGameHudMixin",
     "client.TranslationStorageMixin",
-    "client.data.ItemModelOutputMixin",
-    "client.data.ModelProviderItemAssetsMixin",
     "client.font.BakedGlyphDrawnGlyphMixin",
     "client.font.TextRendererAccessor",
     "client.font.TextRendererDrawerMixin",
