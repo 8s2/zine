@@ -22,6 +22,8 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.command.argument.serialize.ArgumentSerializer;
+import net.minecraft.command.permission.Permission;
+import net.minecraft.command.permission.PermissionCheck;
 import net.minecraft.component.ComponentType;
 import net.minecraft.dialog.action.DialogAction;
 import net.minecraft.dialog.body.DialogBody;
@@ -2064,6 +2066,26 @@ public interface RegistryHelper {
     default <T extends OutgoingRpcMethod<?, ?>> T outgoingRpcMethod(String name, OutgoingRpcMethod.Builder<T> builder) {
         Identifier id = this.id(name);
         return this.register(Registries.OUTGOING_RPC_METHOD, name, builder.build());
+    }
+
+    /**
+     * @param name the name of the permission
+     * @param codec the codec of the permission
+     * @return the registered permission codec
+     * @param <T> the type of permission
+     */
+    default <T extends Permission> MapCodec<T> permission(String name, MapCodec<T> codec) {
+        return this.register(Registries.PERMISSION_TYPE, name, codec);
+    }
+
+    /**
+     * @param name the name of the permission check
+     * @param codec the codec of the permission check
+     * @return the registered permission check codec
+     * @param <T> the type of permission check
+     */
+    default <T extends PermissionCheck> MapCodec<T> permissionCheck(String name, MapCodec<T> codec) {
+        return this.register(Registries.PERMISSION_CHECK_TYPE, name, codec);
     }
 
     /**
