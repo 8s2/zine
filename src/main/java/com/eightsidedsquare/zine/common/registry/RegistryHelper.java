@@ -125,6 +125,8 @@ import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.util.math.intprovider.IntProviderType;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.village.VillagerType;
+import net.minecraft.world.attribute.EnvironmentAttribute;
+import net.minecraft.world.attribute.EnvironmentAttributeType;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.debug.DebugSubscriptionType;
 import net.minecraft.world.event.GameEvent;
@@ -1776,7 +1778,7 @@ public interface RegistryHelper {
      * @param <T> the type of data component predicate
      */
     default <T extends ComponentPredicate> ComponentPredicate.Type<T> dataComponentPredicate(String name, Codec<T> codec) {
-        return this.register(Registries.DATA_COMPONENT_PREDICATE_TYPE, name, new ComponentPredicate.class_12169<>(codec));
+        return this.register(Registries.DATA_COMPONENT_PREDICATE_TYPE, name, new ComponentPredicate.OfValue<>(codec));
     }
 
     /**
@@ -2050,10 +2052,8 @@ public interface RegistryHelper {
      * @param name the name of the incoming rpc method
      * @param builder the builder for the incoming rpc method
      * @return the registered incoming rpc method
-     * @param <T> the type of incoming rpc method
      */
-    default <T extends IncomingRpcMethod> T incomingRpcMethod(String name, IncomingRpcMethod.Builder<T> builder) {
-        Identifier id = this.id(name);
+    default <Params, Result> IncomingRpcMethod<Params, Result> incomingRpcMethod(String name, IncomingRpcMethod.Builder<Params, Result> builder) {
         return this.register(Registries.INCOMING_RPC_METHOD, name, builder.build());
     }
 
@@ -2061,10 +2061,8 @@ public interface RegistryHelper {
      * @param name the name of the outgoing rpc method
      * @param builder the builder for the outgoing rpc method
      * @return the registered outgoing rpc method
-     * @param <T> the type of outgoing rpc method
      */
-    default <T extends OutgoingRpcMethod<?, ?>> T outgoingRpcMethod(String name, OutgoingRpcMethod.Builder<T> builder) {
-        Identifier id = this.id(name);
+    default <Params, Result> OutgoingRpcMethod<Params, Result> outgoingRpcMethod(String name, OutgoingRpcMethod.Builder<Params, Result> builder) {
         return this.register(Registries.OUTGOING_RPC_METHOD, name, builder.build());
     }
 
@@ -2086,6 +2084,26 @@ public interface RegistryHelper {
      */
     default <T extends PermissionCheck> MapCodec<T> permissionCheck(String name, MapCodec<T> codec) {
         return this.register(Registries.PERMISSION_CHECK_TYPE, name, codec);
+    }
+
+    /**
+     * @param name the name of the environment attribute
+     * @param builder the builder of the environment attribute
+     * @return the registered environment attribute
+     * @param <T> the type of the environment attribute
+     */
+    default <T> EnvironmentAttribute<T> environmentAttribute(String name, EnvironmentAttribute.Builder<T> builder) {
+        return this.register(Registries.ENVIRONMENTAL_ATTRIBUTE, name, builder.build());
+    }
+
+    /**
+     * @param name the name of the environment attribute type
+     * @param type the environment attribute type to register
+     * @return the registered environment attribute type
+     * @param <T> the type of the environment attribute type
+     */
+    default <T> EnvironmentAttributeType<T> environmentAttributeType(String name, EnvironmentAttributeType<T> type) {
+        return this.register(Registries.ATTRIBUTE_TYPE, name, type);
     }
 
     /**
