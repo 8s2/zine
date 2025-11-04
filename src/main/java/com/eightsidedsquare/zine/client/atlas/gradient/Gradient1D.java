@@ -36,7 +36,7 @@ public record Gradient1D(List<GradientPoint<Integer>> points) implements Gradien
 
     @Override
     public int get(float u, float v, float w) {
-        return this.get(u, this.points, Function.identity());
+        return Gradient.get(u, this.points, Function.identity());
     }
 
     public static Builder builder() {

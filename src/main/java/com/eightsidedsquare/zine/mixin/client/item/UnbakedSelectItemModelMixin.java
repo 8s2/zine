@@ -22,7 +22,7 @@ public abstract class UnbakedSelectItemModelMixin implements ZineUnbakedSelectIt
     private SelectItemModel.UnbakedSwitch<?, ?> unbakedSwitch;
 
     @Override
-    public void zine$setFallback(ItemModel.@Nullable Unbaked fallback) {
+    public void zine$setFallback(@Nullable ItemModel.Unbaked fallback) {
         this.fallback = Optional.ofNullable(fallback);
     }
 

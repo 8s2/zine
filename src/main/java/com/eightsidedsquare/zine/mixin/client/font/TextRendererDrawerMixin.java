@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(TextRenderer.Drawer.class)
 public abstract class TextRendererDrawerMixin {
 
-    @Shadow @Final
-    TextRenderer field_24240;
+    @Shadow(aliases = "field_24240") @Final
+    TextRenderer textRenderer;
     @Shadow
     float x;
     @Shadow
@@ -36,7 +36,7 @@ public abstract class TextRendererDrawerMixin {
                 for (int y = -1; y <= 1; y++) {
                     if (x != 0 || y != 0) {
                         float[] advance = new float[]{originalX};
-                        ((TextRendererAccessor) this.field_24240).zine$invokeAcceptOutline(
+                        ((TextRendererAccessor) this.textRenderer).zine$invokeAcceptOutline(
                                 (TextRenderer.Drawer) (Object) this,
                                 advance,
                                 x,

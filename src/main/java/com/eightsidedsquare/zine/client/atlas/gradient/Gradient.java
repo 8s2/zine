@@ -26,7 +26,7 @@ public interface Gradient {
 
     int get(float u, float v, float w);
 
-    default <T> int get(float t, List<GradientPoint<T>> points, Function<T, Integer> colorGetter) {
+    static <T> int get(float t, List<GradientPoint<T>> points, Function<T, Integer> colorGetter) {
         GradientPoint<T> end = points.getLast();
         if(points.size() == 1) {
             return colorGetter.apply(end.v());

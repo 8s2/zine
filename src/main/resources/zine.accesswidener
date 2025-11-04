@@ -24,7 +24,7 @@ accessible method net/minecraft/client/gui/screen/ingame/HandledScreen addToolti
 accessible field net/minecraft/block/AbstractBlock soundGroup Lnet/minecraft/sound/BlockSoundGroup;
 mutable field net/minecraft/block/AbstractBlock soundGroup Lnet/minecraft/sound/BlockSoundGroup;
 accessible field net/minecraft/client/network/PlayerListEntry texturesSupplier Ljava/util/function/Supplier;
-accessible class net/minecraft/client/font/BakedGlyphImpl$DrawnGlyph
+accessible class net/minecraft/client/font/BakedGlyphImpl$BakedGlyphRect
 accessible field net/minecraft/text/object/TextObjectContentTypes ID_MAPPER Lnet/minecraft/util/dynamic/Codecs$IdMapper;
 accessible field net/minecraft/text/NbtDataSourceTypes ID_MAPPER Lnet/minecraft/util/dynamic/Codecs$IdMapper;
 accessible method net/minecraft/server/dedicated/management/OutgoingRpcMethod$Builder build ()Lnet/minecraft/server/dedicated/management/OutgoingRpcMethod;

@@ -179,6 +179,7 @@
         "com/eightsidedsquare/zine/common/criterion/ZinePlayerCriterionConditions",
         "com/eightsidedsquare/zine/common/criterion/ZineItemCriterionConditions"
       ],
+      "net/minecraft/class_2561": ["com/eightsidedsquare/zine/common/text/ZineText"],
       "net/minecraft/class_2583": ["com/eightsidedsquare/zine/common/text/ZineStyle"],
       "net/minecraft/class_3735": ["com/eightsidedsquare/zine/common/predicate/ZineEntityEquipmentPredicate"],
       "net/minecraft/class_3776": ["com/eightsidedsquare/zine/common/world/structure/ZineFeaturePoolElement"],

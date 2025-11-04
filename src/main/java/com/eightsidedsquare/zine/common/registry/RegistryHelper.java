@@ -8,6 +8,8 @@ import com.eightsidedsquare.zine.common.util.codec.RegistryCodecGroup;
 import com.eightsidedsquare.zine.core.ZineRegistries;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
@@ -86,12 +88,14 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
+import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.scoreboard.number.NumberFormat;
 import net.minecraft.scoreboard.number.NumberFormatType;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.dedicated.management.IncomingRpcMethod;
 import net.minecraft.server.dedicated.management.OutgoingRpcMethod;
+import net.minecraft.server.dedicated.management.dispatch.GameRuleType;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
@@ -125,6 +129,8 @@ import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.util.math.intprovider.IntProviderType;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.village.VillagerType;
+import net.minecraft.world.Category;
+import net.minecraft.world.Visitor;
 import net.minecraft.world.attribute.EnvironmentAttribute;
 import net.minecraft.world.attribute.EnvironmentAttributeType;
 import net.minecraft.world.biome.source.BiomeSource;
@@ -163,6 +169,7 @@ import net.minecraft.world.gen.trunk.TrunkPlacer;
 import net.minecraft.world.gen.trunk.TrunkPlacerType;
 import net.minecraft.world.poi.PointOfInterestType;
 import net.minecraft.world.poi.PointOfInterestTypes;
+import net.minecraft.world.rule.GameRule;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -514,6 +521,67 @@ public interface RegistryHelper {
         return this.dataComponent(name, builder ->
                 builder.codec(registryCodecGroup.entryCodec()).packetCodec(registryCodecGroup.packetCodec()).cache()
         );
+    }
+
+    /**
+     * Registers a game rule
+     * @param name the name of the game rule
+     * @param gameRule the game rule to register
+     * @return the registered game rule
+     * @param <T> the type of the game rule
+     */
+    default <T> GameRule<T> gameRule(String name, GameRule<T> gameRule) {
+        return this.register(Registries.GAME_RULE, name, gameRule);
+    }
+
+    /**
+     * Registers a boolean game rule
+     * @param name the name of the game rule
+     * @param category the category of the game rule
+     * @param defaultValue the default value of the game rule
+     * @return the registered game rule
+     */
+    default GameRule<Boolean> gameRule(String name, Category category, boolean defaultValue) {
+        return this.gameRule(name, new GameRule<>(category, GameRuleType.BOOL, BoolArgumentType.bool(), Visitor::visitBoolean, Codec.BOOL, bool -> bool ? 1 : 0, defaultValue, FeatureSet.empty()));
+    }
+
+    /**
+     * Registers an integer game rule
+     * @param name the name of the game rule
+     * @param category the category of the game rule
+     * @param defaultValue the default value of the game rule
+     * @param minValue the min value of the game rule
+     * @return the registered game rule
+     */
+    default GameRule<Integer> gameRule(String name, Category category, int defaultValue, int minValue) {
+        return this.gameRule(name, category, defaultValue, minValue, Integer.MAX_VALUE, FeatureSet.empty());
+    }
+
+    /**
+     * Registers an integer game rule
+     * @param name the name of the game rule
+     * @param category the category of the game rule
+     * @param defaultValue the default value of the game rule
+     * @param minValue the min value of the game rule
+     * @param maxValue the max value of the game rule
+     * @return the registered game rule
+     */
+    default GameRule<Integer> gameRule(String name, Category category, int defaultValue, int minValue, int maxValue) {
+        return this.gameRule(name, category, defaultValue, minValue, maxValue, FeatureSet.empty());
+    }
+
+    /**
+     * Registers an integer game rule
+     * @param name the name of the game rule
+     * @param category the category of the game rule
+     * @param defaultValue the default value of the game rule
+     * @param minValue the min value of the game rule
+     * @param maxValue the max value of the game rule
+     * @param featureSet the feature set of the game rule
+     * @return the registered game rule
+     */
+    default GameRule<Integer> gameRule(String name, Category category, int defaultValue, int minValue, int maxValue, FeatureSet featureSet) {
+        return this.gameRule(name, new GameRule<>(category, GameRuleType.INT, IntegerArgumentType.integer(minValue, maxValue), Visitor::visitInt, Codec.intRange(minValue, maxValue), i -> i, defaultValue, featureSet));
     }
 
     /**

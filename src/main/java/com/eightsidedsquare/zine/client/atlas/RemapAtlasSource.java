@@ -168,7 +168,7 @@ public class RemapAtlasSource implements AtlasSource {
 
         public Sampler createSampler(ResourceManager resourceManager) {
             Int2ObjectMap<Sampler> samplers = new Int2ObjectArrayMap<>();
-            this.textures.forEach((index, texture) -> samplers.put(index.intValue(), texture.createSampler(resourceManager)));
+            this.textures.forEach((index, texture) -> samplers.put(index, texture.createSampler(resourceManager)));
             return (uvw, u, v) -> {
                 Sampler sampler = samplers.get(uvw & 0xFF);
                 return sampler == null ? uvw : sampler.sample(uvw, u, v);

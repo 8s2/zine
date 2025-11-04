@@ -11,28 +11,19 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.registry.Registries;
 import net.minecraft.state.property.Property;
 import net.minecraft.storage.ReadView;
-import net.minecraft.text.TextColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
-import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.EulerAngle;
 import org.apache.commons.lang3.mutable.*;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 
 public final class CodecUtil {
 
     public static final Codec<Character> CHARACTER = Codec.string(1, 1).xmap(string -> string.charAt(0), String::valueOf);
-    public static final Codec<EulerAngle> EULER_ANGLE = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.FLOAT.optionalFieldOf("pitch", 0f).forGetter(EulerAngle::pitch),
-            Codec.FLOAT.optionalFieldOf("yaw", 0f).forGetter(EulerAngle::yaw),
-            Codec.FLOAT.optionalFieldOf("roll", 0f).forGetter(EulerAngle::roll)
-    ).apply(instance, EulerAngle::new));
     public static final Codec<Integer> INT_STRING = Codec.STRING.comapFlatMap(
             string -> {
                 int value;
@@ -46,12 +37,6 @@ public final class CodecUtil {
             String::valueOf
     );
     public static final Codec<Block> BLOCK = Registries.BLOCK.getCodec();
-    public static final Codec<Integer> COLOR = AlternativeCodec.create(
-            Codecs.RGB,
-            TextColor.CODEC,
-            color -> Optional.of(TextColor.fromRgb(color)),
-            textColor -> textColor.getRgb() | 0xff000000
-    );
     public static final Codec<SpawnReason> SPAWN_REASON = SpawnReasonIds.IDS.getCodec(Identifier.CODEC);
     public static final Codec<Box> CODEC = Codec.DOUBLE.listOf().comapFlatMap(
             vertices -> Util.decodeFixedLengthList(vertices, 6)
@@ -123,7 +108,7 @@ public final class CodecUtil {
     }
 
     public static <T> Codec<MutableObject<T>> mutable(Codec<T> codec) {
-        return codec.xmap(MutableObject::new, MutableObject::getValue);
+        return codec.xmap(MutableObject::new, MutableObject::get);
     }
 
     private CodecUtil() {

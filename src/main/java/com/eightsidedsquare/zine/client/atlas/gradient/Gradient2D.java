@@ -29,7 +29,7 @@ public record Gradient2D(List<GradientPoint<Gradient1D>> points) implements Grad
 
     @Override
     public int get(float u, float v, float w) {
-        return this.get(v, this.points, gradient -> gradient.get(u, v, w));
+        return Gradient.get(v, this.points, gradient -> gradient.get(u, v, w));
     }
 
     public static Builder builder() {
