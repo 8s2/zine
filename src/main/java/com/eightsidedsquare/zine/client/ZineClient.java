@@ -40,7 +40,7 @@ public class ZineClient implements ClientModInitializer {
     }
 
     private void registerEvents() {
-        AtlasEvents.modifySourcesEvent(Identifier.ofVanilla("blocks")).register(ArmorTrimRegistryImpl::modifyBlocksAtlas);
+        AtlasEvents.modifySourcesEvent(Identifier.ofVanilla("items")).register(ArmorTrimRegistryImpl::modifyItemsAtlas);
         AtlasEvents.modifySourcesEvent(Identifier.ofVanilla("armor_trims")).register(ArmorTrimRegistryImpl::modifyArmorTrimsAtlas);
         ModelEvents.ADD_UNBAKED.register(ArmorTrimRegistryImpl::addUnbakedModels);
         ItemModelEvents.BEFORE_BAKE.register(ArmorTrimRegistryImpl::modifyItemModels);

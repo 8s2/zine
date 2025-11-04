@@ -41,8 +41,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.ai.brain.Activity;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.ai.brain.Schedule;
-import net.minecraft.entity.ai.brain.ScheduleBuilder;
 import net.minecraft.entity.ai.brain.sensor.Sensor;
 import net.minecraft.entity.ai.brain.sensor.SensorType;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -70,6 +68,7 @@ import net.minecraft.loot.provider.number.LootNumberProvider;
 import net.minecraft.loot.provider.number.LootNumberProviderType;
 import net.minecraft.loot.provider.score.LootScoreProvider;
 import net.minecraft.loot.provider.score.LootScoreProviderType;
+import net.minecraft.loot.slot.SlotSource;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.particle.ParticleEffect;
@@ -95,7 +94,6 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.dedicated.management.IncomingRpcMethod;
 import net.minecraft.server.dedicated.management.OutgoingRpcMethod;
-import net.minecraft.server.dedicated.management.dispatch.GameRuleType;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
@@ -129,8 +127,6 @@ import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.util.math.intprovider.IntProviderType;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.village.VillagerType;
-import net.minecraft.world.Category;
-import net.minecraft.world.Visitor;
 import net.minecraft.world.attribute.EnvironmentAttribute;
 import net.minecraft.world.attribute.EnvironmentAttributeType;
 import net.minecraft.world.biome.source.BiomeSource;
@@ -170,6 +166,9 @@ import net.minecraft.world.gen.trunk.TrunkPlacerType;
 import net.minecraft.world.poi.PointOfInterestType;
 import net.minecraft.world.poi.PointOfInterestTypes;
 import net.minecraft.world.rule.GameRule;
+import net.minecraft.world.rule.GameRuleCategory;
+import net.minecraft.world.rule.GameRuleType;
+import net.minecraft.world.rule.GameRuleVisitor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -541,8 +540,8 @@ public interface RegistryHelper {
      * @param defaultValue the default value of the game rule
      * @return the registered game rule
      */
-    default GameRule<Boolean> gameRule(String name, Category category, boolean defaultValue) {
-        return this.gameRule(name, new GameRule<>(category, GameRuleType.BOOL, BoolArgumentType.bool(), Visitor::visitBoolean, Codec.BOOL, bool -> bool ? 1 : 0, defaultValue, FeatureSet.empty()));
+    default GameRule<Boolean> gameRule(String name, GameRuleCategory category, boolean defaultValue) {
+        return this.gameRule(name, new GameRule<>(category, GameRuleType.BOOL, BoolArgumentType.bool(), GameRuleVisitor::visitBoolean, Codec.BOOL, bool -> bool ? 1 : 0, defaultValue, FeatureSet.empty()));
     }
 
     /**
@@ -553,7 +552,7 @@ public interface RegistryHelper {
      * @param minValue the min value of the game rule
      * @return the registered game rule
      */
-    default GameRule<Integer> gameRule(String name, Category category, int defaultValue, int minValue) {
+    default GameRule<Integer> gameRule(String name, GameRuleCategory category, int defaultValue, int minValue) {
         return this.gameRule(name, category, defaultValue, minValue, Integer.MAX_VALUE, FeatureSet.empty());
     }
 
@@ -566,7 +565,7 @@ public interface RegistryHelper {
      * @param maxValue the max value of the game rule
      * @return the registered game rule
      */
-    default GameRule<Integer> gameRule(String name, Category category, int defaultValue, int minValue, int maxValue) {
+    default GameRule<Integer> gameRule(String name, GameRuleCategory category, int defaultValue, int minValue, int maxValue) {
         return this.gameRule(name, category, defaultValue, minValue, maxValue, FeatureSet.empty());
     }
 
@@ -580,8 +579,8 @@ public interface RegistryHelper {
      * @param featureSet the feature set of the game rule
      * @return the registered game rule
      */
-    default GameRule<Integer> gameRule(String name, Category category, int defaultValue, int minValue, int maxValue, FeatureSet featureSet) {
-        return this.gameRule(name, new GameRule<>(category, GameRuleType.INT, IntegerArgumentType.integer(minValue, maxValue), Visitor::visitInt, Codec.intRange(minValue, maxValue), i -> i, defaultValue, featureSet));
+    default GameRule<Integer> gameRule(String name, GameRuleCategory category, int defaultValue, int minValue, int maxValue, FeatureSet featureSet) {
+        return this.gameRule(name, new GameRule<>(category, GameRuleType.INT, IntegerArgumentType.integer(minValue, maxValue), GameRuleVisitor::visitInt, Codec.intRange(minValue, maxValue), i -> i, defaultValue, featureSet));
     }
 
     /**
@@ -1219,24 +1218,6 @@ public interface RegistryHelper {
      */
     default <T extends Sensor<?>> SensorType<T> sensor(String name, Supplier<T> supplier) {
         return this.sensor(name, new SensorType<>(supplier));
-    }
-
-    /**
-     * @param name the name of the schedule
-     * @param schedule the schedule to register
-     * @return the registered schedule
-     */
-    default Schedule schedule(String name, Schedule schedule) {
-        return this.register(Registries.SCHEDULE, name, schedule);
-    }
-
-    /**
-     * @param name the name of the schedule
-     * @param builderOperator operator for building the schedule
-     * @return the registered schedule
-     */
-    default Schedule schedule(String name, UnaryOperator<ScheduleBuilder> builderOperator) {
-        return this.schedule(name, builderOperator.apply(new ScheduleBuilder(new Schedule())).build());
     }
 
     /**
@@ -2172,6 +2153,16 @@ public interface RegistryHelper {
      */
     default <T> EnvironmentAttributeType<T> environmentAttributeType(String name, EnvironmentAttributeType<T> type) {
         return this.register(Registries.ATTRIBUTE_TYPE, name, type);
+    }
+
+    /**
+     * @param name the name of the slot source
+     * @param codec the codec of the slot source
+     * @return the registered slot source codec
+     * @param <T> the type of slot source
+     */
+    default <T extends SlotSource> MapCodec<T> slotSource(String name, MapCodec<T> codec) {
+        return this.register(Registries.SLOT_SOURCE_TYPE, name, codec);
     }
 
     /**

@@ -77,7 +77,7 @@ public final class PacketCodecUtil {
     public static final PacketCodec<ByteBuf, MutableDouble> MUTABLE_DOUBLE = PacketCodecs.DOUBLE.xmap(MutableDouble::new, MutableDouble::doubleValue);
 
     public static <B, V> PacketCodec<B, MutableObject<V>> mutable(PacketCodec<B, V> packetCodec) {
-        return packetCodec.xmap(MutableObject::new, MutableObject::getValue);
+        return packetCodec.xmap(MutableObject::new, MutableObject::get);
     }
 
     public static <T extends State<?, ?>> PacketCodec<PacketByteBuf, T> state(IdList<T> idList, @Nullable Function<T, Integer> idGetter) {

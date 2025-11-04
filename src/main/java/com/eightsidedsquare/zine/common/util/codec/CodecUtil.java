@@ -15,6 +15,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Box;
 import org.apache.commons.lang3.mutable.*;
+import org.joml.Vector2i;
+import org.joml.Vector2ic;
+import org.joml.Vector3i;
 
 import java.util.Collection;
 import java.util.List;
@@ -50,6 +53,12 @@ public final class CodecUtil {
     public static final Codec<MutableLong> MUTABLE_LONG = Codec.LONG.xmap(MutableLong::new, MutableLong::longValue);
     public static final Codec<MutableFloat> MUTABLE_FLOAT = Codec.FLOAT.xmap(MutableFloat::new, MutableFloat::floatValue);
     public static final Codec<MutableDouble> MUTABLE_DOUBLE = Codec.DOUBLE.xmap(MutableDouble::new, MutableDouble::doubleValue);
+    public static final Codec<Vector2ic> VECTOR_2I = Codec.INT.listOf()
+            .comapFlatMap(
+                    list -> Util.decodeFixedLengthList(list, 2)
+                            .map(components -> new Vector2i(components.getFirst(), components.get(1))),
+                    vec -> List.of(vec.x(), vec.y())
+            );
 
     /**
      * Creates a list codec that can deserialize single elements as a list,

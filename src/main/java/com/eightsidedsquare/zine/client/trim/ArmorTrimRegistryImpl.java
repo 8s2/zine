@@ -89,7 +89,7 @@ public final class ArmorTrimRegistryImpl {
         return MATERIALS.containsKey(key);
     }
 
-    public static void modifyBlocksAtlas(List<AtlasSource> sources) {
+    public static void modifyItemsAtlas(List<AtlasSource> sources) {
         modifyPalettedSource(sources, ArmorTrimRegistryImpl::applyMaterials);
     }
 
