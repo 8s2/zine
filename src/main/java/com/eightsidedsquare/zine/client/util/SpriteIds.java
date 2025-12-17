@@ -2,6 +2,7 @@ package com.eightsidedsquare.zine.client.util;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Atlases;
 import net.minecraft.util.Identifier;
@@ -29,6 +30,10 @@ public final class SpriteIds {
         return of(Atlases.BLOCKS, id);
     }
 
+    public static SpriteIdentifier blockItem(Identifier id) {
+        return of(BakedModelManager.BLOCK_OR_ITEM, id);
+    }
+
     public static SpriteIdentifier chest(Identifier id) {
         return of(Atlases.CHESTS, id);
     }
@@ -39,6 +44,10 @@ public final class SpriteIds {
 
     public static SpriteIdentifier gui(Identifier id) {
         return of(Atlases.GUI, id);
+    }
+
+    public static SpriteIdentifier item(Identifier id) {
+        return of(Atlases.ITEMS, id);
     }
 
     public static SpriteIdentifier mapDecoration(Identifier id) {

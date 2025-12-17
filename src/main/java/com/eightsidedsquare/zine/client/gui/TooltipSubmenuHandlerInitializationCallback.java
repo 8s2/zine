@@ -1,4 +1,4 @@
-package com.eightsidedsquare.zine.client.screen;
+package com.eightsidedsquare.zine.client.gui;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;

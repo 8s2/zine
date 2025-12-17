@@ -8,7 +8,6 @@ accessible method net/minecraft/entity/effect/StatusEffect <init> (Lnet/minecraf
 accessible method net/minecraft/world/poi/PointOfInterestTypes getStatesOfBlock (Lnet/minecraft/block/Block;)Ljava/util/Set;
 accessible method net/minecraft/world/gen/feature/size/FeatureSizeType <init> (Lcom/mojang/serialization/MapCodec;)V
 accessible method net/minecraft/registry/entry/RegistryEntry$Reference setValue (Ljava/lang/Object;)V
-accessible method net/minecraft/client/texture/atlas/PalettedPermutationsAtlasSource <init> (Ljava/util/List;Lnet/minecraft/util/Identifier;Ljava/util/Map;)V
 accessible field net/minecraft/component/ComponentMap$Builder components Lit/unimi/dsi/fastutil/objects/Reference2ObjectMap;
 accessible class net/minecraft/predicate/entity/LocationPredicate$PositionRange
 accessible method net/minecraft/predicate/entity/LocationPredicate$PositionRange create (Lnet/minecraft/predicate/NumberRange$DoubleRange;Lnet/minecraft/predicate/NumberRange$DoubleRange;Lnet/minecraft/predicate/NumberRange$DoubleRange;)Ljava/util/Optional;
@@ -28,3 +27,9 @@ accessible class net/minecraft/client/font/BakedGlyphImpl$BakedGlyphRect
 accessible field net/minecraft/text/object/TextObjectContentTypes ID_MAPPER Lnet/minecraft/util/dynamic/Codecs$IdMapper;
 accessible field net/minecraft/text/NbtDataSourceTypes ID_MAPPER Lnet/minecraft/util/dynamic/Codecs$IdMapper;
 accessible method net/minecraft/server/dedicated/management/OutgoingRpcMethod$Builder build ()Lnet/minecraft/server/dedicated/management/OutgoingRpcMethod;
+accessible method net/minecraft/client/data/BlockStateVariantMap$SingleProperty <init> (Lnet/minecraft/state/property/Property;)V
+accessible method net/minecraft/client/data/BlockStateVariantMap$DoubleProperty <init> (Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;)V
+accessible method net/minecraft/client/data/BlockStateVariantMap$TripleProperty <init> (Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;)V
+accessible method net/minecraft/client/data/BlockStateVariantMap$QuadrupleProperty <init> (Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;)V
+accessible method net/minecraft/client/data/BlockStateVariantMap$QuintupleProperty <init> (Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;)V
+accessible method net/minecraft/client/data/AtlasDefinitionProvider runForAtlas (Lnet/minecraft/data/DataWriter;Lnet/minecraft/util/Identifier;Ljava/util/List;)Ljava/util/concurrent/CompletableFuture;

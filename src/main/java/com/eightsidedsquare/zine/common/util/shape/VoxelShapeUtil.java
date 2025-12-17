@@ -5,7 +5,6 @@ import com.eightsidedsquare.zine.common.state.StateMapBuilder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.AxisRotation;
-import net.minecraft.util.math.DirectionTransformation;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 
@@ -41,9 +40,9 @@ public final class VoxelShapeUtil {
      * @param sideShape the voxel shape of the connecting side facing north
      */
     public static StateMap<VoxelShape> createHorizontalConnectingMap(VoxelShape centerShape, VoxelShape sideShape) {
-        VoxelShape eastShape = VoxelShapes.transform(sideShape, DirectionTransformation.fromRotations(AxisRotation.R0, AxisRotation.R90));
-        VoxelShape southShape = VoxelShapes.transform(sideShape, DirectionTransformation.fromRotations(AxisRotation.R0, AxisRotation.R180));
-        VoxelShape westShape = VoxelShapes.transform(sideShape, DirectionTransformation.fromRotations(AxisRotation.R0, AxisRotation.R270));
+        VoxelShape eastShape = VoxelShapes.transform(sideShape, AxisRotation.method_76599(AxisRotation.R0, AxisRotation.R90));
+        VoxelShape southShape = VoxelShapes.transform(sideShape, AxisRotation.method_76599(AxisRotation.R0, AxisRotation.R180));
+        VoxelShape westShape = VoxelShapes.transform(sideShape, AxisRotation.method_76599(AxisRotation.R0, AxisRotation.R270));
         return StateMapBuilder.create(
                 Properties.NORTH,
                 Properties.EAST,
@@ -65,11 +64,11 @@ public final class VoxelShapeUtil {
      * @param sideShape the voxel shape of the connecting side facing north
      */
     public static StateMap<VoxelShape> createConnectingMap(VoxelShape centerShape, VoxelShape sideShape) {
-        VoxelShape eastShape = VoxelShapes.transform(sideShape, DirectionTransformation.fromRotations(AxisRotation.R0, AxisRotation.R90));
-        VoxelShape southShape = VoxelShapes.transform(sideShape, DirectionTransformation.fromRotations(AxisRotation.R0, AxisRotation.R180));
-        VoxelShape westShape = VoxelShapes.transform(sideShape, DirectionTransformation.fromRotations(AxisRotation.R0, AxisRotation.R270));
-        VoxelShape upShape = VoxelShapes.transform(sideShape, DirectionTransformation.fromRotations(AxisRotation.R270, AxisRotation.R0));
-        VoxelShape downShape = VoxelShapes.transform(sideShape, DirectionTransformation.fromRotations(AxisRotation.R90, AxisRotation.R0));
+        VoxelShape eastShape = VoxelShapes.transform(sideShape, AxisRotation.method_76599(AxisRotation.R0, AxisRotation.R90));
+        VoxelShape southShape = VoxelShapes.transform(sideShape, AxisRotation.method_76599(AxisRotation.R0, AxisRotation.R180));
+        VoxelShape westShape = VoxelShapes.transform(sideShape, AxisRotation.method_76599(AxisRotation.R0, AxisRotation.R270));
+        VoxelShape upShape = VoxelShapes.transform(sideShape, AxisRotation.method_76599(AxisRotation.R270, AxisRotation.R0));
+        VoxelShape downShape = VoxelShapes.transform(sideShape, AxisRotation.method_76599(AxisRotation.R90, AxisRotation.R0));
         return StateMapBuilder.create(
                 Properties.NORTH,
                 Properties.EAST,
@@ -93,18 +92,18 @@ public final class VoxelShapeUtil {
         VoxelShape[] northShapes = {EMPTY, lowShape, tallShape};
         VoxelShape[] eastShapes = {
                 EMPTY,
-                VoxelShapes.transform(lowShape, DirectionTransformation.fromRotations(AxisRotation.R0, AxisRotation.R90)),
-                VoxelShapes.transform(tallShape, DirectionTransformation.fromRotations(AxisRotation.R0, AxisRotation.R90))
+                VoxelShapes.transform(lowShape, AxisRotation.method_76599(AxisRotation.R0, AxisRotation.R90)),
+                VoxelShapes.transform(tallShape, AxisRotation.method_76599(AxisRotation.R0, AxisRotation.R90))
         };
         VoxelShape[] southShapes = {
                 EMPTY,
-                VoxelShapes.transform(lowShape, DirectionTransformation.fromRotations(AxisRotation.R0, AxisRotation.R180)),
-                VoxelShapes.transform(tallShape, DirectionTransformation.fromRotations(AxisRotation.R0, AxisRotation.R180))
+                VoxelShapes.transform(lowShape, AxisRotation.method_76599(AxisRotation.R0, AxisRotation.R180)),
+                VoxelShapes.transform(tallShape, AxisRotation.method_76599(AxisRotation.R0, AxisRotation.R180))
         };
         VoxelShape[] westShapes = {
                 EMPTY,
-                VoxelShapes.transform(lowShape, DirectionTransformation.fromRotations(AxisRotation.R0, AxisRotation.R270)),
-                VoxelShapes.transform(tallShape, DirectionTransformation.fromRotations(AxisRotation.R0, AxisRotation.R270))
+                VoxelShapes.transform(lowShape, AxisRotation.method_76599(AxisRotation.R0, AxisRotation.R270)),
+                VoxelShapes.transform(tallShape, AxisRotation.method_76599(AxisRotation.R0, AxisRotation.R270))
         };
         return StateMapBuilder.create(
                 centerProperty,

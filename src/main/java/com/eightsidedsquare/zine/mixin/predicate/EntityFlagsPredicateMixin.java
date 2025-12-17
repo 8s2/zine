@@ -34,6 +34,12 @@ public abstract class EntityFlagsPredicateMixin implements ZineEntityFlagsPredic
     @Shadow @Final @Mutable
     private Optional<Boolean> isBaby;
 
+    @Shadow @Final @Mutable
+    private Optional<Boolean> isInWater;
+
+    @Shadow @Final @Mutable
+    private Optional<Boolean> isFallFlying;
+
     @Override
     public void zine$setOnGround(@Nullable Boolean onGround) {
         this.isOnGround = Optional.ofNullable(onGround);
@@ -67,5 +73,15 @@ public abstract class EntityFlagsPredicateMixin implements ZineEntityFlagsPredic
     @Override
     public void zine$setBaby(@Nullable Boolean baby) {
         this.isBaby = Optional.ofNullable(baby);
+    }
+
+    @Override
+    public void zine$setInWater(@Nullable Boolean inWater) {
+        this.isInWater = Optional.ofNullable(inWater);
+    }
+
+    @Override
+    public void zine$setFallFlying(@Nullable Boolean fallFlying) {
+        this.isFallFlying = Optional.ofNullable(fallFlying);
     }
 }

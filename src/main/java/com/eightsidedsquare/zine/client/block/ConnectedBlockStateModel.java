@@ -90,7 +90,7 @@ public class ConnectedBlockStateModel implements BlockStateModel {
                 emitMeshes(meshes, builder, emitter, pattern, sprite);
             }
             builder.clear();
-            return new ConnectedBlockStateModel(meshes, particleSprite, fancy);
+            return new ConnectedBlockStateModel(meshes, particleSprite, this.fancy);
         }
 
         private static void emitMeshes(Mesh[] meshes, MutableMesh builder, QuadEmitter emitter, ConnectedPattern pattern, Sprite sprite) {

@@ -1,4 +1,4 @@
-package com.eightsidedsquare.zine.client.screen;
+package com.eightsidedsquare.zine.client.gui;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;

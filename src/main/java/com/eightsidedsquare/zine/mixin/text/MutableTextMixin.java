@@ -24,20 +24,20 @@ public abstract class MutableTextMixin implements Text, ZineMutableText {
     private boolean frozen = false;
 
     @Unique
-    private MutableText cast() {
+    private MutableText zine$cast() {
         return (MutableText) (Object) this;
     }
 
     @Override
     public MutableText zine$freeze() {
         this.frozen = true;
-        return this.cast();
+        return this.zine$cast();
     }
 
     @Override
     public MutableText zine$unfreeze() {
         this.frozen = false;
-        return this.cast();
+        return this.zine$cast();
     }
 
     @Override
@@ -53,14 +53,14 @@ public abstract class MutableTextMixin implements Text, ZineMutableText {
     @Inject(method = "setStyle", at = @At("HEAD"), cancellable = true)
     private void zine$cancelSetStyleIfFrozen(Style style, CallbackInfoReturnable<MutableText> cir) {
         if(this.frozen) {
-            cir.setReturnValue(this.cast());
+            cir.setReturnValue(this.zine$cast());
         }
     }
 
     @Inject(method = "append(Lnet/minecraft/text/Text;)Lnet/minecraft/text/MutableText;", at = @At("HEAD"), cancellable = true)
     private void zine$cancelAppendIfFrozen(Text text, CallbackInfoReturnable<MutableText> cir) {
         if(this.frozen) {
-            cir.setReturnValue(this.cast());
+            cir.setReturnValue(this.zine$cast());
         }
     }
 }

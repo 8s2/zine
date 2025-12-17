@@ -17,7 +17,6 @@ import net.minecraft.util.math.Box;
 import org.apache.commons.lang3.mutable.*;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
-import org.joml.Vector3i;
 
 import java.util.Collection;
 import java.util.List;
@@ -100,6 +99,29 @@ public final class CodecUtil {
             }
             return DataResult.success(block);
         });
+    }
+
+    public static <A> MapCodec<List<A>> grammaticalListMapCodec(MapCodec<A> singleCodec, MapCodec<List<A>> listCodec) {
+        return Codec.mapEither(singleCodec, listCodec).xmap(
+                either -> either.map(List::of, Function.identity()),
+                list -> list.size() == 1 ? Either.left(list.getFirst()) : Either.right(list)
+        );
+    }
+
+    public static <A> MapCodec<List<A>> grammaticalListMapCodec(String singularName, String pluralName, Codec<A> singleCodec, Codec<List<A>> listCodec) {
+        return grammaticalListMapCodec(singleCodec.fieldOf(singularName), listCodec.fieldOf(pluralName));
+    }
+
+    public static <A> MapCodec<List<A>> grammaticalListMapCodec(String singularName, String pluralName, Codec<A> singleCodec) {
+        return grammaticalListMapCodec(singleCodec.fieldOf(singularName), singleCodec.listOf().fieldOf(pluralName));
+    }
+
+    public static <A> MapCodec<List<A>> grammaticalListMapCodec(String singularName, Codec<A> singleCodec, Codec<List<A>> listCodec) {
+        return grammaticalListMapCodec(singularName, singularName + "s", singleCodec, listCodec);
+    }
+
+    public static <A> MapCodec<List<A>> grammaticalListMapCodec(String singularName, Codec<A> singleCodec) {
+        return grammaticalListMapCodec(singularName, singleCodec, singleCodec.listOf());
     }
 
     public static Codec<Block> blockCodecWithPropertiesOf(Block block) {

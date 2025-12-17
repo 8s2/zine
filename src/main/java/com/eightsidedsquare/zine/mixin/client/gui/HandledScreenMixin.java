@@ -1,7 +1,7 @@
-package com.eightsidedsquare.zine.mixin.client.screens;
+package com.eightsidedsquare.zine.mixin.client.gui;
 
-import com.eightsidedsquare.zine.client.screen.TooltipSubmenuHandlerInitializationCallback;
-import com.eightsidedsquare.zine.client.screen.TooltipSubmenuHandlerInitializationContextImpl;
+import com.eightsidedsquare.zine.client.gui.TooltipSubmenuHandlerInitializationCallback;
+import com.eightsidedsquare.zine.client.gui.TooltipSubmenuHandlerInitializationContextImpl;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.text.Text;

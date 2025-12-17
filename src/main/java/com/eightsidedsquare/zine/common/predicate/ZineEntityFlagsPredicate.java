@@ -32,4 +32,12 @@ public interface ZineEntityFlagsPredicate {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
+    default void zine$setInWater(@Nullable Boolean inWater) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default void zine$setFallFlying(@Nullable Boolean fallFlying) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
 }

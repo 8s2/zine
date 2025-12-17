@@ -3,15 +3,12 @@ package com.eightsidedsquare.zine.client.atlas;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.texture.atlas.AtlasSource;
-import net.minecraft.client.texture.atlas.PalettedPermutationsAtlasSource;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 
 import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public final class AtlasSourceUtil {
@@ -19,10 +16,6 @@ public final class AtlasSourceUtil {
     }
 
     private static final Logger LOGGER = LogUtils.getLogger();
-
-    public static PalettedPermutationsAtlasSource createPaletted(List<Identifier> textures, Identifier paletteKey, Map<String, Identifier> permutations) {
-        return new PalettedPermutationsAtlasSource(textures, paletteKey, permutations);
-    }
 
     public static TextureData open(ResourceManager resourceManager, Identifier texture) {
         Optional<Resource> optional = resourceManager.getResource(AtlasSource.RESOURCE_FINDER.toResourcePath(texture));
