@@ -15,6 +15,7 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.handler.PacketDecoderException;
 import net.minecraft.state.State;
 import net.minecraft.util.collection.IdList;
+import net.minecraft.util.function.ValueLists;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.Box;
 import org.apache.commons.lang3.mutable.*;
@@ -135,6 +136,13 @@ public final class PacketCodecUtil {
             PacketCodec<? super B, K> keyCodec,
             Function<K, PacketCodec<? super B, V>> valueCodecFunction) {
         return dispatchedMap(factory, keyCodec, valueCodecFunction, Integer.MAX_VALUE);
+    }
+
+    public static <T extends Enum<T>> PacketCodec<ByteBuf, T> enumPacketCodec(T[] values) {
+        return PacketCodecs.indexed(
+                ValueLists.createIndexToValueFunction(T::ordinal, values, ValueLists.OutOfBoundsHandling.ZERO),
+                T::ordinal
+        );
     }
 
     private PacketCodecUtil() {
