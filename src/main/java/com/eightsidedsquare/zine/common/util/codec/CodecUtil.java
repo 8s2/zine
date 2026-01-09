@@ -18,9 +18,7 @@ import org.apache.commons.lang3.mutable.*;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 public final class CodecUtil {
@@ -58,6 +56,12 @@ public final class CodecUtil {
                             .map(components -> new Vector2i(components.getFirst(), components.get(1))),
                     vec -> List.of(vec.x(), vec.y())
             );
+    public static final Codec<OptionalInt> OPTIONAL_INT = Codec.INT.xmap(OptionalInt::of, OptionalInt::getAsInt)
+            .orElse(OptionalInt.empty());
+    public static final Codec<OptionalDouble> OPTIONAL_DOUBLE = Codec.DOUBLE.xmap(OptionalDouble::of, OptionalDouble::getAsDouble)
+            .orElse(OptionalDouble.empty());
+    public static final Codec<OptionalLong> OPTIONAL_LONG = Codec.LONG.xmap(OptionalLong::of, OptionalLong::getAsLong)
+            .orElse(OptionalLong.empty());
 
     /**
      * Creates a list codec that can deserialize single elements as a list,
