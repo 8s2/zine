@@ -1,17 +1,17 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import net.minecraft.predicate.NumberRange;
-import net.minecraft.predicate.entity.DamageSourcePredicate;
-import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.advancements.criterion.DamageSourcePredicate;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import org.jetbrains.annotations.Nullable;
 
 public interface ZineDamagePredicate {
 
-    default void zine$setDealt(NumberRange.DoubleRange dealt) {
+    default void zine$setDealt(MinMaxBounds.Doubles dealt) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setTaken(NumberRange.DoubleRange taken) {
+    default void zine$setTaken(MinMaxBounds.Doubles taken) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 

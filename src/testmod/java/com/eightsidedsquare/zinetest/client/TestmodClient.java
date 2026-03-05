@@ -1,9 +1,9 @@
 package com.eightsidedsquare.zinetest.client;
 
 import com.eightsidedsquare.zine.client.atlas.AtlasEvents;
-import com.eightsidedsquare.zine.client.atlas.ConnectedTexturesAtlasSource;
-import com.eightsidedsquare.zine.client.atlas.GeneratorAtlasSource;
-import com.eightsidedsquare.zine.client.atlas.RemapAtlasSource;
+import com.eightsidedsquare.zine.client.atlas.ConnectedTexturesSpriteSource;
+import com.eightsidedsquare.zine.client.atlas.GeneratorSpriteSource;
+import com.eightsidedsquare.zine.client.atlas.RemapSpriteSource;
 import com.eightsidedsquare.zine.client.atlas.generator.NoiseSpriteGenerator;
 import com.eightsidedsquare.zine.client.atlas.generator.SpriteProperties;
 import com.eightsidedsquare.zine.client.atlas.gradient.Gradient1D;
@@ -17,23 +17,27 @@ import com.eightsidedsquare.zinetest.core.TestmodInit;
 import com.eightsidedsquare.zinetest.core.TestmodItems;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
+import net.fabricmc.fabric.api.client.rendering.v1.ChunkSectionLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.data.ItemModels;
-import net.minecraft.client.data.ModelIds;
-import net.minecraft.client.data.Models;
-import net.minecraft.client.data.TextureMap;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.render.model.SimpleBlockStateModel;
-import net.minecraft.client.render.model.json.ModelVariant;
-import net.minecraft.item.Items;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.data.models.model.ItemModelUtils;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.block.model.SingleVariant;
+import net.minecraft.client.renderer.block.model.Variant;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.renderer.texture.atlas.sources.SingleFile;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -43,21 +47,21 @@ import java.util.Map;
 public class TestmodClient implements ClientModInitializer {
 
     public static final ClientRegistryHelper REGISTRY = ClientRegistryHelper.create(TestmodInit.MOD_ID);
-    public static int entityId;
+    public static final Identifier NEST_MODEL = TestmodInit.id("nest");
     private static final Identifier TEST_MODEL = TestmodInit.id("item/test");
     private static final boolean SHOW_TEST_HUD = false;
 
     @Override
     public void onInitializeClient() {
-        AtlasEvents.modifySourcesEvent(Identifier.ofVanilla("blocks")).register(sources -> {
-            sources.add(new GeneratorAtlasSource(
+        AtlasEvents.modifySourcesEvent(Identifier.withDefaultNamespace("blocks")).register(sources -> {
+            sources.add(new GeneratorSpriteSource(
                     new NoiseSpriteGenerator(
                             Gradient1D.builder()
                                     .pt(0xff1a372c, 0.2f)
                                     .pt(0xff42bb1f, 0.6f)
                                     .pt(0xffcaf732, 0.9f)
                                     .build(),
-                            new DoublePerlinNoiseSampler.NoiseParameters(1, 1, 1, 1),
+                            new NormalNoise.NoiseParameters(1, 1, 1, 1),
                             42069L,
                             new Vector2f(3f, 2f),
                             new Vector3f(0, -5, 1f),
@@ -66,81 +70,78 @@ public class TestmodClient implements ClientModInitializer {
                     TestmodInit.id("goo"),
                     new SpriteProperties(16, 16, 64, 2, false)
             ));
-            sources.add(new RemapAtlasSource(
+            sources.add(new RemapSpriteSource(
                     List.of(
-                            RemapAtlasSource.textureSet(
+                            RemapSpriteSource.textureSet(
                                     "polished_granite",
                                     Map.of(
-                                            0, RemapAtlasSource.texture(
-                                                    Identifier.of("block/debug"),
+                                            0, RemapSpriteSource.texture(
+                                                    Identifier.parse("block/debug"),
                                                     TestmodInit.id("block/offset"),
                                                     -16,
                                                     16
                                             ),
-                                            255, RemapAtlasSource.texture(Identifier.of("block/tuff"))
+                                            255, RemapSpriteSource.texture(Identifier.parse("block/tuff"))
                                     )
                             )
 
                     ),
                     List.of(
-                            RemapAtlasSource.mapping(TestmodInit.id("block/bricks_uv"), null, "_bricks"),
-                            RemapAtlasSource.mapping(TestmodInit.id("block/stone_bricks_uv"), null, "_stone_bricks"),
-                            RemapAtlasSource.mapping(TestmodInit.id("block/mud_bricks_uv"), null, "_mud_bricks"),
-                            RemapAtlasSource.mapping(TestmodInit.id("block/tiles_uv"), null, "_tiles"),
-                            RemapAtlasSource.mapping(TestmodInit.id("block/cut_uv"), "cut_", null),
-                            RemapAtlasSource.mapping(TestmodInit.id("block/full_uv"), null, "_block")
+                            RemapSpriteSource.mapping(TestmodInit.id("block/bricks_uv"), null, "_bricks"),
+                            RemapSpriteSource.mapping(TestmodInit.id("block/stone_bricks_uv"), null, "_stone_bricks"),
+                            RemapSpriteSource.mapping(TestmodInit.id("block/mud_bricks_uv"), null, "_mud_bricks"),
+                            RemapSpriteSource.mapping(TestmodInit.id("block/tiles_uv"), null, "_tiles"),
+                            RemapSpriteSource.mapping(TestmodInit.id("block/cut_uv"), "cut_", null),
+                            RemapSpriteSource.mapping(TestmodInit.id("block/full_uv"), null, "_block")
                     )
             ));
-            sources.add(new ConnectedTexturesAtlasSource(TestmodInit.id("block/wood")));
+            sources.add(new ConnectedTexturesSpriteSource(TestmodInit.id("block/wood")));
+//            sources.add(new SingleFile(Identifier.withDefaultNamespace("item/egg")));
+//            sources.add(new SingleFile(Identifier.withDefaultNamespace("item/brown_egg")));
+//            sources.add(new SingleFile(Identifier.withDefaultNamespace("item/blue_egg")));
         });
         ItemModelEvents.BEFORE_BAKE.register((id, unbaked) -> {
-            if(Items.DIAMOND.zine$modelEquals(id)) {
-                return ItemModels.composite(unbaked, ItemModels.basic(TEST_MODEL));
-            }else if(Items.COPPER_INGOT.zine$modelEquals(id)) {
+            if(id.equals(BuiltInRegistries.ITEM.getKey(Items.DIAMOND))) {
+                return ItemModelUtils.composite(unbaked, ItemModelUtils.plainModel(TEST_MODEL));
+            }else if(id.equals(BuiltInRegistries.ITEM.getKey(Items.COPPER_INGOT))) {
                 return new TransformedItemModel.Unbaked();
             }
             return unbaked;
         });
         ModelEvents.ADD_UNBAKED.register(modelCollector -> {
-            Models.GENERATED.upload(TEST_MODEL, TextureMap.layer0(Items.EMERALD), modelCollector);
-            Models.GENERATED.upload(TestmodItems.TOURMALINE, TextureMap.layer0(TestmodItems.TOURMALINE), modelCollector);
-            Models.GENERATED.upload(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE, TextureMap.layer0(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE), modelCollector);
-            Models.CUBE_ALL.upload(TestmodBlocks.TOURMALINE_BLOCK, TextureMap.all(TestmodBlocks.TOURMALINE_BLOCK), modelCollector);
-            Models.CUBE_ALL.upload(TestmodBlocks.GOO, TextureMap.all(TestmodInit.id("goo")), modelCollector);
-            Models.CUBE_ALL.upload(TestmodBlocks.WOOD, TextureMap.all(TextureMap.getSubId(TestmodBlocks.WOOD, "_all")), modelCollector);
-            Models.CUBE_ALL.upload(TestmodBlocks.RAINBOW, TextureMap.all(TextureMap.getId(TestmodBlocks.RAINBOW)), modelCollector);
+            ModelTemplates.FLAT_ITEM.create(TEST_MODEL, TextureMapping.layer0(Items.EMERALD), modelCollector);
+            ModelTemplates.FLAT_ITEM.create(TestmodItems.TOURMALINE, TextureMapping.layer0(TestmodItems.TOURMALINE), modelCollector);
+            ModelTemplates.FLAT_ITEM.create(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE, TextureMapping.layer0(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE), modelCollector);
+            ModelTemplates.CUBE_ALL.create(TestmodBlocks.TOURMALINE_BLOCK, TextureMapping.cube(TestmodBlocks.TOURMALINE_BLOCK), modelCollector);
+            ModelTemplates.CUBE_ALL.create(TestmodBlocks.GOO, TextureMapping.cube(TestmodInit.id("goo")), modelCollector);
+            ModelTemplates.CUBE_ALL.create(TestmodBlocks.WOOD, TextureMapping.cube(TextureMapping.getBlockTexture(TestmodBlocks.WOOD, "_all")), modelCollector);
+            ModelTemplates.CUBE_ALL.create(TestmodBlocks.RAINBOW, TextureMapping.cube(TextureMapping.getBlockTexture(TestmodBlocks.RAINBOW)), modelCollector);
         });
         ItemModelEvents.ADD_UNBAKED.register(assetCollector -> {
-            assetCollector.accept(TestmodItems.TOURMALINE, ItemModels.basic(ModelIds.getItemModelId(TestmodItems.TOURMALINE)));
-            assetCollector.accept(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE, ItemModels.basic(ModelIds.getItemModelId(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE)));
-            assetCollector.accept(TestmodItems.TOURMALINE_BLOCK, ItemModels.basic(ModelIds.getBlockModelId(TestmodBlocks.TOURMALINE_BLOCK)));
-            assetCollector.accept(TestmodItems.GOO, ItemModels.basic(ModelIds.getBlockModelId(TestmodBlocks.GOO)));
-            assetCollector.accept(TestmodItems.WOOD, ItemModels.basic(ModelIds.getBlockModelId(TestmodBlocks.WOOD)));
-            assetCollector.accept(TestmodItems.RAINBOW, ItemModels.basic(ModelIds.getBlockModelId(TestmodBlocks.RAINBOW)));
-            assetCollector.accept(TestmodItems.BIG_DIAMOND, ItemModels.basic(ModelIds.getBlockModelId(Blocks.DIAMOND_BLOCK)));
+            assetCollector.accept(TestmodItems.TOURMALINE, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodItems.TOURMALINE)));
+            assetCollector.accept(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE)));
+            assetCollector.accept(TestmodItems.TOURMALINE_BLOCK, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlocks.TOURMALINE_BLOCK)));
+            assetCollector.accept(TestmodItems.GOO, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlocks.GOO)));
+            assetCollector.accept(TestmodItems.WOOD, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlocks.WOOD)));
+            assetCollector.accept(TestmodItems.RAINBOW, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlocks.RAINBOW)));
+            assetCollector.accept(TestmodItems.BIG_DIAMOND, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(Blocks.DIAMOND_BLOCK)));
         });
         ModelLoadingPlugin.register(pluginCtx -> {
             pluginCtx.registerBlockStateResolver(TestmodBlocks.TOURMALINE_BLOCK, ctx -> {
-                ctx.setModel(ctx.block().getDefaultState(), new SimpleBlockStateModel.Unbaked(new ModelVariant(ModelIds.getBlockModelId(TestmodBlocks.TOURMALINE_BLOCK))).cached());
+                ctx.setModel(ctx.block().defaultBlockState(), new SingleVariant.Unbaked(new Variant(ModelLocationUtils.getModelLocation(TestmodBlocks.TOURMALINE_BLOCK))).asRoot());
             });
             pluginCtx.registerBlockStateResolver(TestmodBlocks.GOO, ctx -> {
-                ctx.setModel(ctx.block().getDefaultState(), new SimpleBlockStateModel.Unbaked(new ModelVariant(ModelIds.getBlockModelId(TestmodBlocks.GOO))).cached());
+                ctx.setModel(ctx.block().defaultBlockState(), new SingleVariant.Unbaked(new Variant(ModelLocationUtils.getModelLocation(TestmodBlocks.GOO))).asRoot());
             });
         });
-        ModelLoadingPlugin.register(ctx -> ctx.modifyItemModelBeforeBake().register((model, context) -> {
-            if(Items.DIAMOND.zine$modelEquals(context.itemId())) {
-                return ItemModels.composite(model, ItemModels.basic(TEST_MODEL));
-            }
-            return model;
-        }));
         LanguageEvents.MODIFY_TRANSLATIONS.register((translations, languageCode, rightToLeft) -> {
-            translations.putIfAbsent(TestmodItems.TOURMALINE.getTranslationKey(), "Tourmaline");
-            translations.putIfAbsent(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.getTranslationKey(), "Checkered Armor Trim");
-            translations.putIfAbsent(TestmodItems.TOURMALINE_BLOCK.getTranslationKey(), "Block of Tourmaline");
-            translations.putIfAbsent(TestmodItems.GOO.getTranslationKey(), "Goo");
-            translations.putIfAbsent(TestmodItems.WOOD.getTranslationKey(), "Wood");
-            translations.putIfAbsent(TestmodItems.RAINBOW.getTranslationKey(), "Rainbow");
-            translations.putIfAbsent(TestmodItems.BIG_DIAMOND.getTranslationKey(), "Big Diamond");
+            translations.putIfAbsent(TestmodItems.TOURMALINE.getDescriptionId(), "Tourmaline");
+            translations.putIfAbsent(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.getDescriptionId(), "Checkered Armor Trim");
+            translations.putIfAbsent(TestmodItems.TOURMALINE_BLOCK.getDescriptionId(), "Block of Tourmaline");
+            translations.putIfAbsent(TestmodItems.GOO.getDescriptionId(), "Goo");
+            translations.putIfAbsent(TestmodItems.WOOD.getDescriptionId(), "Wood");
+            translations.putIfAbsent(TestmodItems.RAINBOW.getDescriptionId(), "Rainbow");
+            translations.putIfAbsent(TestmodItems.BIG_DIAMOND.getDescriptionId(), "Big Diamond");
         });
         ArmorTrimRegistry.registerMaterial(TestmodInit.TOURMALINE_TRIM_MATERIAL);
         ArmorTrimRegistry.registerMaterial(TestmodInit.OBSIDIAN_TRIM_MATERIAL);
@@ -148,12 +149,16 @@ public class TestmodClient implements ClientModInitializer {
 
         REGISTRY.itemModel("transformed", TransformedItemModel.Unbaked.CODEC);
 
+        REGISTRY.blockStateModel("nest", NestBlockStateModel.Unbaked.CODEC);
+
+        ChunkSectionLayerMap.putBlock(TestmodBlocks.NEST, ChunkSectionLayer.CUTOUT);
+
         if(SHOW_TEST_HUD) {
             HudElementRegistry.attachElementAfter(VanillaHudElements.TITLE_AND_SUBTITLE, TestmodInit.id("test"), (ctx, tickCounter) -> {
-                TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-                MutableText text = Text.literal("ABC 123").formatted(Formatting.ITALIC, Formatting.BOLD);
-                ctx.drawText(textRenderer, text, 10, 10, -1, false);
-                ctx.drawText(textRenderer, text, 10, 20, -1, false);
+                Font textRenderer = Minecraft.getInstance().font;
+                MutableComponent text = Component.literal("ABC 123").withStyle(ChatFormatting.ITALIC, ChatFormatting.BOLD);
+                ctx.drawString(textRenderer, text, 10, 10, -1, false);
+                ctx.drawString(textRenderer, text, 10, 20, -1, false);
             });
         }
     }

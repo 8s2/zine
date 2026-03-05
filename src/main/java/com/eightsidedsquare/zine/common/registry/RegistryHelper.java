@@ -1,174 +1,169 @@
 package com.eightsidedsquare.zine.common.registry;
 
+import com.eightsidedsquare.zine.common.item.CustomIngredientSerializerImpl;
 import com.eightsidedsquare.zine.common.recipe.RecipeTypeImpl;
-import com.eightsidedsquare.zine.common.text.CustomStyleAttribute;
 import com.eightsidedsquare.zine.common.text.TextUtil;
 import com.eightsidedsquare.zine.common.text.TextUtilImpl;
 import com.eightsidedsquare.zine.common.util.codec.RegistryCodecGroup;
-import com.eightsidedsquare.zine.core.ZineRegistries;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricTrackedDataRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityDataRegistry;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
-import net.minecraft.advancement.criterion.Criterion;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.command.argument.serialize.ArgumentSerializer;
-import net.minecraft.command.permission.Permission;
-import net.minecraft.command.permission.PermissionCheck;
-import net.minecraft.component.ComponentType;
-import net.minecraft.dialog.action.DialogAction;
-import net.minecraft.dialog.body.DialogBody;
-import net.minecraft.dialog.input.InputControl;
-import net.minecraft.dialog.type.Dialog;
-import net.minecraft.enchantment.EnchantmentLevelBasedValue;
-import net.minecraft.enchantment.effect.EnchantmentEntityEffect;
-import net.minecraft.enchantment.effect.EnchantmentLocationBasedEffect;
-import net.minecraft.enchantment.effect.EnchantmentValueEffect;
-import net.minecraft.enchantment.provider.EnchantmentProvider;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.ai.brain.Activity;
-import net.minecraft.entity.ai.brain.MemoryModuleType;
-import net.minecraft.entity.ai.brain.sensor.Sensor;
-import net.minecraft.entity.ai.brain.sensor.SensorType;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.data.TrackedDataHandler;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.spawn.SpawnCondition;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.SpawnEggItem;
-import net.minecraft.item.consume.ConsumeEffect;
-import net.minecraft.item.map.MapDecorationType;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.condition.LootConditionType;
-import net.minecraft.loot.entry.LootPoolEntry;
-import net.minecraft.loot.entry.LootPoolEntryType;
-import net.minecraft.loot.function.LootFunction;
-import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.loot.provider.nbt.LootNbtProvider;
-import net.minecraft.loot.provider.nbt.LootNbtProviderType;
-import net.minecraft.loot.provider.number.LootNumberProvider;
-import net.minecraft.loot.provider.number.LootNumberProviderType;
-import net.minecraft.loot.provider.score.LootScoreProvider;
-import net.minecraft.loot.provider.score.LootScoreProviderType;
-import net.minecraft.loot.slot.SlotSource;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleType;
-import net.minecraft.particle.SimpleParticleType;
-import net.minecraft.potion.Potion;
-import net.minecraft.predicate.component.ComponentPredicate;
-import net.minecraft.predicate.entity.EntitySubPredicate;
-import net.minecraft.recipe.*;
-import net.minecraft.recipe.book.RecipeBookCategory;
-import net.minecraft.recipe.display.RecipeDisplay;
-import net.minecraft.recipe.display.SlotDisplay;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.resource.featuretoggle.FeatureFlags;
-import net.minecraft.resource.featuretoggle.FeatureSet;
-import net.minecraft.scoreboard.number.NumberFormat;
-import net.minecraft.scoreboard.number.NumberFormatType;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.server.dedicated.management.IncomingRpcMethod;
-import net.minecraft.server.dedicated.management.OutgoingRpcMethod;
-import net.minecraft.server.world.ChunkTicketType;
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.stat.StatFormatter;
-import net.minecraft.stat.StatType;
-import net.minecraft.stat.Stats;
-import net.minecraft.structure.StructurePieceType;
-import net.minecraft.structure.pool.StructurePoolElement;
-import net.minecraft.structure.pool.StructurePoolElementType;
-import net.minecraft.structure.pool.alias.StructurePoolAliasBinding;
-import net.minecraft.structure.processor.StructureProcessor;
-import net.minecraft.structure.processor.StructureProcessorType;
-import net.minecraft.structure.rule.PosRuleTest;
-import net.minecraft.structure.rule.PosRuleTestType;
-import net.minecraft.structure.rule.RuleTest;
-import net.minecraft.structure.rule.RuleTestType;
-import net.minecraft.structure.rule.blockentity.RuleBlockEntityModifier;
-import net.minecraft.structure.rule.blockentity.RuleBlockEntityModifierType;
-import net.minecraft.test.TestContext;
-import net.minecraft.test.TestEnvironmentDefinition;
-import net.minecraft.test.TestInstance;
-import net.minecraft.text.NbtDataSource;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextContent;
-import net.minecraft.text.object.TextObjectContents;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
+import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
+import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.advancements.criterion.EntitySubPredicate;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.predicates.DataComponentPredicate;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.gametest.framework.GameTestInstance;
+import net.minecraft.gametest.framework.TestEnvironmentDefinition;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.contents.data.DataSource;
+import net.minecraft.network.chat.contents.objects.ObjectInfo;
+import net.minecraft.network.chat.numbers.NumberFormat;
+import net.minecraft.network.chat.numbers.NumberFormatType;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.dialog.Dialog;
+import net.minecraft.server.dialog.action.Action;
+import net.minecraft.server.dialog.body.DialogBody;
+import net.minecraft.server.dialog.input.InputControl;
+import net.minecraft.server.jsonrpc.IncomingRpcMethod;
+import net.minecraft.server.jsonrpc.OutgoingRpcMethod;
+import net.minecraft.server.level.TicketType;
+import net.minecraft.server.permissions.Permission;
+import net.minecraft.server.permissions.PermissionCheck;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.stats.StatFormatter;
+import net.minecraft.stats.StatType;
+import net.minecraft.stats.Stats;
 import net.minecraft.util.Util;
-import net.minecraft.util.math.floatprovider.FloatProvider;
-import net.minecraft.util.math.floatprovider.FloatProviderType;
-import net.minecraft.util.math.intprovider.IntProvider;
-import net.minecraft.util.math.intprovider.IntProviderType;
-import net.minecraft.village.VillagerProfession;
-import net.minecraft.village.VillagerType;
+import net.minecraft.util.debug.DebugSubscription;
+import net.minecraft.util.valueproviders.FloatProvider;
+import net.minecraft.util.valueproviders.FloatProviderType;
+import net.minecraft.util.valueproviders.IntProvider;
+import net.minecraft.util.valueproviders.IntProviderType;
+import net.minecraft.world.attribute.AttributeType;
 import net.minecraft.world.attribute.EnvironmentAttribute;
-import net.minecraft.world.attribute.EnvironmentAttributeType;
-import net.minecraft.world.biome.source.BiomeSource;
-import net.minecraft.world.debug.DebugSubscriptionType;
-import net.minecraft.world.event.GameEvent;
-import net.minecraft.world.event.PositionSource;
-import net.minecraft.world.event.PositionSourceType;
-import net.minecraft.world.gen.blockpredicate.BlockPredicate;
-import net.minecraft.world.gen.blockpredicate.BlockPredicateType;
-import net.minecraft.world.gen.carver.Carver;
-import net.minecraft.world.gen.carver.CarverConfig;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.chunk.placement.StructurePlacement;
-import net.minecraft.world.gen.chunk.placement.StructurePlacementType;
-import net.minecraft.world.gen.densityfunction.DensityFunction;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.FeatureConfig;
-import net.minecraft.world.gen.feature.size.FeatureSize;
-import net.minecraft.world.gen.feature.size.FeatureSizeType;
-import net.minecraft.world.gen.foliage.FoliagePlacer;
-import net.minecraft.world.gen.foliage.FoliagePlacerType;
-import net.minecraft.world.gen.heightprovider.HeightProvider;
-import net.minecraft.world.gen.heightprovider.HeightProviderType;
-import net.minecraft.world.gen.placementmodifier.PlacementModifier;
-import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
-import net.minecraft.world.gen.root.RootPlacer;
-import net.minecraft.world.gen.root.RootPlacerType;
-import net.minecraft.world.gen.stateprovider.BlockStateProvider;
-import net.minecraft.world.gen.stateprovider.BlockStateProviderType;
-import net.minecraft.world.gen.structure.Structure;
-import net.minecraft.world.gen.structure.StructureType;
-import net.minecraft.world.gen.surfacebuilder.MaterialRules;
-import net.minecraft.world.gen.treedecorator.TreeDecorator;
-import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
-import net.minecraft.world.gen.trunk.TrunkPlacer;
-import net.minecraft.world.gen.trunk.TrunkPlacerType;
-import net.minecraft.world.poi.PointOfInterestType;
-import net.minecraft.world.poi.PointOfInterestTypes;
-import net.minecraft.world.rule.GameRule;
-import net.minecraft.world.rule.GameRuleCategory;
-import net.minecraft.world.rule.GameRuleType;
-import net.minecraft.world.rule.GameRuleVisitor;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.sensing.Sensor;
+import net.minecraft.world.entity.ai.sensing.SensorType;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
+import net.minecraft.world.entity.ai.village.poi.PoiTypes;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.entity.npc.villager.VillagerType;
+import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.entity.variant.SpawnCondition;
+import net.minecraft.world.flag.FeatureFlagSet;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
+import net.minecraft.world.item.enchantment.LevelBasedValue;
+import net.minecraft.world.item.enchantment.effects.EnchantmentEntityEffect;
+import net.minecraft.world.item.enchantment.effects.EnchantmentLocationBasedEffect;
+import net.minecraft.world.item.enchantment.effects.EnchantmentValueEffect;
+import net.minecraft.world.item.enchantment.providers.EnchantmentProvider;
+import net.minecraft.world.item.slot.SlotSource;
+import net.minecraft.world.item.trading.TradeSet;
+import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.DecoratedPotPattern;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
+import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gameevent.PositionSource;
+import net.minecraft.world.level.gameevent.PositionSourceType;
+import net.minecraft.world.level.gamerules.GameRule;
+import net.minecraft.world.level.gamerules.GameRuleCategory;
+import net.minecraft.world.level.gamerules.GameRuleType;
+import net.minecraft.world.level.gamerules.GameRuleTypeVisitor;
+import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.SurfaceRules;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
+import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicateType;
+import net.minecraft.world.level.levelgen.carver.CarverConfiguration;
+import net.minecraft.world.level.levelgen.carver.WorldCarver;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
+import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSizeType;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
+import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerType;
+import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
+import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacerType;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
+import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
+import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
+import net.minecraft.world.level.levelgen.heightproviders.HeightProviderType;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
+import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
+import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasBinding;
+import net.minecraft.world.level.levelgen.structure.templatesystem.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifier;
+import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifierType;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.saveddata.maps.MapDecorationType;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.providers.nbt.NbtProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.score.ScoreboardNameProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -205,8 +200,8 @@ public interface RegistryHelper {
      * @return the registry key for a value of the registry specified by {@code registryKey}.
      * @param <T> the type of the registry key
      */
-    default <T> RegistryKey<T> key(RegistryKey<? extends Registry<T>> registryKey, String name) {
-        return RegistryKey.of(registryKey, this.id(name));
+    default <T> ResourceKey<T> key(ResourceKey<? extends Registry<T>> registryKey, String name) {
+        return ResourceKey.create(registryKey, this.id(name));
     }
 
     /**
@@ -225,10 +220,10 @@ public interface RegistryHelper {
      * @param registry the static registry to register {@code value} to
      * @param name the path of the registered value's identifier
      * @param value the value to register
-     * @return registered {@code value} wrapped in a {@link RegistryEntry.Reference}
+     * @return registered {@code value} wrapped in a {@link Holder.Reference}
      */
-    default <T> RegistryEntry.Reference<T> registerReference(Registry<T> registry, String name, T value) {
-        return Registry.registerReference(registry, this.id(name), value);
+    default <T> Holder.Reference<T> registerReference(Registry<T> registry, String name, T value) {
+        return Registry.registerForHolder(registry, this.id(name), value);
     }
 
     /**
@@ -247,10 +242,10 @@ public interface RegistryHelper {
      * @return the registered item
      * @param <T> the type of the item
      * @apiNote Prioritize the other {@code item} methods over this one,
-     * as they handle passing a required {@link RegistryKey} to the {@link Item.Settings}.
+     * as they handle passing a required {@link ResourceKey} to the {@link Item.Properties}.
      */
     default <T extends Item> T item(String name, T item) {
-        return this.register(Registries.ITEM, name, item);
+        return this.register(BuiltInRegistries.ITEM, name, item);
     }
 
     /**
@@ -261,8 +256,8 @@ public interface RegistryHelper {
      * @return the registered item created by the {@code factory} with {@code settings}
      * @param <T> the type of the item
      */
-    default <T extends Item> T item(String name, Item.Settings settings, Function<Item.Settings, T> factory) {
-        return this.item(name, factory.apply(settings.registryKey(this.key(RegistryKeys.ITEM, name))));
+    default <T extends Item> T item(String name, Item.Properties settings, Function<Item.Properties, T> factory) {
+        return this.item(name, factory.apply(settings.setId(this.key(Registries.ITEM, name))));
     }
 
     /**
@@ -271,7 +266,7 @@ public interface RegistryHelper {
      * @param settings the item's settings
      * @return the registered item with {@code settings}
      */
-    default Item item(String name, Item.Settings settings) {
+    default Item item(String name, Item.Properties settings) {
         return this.item(name, settings, Item::new);
     }
 
@@ -281,7 +276,7 @@ public interface RegistryHelper {
      * @return the registered item
      */
     default Item item(String name) {
-        return this.item(name, new Item.Settings());
+        return this.item(name, new Item.Properties());
     }
 
     /**
@@ -293,8 +288,8 @@ public interface RegistryHelper {
      * @return the registered block item created by the {@code factory} with {@code settings}
      * @param <T> the type of the block item
      */
-    default <T extends BlockItem> T item(String name, Block block, Item.Settings settings, BiFunction<Block, Item.Settings, T> factory) {
-        return this.item(name, settings.useBlockPrefixedTranslationKey(), itemSettings -> factory.apply(block, itemSettings));
+    default <T extends BlockItem> T item(String name, Block block, Item.Properties settings, BiFunction<Block, Item.Properties, T> factory) {
+        return this.item(name, settings.useBlockDescriptionPrefix(), itemSettings -> factory.apply(block, itemSettings));
     }
 
     /**
@@ -304,7 +299,7 @@ public interface RegistryHelper {
      * @return the registered block item
      */
     default BlockItem item(String name, Block block) {
-        return this.item(name, block, new Item.Settings(), BlockItem::new);
+        return this.item(name, block, new Item.Properties(), BlockItem::new);
     }
 
     /**
@@ -314,7 +309,7 @@ public interface RegistryHelper {
      * @return the registered spawn egg item
      */
     default SpawnEggItem item(String name, EntityType<?> entityType) {
-        return this.item(name, new Item.Settings().spawnEgg(entityType), SpawnEggItem::new);
+        return this.item(name, new Item.Properties().spawnEgg(entityType), SpawnEggItem::new);
     }
 
     /**
@@ -324,10 +319,10 @@ public interface RegistryHelper {
      * @return the registered block
      * @param <T> the type of the block
      * @apiNote Prioritize the other {@code block} methods over this one,
-     * as they handle passing a required {@link RegistryKey} to the {@link AbstractBlock.Settings}.
+     * as they handle passing a required {@link ResourceKey} to the {@link net.minecraft.world.level.block.state.BlockBehaviour.Properties}.
      */
     default <T extends Block> T block(String name, T block) {
-        return this.register(Registries.BLOCK, name, block);
+        return this.register(BuiltInRegistries.BLOCK, name, block);
     }
 
     /**
@@ -337,8 +332,8 @@ public interface RegistryHelper {
      * @return the registered block created by the {@code factory} with {@code settings}
      * @param <T> the type of the block
      */
-    default <T extends Block> T block(String name, AbstractBlock.Settings settings, Function<AbstractBlock.Settings, T> factory) {
-        return this.block(name, factory.apply(settings.registryKey(this.key(RegistryKeys.BLOCK, name))));
+    default <T extends Block> T block(String name, net.minecraft.world.level.block.state.BlockBehaviour.Properties settings, Function<net.minecraft.world.level.block.state.BlockBehaviour.Properties, T> factory) {
+        return this.block(name, factory.apply(settings.setId(this.key(Registries.BLOCK, name))));
     }
 
     /**
@@ -347,7 +342,7 @@ public interface RegistryHelper {
      * @param settings the block's settings
      * @return the registered block with {@code settings}
      */
-    default Block block(String name, AbstractBlock.Settings settings) {
+    default Block block(String name, net.minecraft.world.level.block.state.BlockBehaviour.Properties settings) {
         return this.block(name, settings, Block::new);
     }
 
@@ -359,7 +354,7 @@ public interface RegistryHelper {
      * @return the registered block
      * @param <T> the type of the block
      * @apiNote Prioritize the other {@code blockWithItem} methods over this one,
-     * as they handle passing a required {@link RegistryKey} to the {@link AbstractBlock.Settings}.
+     * as they handle passing a required {@link ResourceKey} to the {@link net.minecraft.world.level.block.state.BlockBehaviour.Properties}.
      */
     default <T extends Block> T blockWithItem(String name, T block) {
         return this.registerBlockItem(name, this.block(name, block));
@@ -374,7 +369,7 @@ public interface RegistryHelper {
      * @return the registered block created by the {@code factory} with {@code settings}
      * @param <T> the type of the block
      */
-    default <T extends Block> T blockWithItem(String name, AbstractBlock.Settings settings, Function<AbstractBlock.Settings, T> factory) {
+    default <T extends Block> T blockWithItem(String name, net.minecraft.world.level.block.state.BlockBehaviour.Properties settings, Function<net.minecraft.world.level.block.state.BlockBehaviour.Properties, T> factory) {
         return this.registerBlockItem(name, this.block(name, settings, factory));
     }
 
@@ -385,15 +380,15 @@ public interface RegistryHelper {
      * @param settings the block's settings
      * @return the registered block with {@code settings}
      */
-    default Block blockWithItem(String name, AbstractBlock.Settings settings) {
+    default Block blockWithItem(String name, net.minecraft.world.level.block.state.BlockBehaviour.Properties settings) {
         return this.registerBlockItem(name, this.block(name, settings));
     }
 
     /**
-     * Registers an entity type given an entity type builder. Use {@link EntityType.Builder#create(SpawnGroup)},
-     * {@link EntityType.Builder#create(EntityType.EntityFactory, SpawnGroup)},
-     * {@link EntityType.Builder#createLiving(EntityType.EntityFactory, SpawnGroup, UnaryOperator)},
-     * or {@link EntityType.Builder#createMob(EntityType.EntityFactory, SpawnGroup, UnaryOperator)}
+     * Registers an entity type given an entity type builder. Use {@link EntityType.Builder#createNothing(MobCategory)},
+     * {@link EntityType.Builder#of(EntityType.EntityFactory, MobCategory)},
+     * {@link EntityType.Builder#createLiving(EntityType.EntityFactory, MobCategory, UnaryOperator)},
+     * or {@link EntityType.Builder#createMob(EntityType.EntityFactory, MobCategory, UnaryOperator)}
      * to create a builder.
      * @param name the name of the entity type
      * @param builder the entity type builder
@@ -401,7 +396,7 @@ public interface RegistryHelper {
      * @param <T> the type of the entity
      */
     default <T extends Entity> EntityType<T> entity(String name, EntityType.Builder<T> builder) {
-        return this.register(Registries.ENTITY_TYPE, name, builder.build(this.key(RegistryKeys.ENTITY_TYPE, name)));
+        return this.register(BuiltInRegistries.ENTITY_TYPE, name, builder.build(this.key(Registries.ENTITY_TYPE, name)));
     }
 
     /**
@@ -414,7 +409,7 @@ public interface RegistryHelper {
      * @param <T> the type of the block entity
      */
     default <T extends BlockEntity> BlockEntityType<T> blockEntity(String name, FabricBlockEntityTypeBuilder<T> builder) {
-        return this.register(Registries.BLOCK_ENTITY_TYPE, name, builder.build());
+        return this.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, name, builder.build());
     }
 
     /**
@@ -423,7 +418,7 @@ public interface RegistryHelper {
      * @return the registered sound event
      */
     default SoundEvent sound(String name, SoundEvent soundEvent) {
-        return this.register(Registries.SOUND_EVENT, name, soundEvent);
+        return this.register(BuiltInRegistries.SOUND_EVENT, name, soundEvent);
     }
 
     /**
@@ -432,38 +427,38 @@ public interface RegistryHelper {
      * @return the registered sound event
      */
     default SoundEvent sound(String name) {
-        return this.sound(name, SoundEvent.of(this.id(name)));
+        return this.sound(name, SoundEvent.createVariableRangeEvent(this.id(name)));
     }
 
     /**
-     * Registers a {@link SoundEvent} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link SoundEvent} wrapped in a {@link Holder.Reference}.
      * @param name the name of the sound event
      * @param soundEvent the sound event to register
      * @return the registered sound event
      */
-    default RegistryEntry.Reference<SoundEvent> soundReference(String name, SoundEvent soundEvent) {
-        return this.registerReference(Registries.SOUND_EVENT, name, soundEvent);
+    default Holder.Reference<SoundEvent> soundReference(String name, SoundEvent soundEvent) {
+        return this.registerReference(BuiltInRegistries.SOUND_EVENT, name, soundEvent);
     }
 
     /**
-     * Registers a {@link SoundEvent} wrapped in a {@link RegistryEntry.Reference} without a specified range.
+     * Registers a {@link SoundEvent} wrapped in a {@link Holder.Reference} without a specified range.
      * @param name the name of the sound event
      * @return the registered sound event
      */
-    default RegistryEntry.Reference<SoundEvent> soundReference(String name) {
-        return this.soundReference(name, SoundEvent.of(this.id(name)));
+    default Holder.Reference<SoundEvent> soundReference(String name) {
+        return this.soundReference(name, SoundEvent.createVariableRangeEvent(this.id(name)));
     }
 
     /**
-     * Creates a {@link BlockSoundGroup} with its break, step, place, hit, and fall sounds automatically registered.
-     * These individual sounds can be accessed with {@link BlockSoundGroup#getBreakSound()}, {@link BlockSoundGroup#getStepSound()}, etc.
+     * Creates a {@link SoundType} with its break, step, place, hit, and fall sounds automatically registered.
+     * These individual sounds can be accessed with {@link SoundType#getBreakSound()}, {@link SoundType#getStepSound()}, etc.
      * @param name the base name of the sound events of the block sound group
      * @param volume the volume of the block sound group's sounds
      * @param pitch the pitch of the block sound group's sounds
      * @return the block sound group, containing all registered sound events
      */
-    default BlockSoundGroup blockSoundGroup(String name, float volume, float pitch) {
-        return new BlockSoundGroup(
+    default SoundType blockSoundGroup(String name, float volume, float pitch) {
+        return new SoundType(
                 volume,
                 pitch,
                 this.sound("block." + name + ".break"),
@@ -481,19 +476,19 @@ public interface RegistryHelper {
      * @return the registered component type
      * @param <T> the type of the component type
      */
-    default <T> ComponentType<T> dataComponent(String name, ComponentType<T> componentType) {
-        return this.register(Registries.DATA_COMPONENT_TYPE, name, componentType);
+    default <T> DataComponentType<T> dataComponent(String name, DataComponentType<T> componentType) {
+        return this.register(BuiltInRegistries.DATA_COMPONENT_TYPE, name, componentType);
     }
 
     /**
      * Registers a data component type, which is used by items and block entities.
-     * Use {@link ComponentType#builder()} to create a builder.
+     * Use {@link DataComponentType#builder()} to create a builder.
      * @param name the name of the component type
      * @param builder the component type's builder
      * @return the registered and built component type
      * @param <T> the type of the component type
      */
-    default <T> ComponentType<T> dataComponent(String name, ComponentType.Builder<T> builder) {
+    default <T> DataComponentType<T> dataComponent(String name, DataComponentType.Builder<T> builder) {
         return this.dataComponent(name, builder.build());
     }
 
@@ -504,8 +499,8 @@ public interface RegistryHelper {
      * @return the registered and built component type
      * @param <T> the type of the component type
      */
-    default <T> ComponentType<T> dataComponent(String name, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
-        return this.dataComponent(name, builderOperator.apply(ComponentType.builder()));
+    default <T> DataComponentType<T> dataComponent(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
+        return this.dataComponent(name, builderOperator.apply(DataComponentType.builder()));
     }
 
     /**
@@ -516,9 +511,9 @@ public interface RegistryHelper {
      * @return the registered and built component type
      * @param <T> the registry entry type of the component type
      */
-    default <T> ComponentType<RegistryEntry<T>> dataComponent(String name, RegistryCodecGroup<T> registryCodecGroup) {
+    default <T> DataComponentType<Holder<T>> dataComponent(String name, RegistryCodecGroup<T> registryCodecGroup) {
         return this.dataComponent(name, builder ->
-                builder.codec(registryCodecGroup.entryCodec()).packetCodec(registryCodecGroup.packetCodec()).cache()
+                builder.persistent(registryCodecGroup.holderCodec()).networkSynchronized(registryCodecGroup.streamCodec()).cacheEncoding()
         );
     }
 
@@ -530,7 +525,7 @@ public interface RegistryHelper {
      * @param <T> the type of the game rule
      */
     default <T> GameRule<T> gameRule(String name, GameRule<T> gameRule) {
-        return this.register(Registries.GAME_RULE, name, gameRule);
+        return this.register(BuiltInRegistries.GAME_RULE, name, gameRule);
     }
 
     /**
@@ -541,7 +536,7 @@ public interface RegistryHelper {
      * @return the registered game rule
      */
     default GameRule<Boolean> gameRule(String name, GameRuleCategory category, boolean defaultValue) {
-        return this.gameRule(name, new GameRule<>(category, GameRuleType.BOOL, BoolArgumentType.bool(), GameRuleVisitor::visitBoolean, Codec.BOOL, bool -> bool ? 1 : 0, defaultValue, FeatureSet.empty()));
+        return this.gameRule(name, new GameRule<>(category, GameRuleType.BOOL, BoolArgumentType.bool(), GameRuleTypeVisitor::visitBoolean, Codec.BOOL, bool -> bool ? 1 : 0, defaultValue, FeatureFlagSet.of()));
     }
 
     /**
@@ -553,7 +548,7 @@ public interface RegistryHelper {
      * @return the registered game rule
      */
     default GameRule<Integer> gameRule(String name, GameRuleCategory category, int defaultValue, int minValue) {
-        return this.gameRule(name, category, defaultValue, minValue, Integer.MAX_VALUE, FeatureSet.empty());
+        return this.gameRule(name, category, defaultValue, minValue, Integer.MAX_VALUE, FeatureFlagSet.of());
     }
 
     /**
@@ -566,7 +561,7 @@ public interface RegistryHelper {
      * @return the registered game rule
      */
     default GameRule<Integer> gameRule(String name, GameRuleCategory category, int defaultValue, int minValue, int maxValue) {
-        return this.gameRule(name, category, defaultValue, minValue, maxValue, FeatureSet.empty());
+        return this.gameRule(name, category, defaultValue, minValue, maxValue, FeatureFlagSet.of());
     }
 
     /**
@@ -579,8 +574,8 @@ public interface RegistryHelper {
      * @param featureSet the feature set of the game rule
      * @return the registered game rule
      */
-    default GameRule<Integer> gameRule(String name, GameRuleCategory category, int defaultValue, int minValue, int maxValue, FeatureSet featureSet) {
-        return this.gameRule(name, new GameRule<>(category, GameRuleType.INT, IntegerArgumentType.integer(minValue, maxValue), GameRuleVisitor::visitInt, Codec.intRange(minValue, maxValue), i -> i, defaultValue, featureSet));
+    default GameRule<Integer> gameRule(String name, GameRuleCategory category, int defaultValue, int minValue, int maxValue, FeatureFlagSet featureSet) {
+        return this.gameRule(name, new GameRule<>(category, GameRuleType.INT, IntegerArgumentType.integer(minValue, maxValue), GameRuleTypeVisitor::visitInteger, Codec.intRange(minValue, maxValue), i -> i, defaultValue, featureSet));
     }
 
     /**
@@ -590,19 +585,19 @@ public interface RegistryHelper {
      * @return the registered component type
      * @param <T> the type of the component type
      */
-    default <T> ComponentType<T> enchantmentComponent(String name, ComponentType<T> componentType) {
-        return this.register(Registries.ENCHANTMENT_EFFECT_COMPONENT_TYPE, name, componentType);
+    default <T> DataComponentType<T> enchantmentComponent(String name, DataComponentType<T> componentType) {
+        return this.register(BuiltInRegistries.ENCHANTMENT_EFFECT_COMPONENT_TYPE, name, componentType);
     }
 
     /**
      * Registers an enchantment component type, which is used by enchantments.
-     * Use {@link ComponentType#builder()} to create a builder.
+     * Use {@link DataComponentType#builder()} to create a builder.
      * @param name the name of the component type
      * @param builder the component type's builder
      * @return the registered and built component type
      * @param <T> the type of the component type
      */
-    default <T> ComponentType<T> enchantmentComponent(String name, ComponentType.Builder<T> builder) {
+    default <T> DataComponentType<T> enchantmentComponent(String name, DataComponentType.Builder<T> builder) {
         return this.enchantmentComponent(name, builder.build());
     }
 
@@ -613,8 +608,8 @@ public interface RegistryHelper {
      * @return the registered and built component type
      * @param <T> the type of the component type
      */
-    default <T> ComponentType<T> enchantmentComponent(String name, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
-        return this.enchantmentComponent(name, builderOperator.apply(ComponentType.builder()));
+    default <T> DataComponentType<T> enchantmentComponent(String name, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
+        return this.enchantmentComponent(name, builderOperator.apply(DataComponentType.builder()));
     }
 
     /**
@@ -624,8 +619,8 @@ public interface RegistryHelper {
      * @param <E> the type of the particle type's particle effect
      * @param <T> the type of the particle type
      */
-    default <E extends ParticleEffect, T extends ParticleType<E>> T particle(String name, T particleType) {
-        return this.register(Registries.PARTICLE_TYPE, name, particleType);
+    default <E extends ParticleOptions, T extends ParticleType<E>> T particle(String name, T particleType) {
+        return this.register(BuiltInRegistries.PARTICLE_TYPE, name, particleType);
     }
 
     /**
@@ -657,7 +652,7 @@ public interface RegistryHelper {
      * @return the registered particle type
      * @param <T> the type of the particle type's particle effect
      */
-    default <T extends ParticleEffect> ParticleType<T> particle(String name, boolean alwaysSpawn, MapCodec<T> codec, PacketCodec<? super RegistryByteBuf, T> packetCodec) {
+    default <T extends ParticleOptions> ParticleType<T> particle(String name, boolean alwaysSpawn, MapCodec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, T> packetCodec) {
         return this.particle(name, FabricParticleTypes.complex(alwaysSpawn, codec, packetCodec));
     }
 
@@ -670,7 +665,7 @@ public interface RegistryHelper {
      * @return the registered particle type
      * @param <T> the type of the particle type's particle effect
      */
-    default <T extends ParticleEffect> ParticleType<T> particle(String name, MapCodec<T> codec, PacketCodec<? super RegistryByteBuf, T> packetCodec) {
+    default <T extends ParticleOptions> ParticleType<T> particle(String name, MapCodec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, T> packetCodec) {
         return this.particle(name, false, codec, packetCodec);
     }
 
@@ -683,7 +678,7 @@ public interface RegistryHelper {
      * @return the registered particle type
      * @param <T> the type of the particle type's particle effect
      */
-    default <T extends ParticleEffect> ParticleType<T> particle(String name, boolean alwaysSpawn, Function<ParticleType<T>, MapCodec<T>> codecGetter, Function<ParticleType<T>, PacketCodec<? super RegistryByteBuf, T>> packetCodecGetter) {
+    default <T extends ParticleOptions> ParticleType<T> particle(String name, boolean alwaysSpawn, Function<ParticleType<T>, MapCodec<T>> codecGetter, Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> packetCodecGetter) {
         return this.particle(name, FabricParticleTypes.complex(alwaysSpawn, codecGetter, packetCodecGetter));
     }
 
@@ -696,7 +691,7 @@ public interface RegistryHelper {
      * @return the registered particle type
      * @param <T> the type of the particle type's particle effect
      */
-    default <T extends ParticleEffect> ParticleType<T> particle(String name, Function<ParticleType<T>, MapCodec<T>> codecGetter, Function<ParticleType<T>, PacketCodec<? super RegistryByteBuf, T>> packetCodecGetter) {
+    default <T extends ParticleOptions> ParticleType<T> particle(String name, Function<ParticleType<T>, MapCodec<T>> codecGetter, Function<ParticleType<T>, StreamCodec<? super RegistryFriendlyByteBuf, T>> packetCodecGetter) {
         return this.particle(name, false, codecGetter, packetCodecGetter);
     }
 
@@ -705,46 +700,46 @@ public interface RegistryHelper {
      * @param itemGroup the item group to register
      * @return the registered item group
      */
-    default ItemGroup itemGroup(String name, ItemGroup itemGroup) {
-        return this.register(Registries.ITEM_GROUP, name, itemGroup);
+    default CreativeModeTab itemGroup(String name, CreativeModeTab itemGroup) {
+        return this.register(BuiltInRegistries.CREATIVE_MODE_TAB, name, itemGroup);
     }
 
     /**
-     * Use {@link FabricItemGroup#builder()}
+     * Use {@link FabricCreativeModeTab#builder()}
      * @param name the name of the item group
      * @param builder the builder of the item group to register
      * @return the registered and built item group
      */
-    default ItemGroup itemGroup(String name, ItemGroup.Builder builder) {
+    default CreativeModeTab itemGroup(String name, CreativeModeTab.Builder builder) {
         return this.itemGroup(name, builder.build());
     }
 
     /**
-     * Registers a {@link GameEvent} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link GameEvent} wrapped in a {@link Holder.Reference}.
      * @param name the name of the game event
      * @param gameEvent the game event to register
      * @return the registered game event
      */
-    default RegistryEntry.Reference<GameEvent> gameEvent(String name, GameEvent gameEvent) {
-        return this.registerReference(Registries.GAME_EVENT, name, gameEvent);
+    default Holder.Reference<GameEvent> gameEvent(String name, GameEvent gameEvent) {
+        return this.registerReference(BuiltInRegistries.GAME_EVENT, name, gameEvent);
     }
 
     /**
-     * Registers a {@link GameEvent} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link GameEvent} wrapped in a {@link Holder.Reference}.
      * @param name the name of the game event
      * @param radius the radius of the game event
      * @return the registered game event
      */
-    default RegistryEntry.Reference<GameEvent> gameEvent(String name, int radius) {
+    default Holder.Reference<GameEvent> gameEvent(String name, int radius) {
         return this.gameEvent(name, new GameEvent(radius));
     }
 
     /**
-     * Registers a {@link GameEvent} wrapped in a {@link RegistryEntry.Reference} with a default radius of 16.
+     * Registers a {@link GameEvent} wrapped in a {@link Holder.Reference} with a default radius of 16.
      * @param name the name of the game event
      * @return the registered game event
      */
-    default RegistryEntry.Reference<GameEvent> gameEvent(String name) {
+    default Holder.Reference<GameEvent> gameEvent(String name) {
         return this.gameEvent(name, 16);
     }
 
@@ -755,56 +750,56 @@ public interface RegistryHelper {
      * @param <T> the type of the fluid
      */
     default <T extends Fluid> T fluid(String name, T fluid) {
-        return this.register(Registries.FLUID, name, fluid);
+        return this.register(BuiltInRegistries.FLUID, name, fluid);
     }
 
     /**
-     * Registers a {@link StatusEffect} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link MobEffect} wrapped in a {@link Holder.Reference}.
      * @param name the name of the status effect
      * @param statusEffect the status effect to register
      * @return the registered status effect
      */
-    default RegistryEntry.Reference<StatusEffect> statusEffect(String name, StatusEffect statusEffect) {
-        return this.registerReference(Registries.STATUS_EFFECT, name, statusEffect);
+    default Holder.Reference<MobEffect> statusEffect(String name, MobEffect statusEffect) {
+        return this.registerReference(BuiltInRegistries.MOB_EFFECT, name, statusEffect);
     }
 
     /**
-     * Registers a {@link StatusEffect} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link MobEffect} wrapped in a {@link Holder.Reference}.
      * @param name the name of the status effect
      * @param category the category of the status effect
      * @param color the color of the status effect in RGB format
      * @return the registered status effect
      */
-    default RegistryEntry.Reference<StatusEffect> statusEffect(String name, StatusEffectCategory category, int color) {
-        return this.statusEffect(name, new StatusEffect(category, color));
+    default Holder.Reference<MobEffect> statusEffect(String name, MobEffectCategory category, int color) {
+        return this.statusEffect(name, new MobEffect(category, color));
     }
 
     /**
-     * Registers a {@link StatusEffect} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link MobEffect} wrapped in a {@link Holder.Reference}.
      * @param name the name of the status effect
      * @param category the category of the status effect
      * @param color the color of the status effect in RGB format
      * @param particleEffect the particle spawned by the status effect
      * @return the registered status effect
      */
-    default RegistryEntry.Reference<StatusEffect> statusEffect(String name, StatusEffectCategory category, int color, ParticleEffect particleEffect) {
-        return this.statusEffect(name, new StatusEffect(category, color, particleEffect));
+    default Holder.Reference<MobEffect> statusEffect(String name, MobEffectCategory category, int color, ParticleOptions particleEffect) {
+        return this.statusEffect(name, new MobEffect(category, color, particleEffect));
     }
 
     /**
-     * Registers a {@link StatusEffect} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link MobEffect} wrapped in a {@link Holder.Reference}.
      * @param name the name of the status effect
      * @param category the category of the status effect
      * @param color the color of the status effect in RGB format
      * @param statusEffectOperator operator to apply changes to the status effect after registration
      * @return the registered status effect
      */
-    default RegistryEntry.Reference<StatusEffect> statusEffect(String name, StatusEffectCategory category, int color, UnaryOperator<StatusEffect> statusEffectOperator) {
-        return this.statusEffect(name, statusEffectOperator.apply(new StatusEffect(category, color)));
+    default Holder.Reference<MobEffect> statusEffect(String name, MobEffectCategory category, int color, UnaryOperator<MobEffect> statusEffectOperator) {
+        return this.statusEffect(name, statusEffectOperator.apply(new MobEffect(category, color)));
     }
 
     /**
-     * Registers a {@link StatusEffect} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link MobEffect} wrapped in a {@link Holder.Reference}.
      * @param name the name of the status effect
      * @param category the category of the status effect
      * @param color the color of the status effect in RGB format
@@ -812,22 +807,22 @@ public interface RegistryHelper {
      * @param statusEffectOperator operator to apply changes to the status effect after registration
      * @return the registered status effect
      */
-    default RegistryEntry.Reference<StatusEffect> statusEffect(String name, StatusEffectCategory category, int color, ParticleEffect particleEffect, UnaryOperator<StatusEffect> statusEffectOperator) {
-        return this.statusEffect(name, statusEffectOperator.apply(new StatusEffect(category, color, particleEffect)));
+    default Holder.Reference<MobEffect> statusEffect(String name, MobEffectCategory category, int color, ParticleOptions particleEffect, UnaryOperator<MobEffect> statusEffectOperator) {
+        return this.statusEffect(name, statusEffectOperator.apply(new MobEffect(category, color, particleEffect)));
     }
 
     /**
-     * Registers a {@link Potion} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link Potion} wrapped in a {@link Holder.Reference}.
      * @param name the name of the potion
      * @param potion the potion to register
      * @return the registered potion
      */
-    default RegistryEntry.Reference<Potion> potion(String name, Potion potion) {
-        return this.registerReference(Registries.POTION, name, potion);
+    default Holder.Reference<Potion> potion(String name, Potion potion) {
+        return this.registerReference(BuiltInRegistries.POTION, name, potion);
     }
 
     /**
-     * Registers a {@link Potion} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link Potion} wrapped in a {@link Holder.Reference}.
      * @param name the name of the potion
      * @param statusEffectInstances an array of status effect instances that the potion contains
      * @return the registered potion
@@ -835,7 +830,7 @@ public interface RegistryHelper {
      * Use {@link #potion(String, Potion)} to register "long" and "strong" variants of a potion,
      * since these should use the original potion's base name.
      */
-    default RegistryEntry.Reference<Potion> potion(String name, StatusEffectInstance... statusEffectInstances) {
+    default Holder.Reference<Potion> potion(String name, MobEffectInstance... statusEffectInstances) {
         return this.potion(name, new Potion(name, statusEffectInstances));
     }
 
@@ -845,8 +840,8 @@ public interface RegistryHelper {
      * @return the registered custom stat
      */
     default Identifier customStat(String name, StatFormatter formatter) {
-        Identifier stat = this.register(Registries.CUSTOM_STAT, name, this.id(name));
-        Stats.CUSTOM.getOrCreateStat(stat, formatter);
+        Identifier stat = this.register(BuiltInRegistries.CUSTOM_STAT, name, this.id(name));
+        Stats.CUSTOM.get(stat, formatter);
         return stat;
     }
 
@@ -866,7 +861,7 @@ public interface RegistryHelper {
      * @param <T> the type of stat
      */
     default <T> StatType<T> stat(String name, StatType<T> statType) {
-        return this.register(Registries.STAT_TYPE, name, statType);
+        return this.register(BuiltInRegistries.STAT_TYPE, name, statType);
     }
 
     /**
@@ -876,7 +871,7 @@ public interface RegistryHelper {
      * @param <T> the type of stat
      */
     default <T> StatType<T> stat(String name, Registry<T> registry) {
-        Text text = Text.translatable(Util.createTranslationKey("stat_type", this.id(name)));
+        Component text = Component.translatable(Util.makeDescriptionId("stat_type", this.id(name)));
         return this.stat(name, new StatType<>(registry, text));
     }
 
@@ -887,7 +882,7 @@ public interface RegistryHelper {
      * @param <T> the type of rule test
      */
     default <T extends RuleTest> RuleTestType<T> ruleTest(String name, RuleTestType<T> type) {
-        return this.register(Registries.RULE_TEST, name, type);
+        return this.register(BuiltInRegistries.RULE_TEST, name, type);
     }
 
     /**
@@ -907,7 +902,7 @@ public interface RegistryHelper {
      * @param <T> the type of the rule block entity modifier
      */
     default <T extends RuleBlockEntityModifier> RuleBlockEntityModifierType<T> ruleBlockEntityModifier(String name, RuleBlockEntityModifierType<T> type) {
-        return this.register(Registries.RULE_BLOCK_ENTITY_MODIFIER, name, type);
+        return this.register(BuiltInRegistries.RULE_BLOCK_ENTITY_MODIFIER, name, type);
     }
 
     /**
@@ -927,7 +922,7 @@ public interface RegistryHelper {
      * @param <T> the type of pos rule test
      */
     default <T extends PosRuleTest> PosRuleTestType<T> posRuleTest(String name, PosRuleTestType<T> type) {
-        return this.register(Registries.POS_RULE_TEST, name, type);
+        return this.register(BuiltInRegistries.POS_RULE_TEST, name, type);
     }
 
     /**
@@ -941,24 +936,24 @@ public interface RegistryHelper {
     }
 
     /**
-     * @param name the name of the screen handler type
-     * @param type the screen handler type to register
-     * @return the registered screen handler type
-     * @param <T> the type of the screen handler
+     * @param name the name of the menu type
+     * @param type the menu type to register
+     * @return the registered menu type
+     * @param <T> the type of menu
      */
-    default <T extends ScreenHandler> ScreenHandlerType<T> screenHandler(String name, ScreenHandlerType<T> type) {
-        return this.register(Registries.SCREEN_HANDLER, name, type);
+    default <T extends AbstractContainerMenu> MenuType<T> menu(String name, MenuType<T> type) {
+        return this.register(BuiltInRegistries.MENU, name, type);
     }
 
     /**
-     * Registers a {@link ScreenHandlerType} with {@link FeatureFlags#VANILLA_FEATURES} feature flags.
-     * @param name the name of the screen handler type
-     * @param factory the screen handler type's factory
-     * @return the registered screen handler type
-     * @param <T> the type of the screen handler
+     * Registers a {@link MenuType} with {@link FeatureFlags#VANILLA_SET} feature flags.
+     * @param name the name of the menu
+     * @param supplier the menu's supplier
+     * @return the registered menu type
+     * @param <T> the type of menu
      */
-    default <T extends ScreenHandler> ScreenHandlerType<T> screenHandler(String name, ScreenHandlerType.Factory<T> factory) {
-        return this.screenHandler(name, new ScreenHandlerType<>(factory, FeatureFlags.VANILLA_FEATURES));
+    default <T extends AbstractContainerMenu> MenuType<T> menu(String name, MenuType.MenuSupplier<T> supplier) {
+        return this.menu(name, new MenuType<>(supplier, FeatureFlags.VANILLA_SET));
     }
 
     /**
@@ -967,7 +962,7 @@ public interface RegistryHelper {
      * @param <T> the type of recipe
      */
     default <T extends Recipe<?>> RecipeType<T> recipeType(String name) {
-        return this.register(Registries.RECIPE_TYPE, name, new RecipeTypeImpl<>(name));
+        return this.register(BuiltInRegistries.RECIPE_TYPE, name, new RecipeTypeImpl<>(name));
     }
 
     /**
@@ -978,28 +973,7 @@ public interface RegistryHelper {
      * @param <S> the type of the recipe serializer
      */
     default <T extends Recipe<?>, S extends RecipeSerializer<T>> S recipeSerializer(String name, S serializer) {
-        return this.register(Registries.RECIPE_SERIALIZER, name, serializer);
-    }
-
-    /**
-     * @param name the name of the recipe serializer
-     * @param factory the factory for a special crafting recipe
-     * @return the registered special recipe serializer
-     * @param <T> the type of crafting recipe
-     */
-    default <T extends CraftingRecipe> SpecialCraftingRecipe.SpecialRecipeSerializer<T> recipeSerializer(String name, SpecialCraftingRecipe.SpecialRecipeSerializer.Factory<T> factory) {
-        return this.recipeSerializer(name, new SpecialCraftingRecipe.SpecialRecipeSerializer<>(factory));
-    }
-
-    /**
-     * @param name the name of the recipe serializer
-     * @param factory the factory for a cooking recipe
-     * @param defaultCookingTime the default cooking time of the recipe serializer
-     * @return the registered cooking recipe serializer
-     * @param <T> the type of cooking recipe
-     */
-    default <T extends AbstractCookingRecipe> AbstractCookingRecipe.Serializer<T> recipeSerializer(String name, AbstractCookingRecipe.RecipeFactory<T> factory, int defaultCookingTime) {
-        return this.recipeSerializer(name, new AbstractCookingRecipe.Serializer<>(factory, defaultCookingTime));
+        return this.register(BuiltInRegistries.RECIPE_SERIALIZER, name, serializer);
     }
 
     /**
@@ -1007,8 +981,8 @@ public interface RegistryHelper {
      * @param attribute the entity attribute to register
      * @return the registered entity attribute
      */
-    default EntityAttribute attribute(String name, EntityAttribute attribute) {
-        return this.register(Registries.ATTRIBUTE, name, attribute);
+    default Holder<Attribute> attribute(String name, Attribute attribute) {
+        return this.registerReference(BuiltInRegistries.ATTRIBUTE, name, attribute);
     }
 
     /**
@@ -1019,7 +993,7 @@ public interface RegistryHelper {
      * @param <T> the type of the position source type
      */
     default <S extends PositionSource, T extends PositionSourceType<S>> T positionSource(String name, T type) {
-        return this.register(Registries.POSITION_SOURCE_TYPE, name, type);
+        return this.register(BuiltInRegistries.POSITION_SOURCE_TYPE, name, type);
     }
 
     /**
@@ -1031,7 +1005,7 @@ public interface RegistryHelper {
      * @param <T> the type of argument type properties
      * @param <S> the type of the argument serializer
      */
-    default <A extends ArgumentType<?>, T extends ArgumentSerializer.ArgumentTypeProperties<A>, S extends ArgumentSerializer<A, T>> S argumentSerializer(String name, Class<? extends A> clazz, S serializer) {
+    default <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>, S extends ArgumentTypeInfo<A, T>> S argumentSerializer(String name, Class<? extends A> clazz, S serializer) {
         ArgumentTypeRegistry.registerArgumentType(this.id(name), clazz, serializer);
         return serializer;
     }
@@ -1042,7 +1016,7 @@ public interface RegistryHelper {
      * @return the registered villager type
      */
     default VillagerType villagerType(String name) {
-        return this.register(Registries.VILLAGER_TYPE, name, new VillagerType());
+        return this.register(BuiltInRegistries.VILLAGER_TYPE, name, new VillagerType());
     }
 
     /**
@@ -1051,27 +1025,28 @@ public interface RegistryHelper {
      * @return the registered villager profession
      */
     default VillagerProfession villagerProfession(String name, VillagerProfession profession) {
-        return this.register(Registries.VILLAGER_PROFESSION, name, profession);
+        return this.register(BuiltInRegistries.VILLAGER_PROFESSION, name, profession);
     }
 
     /**
      * @param name the name of the villager profession
-     * @param heldWorkstation the predicate that returns {@code true} if a point of interest is a held workstation
-     * @param acquirableWorkstation the predicate that returns {@code true} if a point of interest is an acquirable workstation
-     * @param gatherableItems the immutable set of items that the villager type can gather
-     * @param secondaryJobSites the immutable set of secondary job sites
+     * @param heldJobSite the predicate that returns {@code true} if a point of interest is a held workstation
+     * @param acquirableJobSite the predicate that returns {@code true} if a point of interest is an acquirable workstation
+     * @param requestedItems the immutable set of items that the villager type can gather
+     * @param secondaryPoi the immutable set of secondary job sites
      * @param workSound the sound event played when the villager works, or null
      * @return the registered villager profession
      */
     default VillagerProfession villagerProfession(String name,
-                                                  Predicate<RegistryEntry<PointOfInterestType>> heldWorkstation,
-                                                  Predicate<RegistryEntry<PointOfInterestType>> acquirableWorkstation,
-                                                  ImmutableSet<Item> gatherableItems,
-                                                  ImmutableSet<Block> secondaryJobSites,
-                                                  @Nullable SoundEvent workSound) {
+                                                  Predicate<Holder<PoiType>> heldJobSite,
+                                                  Predicate<Holder<PoiType>> acquirableJobSite,
+                                                  ImmutableSet<Item> requestedItems,
+                                                  ImmutableSet<Block> secondaryPoi,
+                                                  @Nullable SoundEvent workSound,
+                                                  Int2ObjectMap<ResourceKey<TradeSet>> tradeSetsByLevel) {
         Identifier id = this.id(name);
-        Text text = Text.translatable("entity." + id.getNamespace() + ".villager." + id.getPath());
-        return this.villagerProfession(name, new VillagerProfession(text, heldWorkstation, acquirableWorkstation, gatherableItems, secondaryJobSites, workSound));
+        Component text = Component.translatable("entity." + id.getNamespace() + ".villager." + id.getPath());
+        return this.villagerProfession(name, new VillagerProfession(text, heldJobSite, acquirableJobSite, requestedItems, secondaryPoi, workSound, tradeSetsByLevel));
     }
 
     /**
@@ -1083,12 +1058,13 @@ public interface RegistryHelper {
      * @return the registered villager profession
      */
     default VillagerProfession villagerProfession(String name,
-                                                  RegistryKey<PointOfInterestType> heldWorkstation,
+                                                  ResourceKey<PoiType> heldWorkstation,
                                                   ImmutableSet<Item> gatherableItems,
                                                   ImmutableSet<Block> secondaryJobSites,
-                                                  @Nullable SoundEvent workSound) {
-        Predicate<RegistryEntry<PointOfInterestType>> predicate = entry -> entry.matchesKey(heldWorkstation);
-        return this.villagerProfession(name, predicate, predicate, gatherableItems, secondaryJobSites, workSound);
+                                                  @Nullable SoundEvent workSound,
+                                                  Int2ObjectMap<ResourceKey<TradeSet>> tradeSetsByLevel) {
+        Predicate<Holder<PoiType>> predicate = entry -> entry.is(heldWorkstation);
+        return this.villagerProfession(name, predicate, predicate, gatherableItems, secondaryJobSites, workSound, tradeSetsByLevel);
     }
 
     /**
@@ -1099,10 +1075,11 @@ public interface RegistryHelper {
      * @return the registered villager profession
      */
     default VillagerProfession villagerProfession(String name,
-                                                  Predicate<RegistryEntry<PointOfInterestType>> heldWorkstation,
-                                                  Predicate<RegistryEntry<PointOfInterestType>> acquirableWorkstation,
-                                                  @Nullable SoundEvent workSound) {
-        return this.villagerProfession(name, heldWorkstation, acquirableWorkstation, ImmutableSet.of(), ImmutableSet.of(), workSound);
+                                                  Predicate<Holder<PoiType>> heldWorkstation,
+                                                  Predicate<Holder<PoiType>> acquirableWorkstation,
+                                                  @Nullable SoundEvent workSound,
+                                                  Int2ObjectMap<ResourceKey<TradeSet>> tradeSetsByLevel) {
+        return this.villagerProfession(name, heldWorkstation, acquirableWorkstation, ImmutableSet.of(), ImmutableSet.of(), workSound, tradeSetsByLevel);
     }
 
     /**
@@ -1111,9 +1088,9 @@ public interface RegistryHelper {
      * @param workSound the sound event played when the villager works, or null
      * @return the registered villager profession
      */
-    default VillagerProfession villagerProfession(String name, RegistryKey<PointOfInterestType> heldWorkstation, @Nullable SoundEvent workSound) {
-        Predicate<RegistryEntry<PointOfInterestType>> predicate = entry -> entry.matchesKey(heldWorkstation);
-        return this.villagerProfession(name, predicate, predicate, workSound);
+    default VillagerProfession villagerProfession(String name, ResourceKey<PoiType> heldWorkstation, @Nullable SoundEvent workSound, Int2ObjectMap<ResourceKey<TradeSet>> tradeSetsByLevel) {
+        Predicate<Holder<PoiType>> predicate = entry -> entry.is(heldWorkstation);
+        return this.villagerProfession(name, predicate, predicate, workSound, tradeSetsByLevel);
     }
 
     /**
@@ -1121,10 +1098,10 @@ public interface RegistryHelper {
      * @param type the point of interest type to register
      * @return the registry key for the registered point of interest type
      */
-    default RegistryKey<PointOfInterestType> poi(String name, PointOfInterestType type) {
-        RegistryEntry<PointOfInterestType> entry = this.registerReference(Registries.POINT_OF_INTEREST_TYPE, name, type);
-        PointOfInterestTypes.registerStates(entry, type.blockStates());
-        return this.key(RegistryKeys.POINT_OF_INTEREST_TYPE, name);
+    default ResourceKey<PoiType> poi(String name, PoiType type) {
+        Holder<PoiType> entry = this.registerReference(BuiltInRegistries.POINT_OF_INTEREST_TYPE, name, type);
+        PoiTypes.registerBlockStates(entry, type.matchingStates());
+        return this.key(Registries.POINT_OF_INTEREST_TYPE, name);
     }
 
     /**
@@ -1134,8 +1111,8 @@ public interface RegistryHelper {
      * @param searchDistance the search distance of the point of interest type
      * @return the registered point of interest type
      */
-    default RegistryKey<PointOfInterestType> poi(String name, Set<BlockState> states, int ticketCount, int searchDistance) {
-        return this.poi(name, new PointOfInterestType(states, ticketCount, searchDistance));
+    default ResourceKey<PoiType> poi(String name, Set<BlockState> states, int ticketCount, int searchDistance) {
+        return this.poi(name, new PoiType(states, ticketCount, searchDistance));
     }
 
     /**
@@ -1145,28 +1122,28 @@ public interface RegistryHelper {
      * @param searchDistance the search distance of the point of interest type
      * @return the registered point of interest type
      */
-    default RegistryKey<PointOfInterestType> poi(String name, Block block, int ticketCount, int searchDistance) {
-        return this.poi(name, PointOfInterestTypes.getStatesOfBlock(block), ticketCount, searchDistance);
+    default ResourceKey<PoiType> poi(String name, Block block, int ticketCount, int searchDistance) {
+        return this.poi(name, PoiTypes.getBlockStates(block), ticketCount, searchDistance);
     }
 
     /**
-     * Registers a {@link PointOfInterestType} with a default ticket count and search distance of 1.
+     * Registers a {@link PoiType} with a default ticket count and search distance of 1.
      * @param name the name of the point of interest type
      * @param states the set of block states that constitute the point of interest type
      * @return the registered point of interest type
      */
-    default RegistryKey<PointOfInterestType> poi(String name, Set<BlockState> states) {
-        return this.poi(name, new PointOfInterestType(states, 1, 1));
+    default ResourceKey<PoiType> poi(String name, Set<BlockState> states) {
+        return this.poi(name, new PoiType(states, 1, 1));
     }
 
     /**
-     * Registers a {@link PointOfInterestType} with a default ticket count and search distance of 1.
+     * Registers a {@link PoiType} with a default ticket count and search distance of 1.
      * @param name the name of the point of interest type
      * @param block the block whose block states constitute the point of interest type
      * @return the registered point of interest type
      */
-    default RegistryKey<PointOfInterestType> poi(String name, Block block) {
-        return this.poi(name, PointOfInterestTypes.getStatesOfBlock(block), 1, 1);
+    default ResourceKey<PoiType> poi(String name, Block block) {
+        return this.poi(name, PoiTypes.getBlockStates(block), 1, 1);
     }
 
     /**
@@ -1176,7 +1153,7 @@ public interface RegistryHelper {
      * @param <T> the type of the memory module type
      */
     default <T> MemoryModuleType<T> memoryModule(String name, MemoryModuleType<T> type) {
-        return this.register(Registries.MEMORY_MODULE_TYPE, name, type);
+        return this.register(BuiltInRegistries.MEMORY_MODULE_TYPE, name, type);
     }
 
     /**
@@ -1207,7 +1184,7 @@ public interface RegistryHelper {
      * @param <T> the type of sensor
      */
     default <T extends Sensor<?>> SensorType<T> sensor(String name, SensorType<T> type) {
-        return this.register(Registries.SENSOR_TYPE, name, type);
+        return this.register(BuiltInRegistries.SENSOR_TYPE, name, type);
     }
 
     /**
@@ -1226,7 +1203,7 @@ public interface RegistryHelper {
      * @return the registered activity
      */
     default Activity activity(String name, Activity activity) {
-        return this.register(Registries.ACTIVITY, name, activity);
+        return this.register(BuiltInRegistries.ACTIVITY, name, activity);
     }
 
     /**
@@ -1238,114 +1215,64 @@ public interface RegistryHelper {
         return this.activity(name, new Activity(name));
     }
 
-    /**
-     * @param name the name of the loot pool entry type
-     * @param type the loot pool entry type to register
-     * @return the registered loot pool entry type
-     */
-    default LootPoolEntryType lootPoolEntry(String name, LootPoolEntryType type) {
-        return this.register(Registries.LOOT_POOL_ENTRY_TYPE, name, type);
-    }
 
     /**
-     * @param name the name of the loot pool entry type
+     * @param name the name of the loot pool entry
      * @param codec the codec of the loot pool entry
-     * @return the registered loot pool entry type
+     * @return the registered loot pool entry codec
+     * @param <T> the type of loot pool entry
      */
-    default LootPoolEntryType lootPoolEntry(String name, MapCodec<? extends LootPoolEntry> codec) {
-        return this.lootPoolEntry(name, new LootPoolEntryType(codec));
+    default <T extends LootPoolEntryContainer> MapCodec<T> lootPoolEntry(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.LOOT_POOL_ENTRY_TYPE, name, codec);
     }
 
     /**
-     * @param name the name of the loot function type
-     * @param type the loot function type to register
-     * @return the registered loot function type
-     * @param <T> the type of loot function
-     */
-    default <T extends LootFunction> LootFunctionType<T> lootFunction(String name, LootFunctionType<T> type) {
-        return this.register(Registries.LOOT_FUNCTION_TYPE, name, type);
-    }
-
-    /**
-     * @param name the name of the loot function type
+     * @param name the name of the loot function
      * @param codec the codec of the loot function
-     * @return the registered loot function type
+     * @return the registered loot function codec
      * @param <T> the type of loot function
      */
-    default <T extends LootFunction> LootFunctionType<T> lootFunction(String name, MapCodec<T> codec) {
-        return this.lootFunction(name, new LootFunctionType<>(codec));
+    default <T extends LootItemFunction> MapCodec<T> lootFunction(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, name, codec);
     }
 
     /**
-     * @param name the name of the loot condition type
-     * @param type the loot condition type to register
-     * @return the registered loot condition type
-     */
-    default LootConditionType lootCondition(String name, LootConditionType type) {
-        return this.register(Registries.LOOT_CONDITION_TYPE, name, type);
-    }
-
-    /**
-     * @param name the name of the loot condition type
+     * @param name the name of the loot condition
      * @param codec the codec of the loot condition
-     * @return the registered loot condition type
+     * @return the registered loot condition codec
+     * @param <T> the type of loot condition
      */
-    default LootConditionType lootCondition(String name, MapCodec<? extends LootCondition> codec) {
-        return this.lootCondition(name, new LootConditionType(codec));
+    default <T extends LootItemCondition> MapCodec<T> lootCondition(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.LOOT_CONDITION_TYPE, name, codec);
     }
 
     /**
-     * @param name the name of the loot number provider type
-     * @param type the loot number provider type to register
-     * @return the registered loot number provider type
-     */
-    default LootNumberProviderType lootNumberProvider(String name, LootNumberProviderType type) {
-        return this.register(Registries.LOOT_NUMBER_PROVIDER_TYPE, name, type);
-    }
-
-    /**
-     * @param name the name of the loot number provider type
+     * @param name the name of the loot number provider
      * @param codec the codec of the loot number provider
-     * @return the registered loot number provider type
+     * @return the registered loot number provider codec
+     * @param <T> the type of loot number provider
      */
-    default LootNumberProviderType lootNumberProvider(String name, MapCodec<? extends LootNumberProvider> codec) {
-        return this.lootNumberProvider(name, new LootNumberProviderType(codec));
+    default <T extends NumberProvider> MapCodec<T> lootNumberProvider(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE, name, codec);
     }
 
     /**
-     * @param name the name of the loot NBT provider type
-     * @param type the loot NBT provider type to register
-     * @return the registered loot NBT provider type
-     */
-    default LootNbtProviderType lootNbtProvider(String name, LootNbtProviderType type) {
-        return this.register(Registries.LOOT_NBT_PROVIDER_TYPE, name, type);
-    }
-
-    /**
-     * @param name the name of the loot NBT provider type
+     * @param name the name of the loot NBT provider
      * @param codec the codec of the loot NBT provider
-     * @return the registered loot NBT provider type
+     * @return the registered loot NBT provider codec
+     * @param <T> the type of loot NBT provider
      */
-    default LootNbtProviderType lootNbtProvider(String name, MapCodec<? extends LootNbtProvider> codec) {
-        return this.lootNbtProvider(name, new LootNbtProviderType(codec));
+    default <T extends NbtProvider> MapCodec<T> lootNbtProvider(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.LOOT_NBT_PROVIDER_TYPE, name, codec);
     }
 
     /**
-     * @param name the name of the loot score provider type
-     * @param type the loot score provider type to register
-     * @return the registered loot score provider type
-     */
-    default LootScoreProviderType lootScoreProvider(String name, LootScoreProviderType type) {
-        return this.register(Registries.LOOT_SCORE_PROVIDER_TYPE, name, type);
-    }
-
-    /**
-     * @param name the name of the loot score provider type
+     * @param name the name of the loot score provider
      * @param codec the codec of the loot score provider
-     * @return the registered loot score provider type
+     * @return the registered loot score provider codec
      */
-    default LootScoreProviderType lootScoreProvider(String name, MapCodec<? extends LootScoreProvider> codec) {
-        return this.lootScoreProvider(name, new LootScoreProviderType(codec));
+    default <T extends ScoreboardNameProvider> MapCodec<T> lootScoreProvider(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.LOOT_SCORE_PROVIDER_TYPE, name, codec);
     }
 
     /**
@@ -1355,7 +1282,7 @@ public interface RegistryHelper {
      * @param <T> the type of float provider
      */
     default <T extends FloatProvider> FloatProviderType<T> floatProvider(String name, FloatProviderType<T> type) {
-        return this.register(Registries.FLOAT_PROVIDER_TYPE, name, type);
+        return this.register(BuiltInRegistries.FLOAT_PROVIDER_TYPE, name, type);
     }
 
     /**
@@ -1375,7 +1302,7 @@ public interface RegistryHelper {
      * @param <T> the type of int provider
      */
     default <T extends IntProvider> IntProviderType<T> intProvider(String name, IntProviderType<T> type) {
-        return this.register(Registries.INT_PROVIDER_TYPE, name, type);
+        return this.register(BuiltInRegistries.INT_PROVIDER_TYPE, name, type);
     }
 
     /**
@@ -1395,7 +1322,7 @@ public interface RegistryHelper {
      * @param <T> the type of height provider
      */
     default <T extends HeightProvider> HeightProviderType<T> heightProvider(String name, HeightProviderType<T> type) {
-        return this.register(Registries.HEIGHT_PROVIDER_TYPE, name, type);
+        return this.register(BuiltInRegistries.HEIGHT_PROVIDER_TYPE, name, type);
     }
 
     /**
@@ -1415,7 +1342,7 @@ public interface RegistryHelper {
      * @param <T> the type of block predicate
      */
     default <T extends BlockPredicate> BlockPredicateType<T> blockPredicate(String name, BlockPredicateType<T> type) {
-        return this.register(Registries.BLOCK_PREDICATE_TYPE, name, type);
+        return this.register(BuiltInRegistries.BLOCK_PREDICATE_TYPE, name, type);
     }
 
     /**
@@ -1435,8 +1362,8 @@ public interface RegistryHelper {
      * @param <T> the type of the carver config
      * @param <C> the type of the carver
      */
-    default <T extends CarverConfig, C extends Carver<T>> C carver(String name, C carver) {
-        return this.register(Registries.CARVER, name, carver);
+    default <T extends CarverConfiguration, C extends WorldCarver<T>> C carver(String name, C carver) {
+        return this.register(BuiltInRegistries.CARVER, name, carver);
     }
 
     /**
@@ -1446,8 +1373,8 @@ public interface RegistryHelper {
      * @param <T> the type of the feature config
      * @param <F> the type of the feature
      */
-    default <T extends FeatureConfig, F extends Feature<T>> F feature(String name, F feature) {
-        return this.register(Registries.FEATURE, name, feature);
+    default <T extends FeatureConfiguration, F extends Feature<T>> F feature(String name, F feature) {
+        return this.register(BuiltInRegistries.FEATURE, name, feature);
     }
 
     /**
@@ -1457,7 +1384,7 @@ public interface RegistryHelper {
      * @param <T> the type of structure placement
      */
     default <T extends StructurePlacement> StructurePlacementType<T> structurePlacement(String name, StructurePlacementType<T> type) {
-        return this.register(Registries.STRUCTURE_PLACEMENT, name, type);
+        return this.register(BuiltInRegistries.STRUCTURE_PLACEMENT, name, type);
     }
 
     /**
@@ -1475,11 +1402,11 @@ public interface RegistryHelper {
      * @param type the structure piece type to register
      * @return the registered structure piece type
      * @param <T> the type of the structure piece type
-     * @see #simpleStructurePiece(String, StructurePieceType.Simple)
-     * @see #managerAwareStructurePiece(String, StructurePieceType.ManagerAware)
+     * @see #simpleStructurePiece(String, StructurePieceType.ContextlessType)
+     * @see #managerAwareStructurePiece(String, StructurePieceType.StructureTemplateType)
      */
     default <T extends StructurePieceType> T structurePiece(String name, T type) {
-        return this.register(Registries.STRUCTURE_PIECE, name, type);
+        return this.register(BuiltInRegistries.STRUCTURE_PIECE, name, type);
     }
 
     /**
@@ -1488,8 +1415,8 @@ public interface RegistryHelper {
      * @return the registered structure piece type
      * @param <T> the type of the simple structure piece type
      */
-    default <T extends StructurePieceType.Simple> T simpleStructurePiece(String name, T type) {
-        return this.register(Registries.STRUCTURE_PIECE, name, type);
+    default <T extends StructurePieceType.ContextlessType> T simpleStructurePiece(String name, T type) {
+        return this.register(BuiltInRegistries.STRUCTURE_PIECE, name, type);
     }
 
     /**
@@ -1498,8 +1425,8 @@ public interface RegistryHelper {
      * @return the registered structure piece type
      * @param <T> the type of the manager aware structure piece type
      */
-    default <T extends StructurePieceType.ManagerAware> T managerAwareStructurePiece(String name, T type) {
-        return this.register(Registries.STRUCTURE_PIECE, name, type);
+    default <T extends StructurePieceType.StructureTemplateType> T managerAwareStructurePiece(String name, T type) {
+        return this.register(BuiltInRegistries.STRUCTURE_PIECE, name, type);
     }
 
     /**
@@ -1509,7 +1436,7 @@ public interface RegistryHelper {
      * @param <T> the type of structure
      */
     default <T extends Structure> StructureType<T> structure(String name, StructureType<T> type) {
-        return this.register(Registries.STRUCTURE_TYPE, name, type);
+        return this.register(BuiltInRegistries.STRUCTURE_TYPE, name, type);
     }
 
     /**
@@ -1529,7 +1456,7 @@ public interface RegistryHelper {
      * @param <T> the type of placement modifier
      */
     default <T extends PlacementModifier> PlacementModifierType<T> placementModifier(String name, PlacementModifierType<T> type) {
-        return this.register(Registries.PLACEMENT_MODIFIER_TYPE, name, type);
+        return this.register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, name, type);
     }
 
     /**
@@ -1549,7 +1476,7 @@ public interface RegistryHelper {
      * @param <T> the type of block state provider
      */
     default <T extends BlockStateProvider> BlockStateProviderType<T> blockStateProvider(String name, BlockStateProviderType<T> type) {
-        return this.register(Registries.BLOCK_STATE_PROVIDER_TYPE, name, type);
+        return this.register(BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE, name, type);
     }
 
     /**
@@ -1569,7 +1496,7 @@ public interface RegistryHelper {
      * @param <T> the type of foliage placer
      */
     default <T extends FoliagePlacer> FoliagePlacerType<T> foliagePlacer(String name, FoliagePlacerType<T> type) {
-        return this.register(Registries.FOLIAGE_PLACER_TYPE, name, type);
+        return this.register(BuiltInRegistries.FOLIAGE_PLACER_TYPE, name, type);
     }
 
     /**
@@ -1589,7 +1516,7 @@ public interface RegistryHelper {
      * @param <T> the type of trunk placer
      */
     default <T extends TrunkPlacer> TrunkPlacerType<T> trunkPlacer(String name, TrunkPlacerType<T> type) {
-        return this.register(Registries.TRUNK_PLACER_TYPE, name, type);
+        return this.register(BuiltInRegistries.TRUNK_PLACER_TYPE, name, type);
     }
 
     /**
@@ -1609,7 +1536,7 @@ public interface RegistryHelper {
      * @param <T> the type of root placer
      */
     default <T extends RootPlacer> RootPlacerType<T> rootPlacer(String name, RootPlacerType<T> type) {
-        return this.register(Registries.ROOT_PLACER_TYPE, name, type);
+        return this.register(BuiltInRegistries.ROOT_PLACER_TYPE, name, type);
     }
 
     /**
@@ -1629,7 +1556,7 @@ public interface RegistryHelper {
      * @param <T> the type of tree decorator
      */
     default <T extends TreeDecorator> TreeDecoratorType<T> treeDecorator(String name, TreeDecoratorType<T> type) {
-        return this.register(Registries.TREE_DECORATOR_TYPE, name, type);
+        return this.register(BuiltInRegistries.TREE_DECORATOR_TYPE, name, type);
     }
 
     /**
@@ -1649,7 +1576,7 @@ public interface RegistryHelper {
      * @param <T> the type of feature size
      */
     default <T extends FeatureSize> FeatureSizeType<T> featureSize(String name, FeatureSizeType<T> type) {
-        return this.register(Registries.FEATURE_SIZE_TYPE, name, type);
+        return this.register(BuiltInRegistries.FEATURE_SIZE_TYPE, name, type);
     }
 
     /**
@@ -1669,7 +1596,7 @@ public interface RegistryHelper {
      * @param <T> the type of biome source
      */
     default <T extends BiomeSource> MapCodec<T> biomeSource(String name, MapCodec<T> codec) {
-        return this.register(Registries.BIOME_SOURCE, name, codec);
+        return this.register(BuiltInRegistries.BIOME_SOURCE, name, codec);
     }
 
     /**
@@ -1679,7 +1606,7 @@ public interface RegistryHelper {
      * @param <T> the type of chunk generator
      */
     default <T extends ChunkGenerator> MapCodec<T> chunkGenerator(String name, MapCodec<T> codec) {
-        return this.register(Registries.CHUNK_GENERATOR, name, codec);
+        return this.register(BuiltInRegistries.CHUNK_GENERATOR, name, codec);
     }
 
     /**
@@ -1688,8 +1615,8 @@ public interface RegistryHelper {
      * @return the registered material condition codec
      * @param <T> the type of material condition
      */
-    default <T extends MaterialRules.MaterialCondition> MapCodec<T> materialCondition(String name, MapCodec<T> codec) {
-        return this.register(Registries.MATERIAL_CONDITION, name, codec);
+    default <T extends SurfaceRules.ConditionSource> MapCodec<T> materialCondition(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.MATERIAL_CONDITION, name, codec);
     }
 
     /**
@@ -1698,8 +1625,8 @@ public interface RegistryHelper {
      * @return the registered material rule codec
      * @param <T> the type of material rule
      */
-    default <T extends MaterialRules.MaterialRule> MapCodec<T> materialRule(String name, MapCodec<T> codec) {
-        return this.register(Registries.MATERIAL_RULE, name, codec);
+    default <T extends SurfaceRules.RuleSource> MapCodec<T> materialRule(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.MATERIAL_RULE, name, codec);
     }
 
     /**
@@ -1709,7 +1636,7 @@ public interface RegistryHelper {
      * @param <T> the type of density function
      */
     default <T extends DensityFunction> MapCodec<T> densityFunction(String name, MapCodec<T> codec) {
-        return this.register(Registries.DENSITY_FUNCTION_TYPE, name, codec);
+        return this.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, name, codec);
     }
 
     /**
@@ -1719,7 +1646,7 @@ public interface RegistryHelper {
      * @param <T> the type of block type
      */
     default <T extends Block> MapCodec<T> blockType(String name, MapCodec<T> codec) {
-        return this.register(Registries.BLOCK_TYPE, name, codec);
+        return this.register(BuiltInRegistries.BLOCK_TYPE, name, codec);
     }
 
     /**
@@ -1729,7 +1656,7 @@ public interface RegistryHelper {
      * @param <T> the type of structure processor
      */
     default <T extends StructureProcessor> StructureProcessorType<T> structureProcessor(String name, StructureProcessorType<T> type) {
-        return this.register(Registries.STRUCTURE_PROCESSOR, name, type);
+        return this.register(BuiltInRegistries.STRUCTURE_PROCESSOR, name, type);
     }
 
     /**
@@ -1749,7 +1676,7 @@ public interface RegistryHelper {
      * @param <T> the type of structure pool element
      */
     default <T extends StructurePoolElement> StructurePoolElementType<T> structurePoolElement(String name, StructurePoolElementType<T> type) {
-        return this.register(Registries.STRUCTURE_POOL_ELEMENT, name, type);
+        return this.register(BuiltInRegistries.STRUCTURE_POOL_ELEMENT, name, type);
     }
 
     /**
@@ -1768,8 +1695,8 @@ public interface RegistryHelper {
      * @return the registered pool alias binding codec
      * @param <T> the type of pool alias binding
      */
-    default <T extends StructurePoolAliasBinding> MapCodec<T> poolAliasBinding(String name, MapCodec<T> codec) {
-        return this.register(Registries.POOL_ALIAS_BINDING, name, codec);
+    default <T extends PoolAliasBinding> MapCodec<T> poolAliasBinding(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.POOL_ALIAS_BINDING_TYPE, name, codec);
     }
 
     /**
@@ -1778,7 +1705,7 @@ public interface RegistryHelper {
      * @return the registered decorated pot pattern
      */
     default DecoratedPotPattern decoratedPotPattern(String name, DecoratedPotPattern pattern) {
-        return this.register(Registries.DECORATED_POT_PATTERN, name, pattern);
+        return this.register(BuiltInRegistries.DECORATED_POT_PATTERN, name, pattern);
     }
 
     /**
@@ -1796,8 +1723,8 @@ public interface RegistryHelper {
      * @return the registered criterion
      * @param <T> the type of the criterion
      */
-    default <T extends Criterion<?>> T criterion(String name, T criterion) {
-        return this.register(Registries.CRITERION, name, criterion);
+    default <T extends CriterionTrigger<?>> T criterion(String name, T criterion) {
+        return this.register(BuiltInRegistries.TRIGGER_TYPES, name, criterion);
     }
 
     /**
@@ -1807,7 +1734,7 @@ public interface RegistryHelper {
      * @param <T> the type of number format
      */
     default <T extends NumberFormat> NumberFormatType<T> numberFormat(String name, NumberFormatType<T> type) {
-        return this.register(Registries.NUMBER_FORMAT_TYPE, name, type);
+        return this.register(BuiltInRegistries.NUMBER_FORMAT_TYPE, name, type);
     }
 
     /**
@@ -1817,7 +1744,7 @@ public interface RegistryHelper {
      * @param <T> the type of entity sub-predicate
      */
     default <T extends EntitySubPredicate> MapCodec<T> entitySubPredicate(String name, MapCodec<T> codec) {
-        return this.register(Registries.ENTITY_SUB_PREDICATE_TYPE, name, codec);
+        return this.register(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, name, codec);
     }
 
     /**
@@ -1826,22 +1753,22 @@ public interface RegistryHelper {
      * @return the registered data component predicate type
      * @param <T> the type of data component predicate
      */
-    default <T extends ComponentPredicate> ComponentPredicate.Type<T> dataComponentPredicate(String name, Codec<T> codec) {
-        return this.register(Registries.DATA_COMPONENT_PREDICATE_TYPE, name, new ComponentPredicate.OfValue<>(codec));
+    default <T extends DataComponentPredicate> DataComponentPredicate.Type<T> dataComponentPredicate(String name, Codec<T> codec) {
+        return this.register(BuiltInRegistries.DATA_COMPONENT_PREDICATE_TYPE, name, new DataComponentPredicate.ConcreteType<>(codec));
     }
 
     /**
-     * Registers a {@link MapDecorationType} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link MapDecorationType} wrapped in a {@link Holder.Reference}.
      * @param name the name of the map decoration type
      * @param type the map decoration type to register
      * @return the registered map decoration type
      */
-    default RegistryEntry.Reference<MapDecorationType> mapDecoration(String name, MapDecorationType type) {
-        return this.registerReference(Registries.MAP_DECORATION_TYPE, name, type);
+    default Holder.Reference<MapDecorationType> mapDecoration(String name, MapDecorationType type) {
+        return this.registerReference(BuiltInRegistries.MAP_DECORATION_TYPE, name, type);
     }
 
     /**
-     * Registers a {@link MapDecorationType} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link MapDecorationType} wrapped in a {@link Holder.Reference}.
      * {@code name} is used as the map decoration type's asset id.
      * @param name the name of the map decoration type
      * @param showOnItemFrame {@code true} for showing the map decoration on item frames
@@ -1850,19 +1777,19 @@ public interface RegistryHelper {
      * @param trackCount {@code true} for tracking the amount of this map decoration on a map
      * @return the registered map decoration type
      */
-    default RegistryEntry.Reference<MapDecorationType> mapDecoration(String name, boolean showOnItemFrame, int mapColor, boolean explorationMapElement, boolean trackCount) {
+    default Holder.Reference<MapDecorationType> mapDecoration(String name, boolean showOnItemFrame, int mapColor, boolean explorationMapElement, boolean trackCount) {
         return this.mapDecoration(name, new MapDecorationType(this.id(name), showOnItemFrame, mapColor, explorationMapElement, trackCount));
     }
 
     /**
-     * Registers a {@link MapDecorationType} wrapped in a {@link RegistryEntry.Reference}.
+     * Registers a {@link MapDecorationType} wrapped in a {@link Holder.Reference}.
      * {@code mapColor} is defaulted to white and {@code explorationMapElement} is defaulted to {@code false}.
      * @param name the name of the map decoration type
      * @param showOnItemFrame {@code true} for showing the map decoration on item frames
      * @param trackCount {@code true} for tracking the amount of this map decoration on a map
      * @return the registered map decoration type
      */
-    default RegistryEntry.Reference<MapDecorationType> mapDecoration(String name, boolean showOnItemFrame, boolean trackCount) {
+    default Holder.Reference<MapDecorationType> mapDecoration(String name, boolean showOnItemFrame, boolean trackCount) {
         return this.mapDecoration(name, showOnItemFrame, -1, false, trackCount);
     }
 
@@ -1872,8 +1799,8 @@ public interface RegistryHelper {
      * @return the registered enchantment level based value codec
      * @param <T> the type of enchantment level based value
      */
-    default <T extends EnchantmentLevelBasedValue> MapCodec<T> enchantmentLevelBasedValue(String name, MapCodec<T> codec) {
-        return this.register(Registries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE, name, codec);
+    default <T extends LevelBasedValue> MapCodec<T> enchantmentLevelBasedValue(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.ENCHANTMENT_LEVEL_BASED_VALUE_TYPE, name, codec);
     }
 
     /**
@@ -1883,7 +1810,7 @@ public interface RegistryHelper {
      * @param <T> the type of enchantment entity effect
      */
     default <T extends EnchantmentEntityEffect> MapCodec<T> enchantmentEntityEffect(String name, MapCodec<T> codec) {
-        return this.register(Registries.ENCHANTMENT_ENTITY_EFFECT_TYPE, name, codec);
+        return this.register(BuiltInRegistries.ENCHANTMENT_ENTITY_EFFECT_TYPE, name, codec);
     }
 
     /**
@@ -1893,7 +1820,7 @@ public interface RegistryHelper {
      * @param <T> the type of enchantment location based effect
      */
     default <T extends EnchantmentLocationBasedEffect> MapCodec<T> enchantmentLocationBasedEffect(String name, MapCodec<T> codec) {
-        return this.register(Registries.ENCHANTMENT_LOCATION_BASED_EFFECT_TYPE, name, codec);
+        return this.register(BuiltInRegistries.ENCHANTMENT_LOCATION_BASED_EFFECT_TYPE, name, codec);
     }
 
     /**
@@ -1903,7 +1830,7 @@ public interface RegistryHelper {
      * @param <T> the type of enchantment value effect
      */
     default <T extends EnchantmentValueEffect> MapCodec<T> enchantmentValueEffect(String name, MapCodec<T> codec) {
-        return this.register(Registries.ENCHANTMENT_VALUE_EFFECT_TYPE, name, codec);
+        return this.register(BuiltInRegistries.ENCHANTMENT_VALUE_EFFECT_TYPE, name, codec);
     }
 
     /**
@@ -1913,7 +1840,7 @@ public interface RegistryHelper {
      * @param <T> the type of enchantment provider
      */
     default <T extends EnchantmentProvider> MapCodec<T> enchantmentProvider(String name, MapCodec<T> codec) {
-        return this.register(Registries.ENCHANTMENT_PROVIDER_TYPE, name, codec);
+        return this.register(BuiltInRegistries.ENCHANTMENT_PROVIDER_TYPE, name, codec);
     }
 
     /**
@@ -1923,8 +1850,8 @@ public interface RegistryHelper {
      * @return the registered consume effect type
      * @param <T> the type of consume effect
      */
-    default <T extends ConsumeEffect> ConsumeEffect.Type<T> consumeEffect(String name, MapCodec<T> codec, PacketCodec<RegistryByteBuf, T> packetCodec) {
-        return this.register(Registries.CONSUME_EFFECT_TYPE, name, new ConsumeEffect.Type<>(codec, packetCodec));
+    default <T extends ConsumeEffect> ConsumeEffect.Type<T> consumeEffect(String name, MapCodec<T> codec, StreamCodec<RegistryFriendlyByteBuf, T> packetCodec) {
+        return this.register(BuiltInRegistries.CONSUME_EFFECT_TYPE, name, new ConsumeEffect.Type<>(codec, packetCodec));
     }
 
     /**
@@ -1934,8 +1861,8 @@ public interface RegistryHelper {
      * @return the registered recipe display serializer
      * @param <T> the type of recipe display
      */
-    default <T extends RecipeDisplay> RecipeDisplay.Serializer<T> recipeDisplay(String name, MapCodec<T> codec, PacketCodec<RegistryByteBuf, T> packetCodec) {
-        return this.register(Registries.RECIPE_DISPLAY, name, new RecipeDisplay.Serializer<>(codec, packetCodec));
+    default <T extends RecipeDisplay> RecipeDisplay.Type<T> recipeDisplay(String name, MapCodec<T> codec, StreamCodec<RegistryFriendlyByteBuf, T> packetCodec) {
+        return this.register(BuiltInRegistries.RECIPE_DISPLAY, name, new RecipeDisplay.Type<>(codec, packetCodec));
     }
 
     /**
@@ -1945,8 +1872,8 @@ public interface RegistryHelper {
      * @return the registered slot display serializer
      * @param <T> the type of slot display
      */
-    default <T extends SlotDisplay> SlotDisplay.Serializer<T> slotDisplay(String name, MapCodec<T> codec, PacketCodec<RegistryByteBuf, T> packetCodec) {
-        return this.register(Registries.SLOT_DISPLAY, name, new SlotDisplay.Serializer<>(codec, packetCodec));
+    default <T extends SlotDisplay> SlotDisplay.Type<T> slotDisplay(String name, MapCodec<T> codec, StreamCodec<RegistryFriendlyByteBuf, T> packetCodec) {
+        return this.register(BuiltInRegistries.SLOT_DISPLAY, name, new SlotDisplay.Type<>(codec, packetCodec));
     }
 
     /**
@@ -1955,7 +1882,7 @@ public interface RegistryHelper {
      * @return the registered recipe book category
      */
     default RecipeBookCategory recipeBookCategory(String name, RecipeBookCategory category) {
-        return this.register(Registries.RECIPE_BOOK_CATEGORY, name, category);
+        return this.register(BuiltInRegistries.RECIPE_BOOK_CATEGORY, name, category);
     }
 
     /**
@@ -1969,13 +1896,13 @@ public interface RegistryHelper {
     /**
      * @param name the name of the ticket type
      * @param expiryTicks the duration of chunk tickets of this type
-     * @param flags packed int flags of the ticket type, such as {@link ChunkTicketType#SERIALIZE},
-     *              {@link ChunkTicketType#FOR_LOADING}, {@link ChunkTicketType#FOR_SIMULATION},
-     *              {@link ChunkTicketType#RESETS_IDLE_TIMEOUT}, and {@link ChunkTicketType#CAN_EXPIRE_BEFORE_LOAD}
+     * @param flags packed int flags of the ticket type, such as {@link TicketType#FLAG_PERSIST},
+     *              {@link TicketType#FLAG_LOADING}, {@link TicketType#FLAG_SIMULATION},
+     *              {@link TicketType#FLAG_KEEP_DIMENSION_ACTIVE}, and {@link TicketType#FLAG_CAN_EXPIRE_IF_UNLOADED}
      * @return the registered ticket type
      */
-    default ChunkTicketType ticketType(String name, long expiryTicks, int flags) {
-        return this.register(Registries.TICKET_TYPE, name, new ChunkTicketType(expiryTicks, flags));
+    default TicketType ticketType(String name, long expiryTicks, int flags) {
+        return this.register(BuiltInRegistries.TICKET_TYPE, name, new TicketType(expiryTicks, flags));
     }
 
     /**
@@ -1984,8 +1911,8 @@ public interface RegistryHelper {
      * @return the registered test environment definition codec
      * @param <T> the type of test environment definition
      */
-    default <T extends TestEnvironmentDefinition> MapCodec<T> testEnvironmentDefinition(String name, MapCodec<T> codec) {
-        return this.register(Registries.TEST_ENVIRONMENT_DEFINITION_TYPE, name, codec);
+    default <T extends TestEnvironmentDefinition<?>> MapCodec<T> testEnvironmentDefinition(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.TEST_ENVIRONMENT_DEFINITION_TYPE, name, codec);
     }
 
     /**
@@ -1994,8 +1921,8 @@ public interface RegistryHelper {
      * @return the registered test instance codec
      * @param <T> the type of test instance
      */
-    default <T extends TestInstance> MapCodec<T> testInstance(String name, MapCodec<T> codec) {
-        return this.register(Registries.TEST_INSTANCE_TYPE, name, codec);
+    default <T extends GameTestInstance> MapCodec<T> testInstance(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.TEST_INSTANCE_TYPE, name, codec);
     }
 
     /**
@@ -2003,8 +1930,8 @@ public interface RegistryHelper {
      * @param testFunction the test function to register
      * @return the registered test function
      */
-    default Consumer<TestContext> testFunction(String name, Consumer<TestContext> testFunction) {
-        return this.register(Registries.TEST_FUNCTION, name, testFunction);
+    default Consumer<GameTestHelper> testFunction(String name, Consumer<GameTestHelper> testFunction) {
+        return this.register(BuiltInRegistries.TEST_FUNCTION, name, testFunction);
     }
 
     /**
@@ -2014,7 +1941,7 @@ public interface RegistryHelper {
      * @param <T> the type of spawn condition
      */
     default <T extends SpawnCondition> MapCodec<T> spawnCondition(String name, MapCodec<T> codec) {
-        return this.register(Registries.SPAWN_CONDITION_TYPE, name, codec);
+        return this.register(BuiltInRegistries.SPAWN_CONDITION_TYPE, name, codec);
     }
 
     /**
@@ -2024,7 +1951,7 @@ public interface RegistryHelper {
      * @param <T> the type of dialog
      */
     default <T extends Dialog> MapCodec<T> dialog(String name, MapCodec<T> codec) {
-        return this.register(Registries.DIALOG_TYPE, name, codec);
+        return this.register(BuiltInRegistries.DIALOG_TYPE, name, codec);
     }
 
     /**
@@ -2034,7 +1961,7 @@ public interface RegistryHelper {
      * @param <T> the type of dialog body
      */
     default <T extends DialogBody> MapCodec<T> dialogBody(String name, MapCodec<T> codec) {
-        return this.register(Registries.DIALOG_BODY_TYPE, name, codec);
+        return this.register(BuiltInRegistries.DIALOG_BODY_TYPE, name, codec);
     }
 
     /**
@@ -2043,8 +1970,8 @@ public interface RegistryHelper {
      * @return the registered dialog action codec
      * @param <T> the type of dialog action
      */
-    default <T extends DialogAction> MapCodec<T> dialogAction(String name, MapCodec<T> codec) {
-        return this.register(Registries.DIALOG_ACTION_TYPE, name, codec);
+    default <T extends Action> MapCodec<T> dialogAction(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.DIALOG_ACTION_TYPE, name, codec);
     }
 
     /**
@@ -2054,7 +1981,7 @@ public interface RegistryHelper {
      * @param <T> the type of input control
      */
     default <T extends InputControl> MapCodec<T> inputControl(String name, MapCodec<T> codec) {
-        return this.register(Registries.INPUT_CONTROL_TYPE, name, codec);
+        return this.register(BuiltInRegistries.INPUT_CONTROL_TYPE, name, codec);
     }
 
     /**
@@ -2063,8 +1990,8 @@ public interface RegistryHelper {
      * @return the registered debug subscription
      * @param <T> the type of debug subscription
      */
-    default <T> DebugSubscriptionType<T> debugSubscription(String name, DebugSubscriptionType<T> type) {
-        return this.register(Registries.DEBUG_SUBSCRIPTION, name, type);
+    default <T> DebugSubscription<T> debugSubscription(String name, DebugSubscription<T> type) {
+        return this.register(BuiltInRegistries.DEBUG_SUBSCRIPTION, name, type);
     }
 
     /**
@@ -2072,8 +1999,8 @@ public interface RegistryHelper {
      * @return the registered debug subscription
      * @param <T> the type of debug subscription
      */
-    default <T> DebugSubscriptionType<T> debugSubscription(String name) {
-        return this.debugSubscription(name, new DebugSubscriptionType<>(null));
+    default <T> DebugSubscription<T> debugSubscription(String name) {
+        return this.debugSubscription(name, new DebugSubscription<>(null));
     }
 
     /**
@@ -2082,8 +2009,8 @@ public interface RegistryHelper {
      * @return the registered debug subscription
      * @param <T> the type of debug subscription
      */
-    default <T> DebugSubscriptionType<T> debugSubscription(String name, @Nullable PacketCodec<? super RegistryByteBuf, T> packetCodec) {
-        return this.debugSubscription(name, new DebugSubscriptionType<>(packetCodec));
+    default <T> DebugSubscription<T> debugSubscription(String name, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, T> packetCodec) {
+        return this.debugSubscription(name, new DebugSubscription<>(packetCodec));
     }
 
     /**
@@ -2093,8 +2020,8 @@ public interface RegistryHelper {
      * @return the registered debug subscription
      * @param <T> the type of debug subscription
      */
-    default <T> DebugSubscriptionType<T> debugSubscription(String name, @Nullable PacketCodec<? super RegistryByteBuf, T> packetCodec, int expiry) {
-        return this.debugSubscription(name, new DebugSubscriptionType<>(packetCodec, expiry));
+    default <T> DebugSubscription<T> debugSubscription(String name, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, T> packetCodec, int expiry) {
+        return this.debugSubscription(name, new DebugSubscription<>(packetCodec, expiry));
     }
 
     /**
@@ -2102,8 +2029,8 @@ public interface RegistryHelper {
      * @param builder the builder for the incoming rpc method
      * @return the registered incoming rpc method
      */
-    default <Params, Result> IncomingRpcMethod<Params, Result> incomingRpcMethod(String name, IncomingRpcMethod.Builder<Params, Result> builder) {
-        return this.register(Registries.INCOMING_RPC_METHOD, name, builder.build());
+    default <Params, Result> IncomingRpcMethod<Params, Result> incomingRpcMethod(String name, IncomingRpcMethod.IncomingRpcMethodBuilder<Params, Result> builder) {
+        return this.register(BuiltInRegistries.INCOMING_RPC_METHOD, name, builder.build());
     }
 
     /**
@@ -2111,8 +2038,8 @@ public interface RegistryHelper {
      * @param builder the builder for the outgoing rpc method
      * @return the registered outgoing rpc method
      */
-    default <Params, Result> OutgoingRpcMethod<Params, Result> outgoingRpcMethod(String name, OutgoingRpcMethod.Builder<Params, Result> builder) {
-        return this.register(Registries.OUTGOING_RPC_METHOD, name, builder.build());
+    default <Params, Result> OutgoingRpcMethod<Params, Result> outgoingRpcMethod(String name, OutgoingRpcMethod.OutgoingRpcMethodBuilder<Params, Result> builder) {
+        return this.register(BuiltInRegistries.OUTGOING_RPC_METHOD, name, builder.build());
     }
 
     /**
@@ -2122,7 +2049,7 @@ public interface RegistryHelper {
      * @param <T> the type of permission
      */
     default <T extends Permission> MapCodec<T> permission(String name, MapCodec<T> codec) {
-        return this.register(Registries.PERMISSION_TYPE, name, codec);
+        return this.register(BuiltInRegistries.PERMISSION_TYPE, name, codec);
     }
 
     /**
@@ -2132,7 +2059,7 @@ public interface RegistryHelper {
      * @param <T> the type of permission check
      */
     default <T extends PermissionCheck> MapCodec<T> permissionCheck(String name, MapCodec<T> codec) {
-        return this.register(Registries.PERMISSION_CHECK_TYPE, name, codec);
+        return this.register(BuiltInRegistries.PERMISSION_CHECK_TYPE, name, codec);
     }
 
     /**
@@ -2142,7 +2069,7 @@ public interface RegistryHelper {
      * @param <T> the type of the environment attribute
      */
     default <T> EnvironmentAttribute<T> environmentAttribute(String name, EnvironmentAttribute.Builder<T> builder) {
-        return this.register(Registries.ENVIRONMENTAL_ATTRIBUTE, name, builder.build());
+        return this.register(BuiltInRegistries.ENVIRONMENT_ATTRIBUTE, name, builder.build());
     }
 
     /**
@@ -2151,8 +2078,8 @@ public interface RegistryHelper {
      * @return the registered environment attribute type
      * @param <T> the type of the environment attribute type
      */
-    default <T> EnvironmentAttributeType<T> environmentAttributeType(String name, EnvironmentAttributeType<T> type) {
-        return this.register(Registries.ATTRIBUTE_TYPE, name, type);
+    default <T> AttributeType<T> environmentAttributeType(String name, AttributeType<T> type) {
+        return this.register(BuiltInRegistries.ATTRIBUTE_TYPE, name, type);
     }
 
     /**
@@ -2162,39 +2089,28 @@ public interface RegistryHelper {
      * @param <T> the type of slot source
      */
     default <T extends SlotSource> MapCodec<T> slotSource(String name, MapCodec<T> codec) {
-        return this.register(Registries.SLOT_SOURCE_TYPE, name, codec);
+        return this.register(BuiltInRegistries.SLOT_SOURCE_TYPE, name, codec);
     }
 
     /**
-     * @param name the name of the custom style attribute
-     * @param codec the codec of the custom style attribute
-     * @param cache {@code true} if codec decode results should be cached
-     * @return the registered custom style attribute
-     * @param <T> the type of the custom style attribute
+     * @param name the name of the entity data serializer
+     * @param trackedDataHandler the entity data serializer to register
+     * @return the registered entity data serializer
+     * @param <T> the type of entity data
      */
-    default <T> CustomStyleAttribute<T> customStyleAttribute(String name, Codec<T> codec, boolean cache) {
-        return this.register(ZineRegistries.CUSTOM_STYLE_ATTRIBUTES, name, new CustomStyleAttribute<>(codec, cache));
-    }
-
-    /**
-     * @param name the name of the tracked data handler
-     * @param trackedDataHandler the tracked data handler to register
-     * @return the registered tracked data handler
-     * @param <T> the type of tracked data
-     */
-    default <T> TrackedDataHandler<T> trackedDataHandler(String name, TrackedDataHandler<T> trackedDataHandler) {
-        FabricTrackedDataRegistry.register(this.id(name), trackedDataHandler);
+    default <T> EntityDataSerializer<T> entityData(String name, EntityDataSerializer<T> trackedDataHandler) {
+        FabricEntityDataRegistry.register(this.id(name), trackedDataHandler);
         return trackedDataHandler;
     }
 
     /**
-     * @param name the name of the tracked data handler
-     * @param codec the packet codec of the tracked data handler
-     * @return the registered tracked data handler
-     * @param <T> the type of tracked data
+     * @param name the name of the entity data serializer
+     * @param codec the packet codec of the entity data serializer
+     * @return the registered entity data serializer
+     * @param <T> the type of entity data
      */
-    default <T> TrackedDataHandler<T> trackedDataHandler(String name, PacketCodec<? super RegistryByteBuf, T> codec) {
-        return this.trackedDataHandler(name, TrackedDataHandler.create(codec));
+    default <T> EntityDataSerializer<T> entityData(String name, StreamCodec<? super RegistryFriendlyByteBuf, T> codec) {
+        return this.entityData(name, EntityDataSerializer.forValueType(codec));
     }
 
     /**
@@ -2203,7 +2119,7 @@ public interface RegistryHelper {
      * @return the registered text content codec
      * @param <T> the type of text content
      */
-    default <T extends TextContent> MapCodec<T> textContent(String name, MapCodec<T> codec) {
+    default <T extends ComponentContents> MapCodec<T> textContent(String name, MapCodec<T> codec) {
         TextUtil.registerTextContent(this.id(name), codec);
         return codec;
     }
@@ -2214,7 +2130,7 @@ public interface RegistryHelper {
      * @return the registered text object contents codec
      * @param <T> the type of text object contents
      */
-    default <T extends TextObjectContents> MapCodec<T> textObjectContents(String name, MapCodec<T> codec) {
+    default <T extends ObjectInfo> MapCodec<T> textObjectContents(String name, MapCodec<T> codec) {
         TextUtil.registerTextObjectContents(this.id(name), codec);
         return codec;
     }
@@ -2225,7 +2141,7 @@ public interface RegistryHelper {
      * @return the registered nbt data source codec
      * @param <T> the type of nbt data source
      */
-    default <T extends NbtDataSource> MapCodec<T> nbtDataSource(String name, MapCodec<T> codec) {
+    default <T extends DataSource> MapCodec<T> nbtDataSource(String name, MapCodec<T> codec) {
         TextUtilImpl.registerNbtDataSource(this.id(name), codec);
         return codec;
     }
@@ -2249,8 +2165,21 @@ public interface RegistryHelper {
         return builder.register(this.id(name), blockSetType);
     }
 
+    /**
+     * @param name the name of the custom ingredient serializer
+     * @param codec the codec of the custom ingredient
+     * @param streamCodec the stream codec of the custom ingredient
+     * @return the registered custom ingredient serializer
+     * @param <T> the type of custom ingredient
+     */
+    default <T extends CustomIngredient> CustomIngredientSerializer<T> customIngredient(String name, MapCodec<T> codec, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec) {
+        CustomIngredientSerializer<T> serializer = new CustomIngredientSerializerImpl<>(this.id(name), codec, streamCodec);
+        CustomIngredientSerializer.register(serializer);
+        return serializer;
+    }
+
     private <T extends Block> T registerBlockItem(String name, T block) {
-        this.item(name, block);
+        Item.BY_BLOCK.put(block, this.item(name, block));
         return block;
     }
 }

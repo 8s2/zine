@@ -2,9 +2,9 @@ package com.eightsidedsquare.zine.client.gui;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.tooltip.TooltipSubmenuHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ItemSlotMouseAction;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
 public interface TooltipSubmenuHandlerInitializationCallback {
 
@@ -19,11 +19,11 @@ public interface TooltipSubmenuHandlerInitializationCallback {
 
     interface Context {
 
-        void accept(TooltipSubmenuHandler tooltipSubmenuHandler);
+        void accept(ItemSlotMouseAction tooltipSubmenuHandler);
 
-        HandledScreen<?> screen();
+        AbstractContainerScreen<?> screen();
 
-        MinecraftClient client();
+        Minecraft client();
 
     }
 

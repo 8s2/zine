@@ -1,8 +1,8 @@
 package com.eightsidedsquare.zine.client.item;
 
-import net.minecraft.client.render.item.model.ItemModel;
-import net.minecraft.client.render.item.model.SelectItemModel;
-import net.minecraft.client.render.item.property.select.SelectProperty;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.item.SelectItemModel;
+import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -17,11 +17,11 @@ public interface ZineUnbakedSelectItemModel {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default <P extends SelectProperty<T>, T> void zine$addCase(SelectProperty.Type<P, T> type, List<T> values, ItemModel.Unbaked model) {
+    default <P extends SelectItemModelProperty<T>, T> void zine$addCase(SelectItemModelProperty.Type<P, T> type, List<T> values, ItemModel.Unbaked model) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default <P extends SelectProperty<T>, T> void zine$addCases(SelectProperty.Type<P, T> type, List<SelectItemModel.SwitchCase<T>> cases) {
+    default <P extends SelectItemModelProperty<T>, T> void zine$addCases(SelectItemModelProperty.Type<P, T> type, List<SelectItemModel.SwitchCase<T>> cases) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 

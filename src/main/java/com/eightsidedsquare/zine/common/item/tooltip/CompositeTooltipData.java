@@ -2,26 +2,26 @@ package com.eightsidedsquare.zine.common.item.tooltip;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Either;
-import net.minecraft.item.tooltip.TooltipData;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 
 import java.util.List;
 
-public record CompositeTooltipData(List<Either<Text, TooltipData>> data) implements TooltipData {
+public record CompositeTooltipData(List<Either<Component, TooltipComponent>> data) implements TooltipComponent {
 
     public static Builder builder() {
         return new Builder();
     }
 
     public static class Builder {
-        private final ImmutableList.Builder<Either<Text, TooltipData>> data = ImmutableList.builder();
+        private final ImmutableList.Builder<Either<Component, TooltipComponent>> data = ImmutableList.builder();
 
-        public Builder with(Text text) {
+        public Builder with(Component text) {
             this.data.add(Either.left(text));
             return this;
         }
 
-        public Builder with(TooltipData tooltipData) {
+        public Builder with(TooltipComponent tooltipData) {
             this.data.add(Either.right(tooltipData));
             return this;
         }

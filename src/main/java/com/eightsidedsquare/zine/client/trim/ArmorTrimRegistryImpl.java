@@ -2,35 +2,31 @@ package com.eightsidedsquare.zine.client.trim;
 
 import com.eightsidedsquare.zine.common.util.ZineUtil;
 import com.google.common.collect.ImmutableMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.data.ItemModels;
-import net.minecraft.client.data.ModelSupplier;
-import net.minecraft.client.data.Models;
-import net.minecraft.client.data.TextureMap;
-import net.minecraft.client.render.entity.equipment.EquipmentModel;
-import net.minecraft.client.render.item.model.ItemModel;
-import net.minecraft.client.render.item.model.SelectItemModel;
-import net.minecraft.client.render.item.property.select.TrimMaterialProperty;
-import net.minecraft.client.texture.atlas.AtlasSource;
-import net.minecraft.client.texture.atlas.PalettedPermutationsAtlasSource;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.EquippableComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.equipment.EquipmentType;
-import net.minecraft.item.equipment.trim.ArmorTrimMaterial;
-import net.minecraft.item.equipment.trim.ArmorTrimPattern;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.data.models.model.ItemModelUtils;
+import net.minecraft.client.data.models.model.ModelInstance;
+import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.client.renderer.item.SelectItemModel;
+import net.minecraft.client.renderer.item.properties.select.TrimMaterialProperty;
+import net.minecraft.client.renderer.texture.atlas.SpriteSource;
+import net.minecraft.client.renderer.texture.atlas.sources.PalettedPermutations;
+import net.minecraft.client.resources.model.EquipmentClientInfo;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimPattern;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -39,35 +35,36 @@ public final class ArmorTrimRegistryImpl {
     private ArmorTrimRegistryImpl() {
     }
 
-    private static final Identifier TRIM_PALETTE_KEY = Identifier.ofVanilla("trims/color_palettes/trim_palette");
-    private static final Map<RegistryKey<ArmorTrimMaterial>, Material> MATERIALS = new Object2ObjectOpenHashMap<>();
-    private static final Map<RegistryKey<ArmorTrimPattern>, Pattern> PATTERNS = new Object2ObjectOpenHashMap<>();
+    private static final Identifier TRIM_PALETTE_KEY = Identifier.withDefaultNamespace("trims/color_palettes/trim_palette");
+    private static final Map<ResourceKey<TrimMaterial>, Material> MATERIALS = new Reference2ObjectOpenHashMap<>();
+    private static final Map<ResourceKey<TrimPattern>, Pattern> PATTERNS = new Reference2ObjectOpenHashMap<>();
     private static final Set<Identifier> ITEM_MODEL_EXCLUDE = new ObjectOpenHashSet<>();
+    private static final Map<Item, ArmorType> ARMOR_ITEMS = new Reference2ObjectOpenHashMap<>();
 
-    private static void registerMaterial(RegistryKey<ArmorTrimMaterial> key, Material material) {
+    private static void registerMaterial(ResourceKey<TrimMaterial> key, Material material) {
         MATERIALS.put(key, material);
     }
 
-    static void registerMaterial(RegistryKey<ArmorTrimMaterial> key, String name, Identifier colorPaletteTexture, Map<EquipmentType, Identifier> equipmentItemModelIds) {
+    static void registerMaterial(ResourceKey<TrimMaterial> key, String name, Identifier colorPaletteTexture, Map<ArmorType, Identifier> equipmentItemModelIds) {
         registerMaterial(key, new Material(name, colorPaletteTexture, equipmentItemModelIds));
     }
 
-    static void registerMaterial(RegistryKey<ArmorTrimMaterial> key) {
-        registerMaterial(key, key.getValue().getPath(), key.getValue().withPrefixedPath("trims/color_palettes/"), createEquipmentModelIds(key));
+    static void registerMaterial(ResourceKey<TrimMaterial> key) {
+        registerMaterial(key, key.identifier().getPath(), key.identifier().withPrefix("trims/color_palettes/"), createEquipmentModelIds(key));
     }
 
-    private static void registerPattern(RegistryKey<ArmorTrimPattern> key, Pattern pattern) {
+    private static void registerPattern(ResourceKey<TrimPattern> key, Pattern pattern) {
         PATTERNS.put(key, pattern);
     }
 
-    static void registerPattern(RegistryKey<ArmorTrimPattern> key, Map<EquipmentModel.LayerType, Identifier> equipmentTextures) {
+    static void registerPattern(ResourceKey<TrimPattern> key, Map<EquipmentClientInfo.LayerType, Identifier> equipmentTextures) {
         registerPattern(key, new Pattern(equipmentTextures));
     }
 
-    static void registerPattern(RegistryKey<ArmorTrimPattern> key) {
-        Map<EquipmentModel.LayerType, Identifier> equipmentTextures = ImmutableMap.<EquipmentModel.LayerType, Identifier>builder()
-                .put(EquipmentModel.LayerType.HUMANOID, key.getValue().withPrefixedPath("trims/entity/humanoid/"))
-                .put(EquipmentModel.LayerType.HUMANOID_LEGGINGS, key.getValue().withPrefixedPath("trims/entity/humanoid_leggings/"))
+    static void registerPattern(ResourceKey<TrimPattern> key) {
+        Map<EquipmentClientInfo.LayerType, Identifier> equipmentTextures = ImmutableMap.<EquipmentClientInfo.LayerType, Identifier>builder()
+                .put(EquipmentClientInfo.LayerType.HUMANOID, key.identifier().withPrefix("trims/entity/humanoid/"))
+                .put(EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS, key.identifier().withPrefix("trims/entity/humanoid_leggings/"))
                 .build();
         registerPattern(key, equipmentTextures);
     }
@@ -76,43 +73,47 @@ public final class ArmorTrimRegistryImpl {
         ITEM_MODEL_EXCLUDE.addAll(Arrays.asList(ids));
     }
 
-    private static Map<EquipmentType, Identifier> createEquipmentModelIds(RegistryKey<ArmorTrimMaterial> key) {
-        ImmutableMap.Builder<EquipmentType, Identifier> builder = ImmutableMap.builder();
-        String name = key.getValue().getPath();
-        for(EquipmentType type : ZineUtil.HUMANOID_EQUIPMENT_TYPES) {
-            builder.put(type, key.getValue().withPath("item/" + type.asString() + "_" + name + "_trim"));
+    private static Map<ArmorType, Identifier> createEquipmentModelIds(ResourceKey<TrimMaterial> key) {
+        ImmutableMap.Builder<ArmorType, Identifier> builder = ImmutableMap.builder();
+        String name = key.identifier().getPath();
+        for(ArmorType type : ZineUtil.HUMANOID_EQUIPMENT_TYPES) {
+            builder.put(type, key.identifier().withPath("item/" + type.getSerializedName() + "_" + name + "_trim"));
         }
         return builder.build();
     }
 
-    public static boolean containsMaterial(RegistryKey<ArmorTrimMaterial> key) {
+    public static boolean containsMaterial(ResourceKey<TrimMaterial> key) {
         return MATERIALS.containsKey(key);
     }
 
-    public static void modifyItemsAtlas(List<AtlasSource> sources) {
+    public static void modifyItemsAtlas(List<SpriteSource> sources) {
         modifyPalettedSource(sources, ArmorTrimRegistryImpl::applyMaterials);
     }
 
-    public static void modifyArmorTrimsAtlas(List<AtlasSource> sources) {
+    public static void modifyArmorTrimsAtlas(List<SpriteSource> sources) {
         modifyPalettedSource(sources, source -> {
             applyMaterials(source);
             applyPatterns(source);
         });
     }
 
-    private static void modifyPalettedSource(List<AtlasSource> sources, Consumer<PalettedPermutationsAtlasSource> consumer) {
-        for(AtlasSource source : sources) {
-            if(source instanceof PalettedPermutationsAtlasSource palettedSource && palettedSource.zine$getPaletteKey().equals(TRIM_PALETTE_KEY)) {
+    public static void addArmorItem(Item item, ArmorType armorType) {
+        ARMOR_ITEMS.put(item, armorType);
+    }
+
+    private static void modifyPalettedSource(List<SpriteSource> sources, Consumer<PalettedPermutations> consumer) {
+        for(SpriteSource source : sources) {
+            if(source instanceof PalettedPermutations palettedSource && palettedSource.zine$getPaletteKey().equals(TRIM_PALETTE_KEY)) {
                 consumer.accept(palettedSource);
             }
         }
     }
 
-    private static void applyMaterials(PalettedPermutationsAtlasSource source) {
+    private static void applyMaterials(PalettedPermutations source) {
         MATERIALS.values().forEach(entry -> source.zine$addNamespacedPermutation(entry.name, entry.colorPaletteTexture));
     }
 
-    private static void applyPatterns(PalettedPermutationsAtlasSource source) {
+    private static void applyPatterns(PalettedPermutations source) {
         PATTERNS.values().forEach(entry -> entry.equipmentTextures.values().forEach(source::zine$addTexture));
     }
 
@@ -120,31 +121,29 @@ public final class ArmorTrimRegistryImpl {
         if(ITEM_MODEL_EXCLUDE.contains(id)) {
             return unbaked;
         }
-        Item item = Registries.ITEM.get(id);
-        if(!item.zine$modelEquals(id)) {
-            return unbaked;
-        }
-        EquipmentType equipmentType = getEquipmentType(item);
-        if(equipmentType == null) {
-            return unbaked;
-        }else if(unbaked instanceof SelectItemModel.Unbaked selectModel) {
-            return applyMaterials(selectModel, equipmentType);
+        Optional<Holder.Reference<Item>> itemRef = BuiltInRegistries.ITEM.get(id);
+        if(itemRef.isPresent()
+                && unbaked instanceof SelectItemModel.Unbaked selectModel
+                && selectModel.unbakedSwitch().property() instanceof TrimMaterialProperty) {
+            Item item = itemRef.get().value();
+            ArmorType armorType = getArmorType(item);
+            return armorType == null ? unbaked : applyMaterials(selectModel, armorType);
         }
         return unbaked;
     }
 
-    private static ItemModel.Unbaked applyMaterials(SelectItemModel.Unbaked selectModel, EquipmentType equipmentType) {
+    private static ItemModel.Unbaked applyMaterials(SelectItemModel.Unbaked selectModel, ArmorType armorType) {
         if(selectModel.fallback().isEmpty()) {
             return selectModel;
         }
         ItemModel.Unbaked fallback = selectModel.fallback().get();
         selectModel.zine$addCases(TrimMaterialProperty.TYPE, MATERIALS.entrySet()
                 .stream()
-                .map(entry -> ItemModels.switchCase(
+                .map(entry -> ItemModelUtils.when(
                         entry.getKey(),
-                        ItemModels.composite(
+                        ItemModelUtils.composite(
                                 fallback,
-                                ItemModels.basic(entry.getValue().equipmentModelIds.get(equipmentType))
+                                ItemModelUtils.plainModel(entry.getValue().equipmentModelIds.get(armorType))
                         )
                 ))
                 .toList()
@@ -154,36 +153,26 @@ public final class ArmorTrimRegistryImpl {
 
 
     @Nullable
-    private static EquipmentType getEquipmentType(Item item) {
-        EquippableComponent equippableComponent = item.getComponents().get(DataComponentTypes.EQUIPPABLE);
-        if(equippableComponent == null) {
-            return null;
-        }
-        return switch (equippableComponent.slot()) {
-            case HEAD -> EquipmentType.HELMET;
-            case CHEST -> EquipmentType.CHESTPLATE;
-            case LEGS -> EquipmentType.LEGGINGS;
-            case FEET -> EquipmentType.BOOTS;
-            default -> null;
-        };
+    private static ArmorType getArmorType(Item item) {
+        return ARMOR_ITEMS.get(item);
     }
 
-    public static void addUnbakedModels(BiConsumer<Identifier, ModelSupplier> modelCollector) {
+    public static void addUnbakedModels(BiConsumer<Identifier, ModelInstance> modelCollector) {
         for(Material entry : MATERIALS.values()) {
-            for(EquipmentType type : ZineUtil.HUMANOID_EQUIPMENT_TYPES) {
-                Models.GENERATED.upload(
+            for(ArmorType type : ZineUtil.HUMANOID_EQUIPMENT_TYPES) {
+                ModelTemplates.FLAT_ITEM.create(
                         entry.equipmentModelIds.get(type),
-                        TextureMap.layer0(entry.colorPaletteTexture.withPath("trims/items/" + type.asString() + "_trim_" + entry.name)),
+                        TextureMapping.layer0(entry.colorPaletteTexture.withPath("trims/items/" + type.getSerializedName() + "_trim_" + entry.name)),
                         modelCollector
                 );
             }
         }
     }
 
-    private record Material(String name, Identifier colorPaletteTexture, Map<EquipmentType, Identifier> equipmentModelIds) {
+    private record Material(String name, Identifier colorPaletteTexture, Map<ArmorType, Identifier> equipmentModelIds) {
     }
 
-    private record Pattern(Map<EquipmentModel.LayerType, Identifier> equipmentTextures) {
+    private record Pattern(Map<EquipmentClientInfo.LayerType, Identifier> equipmentTextures) {
     }
 
 }

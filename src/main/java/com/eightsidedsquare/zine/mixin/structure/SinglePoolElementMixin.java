@@ -2,12 +2,12 @@ package com.eightsidedsquare.zine.mixin.structure;
 
 import com.eightsidedsquare.zine.common.world.structure.ZineSinglePoolElement;
 import com.mojang.datafixers.util.Either;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.structure.StructureLiquidSettings;
-import net.minecraft.structure.StructureTemplate;
-import net.minecraft.structure.pool.SinglePoolElement;
-import net.minecraft.structure.processor.StructureProcessorList;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
+import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,46 +20,46 @@ import java.util.Optional;
 public abstract class SinglePoolElementMixin implements ZineSinglePoolElement {
 
     @Shadow @Final @Mutable
-    protected Either<Identifier, StructureTemplate> location;
+    protected Either<Identifier, StructureTemplate> template;
 
     @Shadow @Final @Mutable
-    protected RegistryEntry<StructureProcessorList> processors;
+    protected Holder<StructureProcessorList> processors;
 
     @Shadow @Final @Mutable
-    protected Optional<StructureLiquidSettings> overrideLiquidSettings;
+    protected Optional<LiquidSettings> overrideLiquidSettings;
 
     @Override
     public void zine$setTemplate(Identifier template) {
-        this.location = Either.left(template);
+        this.template = Either.left(template);
     }
 
     @Override
     public void zine$setTemplate(StructureTemplate template) {
-        this.location = Either.right(template);
+        this.template = Either.right(template);
     }
 
     @Override
     public Either<Identifier, StructureTemplate> zine$getTemplate() {
-        return this.location;
+        return this.template;
     }
 
     @Override
-    public RegistryEntry<StructureProcessorList> zine$getProcessors() {
+    public Holder<StructureProcessorList> zine$getProcessors() {
         return this.processors;
     }
 
     @Override
-    public void zine$setProcessors(RegistryEntry<StructureProcessorList> processors) {
+    public void zine$setProcessors(Holder<StructureProcessorList> processors) {
         this.processors = processors;
     }
 
     @Override
-    public @Nullable StructureLiquidSettings zine$getOverrideLiquidSettings() {
+    public @Nullable LiquidSettings zine$getOverrideLiquidSettings() {
         return this.overrideLiquidSettings.orElse(null);
     }
 
     @Override
-    public void zine$setOverrideLiquidSettings(@Nullable StructureLiquidSettings overrideLiquidSettings) {
+    public void zine$setOverrideLiquidSettings(@Nullable LiquidSettings overrideLiquidSettings) {
         this.overrideLiquidSettings = Optional.ofNullable(overrideLiquidSettings);
     }
 }

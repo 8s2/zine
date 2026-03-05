@@ -1,14 +1,14 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.world.entity.EntityType;
 
 import java.util.Collection;
 
 public interface ZineEntityTypePredicate {
 
-    default void zine$setTypes(RegistryEntryList<EntityType<?>> types) {
+    default void zine$setTypes(HolderSet<EntityType<?>> types) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
@@ -16,11 +16,11 @@ public interface ZineEntityTypePredicate {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$addType(RegistryEntry<EntityType<?>> type) {
+    default void zine$addType(Holder<EntityType<?>> type) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$addTypes(RegistryEntryList<EntityType<?>> types) {
+    default void zine$addTypes(HolderSet<EntityType<?>> types) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 

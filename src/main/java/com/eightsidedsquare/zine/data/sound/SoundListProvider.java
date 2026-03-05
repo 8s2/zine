@@ -3,11 +3,11 @@ package com.eightsidedsquare.zine.data.sound;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.data.DataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.DataWriter;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.data.PackOutput;
+import net.minecraft.sounds.SoundEvent;
 
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
@@ -21,8 +21,8 @@ public abstract class SoundListProvider implements DataProvider {
 
     private final Path outputPath;
 
-    public SoundListProvider(FabricDataOutput output) {
-        this.outputPath = output.resolvePath(DataOutput.OutputType.RESOURCE_PACK).resolve(output.getModId()).resolve("sounds.json");
+    public SoundListProvider(FabricPackOutput output) {
+        this.outputPath = output.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(output.getModId()).resolve("sounds.json");
     }
 
     protected abstract void generate(SoundEntryConsumer consumer);
@@ -32,16 +32,16 @@ public abstract class SoundListProvider implements DataProvider {
     }
 
     @Override
-    public CompletableFuture<?> run(DataWriter writer) {
+    public CompletableFuture<?> run(CachedOutput writer) {
         JsonObject jsonObject = new JsonObject();
         this.generate((soundEvent, soundEntry) -> {
             if(soundEntry.subtitle() != null) {
                 this.putSubtitle(soundEvent, soundEntry.subtitle());
             }
             SoundEntryRecord.CODEC.encodeStart(JsonOps.INSTANCE, soundEntry)
-                    .ifSuccess(soundEntryJson -> jsonObject.add(soundEvent.id().getPath(), soundEntryJson));
+                    .ifSuccess(soundEntryJson -> jsonObject.add(soundEvent.location().getPath(), soundEntryJson));
         });
-        return DataProvider.writeToPath(writer, jsonObject, this.outputPath);
+        return DataProvider.saveStable(writer, jsonObject, this.outputPath);
     }
 
     @Override

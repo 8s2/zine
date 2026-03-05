@@ -1,27 +1,27 @@
 package com.eightsidedsquare.zine.common.advancement;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.passive.CatVariant;
-import net.minecraft.entity.passive.FrogVariant;
-import net.minecraft.entity.passive.WolfVariant;
-import net.minecraft.item.Item;
-import net.minecraft.loot.LootTable;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.feline.CatVariant;
+import net.minecraft.world.entity.animal.frog.FrogVariant;
+import net.minecraft.world.entity.animal.wolf.WolfVariant;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 public final class VanillaAdvancementModifications {
     private VanillaAdvancementModifications() {
     }
 
-    public static void registerAdventuringTimeBiome(RegistryKey<Biome> biomeKey) {
+    public static void registerAdventuringTimeBiome(ResourceKey<Biome> biomeKey) {
         VanillaAdvancementModificationsImpl.registerAdventuringTimeBiome(biomeKey);
     }
 
-    public static void registerAllEffectsStatusEffect(RegistryEntry<StatusEffect> statusEffect, boolean potion) {
+    public static void registerAllEffectsStatusEffect(Holder<MobEffect> statusEffect, boolean potion) {
         VanillaAdvancementModificationsImpl.registerAllEffectsStatusEffect(statusEffect, potion);
     }
 
@@ -33,11 +33,11 @@ public final class VanillaAdvancementModifications {
         VanillaAdvancementModificationsImpl.registerBreedableAnimal(entityType, laysEgg);
     }
 
-    public static void registerCompleteCatalogueCatVariant(RegistryKey<CatVariant> catVariantKey) {
+    public static void registerCompleteCatalogueCatVariant(ResourceKey<CatVariant> catVariantKey) {
         VanillaAdvancementModificationsImpl.registerCompleteCatalogueCatVariant(catVariantKey);
     }
 
-    public static void registerExploreNetherBiome(RegistryKey<Biome> biomeKey) {
+    public static void registerExploreNetherBiome(ResourceKey<Biome> biomeKey) {
         VanillaAdvancementModificationsImpl.registerExploreNetherBiome(biomeKey);
     }
 
@@ -53,7 +53,7 @@ public final class VanillaAdvancementModifications {
         VanillaAdvancementModificationsImpl.registerKillableMobEntityType(entityType);
     }
 
-    public static void registerLeashAllFrogVariantsFrogVariant(RegistryKey<FrogVariant> frogVariantKey) {
+    public static void registerLeashAllFrogVariantsFrogVariant(ResourceKey<FrogVariant> frogVariantKey) {
         VanillaAdvancementModificationsImpl.registerLeashAllFrogVariantsFrogVariant(frogVariantKey);
     }
 
@@ -61,7 +61,7 @@ public final class VanillaAdvancementModifications {
         VanillaAdvancementModificationsImpl.registerLightenUpBlock(block);
     }
 
-    public static void registerLootBastionLootTable(RegistryKey<LootTable> lootTableKey) {
+    public static void registerLootBastionLootTable(ResourceKey<LootTable> lootTableKey) {
         VanillaAdvancementModificationsImpl.registerLootBastionLootTable(lootTableKey);
     }
 
@@ -69,7 +69,7 @@ public final class VanillaAdvancementModifications {
         VanillaAdvancementModificationsImpl.registerPlantSeedBlock(block, fromSniffer);
     }
 
-    public static void registerSalvageSherdLootTable(RegistryKey<LootTable> lootTableKey) {
+    public static void registerSalvageSherdLootTable(ResourceKey<LootTable> lootTableKey) {
         VanillaAdvancementModificationsImpl.registerSalvageSherdLootTable(lootTableKey);
     }
 
@@ -81,7 +81,7 @@ public final class VanillaAdvancementModifications {
         VanillaAdvancementModificationsImpl.registerTacticalFishingBucketItem(item);
     }
 
-    public static void registerTrimWithAnyArmorPatternRecipe(RegistryKey<Recipe<?>> recipeKey) {
+    public static void registerTrimWithAnyArmorPatternRecipe(ResourceKey<Recipe<?>> recipeKey) {
         VanillaAdvancementModificationsImpl.registerTrimWithAnyArmorPatternRecipe(recipeKey);
     }
 
@@ -93,7 +93,7 @@ public final class VanillaAdvancementModifications {
         VanillaAdvancementModificationsImpl.registerWaxOnBlock(block);
     }
 
-    public static void registerWholePackWolfVariant(RegistryKey<WolfVariant> wolfVariantKey) {
+    public static void registerWholePackWolfVariant(ResourceKey<WolfVariant> wolfVariantKey) {
         VanillaAdvancementModificationsImpl.registerWholePackWolfVariant(wolfVariantKey);
     }
 }

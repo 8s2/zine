@@ -1,35 +1,44 @@
-accessWidener v2 named
-accessible class net/minecraft/client/item/ItemAssetsLoader$Definition
-accessible field net/minecraft/client/item/ItemAsset model Lnet/minecraft/client/render/item/model/ItemModel$Unbaked;
-mutable field net/minecraft/client/item/ItemAsset model Lnet/minecraft/client/render/item/model/ItemModel$Unbaked;
-accessible field net/minecraft/client/render/model/json/JsonUnbakedModel GSON Lcom/google/gson/Gson;
-accessible method net/minecraft/entity/effect/StatusEffect <init> (Lnet/minecraft/entity/effect/StatusEffectCategory;I)V
-accessible method net/minecraft/entity/effect/StatusEffect <init> (Lnet/minecraft/entity/effect/StatusEffectCategory;ILnet/minecraft/particle/ParticleEffect;)V
-accessible method net/minecraft/world/poi/PointOfInterestTypes getStatesOfBlock (Lnet/minecraft/block/Block;)Ljava/util/Set;
-accessible method net/minecraft/world/gen/feature/size/FeatureSizeType <init> (Lcom/mojang/serialization/MapCodec;)V
-accessible method net/minecraft/registry/entry/RegistryEntry$Reference setValue (Ljava/lang/Object;)V
-accessible field net/minecraft/component/ComponentMap$Builder components Lit/unimi/dsi/fastutil/objects/Reference2ObjectMap;
-accessible class net/minecraft/predicate/entity/LocationPredicate$PositionRange
-accessible method net/minecraft/predicate/entity/LocationPredicate$PositionRange create (Lnet/minecraft/predicate/NumberRange$DoubleRange;Lnet/minecraft/predicate/NumberRange$DoubleRange;Lnet/minecraft/predicate/NumberRange$DoubleRange;)Ljava/util/Optional;
-accessible method net/minecraft/world/poi/PointOfInterestTypes registerStates (Lnet/minecraft/registry/entry/RegistryEntry;Ljava/util/Set;)V
-accessible class net/minecraft/client/font/TextRenderer$Drawer
-accessible method net/minecraft/client/data/VariantsBlockModelDefinitionCreator validateAndAddProperties (Ljava/util/Set;Lnet/minecraft/block/Block;Lnet/minecraft/client/data/BlockStateVariantMap;)Ljava/util/Set;
-accessible method net/minecraft/client/data/BlockStateVariantMap getVariants ()Ljava/util/Map;
-accessible method net/minecraft/client/render/entity/LivingEntityRenderer addFeature (Lnet/minecraft/client/render/entity/feature/FeatureRenderer;)Z
-accessible field net/minecraft/client/render/entity/LivingEntityRenderer itemModelResolver Lnet/minecraft/client/item/ItemModelManager;
-accessible field net/minecraft/client/render/entity/EntityRenderer dispatcher Lnet/minecraft/client/render/entity/EntityRenderManager;
-accessible field net/minecraft/client/gui/screen/Screen client Lnet/minecraft/client/MinecraftClient;
-accessible method net/minecraft/client/gui/screen/ingame/HandledScreen addTooltipSubmenuHandler (Lnet/minecraft/client/gui/tooltip/TooltipSubmenuHandler;)V
-accessible field net/minecraft/block/AbstractBlock soundGroup Lnet/minecraft/sound/BlockSoundGroup;
-mutable field net/minecraft/block/AbstractBlock soundGroup Lnet/minecraft/sound/BlockSoundGroup;
-accessible field net/minecraft/client/network/PlayerListEntry texturesSupplier Ljava/util/function/Supplier;
-accessible class net/minecraft/client/font/BakedGlyphImpl$BakedGlyphRect
-accessible field net/minecraft/text/object/TextObjectContentTypes ID_MAPPER Lnet/minecraft/util/dynamic/Codecs$IdMapper;
-accessible field net/minecraft/text/NbtDataSourceTypes ID_MAPPER Lnet/minecraft/util/dynamic/Codecs$IdMapper;
-accessible method net/minecraft/server/dedicated/management/OutgoingRpcMethod$Builder build ()Lnet/minecraft/server/dedicated/management/OutgoingRpcMethod;
-accessible method net/minecraft/client/data/BlockStateVariantMap$SingleProperty <init> (Lnet/minecraft/state/property/Property;)V
-accessible method net/minecraft/client/data/BlockStateVariantMap$DoubleProperty <init> (Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;)V
-accessible method net/minecraft/client/data/BlockStateVariantMap$TripleProperty <init> (Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;)V
-accessible method net/minecraft/client/data/BlockStateVariantMap$QuadrupleProperty <init> (Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;)V
-accessible method net/minecraft/client/data/BlockStateVariantMap$QuintupleProperty <init> (Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;Lnet/minecraft/state/property/Property;)V
-accessible method net/minecraft/client/data/AtlasDefinitionProvider runForAtlas (Lnet/minecraft/data/DataWriter;Lnet/minecraft/util/Identifier;Ljava/util/List;)Ljava/util/concurrent/CompletableFuture;
+accessWidener v2 official
+accessible class net/minecraft/client/resources/model/ClientItemInfoLoader$PendingLoad
+accessible field net/minecraft/client/renderer/item/ClientItem model Lnet/minecraft/client/renderer/item/ItemModel$Unbaked;
+mutable field net/minecraft/client/renderer/item/ClientItem model Lnet/minecraft/client/renderer/item/ItemModel$Unbaked;
+accessible method net/minecraft/world/effect/MobEffect <init> (Lnet/minecraft/world/effect/MobEffectCategory;I)V
+accessible method net/minecraft/world/effect/MobEffect <init> (Lnet/minecraft/world/effect/MobEffectCategory;ILnet/minecraft/core/particles/ParticleOptions;)V
+accessible method net/minecraft/world/entity/ai/village/poi/PoiTypes getBlockStates (Lnet/minecraft/world/level/block/Block;)Ljava/util/Set;
+accessible method net/minecraft/world/level/levelgen/feature/featuresize/FeatureSizeType <init> (Lcom/mojang/serialization/MapCodec;)V
+accessible method net/minecraft/core/Holder$Reference bindValue (Ljava/lang/Object;)V
+accessible field net/minecraft/core/component/DataComponentMap$Builder map Lit/unimi/dsi/fastutil/objects/Reference2ObjectMap;
+accessible class net/minecraft/advancements/criterion/LocationPredicate$PositionPredicate
+accessible method net/minecraft/advancements/criterion/LocationPredicate$PositionPredicate of (Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;)Ljava/util/Optional;
+accessible method net/minecraft/world/entity/ai/village/poi/PoiTypes registerBlockStates (Lnet/minecraft/core/Holder;Ljava/util/Set;)V
+accessible class net/minecraft/client/gui/Font$PreparedTextBuilder
+accessible method net/minecraft/client/data/models/blockstates/MultiVariantGenerator validateAndExpandProperties (Ljava/util/Set;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/client/data/models/blockstates/PropertyDispatch;)Ljava/util/Set;
+accessible method net/minecraft/client/data/models/blockstates/PropertyDispatch getEntries ()Ljava/util/Map;
+accessible method net/minecraft/client/renderer/entity/LivingEntityRenderer addLayer (Lnet/minecraft/client/renderer/entity/layers/RenderLayer;)Z
+accessible field net/minecraft/client/renderer/entity/LivingEntityRenderer itemModelResolver Lnet/minecraft/client/renderer/item/ItemModelResolver;
+accessible field net/minecraft/client/renderer/entity/EntityRenderer entityRenderDispatcher Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;
+accessible field net/minecraft/client/gui/screens/Screen minecraft Lnet/minecraft/client/Minecraft;
+accessible method net/minecraft/client/gui/screens/inventory/AbstractContainerScreen addItemSlotMouseAction (Lnet/minecraft/client/gui/ItemSlotMouseAction;)V
+accessible field net/minecraft/world/level/block/state/BlockBehaviour soundType Lnet/minecraft/world/level/block/SoundType;
+mutable field net/minecraft/world/level/block/state/BlockBehaviour soundType Lnet/minecraft/world/level/block/SoundType;
+accessible field net/minecraft/client/multiplayer/PlayerInfo skinLookup Ljava/util/function/Supplier;
+accessible class net/minecraft/client/gui/font/glyphs/BakedSheetGlyph$GlyphInstance
+accessible field net/minecraft/network/chat/contents/objects/ObjectInfos ID_MAPPER Lnet/minecraft/util/ExtraCodecs$LateBoundIdMapper;
+accessible field net/minecraft/network/chat/contents/data/DataSources ID_MAPPER Lnet/minecraft/util/ExtraCodecs$LateBoundIdMapper;
+accessible method net/minecraft/server/jsonrpc/OutgoingRpcMethod$OutgoingRpcMethodBuilder build ()Lnet/minecraft/server/jsonrpc/OutgoingRpcMethod;
+accessible method net/minecraft/client/data/models/blockstates/PropertyDispatch$C1 <init> (Lnet/minecraft/world/level/block/state/properties/Property;)V
+accessible method net/minecraft/client/data/models/blockstates/PropertyDispatch$C2 <init> (Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;)V
+accessible method net/minecraft/client/data/models/blockstates/PropertyDispatch$C3 <init> (Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;)V
+accessible method net/minecraft/client/data/models/blockstates/PropertyDispatch$C4 <init> (Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;)V
+accessible method net/minecraft/client/data/models/blockstates/PropertyDispatch$C5 <init> (Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;)V
+accessible method net/minecraft/client/data/AtlasProvider storeAtlas (Lnet/minecraft/data/CachedOutput;Lnet/minecraft/resources/Identifier;Ljava/util/List;)Ljava/util/concurrent/CompletableFuture;
+accessible class net/minecraft/client/resources/model/ModelBakery$InternerImpl
+accessible method net/minecraft/client/resources/model/ModelBakery$InternerImpl <init> ()V
+accessible class net/minecraft/client/resources/model/ModelManager$ResolvedModels
+accessible class net/minecraft/client/resources/model/ModelBakery$ModelBakerImpl
+accessible class net/minecraft/client/resources/model/ModelManager$ReloadState
+accessible field net/minecraft/client/resources/model/cuboid/CuboidModel GSON Lcom/google/gson/Gson;
+accessible class net/minecraft/client/resources/model/cuboid/CuboidModelElement$Deserializer
+accessible method net/minecraft/client/resources/model/cuboid/CuboidModelElement$Deserializer <init> ()V
+accessible class net/minecraft/client/resources/model/cuboid/CuboidFace$Deserializer
+accessible method net/minecraft/client/resources/model/cuboid/CuboidFace$Deserializer <init> ()V

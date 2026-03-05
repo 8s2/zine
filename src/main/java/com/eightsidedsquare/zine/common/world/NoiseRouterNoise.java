@@ -1,13 +1,13 @@
 package com.eightsidedsquare.zine.common.world;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.world.gen.densityfunction.DensityFunction;
-import net.minecraft.world.gen.noise.NoiseRouter;
+import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.levelgen.DensityFunction;
+import net.minecraft.world.level.levelgen.NoiseRouter;
 
 import java.util.function.Function;
 
-public enum NoiseRouterNoise implements StringIdentifiable {
+public enum NoiseRouterNoise implements StringRepresentable {
     BARRIER("barrier", NoiseRouter::barrierNoise),
     FLUID_LEVEL_FLOODEDNESS("fluid_level_floodedness", NoiseRouter::fluidLevelFloodednessNoise),
     FLUID_LEVEL_SPREAD("fluid_level_spread", NoiseRouter::fluidLevelSpreadNoise),
@@ -24,7 +24,7 @@ public enum NoiseRouterNoise implements StringIdentifiable {
     VEIN_RIDGED("vein_ridged", NoiseRouter::veinRidged),
     VEIN_GAP("vein_gap", NoiseRouter::veinGap);
 
-    public static final Codec<NoiseRouterNoise> CODEC = StringIdentifiable.createCodec(NoiseRouterNoise::values);
+    public static final Codec<NoiseRouterNoise> CODEC = StringRepresentable.fromEnum(NoiseRouterNoise::values);
 
     private final String name;
     public final Function<NoiseRouter, DensityFunction> densityFunctionGetter;
@@ -36,11 +36,11 @@ public enum NoiseRouterNoise implements StringIdentifiable {
 
     @Override
     public String toString() {
-        return this.asString();
+        return this.getSerializedName();
     }
 
     @Override
-    public String asString() {
+    public String getSerializedName() {
         return this.name;
     }
 }

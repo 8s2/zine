@@ -2,11 +2,9 @@ package com.eightsidedsquare.zine.mixin.advancement;
 
 import com.eightsidedsquare.zine.common.advancement.ZineAdvancement;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import net.minecraft.advancement.*;
-import net.minecraft.advancement.criterion.Criterion;
-import net.minecraft.advancement.criterion.CriterionConditions;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.advancements.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,19 +21,19 @@ public abstract class AdvancementMixin implements ZineAdvancement {
     private Optional<Identifier> parent;
 
     @Shadow @Final @Mutable
-    private Optional<AdvancementDisplay> display;
+    private Optional<DisplayInfo> display;
 
     @Shadow @Final @Mutable
     private AdvancementRewards rewards;
 
     @Shadow @Final @Mutable
-    private Map<String, AdvancementCriterion<?>> criteria;
+    private Map<String, Criterion<?>> criteria;
 
     @Shadow @Final @Mutable
     private boolean sendsTelemetryEvent;
 
     @Shadow @Final @Mutable
-    private Optional<Text> name;
+    private Optional<Component> name;
 
     @Shadow @Final @Mutable
     private AdvancementRequirements requirements;
@@ -46,7 +44,7 @@ public abstract class AdvancementMixin implements ZineAdvancement {
     }
 
     @Override
-    public void zine$setDisplay(@Nullable AdvancementDisplay display) {
+    public void zine$setDisplay(@Nullable DisplayInfo display) {
         this.display = Optional.ofNullable(display);
     }
 
@@ -56,12 +54,12 @@ public abstract class AdvancementMixin implements ZineAdvancement {
     }
 
     @Override
-    public void zine$addCriterion(String name, AdvancementCriterion<?> criterion) {
+    public void zine$addCriterion(String name, Criterion<?> criterion) {
         this.criteria = ZineUtil.putOrUnfreeze(this.criteria, name, criterion);
     }
 
     @Override
-    public void zine$setCriteria(Map<String, AdvancementCriterion<?>> criteria) {
+    public void zine$setCriteria(Map<String, Criterion<?>> criteria) {
         this.criteria = criteria;
     }
 
@@ -76,16 +74,16 @@ public abstract class AdvancementMixin implements ZineAdvancement {
     }
 
     @Override
-    public void zine$setName(@Nullable Text name) {
+    public void zine$setName(@Nullable Component name) {
         this.name = Optional.ofNullable(name);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T extends CriterionConditions> Optional<T> zine$getCriterion(String name, Criterion<T> criterion) {
-        AdvancementCriterion<?> advancementCriterion = this.criteria.get(name);
+    public <T extends CriterionTriggerInstance> Optional<T> zine$getCriterion(String name, CriterionTrigger<T> criterion) {
+        Criterion<?> advancementCriterion = this.criteria.get(name);
         if(advancementCriterion != null && advancementCriterion.trigger().equals(criterion)) {
-            return Optional.of((T) advancementCriterion.conditions());
+            return Optional.of((T) advancementCriterion.triggerInstance());
         }
         return Optional.empty();
     }

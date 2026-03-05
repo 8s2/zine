@@ -4,7 +4,7 @@ import com.eightsidedsquare.zine.common.util.codec.CodecUtil;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.util.ExtraCodecs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +12,13 @@ import java.util.function.Function;
 
 public record Gradient1D(List<GradientPoint<Integer>> points) implements Gradient {
 
-    private static final Codec<GradientPoint<Integer>> POINT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codecs.RGB.fieldOf("argb").forGetter(GradientPoint::v),
+    private static final Codec<GradientPoint<Integer>> POINT_CODEC = RecordCodecBuilder.create(i -> i.group(
+            ExtraCodecs.RGB_COLOR_CODEC.fieldOf("argb").forGetter(GradientPoint::v),
             Codec.floatRange(0, 1).fieldOf("t").forGetter(GradientPoint::t)
-    ).apply(instance, GradientPoint::new));
-    public static final MapCodec<Gradient1D> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    ).apply(i, GradientPoint::new));
+    public static final MapCodec<Gradient1D> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             CodecUtil.nonEmptyListCodec(POINT_CODEC).fieldOf("pts").forGetter(Gradient1D::points)
-    ).apply(instance, Gradient1D::new));
+    ).apply(i, Gradient1D::new));
     public static final Codec<Gradient1D> CODEC = CodecUtil.nonEmptyListCodec(POINT_CODEC).xmap(
             Gradient1D::new,
             Gradient1D::points

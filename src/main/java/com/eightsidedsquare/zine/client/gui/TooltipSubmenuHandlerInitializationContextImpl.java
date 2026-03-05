@@ -1,23 +1,23 @@
 package com.eightsidedsquare.zine.client.gui;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.tooltip.TooltipSubmenuHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ItemSlotMouseAction;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
-public record TooltipSubmenuHandlerInitializationContextImpl(HandledScreen<?> screen) implements TooltipSubmenuHandlerInitializationCallback.Context {
+public record TooltipSubmenuHandlerInitializationContextImpl(AbstractContainerScreen<?> screen) implements TooltipSubmenuHandlerInitializationCallback.Context {
 
     @Override
-    public void accept(TooltipSubmenuHandler handler) {
-        this.screen.addTooltipSubmenuHandler(handler);
+    public void accept(ItemSlotMouseAction handler) {
+        this.screen.addItemSlotMouseAction(handler);
     }
 
     @Override
-    public HandledScreen<?> screen() {
+    public AbstractContainerScreen<?> screen() {
         return this.screen;
     }
 
     @Override
-    public MinecraftClient client() {
-        return this.screen.client;
+    public Minecraft client() {
+        return this.screen.minecraft;
     }
 }

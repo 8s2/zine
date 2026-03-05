@@ -3,7 +3,7 @@ package com.eightsidedsquare.zine.common.advancement;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;

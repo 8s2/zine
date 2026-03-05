@@ -2,7 +2,7 @@ package com.eightsidedsquare.zine.common.state;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.*;
-import net.minecraft.state.property.Property;
+import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ public class StateMapBuilder<V> {
     }
 
     <T extends Comparable<T>> StateMapBuilder<V> with(Property<T> property) {
-        int size = property.getValues().size();
+        int size = property.getPossibleValues().size();
         this.coordinates.add(new Coordinate<>(property, size, this.permutations));
         this.permutations *= size;
         return this;
@@ -216,7 +216,7 @@ public class StateMapBuilder<V> {
 
     record Coordinate<T extends Comparable<T>>(Property<T> property, int size, int base) {
         T get(int i) {
-            return this.property.getValues().get((i / this.base) % this.size);
+            return this.property.getPossibleValues().get((i / this.base) % this.size);
         }
     }
 

@@ -1,10 +1,10 @@
 package com.eightsidedsquare.zine.mixin.predicate;
 
 import com.eightsidedsquare.zine.common.predicate.ZineDamagePredicate;
-import net.minecraft.predicate.DamagePredicate;
-import net.minecraft.predicate.NumberRange;
-import net.minecraft.predicate.entity.DamageSourcePredicate;
-import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.advancements.criterion.DamagePredicate;
+import net.minecraft.advancements.criterion.DamageSourcePredicate;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.MinMaxBounds;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,10 +17,10 @@ import java.util.Optional;
 public abstract class DamagePredicateMixin implements ZineDamagePredicate {
 
     @Shadow @Final @Mutable
-    private NumberRange.DoubleRange dealt;
+    private MinMaxBounds.Doubles dealtDamage;
 
     @Shadow @Final @Mutable
-    private NumberRange.DoubleRange taken;
+    private MinMaxBounds.Doubles takenDamage;
 
     @Shadow @Final @Mutable
     private Optional<EntityPredicate> sourceEntity;
@@ -32,13 +32,13 @@ public abstract class DamagePredicateMixin implements ZineDamagePredicate {
     private Optional<DamageSourcePredicate> type;
 
     @Override
-    public void zine$setDealt(NumberRange.DoubleRange dealt) {
-        this.dealt = dealt;
+    public void zine$setDealt(MinMaxBounds.Doubles dealt) {
+        this.dealtDamage = dealt;
     }
 
     @Override
-    public void zine$setTaken(NumberRange.DoubleRange taken) {
-        this.taken = taken;
+    public void zine$setTaken(MinMaxBounds.Doubles taken) {
+        this.takenDamage = taken;
     }
 
     @Override

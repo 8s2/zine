@@ -2,10 +2,10 @@ package com.eightsidedsquare.zine.common.block;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.block.Block;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 
 @FunctionalInterface
 public interface ModifyBlockSoundGroupCallback {
@@ -23,16 +23,16 @@ public interface ModifyBlockSoundGroupCallback {
 
     interface Context {
 
-        void setSoundGroup(Block block, BlockSoundGroup soundGroup);
+        void setSoundGroup(Block block, SoundType soundGroup);
 
-        default void setSoundGroup(BlockSoundGroup soundGroup, Block... blocks) {
+        default void setSoundGroup(SoundType soundGroup, Block... blocks) {
             for (Block block : blocks) {
                 this.setSoundGroup(block, soundGroup);
             }
         }
 
         default Registry<Block> registry() {
-            return Registries.BLOCK;
+            return BuiltInRegistries.BLOCK;
         }
 
     }

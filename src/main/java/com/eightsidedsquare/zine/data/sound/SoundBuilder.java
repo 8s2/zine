@@ -3,16 +3,16 @@ package com.eightsidedsquare.zine.data.sound;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.StringIdentifiable;
-import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.StringRepresentable;
 
 public class SoundBuilder {
 
     private static final Codec<SoundBuilder> SOUND_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("name").forGetter(soundBuilder -> soundBuilder.name),
-            Codecs.POSITIVE_FLOAT.optionalFieldOf("volume", 1f).forGetter(soundBuilder -> soundBuilder.volume),
-            Codecs.POSITIVE_FLOAT.optionalFieldOf("pitch", 1f).forGetter(soundBuilder -> soundBuilder.pitch),
-            Codecs.POSITIVE_INT.optionalFieldOf("weight", 1).forGetter(soundBuilder -> soundBuilder.weight),
+            ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("volume", 1f).forGetter(soundBuilder -> soundBuilder.volume),
+            ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("pitch", 1f).forGetter(soundBuilder -> soundBuilder.pitch),
+            ExtraCodecs.POSITIVE_INT.optionalFieldOf("weight", 1).forGetter(soundBuilder -> soundBuilder.weight),
             SoundBuilder.Type.CODEC.optionalFieldOf("type", SoundBuilder.Type.FILE).forGetter(soundBuilder -> soundBuilder.type),
             Codec.BOOL.optionalFieldOf("stream", false).forGetter(soundBuilder -> soundBuilder.stream),
             Codec.BOOL.optionalFieldOf("preload", false).forGetter(soundBuilder -> soundBuilder.preload),
@@ -95,11 +95,11 @@ public class SoundBuilder {
                 && this.attenuation == 16;
     }
 
-    public enum Type implements StringIdentifiable {
+    public enum Type implements StringRepresentable {
         FILE("file"),
         SOUND_EVENT("event");
 
-        public static final Codec<Type> CODEC = StringIdentifiable.createCodec(Type::values);
+        public static final Codec<Type> CODEC = StringRepresentable.fromEnum(Type::values);
 
         private final String name;
 
@@ -108,7 +108,7 @@ public class SoundBuilder {
         }
 
         @Override
-        public String asString() {
+        public String getSerializedName() {
             return this.name;
         }
 

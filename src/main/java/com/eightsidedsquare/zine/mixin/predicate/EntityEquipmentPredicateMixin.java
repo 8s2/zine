@@ -1,8 +1,8 @@
 package com.eightsidedsquare.zine.mixin.predicate;
 
 import com.eightsidedsquare.zine.common.predicate.ZineEntityEquipmentPredicate;
-import net.minecraft.predicate.entity.EntityEquipmentPredicate;
-import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.advancements.criterion.EntityEquipmentPredicate;
+import net.minecraft.advancements.criterion.ItemPredicate;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.common.registry;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public class RegistryHelperImpl implements RegistryHelper {
 
@@ -12,6 +12,6 @@ public class RegistryHelperImpl implements RegistryHelper {
 
     @Override
     public Identifier id(String name) {
-        return Identifier.of(this.namespace, name);
+        return Identifier.fromNamespaceAndPath(this.namespace, name);
     }
 }

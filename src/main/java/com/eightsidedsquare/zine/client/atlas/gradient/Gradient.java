@@ -3,17 +3,17 @@ package com.eightsidedsquare.zine.client.atlas.gradient;
 import com.eightsidedsquare.zine.client.ZineClient;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.dynamic.Codecs;
-import net.minecraft.util.math.ColorHelper;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.ExtraCodecs;
 
 import java.util.List;
 import java.util.function.Function;
 
 public interface Gradient {
 
-    Codecs.IdMapper<Identifier, MapCodec<? extends Gradient>> ID_MAPPER = new Codecs.IdMapper<>();
-    Codec<Gradient> CODEC = ID_MAPPER.getCodec(Identifier.CODEC).dispatch(Gradient::getCodec, Function.identity());
+    ExtraCodecs.LateBoundIdMapper<Identifier, MapCodec<? extends Gradient>> ID_MAPPER = new ExtraCodecs.LateBoundIdMapper<>();
+    Codec<Gradient> CODEC = ID_MAPPER.codec(Identifier.CODEC).dispatch(Gradient::getCodec, Function.identity());
 
     static void bootstrap() {
         ZineClient.REGISTRY.gradient("flat", FlatGradient.CODEC);
@@ -49,7 +49,7 @@ public interface Gradient {
             }
         }
         float delta = (t - start.t()) / (end.t() - start.t());
-        return ColorHelper.lerp(delta, colorGetter.apply(start.v()), colorGetter.apply(end.v()));
+        return ARGB.srgbLerp(delta, colorGetter.apply(start.v()), colorGetter.apply(end.v()));
     }
 
     interface Builder<T extends Gradient> {

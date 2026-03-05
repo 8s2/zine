@@ -1,7 +1,7 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.world.entity.EquipmentSlot;
 import org.jetbrains.annotations.Nullable;
 
 public interface ZineEntityEquipmentPredicate {

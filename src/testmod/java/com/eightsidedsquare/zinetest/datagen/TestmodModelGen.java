@@ -2,52 +2,62 @@ package com.eightsidedsquare.zinetest.datagen;
 
 import com.eightsidedsquare.zine.client.block.BlockStateModels;
 import com.eightsidedsquare.zine.client.data.BlockModelDefinitions;
+import com.eightsidedsquare.zinetest.client.NestBlockStateModel;
 import com.eightsidedsquare.zinetest.core.TestmodBlocks;
+import com.eightsidedsquare.zinetest.core.TestmodInit;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.client.data.BlockStateModelGenerator;
-import net.minecraft.client.data.ItemModelGenerator;
-import net.minecraft.client.data.ModelIds;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.data.models.model.ModelTemplates;
 
 public class TestmodModelGen extends FabricModelProvider {
 
     @SuppressWarnings("UnstableApiUsage")
-    public TestmodModelGen(FabricDataOutput output) {
-        super(new FabricDataOutput(output.getModContainer(), output.getPath(), false));
+    public TestmodModelGen(FabricPackOutput output) {
+        super(new FabricPackOutput(output.getModContainer(), output.getOutputFolder(), false));
     }
 
     @Override
-    public void generateBlockStateModels(BlockStateModelGenerator generator) {
-        generator.blockStateCollector.accept(
+    public void generateBlockStateModels(BlockModelGenerators generator) {
+        generator.blockStateOutput.accept(
                 BlockModelDefinitions.customVariants(
                         TestmodBlocks.WOOD,
                         BlockStateModels.connected(
-                                ModelIds.getBlockModelId(TestmodBlocks.WOOD),
+                                ModelLocationUtils.getModelLocation(TestmodBlocks.WOOD),
                                 true
                         )
                 )
         );
-        generator.blockStateCollector.accept(
+        generator.blockStateOutput.accept(
                 BlockModelDefinitions.customVariants(
                         TestmodBlocks.RAINBOW,
                         BlockStateModels.tessellating(
-                                ModelIds.getBlockModelId(TestmodBlocks.RAINBOW),
+                                ModelLocationUtils.getModelLocation(TestmodBlocks.RAINBOW),
                                 4
                         )
                 )
         );
-        generator.blockStateCollector.accept(
+        generator.blockStateOutput.accept(
                 BlockModelDefinitions.customVariants(
                         TestmodBlocks.BIG_DIAMOND,
                         BlockStateModels.tessellating(
-                                ModelIds.getBlockModelId(TestmodBlocks.BIG_DIAMOND),
+                                ModelLocationUtils.getModelLocation(TestmodBlocks.BIG_DIAMOND),
                                 7
                         )
+                )
+        );
+        generator.blockStateOutput.accept(
+                BlockModelDefinitions.customVariants(
+                        TestmodBlocks.NEST,
+                        new NestBlockStateModel.Unbaked(TestmodInit.id("nest"))
                 )
         );
     }
 
     @Override
-    public void generateItemModels(ItemModelGenerator generator) {
+    public void generateItemModels(ItemModelGenerators generator) {
+        generator.generateFlatItem(TestmodBlocks.NEST.asItem(), ModelTemplates.FLAT_ITEM);
     }
 }

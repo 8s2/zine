@@ -1,7 +1,7 @@
 package com.eightsidedsquare.zine.client.gui;
 
-import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.item.tooltip.TooltipData;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 
-public record TooltipComponentWrapper(TooltipComponent component) implements TooltipData {
+public record TooltipComponentWrapper(ClientTooltipComponent component) implements TooltipComponent {
 }

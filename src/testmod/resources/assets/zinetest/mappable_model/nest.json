@@ -1,0 +1,90 @@
+{
+	"format_version": "1.21.11",
+	"parent": "minecraft:block/block",
+	"elements": [
+		{
+			"from": [4, 1, 9],
+			"to": [11, 8, 9],
+			"rotation": {"x": 19.56838, "y": -26.12797, "z": -8.89674, "origin": [7.5, 2.5, 9]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "egg"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "egg"}
+			}
+		},
+		{
+			"from": [4, 1, 7],
+			"to": [11, 8, 7],
+			"rotation": {"x": -30, "y": 32.5, "z": 0, "origin": [7.5, 2.5, 7]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "egg"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "egg"}
+			}
+		},
+		{
+			"from": [6, 1, 8],
+			"to": [13, 8, 8],
+			"rotation": {"x": -30, "y": -85, "z": 0, "origin": [9.5, 2.5, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "egg"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "egg"}
+			}
+		},
+		{
+			"from": [3, 0, 3],
+			"to": [13, 2, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [3, 0, 3]},
+			"faces": {
+				"north": {"uv": [3, 14, 13, 16], "texture": "nest"},
+				"east": {"uv": [3, 14, 13, 16], "texture": "nest"},
+				"south": {"uv": [3, 14, 13, 16], "texture": "nest"},
+				"west": {"uv": [3, 14, 13, 16], "texture": "nest"},
+				"up": {"uv": [3, 3, 13, 13], "texture": "nest"},
+				"down": {"uv": [3, 3, 13, 13], "texture": "nest", "cullface": "down"}
+			}
+		},
+		{
+			"from": [11, 2, 3],
+			"to": [13, 4, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [3, 2, 3]},
+			"faces": {
+				"north": {"uv": [3, 12, 5, 14], "texture": "nest"},
+				"east": {"uv": [3, 12, 13, 14], "texture": "nest"},
+				"south": {"uv": [11, 12, 13, 14], "texture": "nest"},
+				"west": {"uv": [3, 12, 13, 14], "texture": "nest"},
+				"up": {"uv": [11, 3, 13, 13], "texture": "nest"}
+			}
+		},
+		{
+			"from": [3, 2, 3],
+			"to": [5, 4, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-5, 2, 3]},
+			"faces": {
+				"north": {"uv": [11, 12, 13, 14], "texture": "nest"},
+				"east": {"uv": [3, 12, 13, 14], "texture": "nest"},
+				"south": {"uv": [3, 12, 5, 14], "texture": "nest"},
+				"west": {"uv": [3, 12, 13, 14], "texture": "nest"},
+				"up": {"uv": [3, 3, 5, 13], "texture": "nest"}
+			}
+		},
+		{
+			"from": [5, 2, 3],
+			"to": [11, 4, 5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 2, 3]},
+			"faces": {
+				"north": {"uv": [5, 12, 11, 14], "texture": "nest"},
+				"south": {"uv": [5, 12, 11, 14], "texture": "nest"},
+				"up": {"uv": [5, 3, 11, 5], "texture": "nest"}
+			}
+		},
+		{
+			"from": [5, 2, 11],
+			"to": [11, 4, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 2, 11]},
+			"faces": {
+				"north": {"uv": [5, 12, 11, 14], "texture": "nest"},
+				"south": {"uv": [5, 12, 11, 14], "texture": "nest"},
+				"up": {"uv": [5, 11, 11, 13], "texture": "nest"}
+			}
+		}
+	]
+}

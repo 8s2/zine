@@ -1,50 +1,50 @@
 package com.eightsidedsquare.zine.client.block;
 
 import net.fabricmc.fabric.api.client.model.loading.v1.CompositeBlockStateModel;
-import net.minecraft.client.render.model.BlockStateModel;
-import net.minecraft.client.render.model.SimpleBlockStateModel;
-import net.minecraft.client.render.model.WeightedBlockStateModel;
-import net.minecraft.client.render.model.json.ModelVariant;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.Pool;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.renderer.block.dispatch.WeightedVariants;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.random.WeightedList;
 
 import java.util.List;
 
 public final class BlockStateModels {
 
     /**
-     * Creates a {@link SimpleBlockStateModel.Unbaked} for the given model variant
+     * Creates a {@link SingleVariant.Unbaked} for the given model variant
      */
-    public static SimpleBlockStateModel.Unbaked simple(ModelVariant variant) {
-        return new SimpleBlockStateModel.Unbaked(variant);
+    public static SingleVariant.Unbaked single(Variant variant) {
+        return new SingleVariant.Unbaked(variant);
     }
 
     /**
-     * Creates a {@link SimpleBlockStateModel.Unbaked} for the given model identifier
+     * Creates a {@link SingleVariant.Unbaked} for the given model identifier
      */
-    public static SimpleBlockStateModel.Unbaked simple(Identifier modelId) {
-        return simple(new ModelVariant(modelId));
+    public static SingleVariant.Unbaked single(Identifier modelId) {
+        return single(new Variant(modelId));
     }
 
     /**
-     * Creates a {@link WeightedBlockStateModel.Unbaked} for the given unbaked block state model pool
+     * Creates a {@link WeightedVariants.Unbaked} for the given unbaked block state model pool
      */
-    public static WeightedBlockStateModel.Unbaked weighted(Pool<BlockStateModel.Unbaked> entries) {
-        return new WeightedBlockStateModel.Unbaked(entries);
+    public static WeightedVariants.Unbaked weighted(WeightedList<BlockStateModel.Unbaked> entries) {
+        return new WeightedVariants.Unbaked(entries);
     }
 
     /**
-     * Creates a {@link WeightedBlockStateModel.Unbaked} for the given unbaked block state model pool builder
+     * Creates a {@link WeightedVariants.Unbaked} for the given unbaked block state model pool builder
      */
-    public static WeightedBlockStateModel.Unbaked weighted(Pool.Builder<BlockStateModel.Unbaked> entriesBuilder) {
+    public static WeightedVariants.Unbaked weighted(WeightedList.Builder<BlockStateModel.Unbaked> entriesBuilder) {
         return weighted(entriesBuilder.build());
     }
 
     /**
-     * Creates a {@link WeightedBlockStateModel.Unbaked} for the given unbaked block state models
+     * Creates a {@link WeightedVariants.Unbaked} for the given unbaked block state models
      */
-    public static WeightedBlockStateModel.Unbaked weighted(BlockStateModel.Unbaked... models) {
-        Pool.Builder<BlockStateModel.Unbaked> entriesBuilder = Pool.builder();
+    public static WeightedVariants.Unbaked weighted(BlockStateModel.Unbaked... models) {
+        WeightedList.Builder<BlockStateModel.Unbaked> entriesBuilder = WeightedList.builder();
         for (BlockStateModel.Unbaked model : models) {
             entriesBuilder.add(model);
         }

@@ -1,57 +1,57 @@
 package com.eightsidedsquare.zine.common.util.codec;
 
 import com.mojang.serialization.Codec;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricTrackedDataRegistry;
-import net.minecraft.entity.data.TrackedDataHandler;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryFixedCodec;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityDataRegistry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.resources.ResourceKey;
 
-public record RegistryCodecGroupImpl<T>(RegistryKey<Registry<T>> registryKey,
+public record RegistryCodecGroupImpl<T>(ResourceKey<Registry<T>> key,
                                         Codec<T> codec,
                                         Codec<T> networkCodec,
-                                        Codec<RegistryEntry<T>> entryCodec,
-                                        PacketCodec<RegistryByteBuf, RegistryEntry<T>> packetCodec)
+                                        Codec<Holder<T>> holderCodec,
+                                        StreamCodec<RegistryFriendlyByteBuf, Holder<T>> streamCodec)
         implements RegistryCodecGroup<T> {
 
-    public RegistryCodecGroupImpl(RegistryKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
+    public RegistryCodecGroupImpl(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
         this(
                 registryKey,
                 codec,
                 networkCodec,
-                RegistryFixedCodec.of(registryKey),
-                PacketCodecs.registryEntry(registryKey)
+                RegistryFixedCodec.create(registryKey),
+                ByteBufCodecs.holderRegistry(registryKey)
         );
     }
 
-    public record TrackedImpl<T>(RegistryKey<Registry<T>> registryKey,
-                                 Codec<T> codec,
-                                 Codec<T> networkCodec,
-                                 Codec<RegistryEntry<T>> entryCodec,
-                                 PacketCodec<RegistryByteBuf, RegistryEntry<T>> packetCodec,
-                                 TrackedDataHandler<RegistryEntry<T>> trackedDataHandler)
-            implements RegistryCodecGroup.Tracked<T> {
+    public record SerializedImpl<T>(ResourceKey<Registry<T>> key,
+                                    Codec<T> codec,
+                                    Codec<T> networkCodec,
+                                    Codec<Holder<T>> holderCodec,
+                                    StreamCodec<RegistryFriendlyByteBuf, Holder<T>> streamCodec,
+                                    EntityDataSerializer<Holder<T>> dataSerializer)
+            implements Serialized<T> {
 
-        public TrackedImpl(RegistryKey<Registry<T>> registryKey,
-                            Codec<T> codec,
-                            Codec<T> networkCodec,
-                            Codec<RegistryEntry<T>> entryCodec,
-                            PacketCodec<RegistryByteBuf, RegistryEntry<T>> packetCodec) {
-            this(registryKey, codec, networkCodec, entryCodec, packetCodec, TrackedDataHandler.create(packetCodec));
-            FabricTrackedDataRegistry.register(registryKey.getValue(), this.trackedDataHandler);
+        public SerializedImpl(ResourceKey<Registry<T>> registryKey,
+                              Codec<T> codec,
+                              Codec<T> networkCodec,
+                              Codec<Holder<T>> entryCodec,
+                              StreamCodec<RegistryFriendlyByteBuf, Holder<T>> packetCodec) {
+            this(registryKey, codec, networkCodec, entryCodec, packetCodec, EntityDataSerializer.forValueType(packetCodec));
+            FabricEntityDataRegistry.register(registryKey.identifier(), this.dataSerializer);
         }
 
-        public TrackedImpl(RegistryKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
+        public SerializedImpl(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
             this(
                     registryKey,
                     codec,
                     networkCodec,
-                    RegistryFixedCodec.of(registryKey),
-                    PacketCodecs.registryEntry(registryKey)
+                    RegistryFixedCodec.create(registryKey),
+                    ByteBufCodecs.holderRegistry(registryKey)
             );
         }
     }

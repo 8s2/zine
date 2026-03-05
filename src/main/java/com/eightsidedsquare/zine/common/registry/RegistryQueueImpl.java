@@ -1,8 +1,8 @@
 package com.eightsidedsquare.zine.common.registry;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 
 import java.util.List;
 
@@ -24,9 +24,9 @@ public class RegistryQueueImpl<T> implements RegistryQueue<T> {
     }
 
     @Override
-    public RegistryEntry.Reference<T> reference(String name, T value) {
-        RegistryEntry.Reference<T> reference = RegistryEntry.Reference.standAlone(this.registry, this.registryHelper.key(this.registry.getKey(), name));
-        reference.setValue(this.add(name, value));
+    public Holder.Reference<T> reference(String name, T value) {
+        Holder.Reference<T> reference = Holder.Reference.createStandAlone(this.registry, this.registryHelper.key(this.registry.key(), name));
+        reference.bindValue(this.add(name, value));
         return reference;
     }
 

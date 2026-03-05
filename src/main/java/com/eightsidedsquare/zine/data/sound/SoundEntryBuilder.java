@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.data.sound;
 
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.sounds.SoundEvent;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class SoundEntryBuilder {
     }
 
     public SoundEntryBuilder subtitle() {
-        return this.subtitle(this.soundEvent.id().getPath());
+        return this.subtitle(this.soundEvent.location().getPath());
     }
 
     public SoundEntryBuilder with(SoundBuilder sound) {
@@ -58,11 +58,11 @@ public class SoundEntryBuilder {
     }
 
     public SoundEntryBuilder with(SoundEvent source) {
-        return this.with(source.id().toString());
+        return this.with(source.location().toString());
     }
 
     public SoundEntryBuilder with(SoundEvent source, Consumer<SoundBuilder> consumer) {
-        return this.with(source.id().toString(), consumer);
+        return this.with(source.location().toString(), consumer);
     }
 
     public SoundEntryBuilder with() {
@@ -82,11 +82,11 @@ public class SoundEntryBuilder {
     }
 
     public SoundEntryBuilder withSuffixed(SoundEvent source, String suffix) {
-        return this.withSuffixed(source.id().toString(), suffix);
+        return this.withSuffixed(source.location().toString(), suffix);
     }
 
     public SoundEntryBuilder withSuffixed(SoundEvent source, String suffix, Consumer<SoundBuilder> consumer) {
-        return this.withSuffixed(source.id().toString(), suffix, consumer);
+        return this.withSuffixed(source.location().toString(), suffix, consumer);
     }
 
     public SoundEntryBuilder withSuffixed(String suffix) {
@@ -132,11 +132,11 @@ public class SoundEntryBuilder {
     }
 
     public SoundEntryBuilder withEvent(SoundEvent event) {
-        return this.with(SoundBuilder.of(event.id().toString(), SoundBuilder.Type.SOUND_EVENT));
+        return this.with(SoundBuilder.of(event.location().toString(), SoundBuilder.Type.SOUND_EVENT));
     }
 
     public SoundEntryBuilder withEvent(SoundEvent event, Consumer<SoundBuilder> consumer) {
-        return this.with(SoundBuilder.of(event.id().toString(), SoundBuilder.Type.SOUND_EVENT), consumer);
+        return this.with(SoundBuilder.of(event.location().toString(), SoundBuilder.Type.SOUND_EVENT), consumer);
     }
 
     @Nullable

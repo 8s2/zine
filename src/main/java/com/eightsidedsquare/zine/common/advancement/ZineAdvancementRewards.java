@@ -1,9 +1,9 @@
 package com.eightsidedsquare.zine.common.advancement;
 
-import net.minecraft.loot.LootTable;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.function.LazyContainer;
+import net.minecraft.commands.CacheableFunction;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -14,31 +14,31 @@ public interface ZineAdvancementRewards {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setLoot(List<RegistryKey<LootTable>> loot) {
+    default void zine$setLoot(List<ResourceKey<LootTable>> loot) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$addLootTable(RegistryKey<LootTable> lootTable) {
+    default void zine$addLootTable(ResourceKey<LootTable> lootTable) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$addLootTables(List<RegistryKey<LootTable>> lootTables) {
+    default void zine$addLootTables(List<ResourceKey<LootTable>> lootTables) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setRecipes(List<RegistryKey<Recipe<?>>> recipes) {
+    default void zine$setRecipes(List<ResourceKey<Recipe<?>>> recipes) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$addRecipe(RegistryKey<Recipe<?>> recipe) {
+    default void zine$addRecipe(ResourceKey<Recipe<?>> recipe) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$addRecipes(List<RegistryKey<Recipe<?>>> recipes) {
+    default void zine$addRecipes(List<ResourceKey<Recipe<?>>> recipes) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setFunction(@Nullable LazyContainer function) {
+    default void zine$setFunction(@Nullable CacheableFunction function) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 

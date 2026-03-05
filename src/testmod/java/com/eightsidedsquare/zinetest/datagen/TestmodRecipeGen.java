@@ -2,40 +2,39 @@ package com.eightsidedsquare.zinetest.datagen;
 
 import com.eightsidedsquare.zinetest.core.TestmodInit;
 import com.eightsidedsquare.zinetest.core.TestmodItems;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.recipe.RecipeExporter;
-import net.minecraft.data.recipe.RecipeGenerator;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.resources.ResourceKey;
 
 import java.util.concurrent.CompletableFuture;
 
-public class TestmodRecipeGen extends RecipeGenerator {
+public class TestmodRecipeGen extends RecipeProvider {
 
-    protected TestmodRecipeGen(RegistryWrapper.WrapperLookup registries, RecipeExporter exporter) {
+    protected TestmodRecipeGen(net.minecraft.core.HolderLookup.Provider registries, RecipeOutput exporter) {
         super(registries, exporter);
     }
 
     @Override
-    public void generate() {
-        this.offerSmithingTrimRecipe(
+    public void buildRecipes() {
+        this.trimSmithing(
                 TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE,
                 TestmodInit.CHECKERED_TRIM_PATTERN,
-                RegistryKey.of(RegistryKeys.RECIPE, Registries.ITEM.getId(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE).withSuffixedPath("_smithing_trim"))
+                ResourceKey.create(Registries.RECIPE, BuiltInRegistries.ITEM.getKey(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE).withSuffix("_smithing_trim"))
         );
     }
 
     protected static class Provider extends FabricRecipeProvider {
 
-        protected Provider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+        protected Provider(FabricPackOutput output, CompletableFuture<net.minecraft.core.HolderLookup.Provider> registriesFuture) {
             super(output, registriesFuture);
         }
 
         @Override
-        protected RecipeGenerator getRecipeGenerator(RegistryWrapper.WrapperLookup wrapperLookup, RecipeExporter recipeExporter) {
+        protected RecipeProvider createRecipeProvider(net.minecraft.core.HolderLookup.Provider wrapperLookup, RecipeOutput recipeExporter) {
             return new TestmodRecipeGen(wrapperLookup, recipeExporter);
         }
 

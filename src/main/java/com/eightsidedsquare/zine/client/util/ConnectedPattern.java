@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 @Environment(EnvType.CLIENT)
 public enum ConnectedPattern {
@@ -111,7 +111,7 @@ public enum ConnectedPattern {
     }
 
     public Identifier addSuffix(Identifier id) {
-        return id.withSuffixedPath(this.suffix);
+        return id.withSuffix(this.suffix);
     }
 
     public ConnectedShape getNW() {

@@ -1,0 +1,6 @@
+{
+  "zinetest:nest": {
+    "egg": "minecraft:item/brown_egg",
+    "nest": "minecraft:block/acacia_log"
+  }
+}

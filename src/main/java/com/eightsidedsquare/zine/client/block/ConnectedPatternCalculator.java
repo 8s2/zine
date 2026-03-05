@@ -2,12 +2,12 @@ package com.eightsidedsquare.zine.client.block;
 
 import com.eightsidedsquare.zine.client.util.ConnectedPattern;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.BlockRenderView;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,8 +51,8 @@ public class ConnectedPatternCalculator {
         return new InstructionBuilder();
     }
 
-    public ConnectedPattern calculate(BlockRenderView world, BlockPos pos, BlockState state, AppearancePredicate predicate) {
-        BlockPos.Mutable mutable = pos.mutableCopy();
+    public ConnectedPattern calculate(BlockAndTintGetter world, BlockPos pos, BlockState state, AppearancePredicate predicate) {
+        BlockPos.MutableBlockPos mutable = pos.mutable();
         ConnectedPattern pattern = ConnectedPattern.NNNN;
         for (Instruction instruction : this.instructions) {
             pattern = instruction.apply(pattern, pos, state, mutable, world, predicate);
@@ -60,14 +60,14 @@ public class ConnectedPatternCalculator {
         return pattern;
     }
 
-    public ConnectedPattern calculate(BlockRenderView world, BlockPos pos, BlockState state) {
+    public ConnectedPattern calculate(BlockAndTintGetter world, BlockPos pos, BlockState state) {
         return this.calculate(world, pos, state, AppearancePredicate.block(state.getBlock()));
     }
 
     public static ConnectedPatternCalculator create(Direction face, Direction up, Direction right) {
         Direction down = up.getOpposite();
         Direction left = right.getOpposite();
-        BlockPos.Mutable offset = new BlockPos.Mutable().move(up).move(right);
+        BlockPos.MutableBlockPos offset = new BlockPos.MutableBlockPos().move(up).move(right);
         Builder builder = builder();
         for (int i = 0; i < 8; i++) {
             switch (i) {
@@ -95,7 +95,7 @@ public class ConnectedPatternCalculator {
     public static ConnectedPatternCalculator createFancy(ConnectedPatternCalculator base, Direction face, Direction up, Direction right) {
         Direction down = up.getOpposite();
         Direction left = right.getOpposite();
-        BlockPos.Mutable offset = new BlockPos.Mutable().move(up).move(right).move(face);
+        BlockPos.MutableBlockPos offset = new BlockPos.MutableBlockPos().move(up).move(right).move(face);
         Builder builder = builder(base);
         for (int i = 0; i < 8; i++) {
             switch (i) {
@@ -121,16 +121,16 @@ public class ConnectedPatternCalculator {
     }
 
     interface Instruction {
-        ConnectedPattern apply(ConnectedPattern pattern, BlockPos origin, BlockState state, BlockPos.Mutable mutable, BlockRenderView world, AppearancePredicate predicate);
+        ConnectedPattern apply(ConnectedPattern pattern, BlockPos origin, BlockState state, BlockPos.MutableBlockPos mutable, BlockAndTintGetter world, AppearancePredicate predicate);
     }
 
     @FunctionalInterface
     public interface AppearancePredicate {
-        boolean test(BlockPos origin, BlockState originState, BlockPos.Mutable mutable, BlockState appearanceState, BlockRenderView world);
+        boolean test(BlockPos origin, BlockState originState, BlockPos.MutableBlockPos mutable, BlockState appearanceState, BlockAndTintGetter world);
 
         static AppearancePredicate block(Block block) {
             return (origin, originState, mutable, appearanceState, world) ->
-                    appearanceState.isOf(block);
+                    appearanceState.is(block);
         }
     }
 
@@ -209,7 +209,7 @@ public class ConnectedPatternCalculator {
             if(this.faces.length == 1) {
                 Direction face = this.faces[0];
                 return (pattern, origin, state, mutable, world, predicate) -> {
-                    mutable.set(origin, x, y, z);
+                    mutable.setWithOffset(origin, x, y, z);
                     BlockState appearanceState = world.getBlockState(mutable).getAppearance(world, mutable, face, state, origin);
                     if(predicate.test(origin, state, mutable, appearanceState, world) != inverted) {
                         return or ? pattern.or(connectedPattern) : pattern.and(connectedPattern);
@@ -219,7 +219,7 @@ public class ConnectedPatternCalculator {
             }
             final Direction[] faces = this.faces;
             return (pattern, origin, state, mutable, world, predicate) -> {
-                mutable.set(origin, x, y, z);
+                mutable.setWithOffset(origin, x, y, z);
                 for (Direction face : faces) {
                     BlockState appearanceState = world.getBlockState(mutable).getAppearance(world, mutable, face, state, origin);
                     if(predicate.test(origin, state, mutable, appearanceState, world) != inverted) {
