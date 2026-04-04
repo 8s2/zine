@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.item.properties.select.TrimMaterialProperty
 import net.minecraft.client.renderer.texture.atlas.SpriteSource;
 import net.minecraft.client.renderer.texture.atlas.sources.PalettedPermutations;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -36,29 +37,29 @@ public final class ArmorTrimRegistryImpl {
     }
 
     private static final Identifier TRIM_PALETTE_KEY = Identifier.withDefaultNamespace("trims/color_palettes/trim_palette");
-    private static final Map<ResourceKey<TrimMaterial>, Material> MATERIALS = new Reference2ObjectOpenHashMap<>();
-    private static final Map<ResourceKey<TrimPattern>, Pattern> PATTERNS = new Reference2ObjectOpenHashMap<>();
+    private static final Map<ResourceKey<TrimMaterial>, CustomMaterial> MATERIALS = new Reference2ObjectOpenHashMap<>();
+    private static final Map<ResourceKey<TrimPattern>, CustomPattern> PATTERNS = new Reference2ObjectOpenHashMap<>();
     private static final Set<Identifier> ITEM_MODEL_EXCLUDE = new ObjectOpenHashSet<>();
     private static final Map<Item, ArmorType> ARMOR_ITEMS = new Reference2ObjectOpenHashMap<>();
 
-    private static void registerMaterial(ResourceKey<TrimMaterial> key, Material material) {
+    private static void registerMaterial(ResourceKey<TrimMaterial> key, CustomMaterial material) {
         MATERIALS.put(key, material);
     }
 
     static void registerMaterial(ResourceKey<TrimMaterial> key, String name, Identifier colorPaletteTexture, Map<ArmorType, Identifier> equipmentItemModelIds) {
-        registerMaterial(key, new Material(name, colorPaletteTexture, equipmentItemModelIds));
+        registerMaterial(key, new CustomMaterial(name, colorPaletteTexture, equipmentItemModelIds));
     }
 
     static void registerMaterial(ResourceKey<TrimMaterial> key) {
         registerMaterial(key, key.identifier().getPath(), key.identifier().withPrefix("trims/color_palettes/"), createEquipmentModelIds(key));
     }
 
-    private static void registerPattern(ResourceKey<TrimPattern> key, Pattern pattern) {
+    private static void registerPattern(ResourceKey<TrimPattern> key, CustomPattern pattern) {
         PATTERNS.put(key, pattern);
     }
 
     static void registerPattern(ResourceKey<TrimPattern> key, Map<EquipmentClientInfo.LayerType, Identifier> equipmentTextures) {
-        registerPattern(key, new Pattern(equipmentTextures));
+        registerPattern(key, new CustomPattern(equipmentTextures));
     }
 
     static void registerPattern(ResourceKey<TrimPattern> key) {
@@ -158,21 +159,21 @@ public final class ArmorTrimRegistryImpl {
     }
 
     public static void addUnbakedModels(BiConsumer<Identifier, ModelInstance> modelCollector) {
-        for(Material entry : MATERIALS.values()) {
+        for(CustomMaterial entry : MATERIALS.values()) {
             for(ArmorType type : ZineUtil.HUMANOID_EQUIPMENT_TYPES) {
                 ModelTemplates.FLAT_ITEM.create(
                         entry.equipmentModelIds.get(type),
-                        TextureMapping.layer0(entry.colorPaletteTexture.withPath("trims/items/" + type.getSerializedName() + "_trim_" + entry.name)),
+                        TextureMapping.layer0(new Material(entry.colorPaletteTexture.withPath("trims/items/" + type.getSerializedName() + "_trim_" + entry.name))),
                         modelCollector
                 );
             }
         }
     }
 
-    private record Material(String name, Identifier colorPaletteTexture, Map<ArmorType, Identifier> equipmentModelIds) {
+    private record CustomMaterial(String name, Identifier colorPaletteTexture, Map<ArmorType, Identifier> equipmentModelIds) {
     }
 
-    private record Pattern(Map<EquipmentClientInfo.LayerType, Identifier> equipmentTextures) {
+    private record CustomPattern(Map<EquipmentClientInfo.LayerType, Identifier> equipmentTextures) {
     }
 
 }

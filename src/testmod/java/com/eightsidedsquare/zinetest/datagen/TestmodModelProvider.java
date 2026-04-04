@@ -3,6 +3,7 @@ package com.eightsidedsquare.zinetest.datagen;
 import com.eightsidedsquare.zine.client.block.BlockStateModels;
 import com.eightsidedsquare.zine.client.data.BlockModelDefinitions;
 import com.eightsidedsquare.zinetest.client.NestBlockStateModel;
+import com.eightsidedsquare.zinetest.client.UnbakedNestItemModel;
 import com.eightsidedsquare.zinetest.core.TestmodBlocks;
 import com.eightsidedsquare.zinetest.core.TestmodInit;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
@@ -10,12 +11,16 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
-import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.resources.model.cuboid.ItemModelGenerator;
+import net.minecraft.resources.Identifier;
 
-public class TestmodModelGen extends FabricModelProvider {
+import java.util.List;
+import java.util.Optional;
+
+public class TestmodModelProvider extends FabricModelProvider {
 
     @SuppressWarnings("UnstableApiUsage")
-    public TestmodModelGen(FabricPackOutput output) {
+    public TestmodModelProvider(FabricPackOutput output) {
         super(new FabricPackOutput(output.getModContainer(), output.getOutputFolder(), false));
     }
 
@@ -58,6 +63,11 @@ public class TestmodModelGen extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerators generator) {
-        generator.generateFlatItem(TestmodBlocks.NEST.asItem(), ModelTemplates.FLAT_ITEM);
+        generator.itemModelOutput.accept(TestmodBlocks.NEST.asItem(), new UnbakedNestItemModel(
+                ItemModelGenerator.GENERATED_ITEM_MODEL_ID,
+                Identifier.withDefaultNamespace("item/generated"),
+                Optional.empty(),
+                List.of()
+        ));
     }
 }

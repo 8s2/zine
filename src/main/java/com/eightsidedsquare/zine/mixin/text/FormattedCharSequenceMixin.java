@@ -15,11 +15,11 @@ public interface FormattedCharSequenceMixin extends ZineFormattedCharSequence {
     @Shadow boolean accept(FormattedCharSink visitor);
 
     @Override
-    default Component zine$toText() {
+    default Component zine$toComponent() {
         StringBuilder[] stringBuilder = {new StringBuilder()};
         Style[] lastStyle = {Style.EMPTY};
         MutableComponent mutableText = Component.empty();
-        this.accept((index, style, codePoint) -> {
+        this.accept((_, style, codePoint) -> {
             if(!style.equals(lastStyle[0])) {
                 if(!stringBuilder[0].isEmpty()) {
                     mutableText.append(Component.literal(stringBuilder[0].toString()).setStyle(lastStyle[0]));

@@ -6,20 +6,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ItemSlotMouseAction;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
-public interface TooltipSubmenuHandlerInitializationCallback {
+public interface ItemSlotMouseActionInitializationCallback {
 
     Event<Callback> EVENT = EventFactory.createArrayBacked(
             Callback.class,
             callbacks -> ctx -> {
                 for (Callback callback : callbacks) {
-                    callback.addTooltipSubmenuHandlers(ctx);
+                    callback.addItemSlotMouseActions(ctx);
                 }
             }
     );
 
     interface Context {
 
-        void accept(ItemSlotMouseAction tooltipSubmenuHandler);
+        void accept(ItemSlotMouseAction itemSlotMouseAction);
 
         AbstractContainerScreen<?> screen();
 
@@ -30,7 +30,7 @@ public interface TooltipSubmenuHandlerInitializationCallback {
     @FunctionalInterface
     interface Callback {
 
-        void addTooltipSubmenuHandlers(Context ctx);
+        void addItemSlotMouseActions(Context ctx);
 
     }
 

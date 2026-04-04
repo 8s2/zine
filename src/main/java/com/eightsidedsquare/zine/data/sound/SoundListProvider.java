@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.sounds.SoundEvent;
 
 import java.nio.file.Path;
 import java.util.concurrent.CompletableFuture;
@@ -27,20 +26,13 @@ public abstract class SoundListProvider implements DataProvider {
 
     protected abstract void generate(SoundEntryConsumer consumer);
 
-    protected void putSubtitle(SoundEvent soundEvent, String subtitle) {
-
-    }
-
     @Override
     public CompletableFuture<?> run(CachedOutput writer) {
         JsonObject jsonObject = new JsonObject();
-        this.generate((soundEvent, soundEntry) -> {
-            if(soundEntry.subtitle() != null) {
-                this.putSubtitle(soundEvent, soundEntry.subtitle());
-            }
+        this.generate((soundEvent, soundEntry) ->
             SoundEntryRecord.CODEC.encodeStart(JsonOps.INSTANCE, soundEntry)
-                    .ifSuccess(soundEntryJson -> jsonObject.add(soundEvent.location().getPath(), soundEntryJson));
-        });
+                    .ifSuccess(soundEntryJson -> jsonObject.add(soundEvent.location().getPath(), soundEntryJson))
+        );
         return DataProvider.saveStable(writer, jsonObject, this.outputPath);
     }
 

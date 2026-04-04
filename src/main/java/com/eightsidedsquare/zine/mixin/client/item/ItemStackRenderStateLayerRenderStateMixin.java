@@ -28,14 +28,14 @@ public abstract class ItemStackRenderStateLayerRenderStateMixin implements ZineI
         this.matrixTransformation = matrixTransformation;
     }
 
-    @Inject(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/model/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack$Pose;)V"))
+    @Inject(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState$LayerRenderState;applyTransform(Lcom/mojang/blaze3d/vertex/PoseStack$Pose;)V"))
     private void zine$applyMatrixTransformationBefore(PoseStack matrices, SubmitNodeCollector queue, int light, int overlay, int i, CallbackInfo ci) {
         if(this.transformBeforeDisplayTransforms && this.matrixTransformation != null) {
             this.matrixTransformation.accept(matrices);
         }
     }
 
-    @Inject(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/block/model/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack$Pose;)V", shift = At.Shift.AFTER))
+    @Inject(method = "submit", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState$LayerRenderState;applyTransform(Lcom/mojang/blaze3d/vertex/PoseStack$Pose;)V", shift = At.Shift.AFTER))
     private void zine$applyMatrixTransformationAfter(PoseStack matrices, SubmitNodeCollector queue, int light, int overlay, int i, CallbackInfo ci) {
         if(!this.transformBeforeDisplayTransforms && this.matrixTransformation != null) {
             this.matrixTransformation.accept(matrices);

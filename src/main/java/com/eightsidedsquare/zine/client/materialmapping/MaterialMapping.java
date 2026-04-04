@@ -49,6 +49,20 @@ public sealed interface MaterialMapping<K, V> {
                 return this.add(name, new Material(sprite, forceTranslucent));
             }
 
+            public Builder itemLayers(Identifier... sprites) {
+                for (int i = 0; i < sprites.length; i++) {
+                    this.add("layer" + i, sprites[i]);
+                }
+                return this;
+            }
+
+            public Builder itemLayers(Material... materials) {
+                for (int i = 0; i < materials.length; i++) {
+                    this.add("layer" + i, materials[i]);
+                }
+                return this;
+            }
+
             public Unbaked build() {
                 return new Unbaked(this.mappings.buildKeepingLast());
             }
@@ -60,6 +74,17 @@ public sealed interface MaterialMapping<K, V> {
 
     record Baked(Map<String, Material.Baked> mappings) implements MaterialMapping<String, Material.Baked> {
         public static final Baked EMPTY = new Baked(Map.of());
+
+        public Material.Baked getParticleMaterial(Material.Baked missingMaterial) {
+            if(this.mappings.isEmpty()) {
+                return missingMaterial;
+            }
+            Material.Baked particleMaterial = this.mappings.get("particle");
+            if(particleMaterial != null) {
+                return particleMaterial;
+            }
+            return this.mappings.values().iterator().next();
+        }
     }
 
     record UnbakedSet(Map<Identifier, Unbaked> mappings) implements MaterialMapping<Identifier, Unbaked> {

@@ -1,12 +1,10 @@
 package com.eightsidedsquare.zine.mixin.client.font;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Style;
-import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Util;
-import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,12 +22,12 @@ public abstract class FontMixin {
     });
 
     @Inject(method = "drawInBatch8xOutline", at = @At("HEAD"))
-    private void zine$prepareOutlineCancel(FormattedCharSequence text, float x, float y, int color, int outlineColor, Matrix4f matrix, MultiBufferSource vertexConsumers, int light, CallbackInfo ci) {
+    private void zine$prepareOutlineCancel(CallbackInfo ci) {
         CANCEL_OUTLINE.remove();
     }
 
     @Inject(method = "lambda$drawInBatch8xOutline$0", at = @At("HEAD"), cancellable = true)
-    private void zine$cancelOutline(Font.PreparedTextBuilder drawer, float[] fs, int i, float f, int j, int k, int index, Style style, int codePoint, CallbackInfoReturnable<Boolean> cir) {
+    private void zine$cancelOutline(CallbackInfoReturnable<Boolean> cir, @Local(argsOnly = true) Style style) {
         Boolean cancel = CANCEL_OUTLINE.get();
         if(cancel == null) {
             if(style.zine$hasOutline()) {
@@ -43,8 +41,8 @@ public abstract class FontMixin {
         }
     }
 
-    @Inject(method = "drawInBatch8xOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font$GlyphVisitor;forMultiBufferSource(Lnet/minecraft/client/renderer/MultiBufferSource;Lorg/joml/Matrix4f;Lnet/minecraft/client/gui/Font$DisplayMode;I)Lnet/minecraft/client/gui/Font$GlyphVisitor;", ordinal = 0))
-    private void zine$resetOutlineCancel(FormattedCharSequence text, float x, float y, int color, int outlineColor, Matrix4f matrix, MultiBufferSource vertexConsumers, int light, CallbackInfo ci) {
+    @Inject(method = "drawInBatch8xOutline", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font$GlyphVisitor;forMultiBufferSource(Lnet/minecraft/client/renderer/MultiBufferSource;Lorg/joml/Matrix4fc;Lnet/minecraft/client/gui/Font$DisplayMode;I)Lnet/minecraft/client/gui/Font$GlyphVisitor;", ordinal = 0))
+    private void zine$resetOutlineCancel(CallbackInfo ci) {
         CANCEL_OUTLINE.set(false);
     }
 

@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4fc;
 
 public class TransformedItemModel implements ItemModel {
 
@@ -37,7 +38,7 @@ public class TransformedItemModel implements ItemModel {
         });
     }
 
-    public record Unbaked() implements net.minecraft.client.renderer.item.ItemModel.Unbaked {
+    public record Unbaked() implements ItemModel.Unbaked {
 
         public static final MapCodec<Unbaked> CODEC = MapCodec.unit(new Unbaked());
 
@@ -47,7 +48,7 @@ public class TransformedItemModel implements ItemModel {
         }
 
         @Override
-        public ItemModel bake(BakingContext context) {
+        public ItemModel bake(BakingContext context, Matrix4fc transformation) {
             return new TransformedItemModel();
         }
 

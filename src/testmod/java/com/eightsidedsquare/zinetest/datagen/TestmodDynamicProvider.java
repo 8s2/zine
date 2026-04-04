@@ -9,9 +9,9 @@ import net.minecraft.resources.ResourceKey;
 
 import java.util.concurrent.CompletableFuture;
 
-public class TestmodDynamicGen extends FabricDynamicRegistryProvider {
+public class TestmodDynamicProvider extends FabricDynamicRegistryProvider {
 
-    public TestmodDynamicGen(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
+    public TestmodDynamicProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }
 

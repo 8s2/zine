@@ -16,6 +16,6 @@ public abstract class ClientTextTooltipMixin implements ClientTooltipComponentMi
 
     @Override
     public void zine$appendSearchableText(List<Component> texts) {
-        texts.add(this.text.zine$toText());
+        texts.add(this.text.zine$toComponent());
     }
 }

@@ -2,6 +2,7 @@ package com.eightsidedsquare.zine.mixin.client.model;
 
 import com.eightsidedsquare.zine.client.materialmapping.*;
 import com.eightsidedsquare.zine.client.model.ModelEvents;
+import com.eightsidedsquare.zine.client.model.ZineMaterialBaker;
 import com.eightsidedsquare.zine.client.util.ZineMappableModelHolder;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -29,6 +30,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
@@ -91,16 +93,12 @@ public abstract class ModelManagerMixin {
         return original.call((Object) newFutures);
     }
 
-    @WrapOperation(method = "reload", at = @At(value = "INVOKE", target = "Ljava/util/concurrent/CompletableFuture;thenApplyAsync(Ljava/util/function/Function;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;", ordinal = 1))
-    private <T, U> CompletableFuture<U> zine$wrapDiscoverModelDependenciesFuture(
-            CompletableFuture<T> future,
+    @ModifyArg(method = "reload", at = @At(value = "INVOKE", target = "Ljava/util/concurrent/CompletableFuture;thenApplyAsync(Ljava/util/function/Function;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;", ordinal = 0), index = 0)
+    private <T, U> Function<? super T, ? extends U> zine$wrapDiscoverModelDependenciesFuture(
             Function<? super T, ? extends U> fn,
-            Executor executor,
-            Operation<CompletableFuture<U>> original,
             @Share("holder") LocalRef<CompletableFuture<ZineMappableModelHolder>> holder
     ) {
-        Function<? super T, ? extends U> func = t -> ScopedValue.where(HOLDER_FUTURE, holder.get()).call(() -> fn.apply(t));
-        return original.call(future, func, executor);
+        return t -> ScopedValue.where(HOLDER_FUTURE, holder.get()).call(() -> fn.apply(t));
     }
 
     @WrapOperation(method = "lambda$reload$1", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/resources/model/ModelManager;discoverModelDependencies(Ljava/util/Map;Lnet/minecraft/client/resources/model/BlockStateModelLoader$LoadedModels;Lnet/minecraft/client/resources/model/ClientItemInfoLoader$LoadedClientInfos;)Lnet/minecraft/client/resources/model/ModelManager$ResolvedModels;"))
@@ -193,7 +191,7 @@ public abstract class ModelManagerMixin {
     }
 
     @Mixin(targets = "net.minecraft.client.resources.model.ModelManager$1")
-    public static abstract class MaterialBakerImplMixin implements MaterialBakerMixin {
+    public static abstract class MaterialBakerImplMixin implements ZineMaterialBaker {
         @Shadow @Final
         private Map<Material, Material.Baked> bakedMaterials;
         @Shadow @Final

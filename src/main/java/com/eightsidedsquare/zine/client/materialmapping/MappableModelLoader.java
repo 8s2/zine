@@ -27,7 +27,6 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 public final class MappableModelLoader {
-
     private static final FileToIdConverter MODEL_LISTER = FileToIdConverter.json("mappable_model");
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final Gson GSON = new GsonBuilder()
@@ -74,7 +73,7 @@ public final class MappableModelLoader {
 
                                 return pair;
                             } catch (Exception exception) {
-                                LOGGER.error("Failed to load model {}", entry.getKey(), exception);
+                                LOGGER.error("Failed to load mappable model {}", entry.getKey(), exception);
                                 return null;
                             }
                         }, executor));

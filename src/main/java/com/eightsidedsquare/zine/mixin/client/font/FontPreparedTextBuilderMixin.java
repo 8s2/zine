@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Font.PreparedTextBuilder.class)
-public abstract class TextRendererDrawerMixin {
+public abstract class FontPreparedTextBuilderMixin {
 
     @Shadow(aliases = "this$0") @Final
     private Font font;

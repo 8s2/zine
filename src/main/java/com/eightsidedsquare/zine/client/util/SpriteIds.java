@@ -2,7 +2,7 @@ package com.eightsidedsquare.zine.client.util;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.resources.model.SpriteId;
+import net.minecraft.client.resources.model.sprite.SpriteId;
 import net.minecraft.data.AtlasIds;
 import net.minecraft.resources.Identifier;
 

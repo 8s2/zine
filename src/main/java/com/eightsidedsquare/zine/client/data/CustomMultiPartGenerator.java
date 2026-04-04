@@ -3,10 +3,10 @@ package com.eightsidedsquare.zine.client.data;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator;
 import net.minecraft.client.data.models.blockstates.ConditionBuilder;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.block.model.multipart.Condition;
-import net.minecraft.client.renderer.block.model.multipart.Selector;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
+import net.minecraft.client.renderer.block.dispatch.multipart.Condition;
+import net.minecraft.client.renderer.block.dispatch.multipart.Selector;
 import net.minecraft.world.level.block.Block;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.function.UnaryOperator;
 public class CustomMultiPartGenerator implements BlockModelDefinitionGenerator {
 
     private final Block block;
-    private final BlockModelDefinition.MultiPartDefinition multipart = new BlockModelDefinition.MultiPartDefinition(new ObjectArrayList<>());
+    private final BlockStateModelDispatcher.MultiPartDefinition multipart = new BlockStateModelDispatcher.MultiPartDefinition(new ObjectArrayList<>());
 
     private CustomMultiPartGenerator(Block block) {
         this.block = block;
@@ -66,7 +66,7 @@ public class CustomMultiPartGenerator implements BlockModelDefinitionGenerator {
     }
 
     @Override
-    public BlockModelDefinition create() {
-        return new BlockModelDefinition(Optional.empty(), Optional.of(this.multipart));
+    public BlockStateModelDispatcher create() {
+        return new BlockStateModelDispatcher(Optional.empty(), Optional.of(this.multipart));
     }
 }

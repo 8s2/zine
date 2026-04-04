@@ -2,7 +2,7 @@ package com.eightsidedsquare.zine.client.gui;
 
 import com.eightsidedsquare.zine.common.item.tooltip.CompositeTooltipData;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
 
@@ -29,35 +29,35 @@ public record CompositeTooltipComponent(List<ClientTooltipComponent> components)
     }
 
     @Override
-    public void zine$cacheDimensions(Font textRenderer) {
+    public void zine$cacheDimensions(Font font) {
         for (ClientTooltipComponent component : this.components) {
-            component.zine$cacheDimensions(textRenderer);
+            component.zine$cacheDimensions(font);
         }
     }
 
     @Override
-    public int getHeight(Font textRenderer) {
-        return this.components.stream().mapToInt(component -> component.getHeight(textRenderer)).sum();
+    public int getHeight(Font font) {
+        return this.components.stream().mapToInt(component -> component.getHeight(font)).sum();
     }
 
     @Override
-    public int getWidth(Font textRenderer) {
-        return this.components.stream().mapToInt(component -> component.getWidth(textRenderer)).max().orElse(0);
+    public int getWidth(Font font) {
+        return this.components.stream().mapToInt(component -> component.getWidth(font)).max().orElse(0);
     }
 
     @Override
-    public void renderText(GuiGraphics context, Font textRenderer, int x, int y) {
+    public void extractText(GuiGraphicsExtractor graphics, Font font, int x, int y) {
         for (ClientTooltipComponent component : this.components) {
-            component.renderText(context, textRenderer, x, y);
-            y += component.getHeight(textRenderer);
+            component.extractText(graphics, font, x, y);
+            y += component.getHeight(font);
         }
     }
 
     @Override
-    public void renderImage(Font textRenderer, int x, int y, int width, int height, GuiGraphics context) {
+    public void extractImage(Font font, int x, int y, int w, int h, GuiGraphicsExtractor graphics) {
         for (ClientTooltipComponent component : this.components) {
-            component.renderImage(textRenderer, x, y, width, height, context);
-            y += component.getHeight(textRenderer);
+            component.extractImage(font, x, y, w, h, graphics);
+            y += component.getHeight(font);
         }
     }
 }

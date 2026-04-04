@@ -6,20 +6,20 @@ import net.fabricmc.fabric.api.client.renderer.v1.mesh.MutableMesh;
 import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadView;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.sprite.Material;
 
 import java.util.function.Consumer;
 
-public record MeshSpritePair(Mesh mesh, TextureAtlasSprite sprite) implements Mesh {
+public record MeshMaterialPair(Mesh mesh, Material.Baked material) implements Mesh {
 
-    public MeshSpritePair(MappableModel mappableModel, MaterialMapping.Baked sprites, String spriteName, TextureAtlasSprite missingSprite) {
+    public MeshMaterialPair(MappableModel mappableModel, MaterialMapping.Baked sprites, String spriteName, Material.Baked missingMaterial) {
         Renderer renderer = Renderer.get();
         MutableMesh builder = renderer.mutableMesh();
         QuadEmitter emitter = builder.emitter();
         mappableModel.outputTo(emitter, sprites);
         this(
                 builder.immutableCopy(),
-                sprites.mappings().isEmpty() ? missingSprite :
+                sprites.mappings().isEmpty() ? missingMaterial :
                         sprites.mappings().getOrDefault(spriteName, sprites.mappings().values().iterator().next())
         );
     }
@@ -41,7 +41,7 @@ public record MeshSpritePair(Mesh mesh, TextureAtlasSprite sprite) implements Me
 
     public void outputTo(ItemStackRenderState.LayerRenderState layerState) {
         this.outputTo(layerState.emitter());
-        layerState.setParticleIcon(this.sprite);
+        layerState.setParticleMaterial(this.material);
     }
 
 }

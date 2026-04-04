@@ -17,7 +17,6 @@ import com.eightsidedsquare.zinetest.core.TestmodInit;
 import com.eightsidedsquare.zinetest.core.TestmodItems;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
-import net.fabricmc.fabric.api.client.rendering.v1.ChunkSectionLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.ChatFormatting;
@@ -27,10 +26,9 @@ import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.renderer.block.model.SingleVariant;
-import net.minecraft.client.renderer.block.model.Variant;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import net.minecraft.client.renderer.texture.atlas.sources.SingleFile;
+import net.minecraft.client.renderer.block.dispatch.SingleVariant;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -113,7 +111,7 @@ public class TestmodClient implements ClientModInitializer {
             ModelTemplates.FLAT_ITEM.create(TestmodItems.TOURMALINE, TextureMapping.layer0(TestmodItems.TOURMALINE), modelCollector);
             ModelTemplates.FLAT_ITEM.create(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE, TextureMapping.layer0(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE), modelCollector);
             ModelTemplates.CUBE_ALL.create(TestmodBlocks.TOURMALINE_BLOCK, TextureMapping.cube(TestmodBlocks.TOURMALINE_BLOCK), modelCollector);
-            ModelTemplates.CUBE_ALL.create(TestmodBlocks.GOO, TextureMapping.cube(TestmodInit.id("goo")), modelCollector);
+            ModelTemplates.CUBE_ALL.create(TestmodBlocks.GOO, TextureMapping.cube(new Material(TestmodInit.id("goo"))), modelCollector);
             ModelTemplates.CUBE_ALL.create(TestmodBlocks.WOOD, TextureMapping.cube(TextureMapping.getBlockTexture(TestmodBlocks.WOOD, "_all")), modelCollector);
             ModelTemplates.CUBE_ALL.create(TestmodBlocks.RAINBOW, TextureMapping.cube(TextureMapping.getBlockTexture(TestmodBlocks.RAINBOW)), modelCollector);
         });
@@ -148,17 +146,16 @@ public class TestmodClient implements ClientModInitializer {
         ArmorTrimRegistry.registerPattern(TestmodInit.CHECKERED_TRIM_PATTERN);
 
         REGISTRY.itemModel("transformed", TransformedItemModel.Unbaked.CODEC);
+        REGISTRY.itemModel("nest", UnbakedNestItemModel.CODEC);
 
         REGISTRY.blockStateModel("nest", NestBlockStateModel.Unbaked.CODEC);
 
-        ChunkSectionLayerMap.putBlock(TestmodBlocks.NEST, ChunkSectionLayer.CUTOUT);
-
         if(SHOW_TEST_HUD) {
             HudElementRegistry.attachElementAfter(VanillaHudElements.TITLE_AND_SUBTITLE, TestmodInit.id("test"), (ctx, tickCounter) -> {
-                Font textRenderer = Minecraft.getInstance().font;
+                Font font = Minecraft.getInstance().font;
                 MutableComponent text = Component.literal("ABC 123").withStyle(ChatFormatting.ITALIC, ChatFormatting.BOLD);
-                ctx.drawString(textRenderer, text, 10, 10, -1, false);
-                ctx.drawString(textRenderer, text, 10, 20, -1, false);
+                ctx.text(font, text, 10, 10, -1, false);
+                ctx.text(font, text, 10, 20, -1, false);
             });
         }
     }

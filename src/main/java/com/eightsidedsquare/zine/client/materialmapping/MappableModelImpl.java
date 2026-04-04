@@ -3,9 +3,11 @@ package com.eightsidedsquare.zine.client.materialmapping;
 import net.fabricmc.fabric.api.client.renderer.v1.mesh.Mesh;
 import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadEmitter;
 import net.minecraft.client.renderer.block.dispatch.ModelState;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.cuboid.CuboidModelElement;
+import net.minecraft.client.resources.model.sprite.Material;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -19,15 +21,17 @@ public record MappableModelImpl(Map<String, Mesh> meshes) implements MappableMod
             return;
         }
         for (Map.Entry<String, Mesh> entry : this.meshes.entrySet()) {
-            TextureAtlasSprite sprite = mapping.get(entry.getKey());
-            if (sprite == null) {
+            Material.Baked material = mapping.get(entry.getKey());
+            if (material == null) {
                 continue;
             }
+            TextureAtlasSprite sprite = material.sprite();
             entry.getValue().forEach(quad -> {
                 emitter.copyFrom(quad);
                 for (int i = 0; i < 4; i++) {
                     emitter.uv(i, sprite.getU(emitter.u(i)), sprite.getV(emitter.v(i)));
                 }
+                emitter.chunkLayer(ChunkSectionLayer.byTransparency(material.zine$getTransparency()));
                 emitter.emit();
             });
         }

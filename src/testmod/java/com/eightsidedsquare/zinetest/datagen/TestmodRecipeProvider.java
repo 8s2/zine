@@ -12,9 +12,9 @@ import net.minecraft.resources.ResourceKey;
 
 import java.util.concurrent.CompletableFuture;
 
-public class TestmodRecipeGen extends RecipeProvider {
+public class TestmodRecipeProvider extends RecipeProvider {
 
-    protected TestmodRecipeGen(net.minecraft.core.HolderLookup.Provider registries, RecipeOutput exporter) {
+    protected TestmodRecipeProvider(net.minecraft.core.HolderLookup.Provider registries, RecipeOutput exporter) {
         super(registries, exporter);
     }
 
@@ -35,7 +35,7 @@ public class TestmodRecipeGen extends RecipeProvider {
 
         @Override
         protected RecipeProvider createRecipeProvider(net.minecraft.core.HolderLookup.Provider wrapperLookup, RecipeOutput recipeExporter) {
-            return new TestmodRecipeGen(wrapperLookup, recipeExporter);
+            return new TestmodRecipeProvider(wrapperLookup, recipeExporter);
         }
 
         @Override

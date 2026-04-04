@@ -15,12 +15,12 @@ public class TestmodDatagen implements DataGeneratorEntrypoint {
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator generator) {
         FabricDataGenerator.Pack pack = generator.createPack();
-        pack.addProvider(TestmodSoundListGen::new);
-        pack.addProvider(TestmodRecipeGen.Provider::new);
-        pack.addProvider(TestmodItemTagGen::new);
-        pack.addProvider(TestmodDynamicGen::new);
-        pack.addProvider(TestmodModelGen::new);
-        pack.addProvider(TestmodMaterialMappingGen::new);
+        pack.addProvider(TestmodSoundListProvider::new);
+        pack.addProvider(TestmodRecipeProvider.Provider::new);
+        pack.addProvider(TestmodItemTagProvider::new);
+        pack.addProvider(TestmodDynamicProvider::new);
+        pack.addProvider(TestmodModelProvider::new);
+        pack.addProvider(TestmodMaterialMappingProvider::new);
     }
 
     @Override

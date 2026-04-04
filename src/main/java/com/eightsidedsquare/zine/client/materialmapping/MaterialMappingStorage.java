@@ -15,7 +15,7 @@ public final class MaterialMappingStorage {
 
     public static final MaterialMappingStorage EMPTY = new MaterialMappingStorage(Map.of());
     private final Map<Identifier, MaterialMapping.BakedSet> mappings;
-    private final CacheSlot<ClientLevel, Map<Holder<?>, MaterialMapping.BakedSet>> mappingCache = new CacheSlot<>(_ -> new Reference2ObjectOpenHashMap<>());
+    private final CacheSlot<ClientLevel, Map<Holder<?>, MaterialMapping.BakedSet>> holderMappingCache = new CacheSlot<>(_ -> new Reference2ObjectOpenHashMap<>());
 
     public MaterialMappingStorage(Map<Identifier, MaterialMapping.BakedSet> mappings) {
         this.mappings = mappings;
@@ -23,7 +23,7 @@ public final class MaterialMappingStorage {
 
     public MaterialMapping.BakedSet get(Holder<?> holder) {
         ClientLevel level = Minecraft.getInstance().level;
-        return level == null ? MaterialMapping.BakedSet.EMPTY : this.mappingCache.compute(level).computeIfAbsent(holder, this::computeMapping);
+        return level == null ? MaterialMapping.BakedSet.EMPTY : this.holderMappingCache.compute(level).computeIfAbsent(holder, this::computeMapping);
     }
 
     public MaterialMapping.BakedSet get(Identifier id) {

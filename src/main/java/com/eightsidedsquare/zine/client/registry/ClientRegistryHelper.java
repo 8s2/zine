@@ -158,7 +158,7 @@ public interface ClientRegistryHelper {
      * @param codec the codec of the unbaked special model renderer
      * @return the registered unbaked special model renderer codec
      */
-    default <T extends SpecialModelRenderer.Unbaked> MapCodec<T> specialModel(String name, MapCodec<T> codec) {
+    default <T extends SpecialModelRenderer.Unbaked<?>> MapCodec<T> specialModel(String name, MapCodec<T> codec) {
         return this.register(name, codec, SpecialModelRenderers.ID_MAPPER::put);
     }
 

@@ -1,7 +1,7 @@
 package com.eightsidedsquare.zine.client.block;
 
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.world.level.block.state.properties.Property;
 
 public final class BlockStateVariantMaps {

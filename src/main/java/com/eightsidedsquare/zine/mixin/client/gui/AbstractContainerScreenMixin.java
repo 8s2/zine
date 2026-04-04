@@ -1,7 +1,7 @@
 package com.eightsidedsquare.zine.mixin.client.gui;
 
-import com.eightsidedsquare.zine.client.gui.TooltipSubmenuHandlerInitializationCallback;
-import com.eightsidedsquare.zine.client.gui.TooltipSubmenuHandlerInitializationContextImpl;
+import com.eightsidedsquare.zine.client.gui.ItemSlotMouseActionInitializationCallback;
+import com.eightsidedsquare.zine.client.gui.ItemSlotMouseActionInitializationContextImpl;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -19,7 +19,7 @@ public abstract class AbstractContainerScreenMixin extends Screen {
 
     @Inject(method = "init", at = @At("TAIL"))
     private void zine$init(CallbackInfo ci) {
-        TooltipSubmenuHandlerInitializationCallback.EVENT.invoker()
-                .addTooltipSubmenuHandlers(new TooltipSubmenuHandlerInitializationContextImpl((AbstractContainerScreen<?>) (Object) this));
+        ItemSlotMouseActionInitializationCallback.EVENT.invoker()
+                .addItemSlotMouseActions(new ItemSlotMouseActionInitializationContextImpl((AbstractContainerScreen<?>) (Object) this));
     }
 }

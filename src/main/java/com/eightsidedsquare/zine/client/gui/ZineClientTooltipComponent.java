@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ZineClientTooltipComponent {
 
-    default void zine$cacheDimensions(Font textRenderer) {
+    default void zine$cacheDimensions(Font font) {
 
     }
 

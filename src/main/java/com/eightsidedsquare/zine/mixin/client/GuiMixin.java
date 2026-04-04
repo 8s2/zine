@@ -16,7 +16,7 @@ public abstract class GuiMixin {
 
     @Shadow private ItemStack lastToolHighlight;
 
-    @WrapOperation(method = "renderSelectedItemName", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 0))
+    @WrapOperation(method = "extractSelectedItemName", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 0))
     private MutableComponent zine$applyNameColor(MutableComponent text, ChatFormatting formatting, Operation<MutableComponent> original) {
         if(this.lastToolHighlight.has(ZineDataComponents.ITEM_NAME_COLOR)) {
             return text.withColor(this.lastToolHighlight.getOrDefault(ZineDataComponents.ITEM_NAME_COLOR, -1));

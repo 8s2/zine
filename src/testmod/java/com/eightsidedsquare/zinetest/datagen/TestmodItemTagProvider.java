@@ -9,9 +9,9 @@ import net.minecraft.world.item.Items;
 
 import java.util.concurrent.CompletableFuture;
 
-public class TestmodItemTagGen extends FabricTagsProvider.ItemTagsProvider {
+public class TestmodItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 
-    public TestmodItemTagGen(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
+    public TestmodItemTagProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
         super(output, completableFuture, null);
     }
 

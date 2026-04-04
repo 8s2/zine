@@ -35,7 +35,7 @@ public class SoundEntryBuilder {
     }
 
     public SoundEntryBuilder subtitle() {
-        return this.subtitle(this.soundEvent.location().getPath());
+        return this.subtitle(this.soundEvent.location().toLanguageKey());
     }
 
     public SoundEntryBuilder with(SoundBuilder sound) {

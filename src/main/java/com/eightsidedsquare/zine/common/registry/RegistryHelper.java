@@ -63,9 +63,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Util;
 import net.minecraft.util.debug.DebugSubscription;
 import net.minecraft.util.valueproviders.FloatProvider;
-import net.minecraft.util.valueproviders.FloatProviderType;
 import net.minecraft.util.valueproviders.IntProvider;
-import net.minecraft.util.valueproviders.IntProviderType;
 import net.minecraft.world.attribute.AttributeType;
 import net.minecraft.world.attribute.EnvironmentAttribute;
 import net.minecraft.world.effect.MobEffect;
@@ -106,6 +104,7 @@ import net.minecraft.world.item.slot.SlotSource;
 import net.minecraft.world.item.trading.TradeSet;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -1276,43 +1275,23 @@ public interface RegistryHelper {
     }
 
     /**
-     * @param name the name of the float provider type
-     * @param type the float provider type to register
-     * @return the registered float provider type
-     * @param <T> the type of float provider
-     */
-    default <T extends FloatProvider> FloatProviderType<T> floatProvider(String name, FloatProviderType<T> type) {
-        return this.register(BuiltInRegistries.FLOAT_PROVIDER_TYPE, name, type);
-    }
-
-    /**
-     * @param name the name of the float provider type
+     * @param name the name of the float provider
      * @param codec the codec of the float provider
-     * @return the registered float provider type
+     * @return the registered float provider codec
      * @param <T> the type of float provider
      */
-    default <T extends FloatProvider> FloatProviderType<T> floatProvider(String name, MapCodec<T> codec) {
-        return this.floatProvider(name, () -> codec);
+    default <T extends FloatProvider> MapCodec<T> floatProvider(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.FLOAT_PROVIDER_TYPE, name, codec);
     }
 
     /**
-     * @param name the name of the int provider type
-     * @param type the int provider type to register
-     * @return the registered int provider type
-     * @param <T> the type of int provider
-     */
-    default <T extends IntProvider> IntProviderType<T> intProvider(String name, IntProviderType<T> type) {
-        return this.register(BuiltInRegistries.INT_PROVIDER_TYPE, name, type);
-    }
-
-    /**
-     * @param name the name of the int provider type
+     * @param name the name of the int provider
      * @param codec the codec of the int provider
-     * @return the registered int provider type
+     * @return the registered int provider codec
      * @param <T> the type of int provider
      */
-    default <T extends IntProvider> IntProviderType<T> intProvider(String name, MapCodec<T> codec) {
-        return this.intProvider(name, () -> codec);
+    default <T extends IntProvider> MapCodec<T> intProvider(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.INT_PROVIDER_TYPE, name, codec);
     }
 
     /**
@@ -2144,6 +2123,17 @@ public interface RegistryHelper {
     default <T extends DataSource> MapCodec<T> nbtDataSource(String name, MapCodec<T> codec) {
         TextUtilImpl.registerNbtDataSource(this.id(name), codec);
         return codec;
+    }
+
+    /**
+     * @param name the name of the skull type
+     * @return the registered skull type
+     */
+    default SkullBlock.Type skullType(String name) {
+        String skullName = this.id(name).toString();
+        SkullBlock.Type skullType = () -> skullName;
+        SkullBlock.Type.TYPES.put(skullName, skullType);
+        return skullType;
     }
 
     /**

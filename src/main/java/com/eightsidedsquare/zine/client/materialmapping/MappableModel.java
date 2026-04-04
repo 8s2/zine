@@ -2,7 +2,6 @@ package com.eightsidedsquare.zine.client.materialmapping;
 
 import com.eightsidedsquare.zine.client.util.ZineClientUtil;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.fabricmc.fabric.api.client.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.client.renderer.v1.mesh.MutableMesh;
@@ -34,11 +33,12 @@ public interface MappableModel {
     }
 
     static MappableModel bake(List<CuboidModelElement> elements, ModelBaker modelBaker, ModelState modelState) {
-        return bake(elements, modelBaker.parts(), modelBaker.zine$getMissingSprite(), modelState);
+        return bake(elements, modelBaker.interner(), modelBaker.zine$getMissing(), modelState);
     }
 
-    static MappableModel bake(List<CuboidModelElement> elements, ModelBaker.Interner interner, TextureAtlasSprite sprite, ModelState modelState) {
-        Map<String, Pair<MutableMesh, QuadEmitter>> builders = new Object2ObjectArrayMap<>();
+    static MappableModel bake(List<CuboidModelElement> elements, ModelBaker.Interner interner, Material.Baked material, ModelState modelState) {
+        record Emitter(MutableMesh builder, QuadEmitter emitter) {}
+        Map<String, Emitter> builders = new Object2ObjectArrayMap<>();
         for (CuboidModelElement element : elements) {
             boolean drawXFaces = true;
             boolean drawYFaces = true;
@@ -59,6 +59,7 @@ public interface MappableModel {
             }
 
             if (drawXFaces || drawYFaces || drawZFaces) {
+                TextureAtlasSprite sprite = material.sprite();
                 float u0 = sprite.getU0();
                 float u1 = sprite.getU1();
                 float v0 = sprite.getV0();
@@ -67,24 +68,28 @@ public interface MappableModel {
                     Direction facing = entry.getKey();
                     CuboidFace face = entry.getValue();
                     if (facing.getAxis().choose(drawXFaces, drawYFaces, drawZFaces)) {
+                        CuboidFace.UVs uvs = face.uvs() == null ? FaceBakery.defaultFaceUV(from, to, facing) : face.uvs();
                         BakedQuad quad = FaceBakery.bakeQuad(
                                 interner,
                                 from,
                                 to,
-                                face.uvs(),
+                                uvs,
                                 face.rotation(),
-                                face.tintIndex(),
-                                null,
+                                BakedQuad.MaterialInfo.of(
+                                        material,
+                                        material.sprite().transparency(),
+                                        face.tintIndex(),
+                                        element.shade(),
+                                        element.lightEmission()
+                                ),
                                 facing,
                                 modelState,
-                                element.rotation(),
-                                element.shade(),
-                                element.lightEmission()
+                                element.rotation()
                         );
-                        QuadEmitter emitter = builders.computeIfAbsent(face.texture(), name -> {
+                        QuadEmitter emitter = builders.computeIfAbsent(face.texture(), _ -> {
                             MutableMesh builder = Renderer.get().mutableMesh();
-                            return Pair.of(builder, builder.emitter());
-                        }).getSecond();
+                            return new Emitter(builder, builder.emitter());
+                        }).emitter;
                         emitter.fromBakedQuad(quad);
                         if(face.cullForDirection() == null) {
                             emitter.cullFace(null);
@@ -99,7 +104,7 @@ public interface MappableModel {
                 }
             }
         }
-        return new MappableModelImpl(ZineUtil.mapValues(builders, pair -> ZineClientUtil.bake(pair.getFirst())));
+        return new MappableModelImpl(ZineUtil.mapValues(builders, emitter -> ZineClientUtil.bake(emitter.builder)));
     }
 
     interface Unbaked {

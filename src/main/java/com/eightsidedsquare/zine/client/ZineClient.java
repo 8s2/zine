@@ -11,7 +11,6 @@ import com.eightsidedsquare.zine.client.block.TessellatingBlockStateModel;
 import com.eightsidedsquare.zine.client.gui.CompositeTooltipComponent;
 import com.eightsidedsquare.zine.client.gui.TooltipComponentWrapper;
 import com.eightsidedsquare.zine.client.item.ItemModelEvents;
-import com.eightsidedsquare.zine.client.materialmapping.MaterialMappingLoader;
 import com.eightsidedsquare.zine.client.model.ModelEvents;
 import com.eightsidedsquare.zine.client.registry.ClientRegistryHelper;
 import com.eightsidedsquare.zine.client.trim.ArmorTrimRegistryImpl;
@@ -19,10 +18,8 @@ import com.eightsidedsquare.zine.common.item.tooltip.CompositeTooltipData;
 import com.eightsidedsquare.zine.core.ZineMod;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.ClientTooltipComponentCallback;
-import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.packs.PackType;
 
 public class ZineClient implements ClientModInitializer {
 

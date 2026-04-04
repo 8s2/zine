@@ -2,6 +2,8 @@ package com.eightsidedsquare.zine.mixin.client.model;
 
 import com.eightsidedsquare.zine.client.materialmapping.MappableModel;
 import com.eightsidedsquare.zine.client.materialmapping.MaterialMapping;
+import com.eightsidedsquare.zine.client.materialmapping.MaterialMappingStorage;
+import com.eightsidedsquare.zine.client.model.ZineModelBaker;
 import com.eightsidedsquare.zine.client.util.ZineMappableModelHolder;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.model.geom.EntityModelSet;
@@ -9,6 +11,7 @@ import net.minecraft.client.renderer.PlayerSkinRenderCache;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.item.ClientItem;
 import net.minecraft.client.resources.model.*;
+import net.minecraft.client.resources.model.sprite.MaterialBaker;
 import net.minecraft.client.resources.model.sprite.SpriteGetter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
@@ -58,12 +61,15 @@ public abstract class ModelBakeryMixin implements ZineMappableModelHolder {
     }
 
     @Mixin(ModelBakery.ModelBakerImpl.class)
-    public static abstract class ModelBakerImplMixin implements ModelBakerMixin {
+    public static abstract class ModelBakerImplMixin implements ZineModelBaker {
         @Unique
         private static final Logger LOGGER = LogUtils.getLogger();
         @Shadow(aliases = "this$0")
         @Final
         private ModelBakery bakery;
+        @Shadow
+        @Final
+        private MaterialBaker materials;
 
         @Override
         public MappableModel.Unbaked zine$getMappableModel(Identifier id) {
@@ -74,6 +80,11 @@ public abstract class ModelBakeryMixin implements ZineMappableModelHolder {
             } else {
                 return unbaked;
             }
+        }
+
+        @Override
+        public MaterialMappingStorage zine$getMappings() {
+            return this.materials.zine$getMappings();
         }
     }
 }

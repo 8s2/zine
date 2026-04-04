@@ -3,6 +3,7 @@ package com.eightsidedsquare.zine.mixin.item;
 import com.eightsidedsquare.zine.common.item.ZineItemProperties;
 import com.eightsidedsquare.zine.core.ZineDataComponents;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentInitializers;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -36,6 +37,9 @@ public abstract class ItemPropertiesMixin implements ZineItemProperties {
     private ArmorType armorType;
 
     @Shadow public abstract <T> Item.Properties component(DataComponentType<T> type, T value);
+
+    @Shadow
+    public abstract <T> Item.Properties delayedComponent(DataComponentType<T> type, DataComponentInitializers.SingleComponentInitializer<T> initializer);
 
     @Override
     public Item.Properties zine$nameColor(int color) {
@@ -92,7 +96,7 @@ public abstract class ItemPropertiesMixin implements ZineItemProperties {
 
     @Override
     public Item.Properties zine$bannerPatterns(TagKey<BannerPattern> bannerPatternTagKey) {
-        return this.component(DataComponents.PROVIDES_BANNER_PATTERNS, bannerPatternTagKey);
+        return this.delayedComponent(DataComponents.PROVIDES_BANNER_PATTERNS, context -> context.getOrThrow(bannerPatternTagKey));
     }
 
     @Override
@@ -107,7 +111,7 @@ public abstract class ItemPropertiesMixin implements ZineItemProperties {
 
     @Override
     public Item.Properties zine$damageResistant(TagKey<DamageType> damageTypeTagKey) {
-        return this.component(DataComponents.DAMAGE_RESISTANT, new DamageResistant(damageTypeTagKey));
+        return this.delayedComponent(DataComponents.DAMAGE_RESISTANT, context -> new DamageResistant(context.getOrThrow(damageTypeTagKey)));
     }
 
     @Override
