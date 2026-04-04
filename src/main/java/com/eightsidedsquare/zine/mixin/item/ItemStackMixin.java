@@ -1,33 +1,33 @@
 package com.eightsidedsquare.zine.mixin.item;
 
-import com.eightsidedsquare.zine.core.ZineDataComponentTypes;
+import com.eightsidedsquare.zine.core.ZineDataComponents;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.component.ComponentHolder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.MutableText;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponentHolder;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(ItemStack.class)
-public abstract class ItemStackMixin implements ComponentHolder {
+public abstract class ItemStackMixin implements DataComponentHolder {
 
-    @WrapOperation(method = "toHoverableText", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/MutableText;formatted(Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/MutableText;", ordinal = 1))
-    private MutableText zine$applyTextColorToHoverable(MutableText text, Formatting formatting, Operation<MutableText> original) {
+    @WrapOperation(method = "getDisplayName", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 1))
+    private MutableComponent zine$applyTextColorToHoverable(MutableComponent text, ChatFormatting formatting, Operation<MutableComponent> original) {
         return this.zine$applyTextColor(text, formatting, original);
     }
 
-    @WrapOperation(method = "getFormattedName", at = @At(value = "INVOKE", target = "Lnet/minecraft/text/MutableText;formatted(Lnet/minecraft/util/Formatting;)Lnet/minecraft/text/MutableText;", ordinal = 0))
-    private MutableText zine$applyTextColorToName(MutableText text, Formatting formatting, Operation<MutableText> original) {
+    @WrapOperation(method = "getStyledHoverName", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 0))
+    private MutableComponent zine$applyTextColorToName(MutableComponent text, ChatFormatting formatting, Operation<MutableComponent> original) {
         return this.zine$applyTextColor(text, formatting, original);
     }
 
     @Unique
-    private MutableText zine$applyTextColor(MutableText text, Formatting formatting, Operation<MutableText> original) {
-        if(this.contains(ZineDataComponentTypes.ITEM_NAME_COLOR)) {
-            return text.withColor(this.getOrDefault(ZineDataComponentTypes.ITEM_NAME_COLOR, -1));
+    private MutableComponent zine$applyTextColor(MutableComponent text, ChatFormatting formatting, Operation<MutableComponent> original) {
+        if(this.has(ZineDataComponents.ITEM_NAME_COLOR)) {
+            return text.withColor(this.getOrDefault(ZineDataComponents.ITEM_NAME_COLOR, -1));
         }else {
             return original.call(text, formatting);
         }

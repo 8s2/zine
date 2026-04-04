@@ -1,10 +1,10 @@
 package com.eightsidedsquare.zine.client.atlas.generator;
 
-import com.eightsidedsquare.zine.client.atlas.GeneratorAtlasSource;
+import com.eightsidedsquare.zine.client.atlas.GeneratorSpriteSource;
 import com.eightsidedsquare.zine.client.atlas.gradient.Gradient;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public record GradientSpriteGenerator(Gradient gradient) implements SpriteGenerator {
 
@@ -22,7 +22,7 @@ public record GradientSpriteGenerator(Gradient gradient) implements SpriteGenera
     }
 
     @Override
-    public GeneratorAtlasSource.Output generate(Identifier outputId, SpriteProperties properties) {
+    public GeneratorSpriteSource.Output generate(Identifier outputId, SpriteProperties properties) {
         return this.gradient::get;
     }
 }

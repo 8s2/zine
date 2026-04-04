@@ -1,8 +1,8 @@
 package com.eightsidedsquare.zine.mixin.entity.variant;
 
 import com.eightsidedsquare.zine.common.entity.variant.ZineModelAndTexture;
-import net.minecraft.util.AssetInfo;
-import net.minecraft.util.ModelAndTexture;
+import net.minecraft.core.ClientAsset;
+import net.minecraft.world.entity.variant.ModelAndTexture;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -15,7 +15,7 @@ public abstract class ModelAndTextureMixin<T> implements ZineModelAndTexture<T> 
     private T model;
 
     @Shadow @Final @Mutable
-    private AssetInfo.TextureAssetInfo asset;
+    private ClientAsset.ResourceTexture asset;
 
     @Override
     public void zine$setModel(T model) {
@@ -23,7 +23,7 @@ public abstract class ModelAndTextureMixin<T> implements ZineModelAndTexture<T> 
     }
 
     @Override
-    public void zine$setAsset(AssetInfo.TextureAssetInfo asset) {
+    public void zine$setAsset(ClientAsset.ResourceTexture asset) {
         this.asset = asset;
     }
 }

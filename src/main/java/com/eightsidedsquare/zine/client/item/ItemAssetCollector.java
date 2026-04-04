@@ -1,26 +1,26 @@
 package com.eightsidedsquare.zine.client.item;
 
-import net.minecraft.client.item.ItemAsset;
-import net.minecraft.client.render.item.model.ItemModel;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.item.ClientItem;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.function.BiConsumer;
 
 @FunctionalInterface
-public interface ItemAssetCollector extends BiConsumer<Identifier, ItemAsset> {
+public interface ItemAssetCollector extends BiConsumer<Identifier, ClientItem> {
 
     default void accept(Identifier id, ItemModel.Unbaked unbaked) {
-        this.accept(id, new ItemAsset(unbaked, ItemAsset.Properties.DEFAULT));
+        this.accept(id, new ClientItem(unbaked, ClientItem.Properties.DEFAULT));
     }
 
-    default void accept(ItemConvertible item, ItemAsset itemAsset) {
-        this.accept(Registries.ITEM.getId(item.asItem()), itemAsset);
+    default void accept(ItemLike item, ClientItem itemAsset) {
+        this.accept(BuiltInRegistries.ITEM.getKey(item.asItem()), itemAsset);
     }
 
-    default void accept(ItemConvertible item, ItemModel.Unbaked unbaked) {
-        this.accept(Registries.ITEM.getId(item.asItem()), unbaked);
+    default void accept(ItemLike item, ItemModel.Unbaked unbaked) {
+        this.accept(BuiltInRegistries.ITEM.getKey(item.asItem()), unbaked);
     }
 
 }

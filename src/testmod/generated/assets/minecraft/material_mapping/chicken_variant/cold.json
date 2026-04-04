@@ -1,0 +1,7 @@
+{
+  "zinetest:nest": {
+    "egg": "minecraft:item/blue_egg",
+    "layer0": "minecraft:item/blue_egg",
+    "nest": "minecraft:block/spruce_log"
+  }
+}

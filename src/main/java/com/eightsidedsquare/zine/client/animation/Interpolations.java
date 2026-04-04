@@ -1,9 +1,9 @@
 package com.eightsidedsquare.zine.client.animation;
 
-import it.unimi.dsi.fastutil.doubles.Double2DoubleFunction;
-import net.minecraft.client.render.entity.animation.Transformation;
-import net.minecraft.util.math.MathHelper;
-import org.joml.Vector3f;
+import it.unimi.dsi.fastutil.floats.FloatUnaryOperator;
+import net.minecraft.client.animation.AnimationChannel;
+import net.minecraft.util.Ease;
+import net.minecraft.util.Mth;
 import org.joml.Vector3fc;
 
 /**
@@ -12,50 +12,50 @@ import org.joml.Vector3fc;
  */
 public class Interpolations {
 
-    public static final Transformation.Interpolation LINEAR = Transformation.Interpolations.LINEAR;
-    public static final Transformation.Interpolation SPLINE = Transformation.Interpolations.CUBIC;
-    public static final InterpolationCreator STEP = steps -> easing(Interpolations.step((double) steps));
-    public static final Transformation.Interpolation EASE_IN_QUADRATIC = easing(easeIn(Interpolations::quadratic));
-    public static final Transformation.Interpolation EASE_OUT_QUADRATIC = easing(easeOut(Interpolations::quadratic));
-    public static final Transformation.Interpolation EASE_IN_OUT_QUADRATIC = easing(easeInOut(Interpolations::quadratic));
-    public static final Transformation.Interpolation EASE_IN_CUBIC = easing(easeIn(Interpolations::cubic));
-    public static final Transformation.Interpolation EASE_OUT_CUBIC = easing(easeOut(Interpolations::cubic));
-    public static final Transformation.Interpolation EASE_IN_OUT_CUBIC = easing(easeInOut(Interpolations::cubic));
-    public static final Transformation.Interpolation EASE_IN_QUARTIC = easing(easeIn(pow(4)));
-    public static final Transformation.Interpolation EASE_OUT_QUARTIC = easing(easeOut(pow(4)));
-    public static final Transformation.Interpolation EASE_IN_OUT_QUARTIC = easing(easeInOut(pow(4)));
-    public static final Transformation.Interpolation EASE_IN_QUINTIC = easing(easeIn(pow(5)));
-    public static final Transformation.Interpolation EASE_OUT_QUINTIC = easing(easeOut(pow(5)));
-    public static final Transformation.Interpolation EASE_IN_OUT_QUINTIC = easing(easeInOut(pow(5)));
-    public static final Transformation.Interpolation EASE_IN_EXPO = easing(easeIn(Interpolations::exp));
-    public static final Transformation.Interpolation EASE_OUT_EXPO = easing(easeOut(Interpolations::exp));
-    public static final Transformation.Interpolation EASE_IN_OUT_EXPO = easing(easeInOut(Interpolations::exp));
-    public static final Transformation.Interpolation EASE_IN_CIRCLE = easing(easeIn(Interpolations::circle));
-    public static final Transformation.Interpolation EASE_OUT_CIRCLE = easing(easeOut(Interpolations::circle));
-    public static final Transformation.Interpolation EASE_IN_OUT_CIRCLE = easing(easeInOut(Interpolations::circle));
-    public static final InterpolationCreator EASE_IN_BACK = overshoot -> easing(easeIn(Interpolations.back((double) overshoot)));
-    public static final InterpolationCreator EASE_OUT_BACK = overshoot -> easing(easeOut(Interpolations.back((double) overshoot)));
-    public static final InterpolationCreator EASE_IN_OUT_BACK = overshoot -> easing(easeInOut(Interpolations.back((double) overshoot)));
-    public static final InterpolationCreator EASE_IN_BOUNCE = bounciness -> easing(easeIn(Interpolations.bounce((double) bounciness)));
-    public static final InterpolationCreator EASE_OUT_BOUNCE = bounciness -> easing(easeOut(Interpolations.bounce((double) bounciness)));
-    public static final InterpolationCreator EASE_IN_OUT_BOUNCE = bounciness -> easing(easeInOut(Interpolations.bounce((double) bounciness)));
-    public static final Transformation.Interpolation EASE_IN_SINE = easing(easeIn(Interpolations::sine));
-    public static final Transformation.Interpolation EASE_OUT_SINE = easing(easeOut(Interpolations::sine));
-    public static final Transformation.Interpolation EASE_IN_OUT_SINE = easing(easeInOut(Interpolations::sine));
-    public static final InterpolationCreator EASE_IN_ELASTIC = bounciness -> easing(easeIn(Interpolations.elastic((double) bounciness)));
-    public static final InterpolationCreator EASE_OUT_ELASTIC = bounciness -> easing(easeOut(Interpolations.elastic((double) bounciness)));
-    public static final InterpolationCreator EASE_IN_OUT_ELASTIC = bounciness -> easing(easeInOut(Interpolations.elastic((double) bounciness)));
+    public static final AnimationChannel.Interpolation LINEAR = AnimationChannel.Interpolations.LINEAR;
+    public static final AnimationChannel.Interpolation SPLINE = AnimationChannel.Interpolations.CATMULLROM;
+    public static final InterpolationFactory STEP = steps -> easing(Interpolations.step(steps));
+    public static final AnimationChannel.Interpolation EASE_IN_QUADRATIC = easing(Ease::inQuad);
+    public static final AnimationChannel.Interpolation EASE_OUT_QUADRATIC = easing(Ease::outQuad);
+    public static final AnimationChannel.Interpolation EASE_IN_OUT_QUADRATIC = easing(Ease::inOutQuad);
+    public static final AnimationChannel.Interpolation EASE_IN_CUBIC = easing(Ease::inCubic);
+    public static final AnimationChannel.Interpolation EASE_OUT_CUBIC = easing(Ease::outCubic);
+    public static final AnimationChannel.Interpolation EASE_IN_OUT_CUBIC = easing(Ease::inOutCubic);
+    public static final AnimationChannel.Interpolation EASE_IN_QUARTIC = easing(Ease::inQuart);
+    public static final AnimationChannel.Interpolation EASE_OUT_QUARTIC = easing(Ease::outQuart);
+    public static final AnimationChannel.Interpolation EASE_IN_OUT_QUARTIC = easing(Ease::inOutQuart);
+    public static final AnimationChannel.Interpolation EASE_IN_QUINTIC = easing(Ease::inQuint);
+    public static final AnimationChannel.Interpolation EASE_OUT_QUINTIC = easing(Ease::outQuint);
+    public static final AnimationChannel.Interpolation EASE_IN_OUT_QUINTIC = easing(Ease::inOutQuint);
+    public static final AnimationChannel.Interpolation EASE_IN_EXPO = easing(Ease::inExpo);
+    public static final AnimationChannel.Interpolation EASE_OUT_EXPO = easing(Ease::outExpo);
+    public static final AnimationChannel.Interpolation EASE_IN_OUT_EXPO = easing(Ease::inOutExpo);
+    public static final AnimationChannel.Interpolation EASE_IN_CIRCLE = easing(Ease::inCirc);
+    public static final AnimationChannel.Interpolation EASE_OUT_CIRCLE = easing(Ease::outCirc);
+    public static final AnimationChannel.Interpolation EASE_IN_OUT_CIRCLE = easing(Ease::inOutCirc);
+    public static final InterpolationFactory EASE_IN_BACK = overshoot -> easing(easeIn(Interpolations.back(overshoot)));
+    public static final InterpolationFactory EASE_OUT_BACK = overshoot -> easing(easeOut(Interpolations.back(overshoot)));
+    public static final InterpolationFactory EASE_IN_OUT_BACK = overshoot -> easing(easeInOut(Interpolations.back(overshoot)));
+    public static final InterpolationFactory EASE_IN_BOUNCE = bounciness -> easing(easeIn(Interpolations.bounce(bounciness)));
+    public static final InterpolationFactory EASE_OUT_BOUNCE = bounciness -> easing(easeOut(Interpolations.bounce(bounciness)));
+    public static final InterpolationFactory EASE_IN_OUT_BOUNCE = bounciness -> easing(easeInOut(Interpolations.bounce(bounciness)));
+    public static final AnimationChannel.Interpolation EASE_IN_SINE = easing(Ease::inSine);
+    public static final AnimationChannel.Interpolation EASE_OUT_SINE = easing(Ease::outSine);
+    public static final AnimationChannel.Interpolation EASE_IN_OUT_SINE = easing(Ease::inOutSine);
+    public static final InterpolationFactory EASE_IN_ELASTIC = bounciness -> easing(easeIn(Interpolations.elastic(bounciness)));
+    public static final InterpolationFactory EASE_OUT_ELASTIC = bounciness -> easing(easeOut(Interpolations.elastic(bounciness)));
+    public static final InterpolationFactory EASE_IN_OUT_ELASTIC = bounciness -> easing(easeInOut(Interpolations.elastic(bounciness)));
 
-    private static Transformation.Interpolation easing(Double2DoubleFunction easing) {
+    private static AnimationChannel.Interpolation easing(FloatUnaryOperator easing) {
         return (output, delta, keyframes, start, end, scale) -> {
-            Vector3fc vector3f = keyframes[start].preTarget();
-            Vector3fc vector3f2 = keyframes[end].postTarget();
+            Vector3fc preTarget = keyframes[start].preTarget();
+            Vector3fc postTarget = keyframes[end].postTarget();
 
-            double eased = delta <= 0 ? 0 : delta >= 1 ? 1 : easing.apply((double) delta);
+            double eased = delta <= 0 ? 0 : delta >= 1 ? 1 : easing.apply(delta);
             return output.set(
-                    MathHelper.lerp(eased, vector3f.x(), vector3f2.x()) * scale,
-                    MathHelper.lerp(eased, vector3f.y(), vector3f2.y()) * scale,
-                    MathHelper.lerp(eased, vector3f.z(), vector3f2.z()) * scale
+                    Mth.lerp(eased, preTarget.x(), postTarget.x()) * scale,
+                    Mth.lerp(eased, preTarget.y(), postTarget.y()) * scale,
+                    Mth.lerp(eased, preTarget.z(), postTarget.z()) * scale
             );
         };
     }
@@ -63,82 +63,27 @@ public class Interpolations {
     /**
      * Returns an easing function running forward in time
      */
-    static Double2DoubleFunction easeIn(Double2DoubleFunction function) {
+    static FloatUnaryOperator easeIn(FloatUnaryOperator function) {
         return function;
     }
 
     /**
      * Returns an easing function running backwards in time
      */
-    static Double2DoubleFunction easeOut(Double2DoubleFunction function) {
+    static FloatUnaryOperator easeOut(FloatUnaryOperator function) {
         return time -> 1 - function.apply(1 - time);
     }
 
     /**
      * Returns an easing function that runs equally both forwards and backwards in time based on the halfway point, generating a symmetrical curve
      */
-    static Double2DoubleFunction easeInOut(Double2DoubleFunction function) {
+    static FloatUnaryOperator easeInOut(FloatUnaryOperator function) {
         return time -> {
             if (time < 0.5d)
-                return function.apply(time * 2d) / 2d;
+                return function.apply(time * 2f) / 2f;
 
-            return 1 - function.apply((1 - time) * 2d) / 2d;
+            return 1 - function.apply((1 - time) * 2f) / 2f;
         };
-    }
-
-    /**
-     * A quadratic function, equivalent to the square (<i>n</i>^2) of elapsed time
-     * <p>
-     * {@code f(n) = n^2}
-     * <p>
-     * <a href="http://easings.net/#easeInQuad">Easings.net#easeInQuad</a>
-     */
-    static double quadratic(double n) {
-        return n * n;
-    }
-
-    /**
-     * A cubic function, equivalent to cube (<i>n</i>^3) of elapsed time
-     * <p>
-     * {@code f(n) = n^3}
-     * <p>
-     * <a href="http://easings.net/#easeInCubic">Easings.net#easeInCubic</a>
-     */
-    static double cubic(double n) {
-        return n * n * n;
-    }
-
-    /**
-     * A sinusoidal function, equivalent to a sine curve output
-     * <p>
-     * {@code f(n) = 1 - cos(n * π / 2)}
-     * <p>
-     * <a href="http://easings.net/#easeInSine">Easings.net#easeInSine</a>
-     */
-    static double sine(double n) {
-        return 1 - Math.cos(n * Math.PI / 2f);
-    }
-
-    /**
-     * A circular function, equivalent to a normally symmetrical curve
-     * <p>
-     * {@code f(n) = 1 - sqrt(1 - n^2)}
-     * <p>
-     * <a href="http://easings.net/#easeInCirc">Easings.net#easeInCirc</a>
-     */
-    static double circle(double n) {
-        return 1 - Math.sqrt(1 - n * n);
-    }
-
-    /**
-     * An exponential function, equivalent to an exponential curve
-     * <p>
-     * {@code f(n) = 2^(10 * (n - 1))}
-     * <p>
-     * <a href="http://easings.net/#easeInExpo">Easings.net#easeInExpo</a>
-     */
-    static double exp(double n) {
-        return Math.pow(2, 10 * (n - 1));
     }
 
     // ---> Easing Curve Functions <--- //
@@ -152,10 +97,9 @@ public class Interpolations {
      * <p>
      * <a href="http://easings.net/#easeInElastic">Easings.net#easeInElastic</a>
      */
-    static Double2DoubleFunction elastic(Double n) {
+    static FloatUnaryOperator elastic(Float n) {
         double n2 = n == null ? 1 : n;
-
-        return t -> 1 - Math.pow(Math.cos(t * Math.PI / 2f), 3) * Math.cos(t * n2 * Math.PI);
+        return t -> 1 - Mth.cube(Mth.cos(t * Math.PI / 2f)) * Mth.cos(t * n2 * Math.PI);
     }
 
     /**
@@ -167,13 +111,13 @@ public class Interpolations {
      * <p>
      * <a href="http://easings.net/#easeInBounce">Easings.net#easeInBounce</a>
      */
-    static Double2DoubleFunction bounce(Double n) {
-        final double n2 = n == null ? 0.5d : n;
+    static FloatUnaryOperator bounce(Float n) {
+        final float n2 = n == null ? 0.5f : n;
 
-        Double2DoubleFunction one = x -> 121f / 16f * x * x;
-        Double2DoubleFunction two = x -> 121f / 4f * n2 * Math.pow(x - 6f / 11f, 2) + 1 - n2;
-        Double2DoubleFunction three = x -> 121 * n2 * n2 * Math.pow(x - 9f / 11f, 2) + 1 - n2 * n2;
-        Double2DoubleFunction four = x -> 484 * n2 * n2 * n2 * Math.pow(x - 10.5f / 11f, 2) + 1 - n2 * n2 * n2;
+        FloatUnaryOperator one = x -> 121f / 16f * x * x;
+        FloatUnaryOperator two = x -> 121f / 4f * n2 * Mth.square(x - 6f / 11f) + 1 - n2;
+        FloatUnaryOperator three = x -> 121 * n2 * n2 * Mth.square(x - 9f / 11f) + 1 - n2 * n2;
+        FloatUnaryOperator four = x -> 484 * n2 * n2 * n2 * Mth.square(x - 10.5f / 11f) + 1 - n2 * n2 * n2;
 
         return t -> Math.min(Math.min(one.apply(t), two.apply(t)), Math.min(three.apply(t), four.apply(t)));
     }
@@ -185,21 +129,10 @@ public class Interpolations {
      * <p>
      * <a href="https://easings.net/#easeInBack">Easings.net#easeInBack</a>
      */
-    static Double2DoubleFunction back(Double n) {
-        final double n2 = n == null ? 1.70158d : n * 1.70158d;
+    static FloatUnaryOperator back(Float n) {
+        final float n2 = n == null ? 1.70158f : n * 1.70158f;
 
         return t -> t * t * ((n2 + 1) * t - n2);
-    }
-
-    /**
-     * An exponential function, equivalent to an exponential curve to the {@code n} root
-     * <p>
-     * <code>f(t) = t^n</code>
-     *
-     * @param n The exponent
-     */
-    static Double2DoubleFunction pow(double n) {
-        return t -> Math.pow(t, n);
     }
 
     // The MIT license notice below applies to the function step
@@ -229,8 +162,8 @@ public class Interpolations {
      * Returns a stepped value based on the nearest step to the input value.<br>
      * The size (grade) of the steps depends on the provided value of {@code n}
      **/
-    static Double2DoubleFunction step(Double n) {
-        double n2 = n == null ? 2 : n;
+    static FloatUnaryOperator step(Float n) {
+        float n2 = n == null ? 2 : n;
 
         if (n2 < 2)
             throw new IllegalArgumentException("Steps must be >= 2, got: " + n2);
@@ -238,12 +171,12 @@ public class Interpolations {
         final int steps = (int)n2;
 
         return t -> {
-            double result = 0;
+            float result = 0;
 
             if (t < 0)
                 return result;
 
-            double stepLength = (1 / (double)steps);
+            float stepLength = (1 / (float)steps);
 
             if (t > (result = (steps - 1) * stepLength))
                 return result;
@@ -267,8 +200,8 @@ public class Interpolations {
         };
     }
 
-    public interface InterpolationCreator {
-        Transformation.Interpolation configure(float value);
+    public interface InterpolationFactory {
+        AnimationChannel.Interpolation configure(float value);
     }
 
 }

@@ -1,104 +1,104 @@
 package com.eightsidedsquare.zine.client.data;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.data.BlockStateVariantMap;
-import net.minecraft.client.data.MultipartBlockModelDefinitionCreator;
-import net.minecraft.client.data.VariantsBlockModelDefinitionCreator;
-import net.minecraft.client.render.model.BlockStateModel;
-import net.minecraft.client.render.model.json.BlockModelDefinition;
-import net.minecraft.client.render.model.json.WeightedVariant;
+import net.minecraft.client.data.models.MultiVariant;
+import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
+import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.blockstates.PropertyDispatch;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
+import net.minecraft.world.level.block.Block;
 
 /**
- * Helper class for instantiating different types of {@link net.minecraft.client.data.BlockModelDefinitionCreator} as their names tend to be verbose
+ * Helper class for instantiating different types of {@link net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator} as their names tend to be verbose
  */
 public final class BlockModelDefinitions {
 
     /**
-     * Creates a {@link VariantsBlockModelDefinitionCreator.Empty} for the given block
+     * Creates a {@link MultiVariantGenerator.Empty} for the given block
      */
-    public static VariantsBlockModelDefinitionCreator.Empty variants(Block block) {
-        return VariantsBlockModelDefinitionCreator.of(block);
+    public static MultiVariantGenerator.Empty variants(Block block) {
+        return MultiVariantGenerator.dispatch(block);
     }
 
     /**
-     * Creates a {@link VariantsBlockModelDefinitionCreator} for the given block
+     * Creates a {@link MultiVariantGenerator} for the given block
      * @param map the block state variant map of weighted variants to apply
      */
-    public static VariantsBlockModelDefinitionCreator variants(Block block, BlockStateVariantMap<WeightedVariant> map) {
+    public static MultiVariantGenerator variants(Block block, PropertyDispatch<MultiVariant> map) {
         return variants(block).with(map);
     }
 
     /**
-     * Creates a {@link VariantsBlockModelDefinitionCreator} for the given block
+     * Creates a {@link MultiVariantGenerator} for the given block
      * @param variant the default variant
      */
-    public static VariantsBlockModelDefinitionCreator variants(Block block, WeightedVariant variant) {
-        return VariantsBlockModelDefinitionCreator.of(block, variant);
+    public static MultiVariantGenerator variants(Block block, MultiVariant variant) {
+        return MultiVariantGenerator.dispatch(block, variant);
     }
 
     /**
-     * Creates a {@link MultipartBlockModelDefinitionCreator} for the given block
+     * Creates a {@link MultiPartGenerator} for the given block
      */
-    public static MultipartBlockModelDefinitionCreator multipart(Block block) {
-        return MultipartBlockModelDefinitionCreator.create(block);
+    public static MultiPartGenerator multipart(Block block) {
+        return MultiPartGenerator.multiPart(block);
     }
 
     /**
-     * Creates a {@link CustomVariantsBlockModelDefinitionCreator} for the given block
-     * @apiNote Unlike {@link VariantsBlockModelDefinitionCreator}, this accepts unbaked block state models
+     * Creates a {@link CustomMultiVariantGenerator} for the given block
+     * @apiNote Unlike {@link MultiVariantGenerator}, this accepts unbaked block state models
      */
-    public static CustomVariantsBlockModelDefinitionCreator.Empty customVariants(Block block) {
-        return CustomVariantsBlockModelDefinitionCreator.create(block);
+    public static CustomMultiVariantGenerator.Empty customVariants(Block block) {
+        return CustomMultiVariantGenerator.create(block);
     }
 
     /**
-     * Creates a {@link CustomVariantsBlockModelDefinitionCreator} for the given block
+     * Creates a {@link CustomMultiVariantGenerator} for the given block
      * @param map the block state variant map of unbaked block state models to apply
-     * @apiNote Unlike {@link VariantsBlockModelDefinitionCreator}, this accepts unbaked block state models
+     * @apiNote Unlike {@link MultiVariantGenerator}, this accepts unbaked block state models
      */
-    public static CustomVariantsBlockModelDefinitionCreator customVariants(Block block, BlockStateVariantMap<BlockStateModel.Unbaked> map) {
-        return CustomVariantsBlockModelDefinitionCreator.create(block, map);
+    public static CustomMultiVariantGenerator customVariants(Block block, PropertyDispatch<BlockStateModel.Unbaked> map) {
+        return CustomMultiVariantGenerator.create(block, map);
     }
 
     /**
-     * Creates a {@link CustomVariantsBlockModelDefinitionCreator} for the given block
+     * Creates a {@link CustomMultiVariantGenerator} for the given block
      * @param model the default unbaked block state model
-     * @apiNote Unlike {@link VariantsBlockModelDefinitionCreator}, this accepts unbaked block state models
+     * @apiNote Unlike {@link MultiVariantGenerator}, this accepts unbaked block state models
      */
-    public static CustomVariantsBlockModelDefinitionCreator customVariants(Block block, BlockStateModel.Unbaked model) {
-        return CustomVariantsBlockModelDefinitionCreator.create(block, model);
+    public static CustomMultiVariantGenerator customVariants(Block block, BlockStateModel.Unbaked model) {
+        return CustomMultiVariantGenerator.create(block, model);
     }
 
     /**
-     * Creates a {@link CustomMultipartBlockModelDefinitionCreator} for the given block
-     * @apiNote Unlike {@link MultipartBlockModelDefinitionCreator}, this accepts unbaked block state models
+     * Creates a {@link CustomMultiPartGenerator} for the given block
+     * @apiNote Unlike {@link MultiPartGenerator}, this accepts unbaked block state models
      */
-    public static CustomMultipartBlockModelDefinitionCreator customMultipart(Block block) {
-        return CustomMultipartBlockModelDefinitionCreator.create(block);
+    public static CustomMultiPartGenerator customMultipart(Block block) {
+        return CustomMultiPartGenerator.create(block);
     }
 
     /**
-     * Creates a {@link DirectBlockModelDefinitionCreator} for the given block
-     * @param definition the block model definition that will be created
+     * Creates a {@link DirectGenerator} for the given block
+     * @param dispatcher the block model dispatcher that will be created
      */
-    public static DirectBlockModelDefinitionCreator direct(Block block, BlockModelDefinition definition) {
-        return DirectBlockModelDefinitionCreator.create(block, definition);
+    public static DirectGenerator direct(Block block, BlockStateModelDispatcher dispatcher) {
+        return DirectGenerator.create(block, dispatcher);
     }
 
     /**
-     * Creates a {@link DirectBlockModelDefinitionCreator} for the given block
+     * Creates a {@link DirectGenerator} for the given block
      * @param variants block model variants for the block model definition that will be created
      */
-    public static DirectBlockModelDefinitionCreator direct(Block block, BlockModelDefinition.Variants variants) {
-        return DirectBlockModelDefinitionCreator.create(block, variants);
+    public static DirectGenerator direct(Block block, BlockStateModelDispatcher.SimpleModelSelectors variants) {
+        return DirectGenerator.create(block, variants);
     }
 
     /**
-     * Creates a {@link DirectBlockModelDefinitionCreator} for the given block
+     * Creates a {@link DirectGenerator} for the given block
      * @param multipart multipart block models for the block model definition that will be created
      */
-    public static DirectBlockModelDefinitionCreator direct(Block block, BlockModelDefinition.Multipart multipart) {
-        return DirectBlockModelDefinitionCreator.create(block, multipart);
+    public static DirectGenerator direct(Block block, BlockStateModelDispatcher.MultiPartDefinition multipart) {
+        return DirectGenerator.create(block, multipart);
     }
 
     private BlockModelDefinitions() {

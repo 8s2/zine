@@ -1,46 +1,37 @@
 package com.eightsidedsquare.zine.mixin.entity.variant;
 
 import com.eightsidedsquare.zine.common.entity.variant.ZineWolfVariant;
-import com.eightsidedsquare.zine.common.entity.variant.ZineWolfVariantWolfAssetInfo;
-import net.minecraft.entity.passive.WolfVariant;
-import net.minecraft.entity.spawn.SpawnConditionSelectors;
-import net.minecraft.util.AssetInfo;
+import net.minecraft.world.entity.animal.wolf.WolfVariant;
+import net.minecraft.world.entity.variant.SpawnPrioritySelectors;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(WolfVariant.class)
-public abstract class WolfVariantMixin implements ZineWolfVariant, ZineWolfVariantWolfAssetInfo {
+public abstract class WolfVariantMixin implements ZineWolfVariant {
 
     @Shadow @Final @Mutable
-    private WolfVariant.WolfAssetInfo assetInfo;
+    private WolfVariant.AssetInfo adultInfo;
 
     @Shadow @Final @Mutable
-    private SpawnConditionSelectors spawnConditions;
+    private WolfVariant.AssetInfo babyInfo;
+
+    @Shadow @Final @Mutable
+    private SpawnPrioritySelectors spawnConditions;
 
     @Override
-    public void zine$setAssetInfo(WolfVariant.WolfAssetInfo assetInfo) {
-        this.assetInfo = assetInfo;
+    public void zine$setAdultInfo(WolfVariant.AssetInfo adultInfo) {
+        this.adultInfo = adultInfo;
     }
 
     @Override
-    public void zine$setSpawnConditions(SpawnConditionSelectors spawnConditions) {
+    public void zine$setBabyInfo(WolfVariant.AssetInfo babyInfo) {
+        this.babyInfo = babyInfo;
+    }
+
+    @Override
+    public void zine$setSpawnConditions(SpawnPrioritySelectors spawnConditions) {
         this.spawnConditions = spawnConditions;
-    }
-
-    @Override
-    public void zine$setWild(AssetInfo.TextureAssetInfo wild) {
-        this.assetInfo.zine$setWild(wild);
-    }
-
-    @Override
-    public void zine$setTame(AssetInfo.TextureAssetInfo tame) {
-        this.assetInfo.zine$setTame(tame);
-    }
-
-    @Override
-    public void zine$setAngry(AssetInfo.TextureAssetInfo angry) {
-        this.assetInfo.zine$setAngry(angry);
     }
 }

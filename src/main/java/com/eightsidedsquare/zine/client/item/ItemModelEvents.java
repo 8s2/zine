@@ -4,8 +4,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.client.render.item.model.ItemModel;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.item.ItemModel;
+import net.minecraft.resources.Identifier;
 
 @Environment(EnvType.CLIENT)
 public final class ItemModelEvents {
@@ -35,7 +35,7 @@ public final class ItemModelEvents {
     public interface BeforeBake {
         /**
          * Called to modify unbaked item models. Return {@code unbaked} if no modification is meant to take place.
-         * <p>{@code id} may directly correlate to the id of an {@link net.minecraft.item.Item} in {@link net.minecraft.registry.Registries#ITEM}.
+         * <p>{@code id} may directly correlate to the id of an {@link net.minecraft.world.item.Item} in {@link net.minecraft.core.registries.BuiltInRegistries#ITEM}.
          * @param id the id of the unbaked item model
          * @param unbaked the unbaked item model
          * @return the modified unbaked item model

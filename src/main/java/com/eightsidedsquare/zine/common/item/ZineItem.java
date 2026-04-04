@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.common.item;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public interface ZineItem {
 

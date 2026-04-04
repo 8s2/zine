@@ -1,0 +1,7 @@
+{
+  "zinetest:nest": {
+    "egg": "minecraft:item/egg",
+    "layer0": "minecraft:item/egg",
+    "nest": "minecraft:block/oak_log"
+  }
+}

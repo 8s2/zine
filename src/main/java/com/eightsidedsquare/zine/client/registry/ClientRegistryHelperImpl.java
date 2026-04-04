@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.client.registry;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 
 public class ClientRegistryHelperImpl implements ClientRegistryHelper {
 
@@ -12,6 +12,6 @@ public class ClientRegistryHelperImpl implements ClientRegistryHelper {
 
     @Override
     public Identifier id(String name) {
-        return Identifier.of(this.namespace, name);
+        return Identifier.fromNamespaceAndPath(this.namespace, name);
     }
 }

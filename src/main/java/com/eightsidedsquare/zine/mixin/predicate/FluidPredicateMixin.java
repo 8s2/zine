@@ -2,11 +2,11 @@ package com.eightsidedsquare.zine.mixin.predicate;
 
 import com.eightsidedsquare.zine.common.predicate.ZineFluidPredicate;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.predicate.FluidPredicate;
-import net.minecraft.predicate.StatePredicate;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.advancements.criterion.FluidPredicate;
+import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.material.Fluid;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,36 +20,36 @@ import java.util.Optional;
 public abstract class FluidPredicateMixin implements ZineFluidPredicate {
 
     @Shadow @Final @Mutable
-    private Optional<RegistryEntryList<Fluid>> fluids;
+    private Optional<HolderSet<Fluid>> fluids;
 
     @Shadow @Final @Mutable
-    private Optional<StatePredicate> state;
+    private Optional<StatePropertiesPredicate> properties;
 
     @Override
-    public void zine$setFluids(@Nullable RegistryEntryList<Fluid> fluids) {
+    public void zine$setFluids(@Nullable HolderSet<Fluid> fluids) {
         this.fluids = Optional.ofNullable(fluids);
     }
 
     @Override
     public void zine$addFluid(Fluid fluid) {
         if(this.fluids.isPresent()) {
-            this.fluids = Optional.of(ZineUtil.mergeValue(this.fluids.get(), Registries.FLUID::getEntry, fluid));
+            this.fluids = Optional.of(ZineUtil.mergeValue(this.fluids.get(), BuiltInRegistries.FLUID::wrapAsHolder, fluid));
             return;
         }
-        this.fluids = Optional.of(RegistryEntryList.of(Registries.FLUID::getEntry, fluid));
+        this.fluids = Optional.of(HolderSet.direct(BuiltInRegistries.FLUID::wrapAsHolder, fluid));
     }
 
     @Override
     public void zine$addFluids(Collection<Fluid> fluids) {
         if(this.fluids.isPresent()) {
-            this.fluids = Optional.of(ZineUtil.mergeValues(this.fluids.get(), Registries.FLUID::getEntry, fluids));
+            this.fluids = Optional.of(ZineUtil.mergeValues(this.fluids.get(), BuiltInRegistries.FLUID::wrapAsHolder, fluids));
             return;
         }
-        this.fluids = Optional.of(RegistryEntryList.of(Registries.FLUID::getEntry, fluids));
+        this.fluids = Optional.of(HolderSet.direct(BuiltInRegistries.FLUID::wrapAsHolder, fluids));
     }
 
     @Override
-    public void zine$setState(@Nullable StatePredicate state) {
-        this.state = Optional.ofNullable(state);
+    public void zine$setState(@Nullable StatePropertiesPredicate state) {
+        this.properties = Optional.ofNullable(state);
     }
 }

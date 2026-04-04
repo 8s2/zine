@@ -2,18 +2,14 @@ package com.eightsidedsquare.zine.mixin.predicate;
 
 import com.eightsidedsquare.zine.common.predicate.ZineLocationPredicate;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import net.minecraft.predicate.BlockPredicate;
-import net.minecraft.predicate.FluidPredicate;
-import net.minecraft.predicate.LightPredicate;
-import net.minecraft.predicate.NumberRange;
-import net.minecraft.predicate.entity.LocationPredicate;
-import net.minecraft.registry.RegistryEntryLookup;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.structure.Structure;
+import net.minecraft.advancements.criterion.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,16 +24,16 @@ import java.util.function.Function;
 public abstract class LocationPredicateMixin implements ZineLocationPredicate {
 
     @Shadow @Final @Mutable
-    private Optional<LocationPredicate.PositionRange> position;
+    private Optional<LocationPredicate.PositionPredicate> position;
 
     @Shadow @Final @Mutable
-    private Optional<RegistryEntryList<Biome>> biomes;
+    private Optional<HolderSet<Biome>> biomes;
 
     @Shadow @Final @Mutable
-    private Optional<RegistryEntryList<Structure>> structures;
+    private Optional<HolderSet<Structure>> structures;
 
     @Shadow @Final @Mutable
-    private Optional<RegistryKey<World>> dimension;
+    private Optional<ResourceKey<Level>> dimension;
 
     @Shadow @Final @Mutable
     private Optional<Boolean> smokey;
@@ -55,8 +51,8 @@ public abstract class LocationPredicateMixin implements ZineLocationPredicate {
     private Optional<Boolean> canSeeSky;
 
     @Override
-    public void zine$setPosition(NumberRange.DoubleRange x, NumberRange.DoubleRange y, NumberRange.DoubleRange z) {
-        this.position = LocationPredicate.PositionRange.create(x, y, z);
+    public void zine$setPosition(MinMaxBounds.Doubles x, MinMaxBounds.Doubles y, MinMaxBounds.Doubles z) {
+        this.position = LocationPredicate.PositionPredicate.of(x, y, z);
     }
 
     @Override
@@ -65,30 +61,30 @@ public abstract class LocationPredicateMixin implements ZineLocationPredicate {
     }
 
     @Override
-    public void zine$setBiomes(@Nullable RegistryEntryList<Biome> biomes) {
+    public void zine$setBiomes(@Nullable HolderSet<Biome> biomes) {
         this.biomes = Optional.ofNullable(biomes);
     }
 
     @Override
-    public void zine$addBiome(RegistryEntry<Biome> biome) {
+    public void zine$addBiome(Holder<Biome> biome) {
         if(this.biomes.isPresent()) {
             this.biomes = Optional.of(ZineUtil.mergeValue(this.biomes.get(), Function.identity(), biome));
             return;
         }
-        this.biomes = Optional.of(RegistryEntryList.of(biome));
+        this.biomes = Optional.of(HolderSet.direct(biome));
     }
 
     @Override
-    public void zine$addBiome(RegistryEntryLookup<Biome> biomeLookup, RegistryKey<Biome> biome) {
+    public void zine$addBiome(HolderGetter<Biome> biomeLookup, ResourceKey<Biome> biome) {
         if(this.biomes.isPresent()) {
             this.biomes = Optional.of(ZineUtil.mergeValue(this.biomes.get(), biomeLookup::getOrThrow, biome));
             return;
         }
-        this.biomes = Optional.of(RegistryEntryList.of(biomeLookup::getOrThrow, biome));
+        this.biomes = Optional.of(HolderSet.direct(biomeLookup::getOrThrow, biome));
     }
 
     @Override
-    public void zine$addBiomes(RegistryEntryList<Biome> biomes) {
+    public void zine$addBiomes(HolderSet<Biome> biomes) {
         if(this.biomes.isPresent()) {
             this.biomes = Optional.of(ZineUtil.mergeValues(this.biomes.get(), biomes));
             return;
@@ -97,48 +93,48 @@ public abstract class LocationPredicateMixin implements ZineLocationPredicate {
     }
 
     @Override
-    public void zine$addBiomes(RegistryEntryLookup<Biome> biomeLookup, Collection<RegistryKey<Biome>> biomes) {
+    public void zine$addBiomes(HolderGetter<Biome> biomeLookup, Collection<ResourceKey<Biome>> biomes) {
         if(this.biomes.isPresent()) {
             this.biomes = Optional.of(ZineUtil.mergeValues(this.biomes.get(), biomeLookup::getOrThrow, biomes));
             return;
         }
-        this.biomes = Optional.of(RegistryEntryList.of(biomeLookup::getOrThrow, biomes));
+        this.biomes = Optional.of(HolderSet.direct(biomeLookup::getOrThrow, biomes));
     }
 
     @Override
-    public void zine$setStructures(@Nullable RegistryEntryList<Structure> structures) {
+    public void zine$setStructures(@Nullable HolderSet<Structure> structures) {
         this.structures = Optional.ofNullable(structures);
     }
 
     @Override
-    public void zine$addStructure(RegistryEntry<Structure> structure) {
+    public void zine$addStructure(Holder<Structure> structure) {
         if(this.structures.isPresent()) {
             this.structures = Optional.of(ZineUtil.mergeValue(this.structures.get(), Function.identity(), structure));
             return;
         }
-        this.structures = Optional.of(RegistryEntryList.of(structure));
+        this.structures = Optional.of(HolderSet.direct(structure));
     }
 
     @Override
-    public void zine$addStructure(RegistryEntryLookup<Structure> structureLookup, RegistryKey<Structure> structure) {
+    public void zine$addStructure(HolderGetter<Structure> structureLookup, ResourceKey<Structure> structure) {
         if(this.structures.isPresent()) {
             this.structures = Optional.of(ZineUtil.mergeValue(this.structures.get(), structureLookup::getOrThrow, structure));
             return;
         }
-        this.structures = Optional.of(RegistryEntryList.of(structureLookup::getOrThrow, structure));
+        this.structures = Optional.of(HolderSet.direct(structureLookup::getOrThrow, structure));
     }
 
     @Override
-    public void zine$addStructures(RegistryEntryLookup<Structure> structureLookup, Collection<RegistryKey<Structure>> structures) {
+    public void zine$addStructures(HolderGetter<Structure> structureLookup, Collection<ResourceKey<Structure>> structures) {
         if(this.structures.isPresent()) {
             this.structures = Optional.of(ZineUtil.mergeValues(this.structures.get(), structureLookup::getOrThrow, structures));
             return;
         }
-        this.structures = Optional.of(RegistryEntryList.of(structureLookup::getOrThrow, structures));
+        this.structures = Optional.of(HolderSet.direct(structureLookup::getOrThrow, structures));
     }
 
     @Override
-    public void zine$addStructures(RegistryEntryList<Structure> structures) {
+    public void zine$addStructures(HolderSet<Structure> structures) {
         if(this.structures.isPresent()) {
             this.structures = Optional.of(ZineUtil.mergeValues(this.structures.get(), structures));
             return;
@@ -147,7 +143,7 @@ public abstract class LocationPredicateMixin implements ZineLocationPredicate {
     }
 
     @Override
-    public void zine$setDimension(@Nullable RegistryKey<World> dimension) {
+    public void zine$setDimension(@Nullable ResourceKey<Level> dimension) {
         this.dimension = Optional.ofNullable(dimension);
     }
 

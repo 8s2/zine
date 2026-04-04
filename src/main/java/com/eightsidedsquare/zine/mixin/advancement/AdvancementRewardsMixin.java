@@ -2,11 +2,11 @@ package com.eightsidedsquare.zine.mixin.advancement;
 
 import com.eightsidedsquare.zine.common.advancement.ZineAdvancementRewards;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import net.minecraft.advancement.AdvancementRewards;
-import net.minecraft.loot.LootTable;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.server.function.LazyContainer;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.commands.CacheableFunction;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,13 +23,13 @@ public abstract class AdvancementRewardsMixin implements ZineAdvancementRewards 
     private int experience;
 
     @Shadow @Final @Mutable
-    private List<RegistryKey<LootTable>> loot;
+    private List<ResourceKey<LootTable>> loot;
 
     @Shadow @Final @Mutable
-    private List<RegistryKey<Recipe<?>>> recipes;
+    private List<ResourceKey<Recipe<?>>> recipes;
 
     @Shadow @Final @Mutable
-    private Optional<LazyContainer> function;
+    private Optional<CacheableFunction> function;
 
     @Override
     public void zine$setExperience(int experience) {
@@ -37,37 +37,37 @@ public abstract class AdvancementRewardsMixin implements ZineAdvancementRewards 
     }
 
     @Override
-    public void zine$setLoot(List<RegistryKey<LootTable>> loot) {
+    public void zine$setLoot(List<ResourceKey<LootTable>> loot) {
         this.loot = loot;
     }
 
     @Override
-    public void zine$addLootTable(RegistryKey<LootTable> lootTable) {
+    public void zine$addLootTable(ResourceKey<LootTable> lootTable) {
         this.loot = ZineUtil.addOrUnfreeze(this.loot, lootTable);
     }
 
     @Override
-    public void zine$addLootTables(List<RegistryKey<LootTable>> lootTables) {
+    public void zine$addLootTables(List<ResourceKey<LootTable>> lootTables) {
         this.loot = ZineUtil.addAllOrUnfreeze(this.loot, lootTables);
     }
 
     @Override
-    public void zine$setRecipes(List<RegistryKey<Recipe<?>>> recipes) {
+    public void zine$setRecipes(List<ResourceKey<Recipe<?>>> recipes) {
         this.recipes = recipes;
     }
 
     @Override
-    public void zine$addRecipe(RegistryKey<Recipe<?>> recipe) {
+    public void zine$addRecipe(ResourceKey<Recipe<?>> recipe) {
         this.recipes = ZineUtil.addOrUnfreeze(this.recipes, recipe);
     }
 
     @Override
-    public void zine$addRecipes(List<RegistryKey<Recipe<?>>> recipes) {
+    public void zine$addRecipes(List<ResourceKey<Recipe<?>>> recipes) {
         this.recipes = ZineUtil.addAllOrUnfreeze(this.recipes, recipes);
     }
 
     @Override
-    public void zine$setFunction(@Nullable LazyContainer function) {
+    public void zine$setFunction(@Nullable CacheableFunction function) {
         this.function = Optional.ofNullable(function);
     }
 }

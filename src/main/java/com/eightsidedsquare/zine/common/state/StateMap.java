@@ -1,10 +1,10 @@
 package com.eightsidedsquare.zine.common.state;
 
-import net.minecraft.state.State;
+import net.minecraft.world.level.block.state.StateHolder;
 
 public interface StateMap<V> {
 
-    V get(State<?, ?> state);
+    V get(StateHolder<?, ?> state);
 
 }
 

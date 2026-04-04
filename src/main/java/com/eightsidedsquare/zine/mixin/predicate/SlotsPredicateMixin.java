@@ -2,9 +2,9 @@ package com.eightsidedsquare.zine.mixin.predicate;
 
 import com.eightsidedsquare.zine.common.predicate.ZineSlotsPredicate;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import net.minecraft.inventory.SlotRange;
-import net.minecraft.predicate.entity.SlotsPredicate;
-import net.minecraft.predicate.item.ItemPredicate;
+import net.minecraft.advancements.criterion.ItemPredicate;
+import net.minecraft.advancements.criterion.SlotsPredicate;
+import net.minecraft.world.inventory.SlotRange;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;

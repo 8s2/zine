@@ -10,13 +10,13 @@ import java.util.List;
 
 public record Gradient2D(List<GradientPoint<Gradient1D>> points) implements Gradient {
 
-    private static final Codec<GradientPoint<Gradient1D>> POINT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    private static final Codec<GradientPoint<Gradient1D>> POINT_CODEC = RecordCodecBuilder.create(i -> i.group(
             Gradient1D.CODEC.fieldOf("gradient").forGetter(GradientPoint::v),
             Codec.floatRange(0, 1).fieldOf("t").forGetter(GradientPoint::t)
-    ).apply(instance, GradientPoint::new));
-    public static final MapCodec<Gradient2D> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    ).apply(i, GradientPoint::new));
+    public static final MapCodec<Gradient2D> MAP_CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             CodecUtil.nonEmptyListCodec(POINT_CODEC).fieldOf("pts").forGetter(Gradient2D::points)
-    ).apply(instance, Gradient2D::new));
+    ).apply(i, Gradient2D::new));
     public static final Codec<Gradient2D> CODEC = CodecUtil.nonEmptyListCodec(POINT_CODEC).xmap(
             Gradient2D::new,
             Gradient2D::points

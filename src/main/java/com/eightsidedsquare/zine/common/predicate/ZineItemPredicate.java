@@ -1,16 +1,16 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import net.minecraft.item.Item;
-import net.minecraft.predicate.NumberRange;
-import net.minecraft.predicate.component.ComponentsPredicate;
-import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.advancements.criterion.DataComponentMatchers;
+import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.core.HolderSet;
+import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
 public interface ZineItemPredicate {
 
-    default void zine$setItems(@Nullable RegistryEntryList<Item> items) {
+    default void zine$setItems(@Nullable HolderSet<Item> items) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
@@ -22,11 +22,11 @@ public interface ZineItemPredicate {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setCount(NumberRange.IntRange count) {
+    default void zine$setCount(MinMaxBounds.Ints count) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setComponents(ComponentsPredicate components) {
+    default void zine$setComponents(DataComponentMatchers components) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 

@@ -27,7 +27,7 @@
   "depends": {
     "zine": "*",
     "fabricloader": "*",
-    "fabric": "*",
+    "fabric-api": "*",
     "minecraft": "*"
   }
 }

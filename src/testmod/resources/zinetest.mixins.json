@@ -1,16 +1,18 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "com.eightsidedsquare.zinetest.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "AxolotlBrainMixin"
   ],
   "client": [
-    "client.AllayEntityModelMixin",
+    "client.AdvancementTabMixin",
+    "client.AllayModelMixin",
     "client.ModelMixin"
   ],
   "injectors": {
     "defaultRequire": 1
+  },
+  "mixinextras": {
+    "minVersion": "0.5.0"
   }
 }

@@ -2,7 +2,7 @@ package com.eightsidedsquare.zine.mixin.advancement;
 
 import com.eightsidedsquare.zine.common.advancement.ZineAdvancementRequirements;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import net.minecraft.advancement.AdvancementRequirements;
+import net.minecraft.advancements.AdvancementRequirements;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;

@@ -4,9 +4,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
-import net.minecraft.client.data.ModelSupplier;
-import net.minecraft.client.data.TextureMap;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.data.models.model.ModelInstance;
+import net.minecraft.client.data.models.model.TextureMapping;
+import net.minecraft.resources.Identifier;
 
 import java.util.function.BiConsumer;
 
@@ -28,10 +28,10 @@ public final class ModelEvents {
     public interface AddUnbaked {
         /**
          * Called to add unbaked json models to the game.
-         * @see net.minecraft.client.data.Model#upload(Identifier, TextureMap, BiConsumer)
+         * @see net.minecraft.client.data.models.model.ModelTemplate#create(Identifier, TextureMapping, BiConsumer)
          * @param modelCollector a consumer that accepts the id of a model and a supplier for it in JSON form
          */
-        void addUnbakedModels(BiConsumer<Identifier, ModelSupplier> modelCollector);
+        void addUnbakedModels(BiConsumer<Identifier, ModelInstance> modelCollector);
     }
 
 }

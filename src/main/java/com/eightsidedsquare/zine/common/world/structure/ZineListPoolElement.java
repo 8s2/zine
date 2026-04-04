@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.common.world.structure;
 
-import net.minecraft.structure.pool.StructurePoolElement;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 
 import java.util.List;
 

@@ -1,22 +1,22 @@
 package com.eightsidedsquare.zine.common.block;
 
 import com.eightsidedsquare.zine.common.registry.FreezeRegistriesEvents;
-import net.minecraft.block.Block;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 
 public final class ModifyBlockSoundGroupContextImpl implements ModifyBlockSoundGroupCallback.Context {
 
     public static void registerEvents() {
-        FreezeRegistriesEvents.beforeFreeze(RegistryKeys.BLOCK)
+        FreezeRegistriesEvents.beforeFreeze(Registries.BLOCK)
                 .register(registry ->
                         ModifyBlockSoundGroupCallback.EVENT.invoker().modify(new ModifyBlockSoundGroupContextImpl())
                 );
     }
 
     @Override
-    public void setSoundGroup(Block block, BlockSoundGroup soundGroup) {
-        block.soundGroup = soundGroup;
+    public void setSoundGroup(Block block, SoundType soundGroup) {
+        block.soundType = soundGroup;
     }
 
     private ModifyBlockSoundGroupContextImpl() {

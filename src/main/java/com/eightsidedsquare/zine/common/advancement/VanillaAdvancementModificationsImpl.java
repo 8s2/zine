@@ -1,32 +1,34 @@
 package com.eightsidedsquare.zine.common.advancement;
 
+import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Reference2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Reference2BooleanOpenHashMap;
-import net.minecraft.advancement.Advancement;
-import net.minecraft.advancement.criterion.*;
-import net.minecraft.block.Block;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.passive.CatVariant;
-import net.minecraft.entity.passive.FrogVariant;
-import net.minecraft.entity.passive.WolfVariant;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.condition.LocationCheckLootCondition;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.condition.MatchToolLootCondition;
-import net.minecraft.predicate.component.ComponentMapPredicate;
-import net.minecraft.predicate.component.ComponentsPredicate;
-import net.minecraft.predicate.entity.EntityPredicate;
-import net.minecraft.predicate.entity.LocationPredicate;
-import net.minecraft.predicate.item.ItemPredicate;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.registry.*;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.criterion.*;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentExactPredicate;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.feline.CatVariant;
+import net.minecraft.world.entity.animal.frog.FrogVariant;
+import net.minecraft.world.entity.animal.wolf.WolfVariant;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.predicates.LocationCheck;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 
 import java.util.Comparator;
 import java.util.List;
@@ -37,49 +39,49 @@ public final class VanillaAdvancementModificationsImpl {
     private VanillaAdvancementModificationsImpl() {
     }
 
-    private static final Identifier ADVENTURING_TIME_ID = Identifier.ofVanilla("adventure/adventuring_time");
-    private static final Identifier ALL_EFFECTS_ID = Identifier.ofVanilla("nether/all_effects");
-    private static final Identifier ALL_POTIONS_ID = Identifier.ofVanilla("nether/all_potions");
-    private static final Identifier BALANCED_DIET_ID = Identifier.ofVanilla("husbandry/balanced_diet");
-    private static final Identifier BRED_ALL_ANIMALS_ID = Identifier.ofVanilla("husbandry/bred_all_animals");
-    private static final Identifier COMPLETE_CATALOGUE_ID = Identifier.ofVanilla("husbandry/complete_catalogue");
-    private static final Identifier EXPLORE_NETHER_ID = Identifier.ofVanilla("nether/explore_nether");
-    private static final Identifier FISHY_BUSINESS_ID = Identifier.ofVanilla("husbandry/fishy_business");
-    private static final Identifier FROGLIGHTS_ID = Identifier.ofVanilla("husbandry/froglights");
-    private static final Identifier KILL_A_MOB_ID = Identifier.ofVanilla("adventure/kill_a_mob");
-    private static final Identifier KILL_ALL_MOBS_ID = Identifier.ofVanilla("adventure/kill_all_mobs");
-    private static final Identifier LEASH_ALL_FROG_VARIANTS_ID = Identifier.ofVanilla("husbandry/leash_all_frog_variants");
-    private static final Identifier LIGHTEN_UP_ID = Identifier.ofVanilla("adventure/lighten_up");
-    private static final Identifier LOOT_BASTION_ID = Identifier.ofVanilla("nether/loot_bastion");
-    private static final Identifier PLANT_ANY_SNIFFER_SEED_ID = Identifier.ofVanilla("husbandry/plant_any_sniffer_seed");
-    private static final Identifier PLANT_SEED_ID = Identifier.ofVanilla("husbandry/plant_seed");
-    private static final Identifier SALVAGE_SHERD_ID = Identifier.ofVanilla("adventure/salvage_sherd");
-    private static final Identifier TACTICAL_FISHING_ID = Identifier.ofVanilla("husbandry/tactical_fishing");
-    private static final Identifier TRIM_WITH_ANY_ARMOR_PATTERN_ID = Identifier.ofVanilla("adventure/trim_with_any_armor_pattern");
-    private static final Identifier WAX_OFF_ID = Identifier.ofVanilla("husbandry/wax_off");
-    private static final Identifier WAX_ON_ID = Identifier.ofVanilla("husbandry/wax_on");
-    private static final Identifier WHOLE_PACK_ID = Identifier.ofVanilla("husbandry/whole_pack");
+    private static final Identifier ADVENTURING_TIME_ID = Identifier.withDefaultNamespace("adventure/adventuring_time");
+    private static final Identifier ALL_EFFECTS_ID = Identifier.withDefaultNamespace("nether/all_effects");
+    private static final Identifier ALL_POTIONS_ID = Identifier.withDefaultNamespace("nether/all_potions");
+    private static final Identifier BALANCED_DIET_ID = Identifier.withDefaultNamespace("husbandry/balanced_diet");
+    private static final Identifier BRED_ALL_ANIMALS_ID = Identifier.withDefaultNamespace("husbandry/bred_all_animals");
+    private static final Identifier COMPLETE_CATALOGUE_ID = Identifier.withDefaultNamespace("husbandry/complete_catalogue");
+    private static final Identifier EXPLORE_NETHER_ID = Identifier.withDefaultNamespace("nether/explore_nether");
+    private static final Identifier FISHY_BUSINESS_ID = Identifier.withDefaultNamespace("husbandry/fishy_business");
+    private static final Identifier FROGLIGHTS_ID = Identifier.withDefaultNamespace("husbandry/froglights");
+    private static final Identifier KILL_A_MOB_ID = Identifier.withDefaultNamespace("adventure/kill_a_mob");
+    private static final Identifier KILL_ALL_MOBS_ID = Identifier.withDefaultNamespace("adventure/kill_all_mobs");
+    private static final Identifier LEASH_ALL_FROG_VARIANTS_ID = Identifier.withDefaultNamespace("husbandry/leash_all_frog_variants");
+    private static final Identifier LIGHTEN_UP_ID = Identifier.withDefaultNamespace("adventure/lighten_up");
+    private static final Identifier LOOT_BASTION_ID = Identifier.withDefaultNamespace("nether/loot_bastion");
+    private static final Identifier PLANT_ANY_SNIFFER_SEED_ID = Identifier.withDefaultNamespace("husbandry/plant_any_sniffer_seed");
+    private static final Identifier PLANT_SEED_ID = Identifier.withDefaultNamespace("husbandry/plant_seed");
+    private static final Identifier SALVAGE_SHERD_ID = Identifier.withDefaultNamespace("adventure/salvage_sherd");
+    private static final Identifier TACTICAL_FISHING_ID = Identifier.withDefaultNamespace("husbandry/tactical_fishing");
+    private static final Identifier TRIM_WITH_ANY_ARMOR_PATTERN_ID = Identifier.withDefaultNamespace("adventure/trim_with_any_armor_pattern");
+    private static final Identifier WAX_OFF_ID = Identifier.withDefaultNamespace("husbandry/wax_off");
+    private static final Identifier WAX_ON_ID = Identifier.withDefaultNamespace("husbandry/wax_on");
+    private static final Identifier WHOLE_PACK_ID = Identifier.withDefaultNamespace("husbandry/whole_pack");
 
-    private static final TreeSet<RegistryKey<Biome>> ADVENTURING_TIME_BIOMES = registryKeySet();
-    private static final Reference2BooleanMap<RegistryEntry<StatusEffect>> ALL_EFFECTS_STATUS_EFFECTS = new Reference2BooleanOpenHashMap<>();
-    private static final TreeSet<Item> BALANCED_DIET_ITEMS = set(Registries.ITEM);
+    private static final TreeSet<ResourceKey<Biome>> ADVENTURING_TIME_BIOMES = registryKeySet();
+    private static final Reference2BooleanMap<Holder<MobEffect>> ALL_EFFECTS_STATUS_EFFECTS = new Reference2BooleanOpenHashMap<>();
+    private static final TreeSet<Item> BALANCED_DIET_ITEMS = set(BuiltInRegistries.ITEM);
     private static final Reference2BooleanMap<EntityType<?>> BREEDABLE_ANIMALS = new Reference2BooleanOpenHashMap<>();
-    private static final TreeSet<RegistryKey<CatVariant>> COMPLETE_CATALOGUE_CAT_VARIANTS = registryKeySet();
-    private static final TreeSet<RegistryKey<Biome>> EXPLORE_NETHER_BIOMES = registryKeySet();
-    private static final TreeSet<Item> FISHY_BUSINESS_ITEMS = set(Registries.ITEM);
-    private static final TreeSet<Item> FROGLIGHTS_ITEMS = set(Registries.ITEM);
-    private static final TreeSet<EntityType<?>> KILLABLE_MOBS = set(Registries.ENTITY_TYPE);
-    private static final TreeSet<RegistryKey<FrogVariant>> LEASH_ALL_FROG_VARIANTS_FROG_VARIANTS = registryKeySet();
-    private static final TreeSet<Block> LIGHTEN_UP_BLOCKS = set(Registries.BLOCK);
-    private static final TreeSet<RegistryKey<LootTable>> LOOT_BASTION_LOOT_TABLES = registryKeySet();
+    private static final TreeSet<ResourceKey<CatVariant>> COMPLETE_CATALOGUE_CAT_VARIANTS = registryKeySet();
+    private static final TreeSet<ResourceKey<Biome>> EXPLORE_NETHER_BIOMES = registryKeySet();
+    private static final TreeSet<Item> FISHY_BUSINESS_ITEMS = set(BuiltInRegistries.ITEM);
+    private static final TreeSet<Item> FROGLIGHTS_ITEMS = set(BuiltInRegistries.ITEM);
+    private static final TreeSet<EntityType<?>> KILLABLE_MOBS = set(BuiltInRegistries.ENTITY_TYPE);
+    private static final TreeSet<ResourceKey<FrogVariant>> LEASH_ALL_FROG_VARIANTS_FROG_VARIANTS = registryKeySet();
+    private static final TreeSet<Block> LIGHTEN_UP_BLOCKS = set(BuiltInRegistries.BLOCK);
+    private static final TreeSet<ResourceKey<LootTable>> LOOT_BASTION_LOOT_TABLES = registryKeySet();
     private static final Reference2BooleanMap<Block> PLANT_SEED_BLOCKS = new Reference2BooleanOpenHashMap<>();
-    private static final TreeSet<RegistryKey<LootTable>> SALVAGE_SHERD_LOOT_TABLES = registryKeySet();
-    private static final TreeSet<Item> SCRAPING_AXE_ITEMS = set(Registries.ITEM);
-    private static final TreeSet<Item> TACTICAL_FISHING_ITEMS = set(Registries.ITEM);
-    private static final TreeSet<RegistryKey<Recipe<?>>> TRIM_WITH_ANY_ARMOR_PATTERN_RECIPES = registryKeySet();
-    private static final TreeSet<Block> WAX_OFF_BLOCKS = set(Registries.BLOCK);
-    private static final TreeSet<Block> WAX_ON_BLOCKS = set(Registries.BLOCK);
-    private static final TreeSet<RegistryKey<WolfVariant>> WHOLE_PACK_WOLF_VARIANTS = registryKeySet();
+    private static final TreeSet<ResourceKey<LootTable>> SALVAGE_SHERD_LOOT_TABLES = registryKeySet();
+    private static final TreeSet<Item> SCRAPING_AXE_ITEMS = set(BuiltInRegistries.ITEM);
+    private static final TreeSet<Item> TACTICAL_FISHING_ITEMS = set(BuiltInRegistries.ITEM);
+    private static final TreeSet<ResourceKey<Recipe<?>>> TRIM_WITH_ANY_ARMOR_PATTERN_RECIPES = registryKeySet();
+    private static final TreeSet<Block> WAX_OFF_BLOCKS = set(BuiltInRegistries.BLOCK);
+    private static final TreeSet<Block> WAX_ON_BLOCKS = set(BuiltInRegistries.BLOCK);
+    private static final TreeSet<ResourceKey<WolfVariant>> WHOLE_PACK_WOLF_VARIANTS = registryKeySet();
 
     public static void registerEvents() {
         AdvancementEvents.modifyAdvancement(ADVENTURING_TIME_ID, VanillaAdvancementModificationsImpl::modifyAdventuringTime);
@@ -106,11 +108,11 @@ public final class VanillaAdvancementModificationsImpl {
         AdvancementEvents.modifyAdvancement(WHOLE_PACK_ID, VanillaAdvancementModificationsImpl::modifyWholePack);
     }
 
-    public static void registerAdventuringTimeBiome(RegistryKey<Biome> biomeKey) {
+    public static void registerAdventuringTimeBiome(ResourceKey<Biome> biomeKey) {
         ADVENTURING_TIME_BIOMES.add(biomeKey);
     }
 
-    public static void registerAllEffectsStatusEffect(RegistryEntry<StatusEffect> statusEffect, boolean potion) {
+    public static void registerAllEffectsStatusEffect(Holder<MobEffect> statusEffect, boolean potion) {
         ALL_EFFECTS_STATUS_EFFECTS.put(statusEffect, potion);
     }
 
@@ -122,11 +124,11 @@ public final class VanillaAdvancementModificationsImpl {
         BREEDABLE_ANIMALS.put(entityType, laysEgg);
     }
 
-    public static void registerCompleteCatalogueCatVariant(RegistryKey<CatVariant> catVariantKey) {
+    public static void registerCompleteCatalogueCatVariant(ResourceKey<CatVariant> catVariantKey) {
         COMPLETE_CATALOGUE_CAT_VARIANTS.add(catVariantKey);
     }
 
-    public static void registerExploreNetherBiome(RegistryKey<Biome> biomeKey) {
+    public static void registerExploreNetherBiome(ResourceKey<Biome> biomeKey) {
         EXPLORE_NETHER_BIOMES.add(biomeKey);
     }
 
@@ -142,7 +144,7 @@ public final class VanillaAdvancementModificationsImpl {
         KILLABLE_MOBS.add(entityType);
     }
 
-    public static void registerLeashAllFrogVariantsFrogVariant(RegistryKey<FrogVariant> frogVariantKey) {
+    public static void registerLeashAllFrogVariantsFrogVariant(ResourceKey<FrogVariant> frogVariantKey) {
         LEASH_ALL_FROG_VARIANTS_FROG_VARIANTS.add(frogVariantKey);
     }
 
@@ -150,7 +152,7 @@ public final class VanillaAdvancementModificationsImpl {
         LIGHTEN_UP_BLOCKS.add(block);
     }
 
-    public static void registerLootBastionLootTable(RegistryKey<LootTable> lootTableKey) {
+    public static void registerLootBastionLootTable(ResourceKey<LootTable> lootTableKey) {
         LOOT_BASTION_LOOT_TABLES.add(lootTableKey);
     }
 
@@ -158,7 +160,7 @@ public final class VanillaAdvancementModificationsImpl {
         PLANT_SEED_BLOCKS.put(block, fromSniffer);
     }
 
-    public static void registerSalvageSherdLootTable(RegistryKey<LootTable> lootTableKey) {
+    public static void registerSalvageSherdLootTable(ResourceKey<LootTable> lootTableKey) {
         SALVAGE_SHERD_LOOT_TABLES.add(lootTableKey);
     }
 
@@ -170,7 +172,7 @@ public final class VanillaAdvancementModificationsImpl {
         TACTICAL_FISHING_ITEMS.add(item);
     }
 
-    public static void registerTrimWithAnyArmorPatternRecipe(RegistryKey<Recipe<?>> recipeKey) {
+    public static void registerTrimWithAnyArmorPatternRecipe(ResourceKey<Recipe<?>> recipeKey) {
         TRIM_WITH_ANY_ARMOR_PATTERN_RECIPES.add(recipeKey);
     }
 
@@ -182,18 +184,18 @@ public final class VanillaAdvancementModificationsImpl {
         WAX_ON_BLOCKS.add(block);
     }
 
-    public static void registerWholePackWolfVariant(RegistryKey<WolfVariant> wolfVariantKey) {
+    public static void registerWholePackWolfVariant(ResourceKey<WolfVariant> wolfVariantKey) {
         WHOLE_PACK_WOLF_VARIANTS.add(wolfVariantKey);
     }
 
-    private static Advancement modifyAdventuringTime(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        lookup.getOptional(RegistryKeys.BIOME).ifPresent(biomeLookup -> {
-            for(RegistryKey<Biome> biomeKey : ADVENTURING_TIME_BIOMES) {
-                Optional<RegistryEntry.Reference<Biome>> biome = biomeLookup.getOptional(biomeKey);
+    private static Advancement modifyAdventuringTime(Advancement advancement, HolderLookup.Provider lookup) {
+        lookup.lookup(Registries.BIOME).ifPresent(biomeLookup -> {
+            for(ResourceKey<Biome> biomeKey : ADVENTURING_TIME_BIOMES) {
+                Optional<Holder.Reference<Biome>> biome = biomeLookup.get(biomeKey);
                 if(biome.isPresent()) {
-                    String name = biomeKey.getValue().toString();
-                    advancement.zine$addCriterion(name, TickCriterion.Conditions.createLocation(
-                            LocationPredicate.Builder.createBiome(biome.get())
+                    String name = biomeKey.identifier().toString();
+                    advancement.zine$addCriterion(name, PlayerTrigger.TriggerInstance.located(
+                            LocationPredicate.Builder.inBiome(biome.get())
                     ));
                     advancement.requirements().zine$addRequirement(List.of(name));
                 }
@@ -202,16 +204,16 @@ public final class VanillaAdvancementModificationsImpl {
         return advancement;
     }
 
-    private static Advancement modifyAllEffects(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        advancement.zine$getCriterion("all_effects", Criteria.EFFECTS_CHANGED)
-                .flatMap(EffectsChangedCriterion.Conditions::effects)
+    private static Advancement modifyAllEffects(Advancement advancement, HolderLookup.Provider lookup) {
+        advancement.zine$getCriterion("all_effects", CriteriaTriggers.EFFECTS_CHANGED)
+                .flatMap(EffectsChangedTrigger.TriggerInstance::effects)
                 .ifPresent(predicate -> ALL_EFFECTS_STATUS_EFFECTS.keySet().forEach(predicate::zine$addEffect));
         return advancement;
     }
 
-    private static Advancement modifyAllPotions(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        advancement.zine$getCriterion("all_effects", Criteria.EFFECTS_CHANGED)
-                .flatMap(EffectsChangedCriterion.Conditions::effects)
+    private static Advancement modifyAllPotions(Advancement advancement, HolderLookup.Provider lookup) {
+        advancement.zine$getCriterion("all_effects", CriteriaTriggers.EFFECTS_CHANGED)
+                .flatMap(EffectsChangedTrigger.TriggerInstance::effects)
                 .ifPresent(predicate -> ALL_EFFECTS_STATUS_EFFECTS.forEach((statusEffect, potion) -> {
                     if(potion) {
                         predicate.zine$addEffect(statusEffect);
@@ -220,30 +222,30 @@ public final class VanillaAdvancementModificationsImpl {
         return advancement;
     }
 
-    private static Advancement modifyBalancedDiet(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
+    private static Advancement modifyBalancedDiet(Advancement advancement, HolderLookup.Provider lookup) {
         for(Item item : BALANCED_DIET_ITEMS) {
-            String name = Registries.ITEM.getId(item).toString();
-            advancement.zine$addCriterion(name, ConsumeItemCriterion.Conditions.item(Registries.ITEM, item));
+            String name = BuiltInRegistries.ITEM.getKey(item).toString();
+            advancement.zine$addCriterion(name, ConsumeItemTrigger.TriggerInstance.usedItem(BuiltInRegistries.ITEM, item));
             advancement.requirements().zine$addRequirement(List.of(name));
         }
         return advancement;
     }
 
-    private static Advancement modifyBredAllAnimals(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
+    private static Advancement modifyBredAllAnimals(Advancement advancement, HolderLookup.Provider lookup) {
         for(Reference2BooleanMap.Entry<EntityType<?>> entry : BREEDABLE_ANIMALS.reference2BooleanEntrySet()) {
             EntityType<?> entityType = entry.getKey();
             boolean laysEgg = entry.getBooleanValue();
-            String name = Registries.ENTITY_TYPE.getId(entityType).toString();
+            String name = BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toString();
 
             if(laysEgg) {
-                advancement.zine$addCriterion(name, BredAnimalsCriterion.Conditions.create(
-                        Optional.of(EntityPredicate.Builder.create().type(Registries.ENTITY_TYPE, entityType).build()),
-                        Optional.of(EntityPredicate.Builder.create().type(Registries.ENTITY_TYPE, entityType).build()),
+                advancement.zine$addCriterion(name, BredAnimalsTrigger.TriggerInstance.bredAnimals(
+                        Optional.of(EntityPredicate.Builder.entity().of(BuiltInRegistries.ENTITY_TYPE, entityType).build()),
+                        Optional.of(EntityPredicate.Builder.entity().of(BuiltInRegistries.ENTITY_TYPE, entityType).build()),
                         Optional.empty()
                 ));
             }else {
-                advancement.zine$addCriterion(name, BredAnimalsCriterion.Conditions.create(
-                        EntityPredicate.Builder.create().type(Registries.ENTITY_TYPE, entityType)
+                advancement.zine$addCriterion(name, BredAnimalsTrigger.TriggerInstance.bredAnimals(
+                        EntityPredicate.Builder.entity().of(BuiltInRegistries.ENTITY_TYPE, entityType)
                 ));
             }
             advancement.requirements().zine$addRequirement(List.of(name));
@@ -251,16 +253,16 @@ public final class VanillaAdvancementModificationsImpl {
         return advancement;
     }
 
-    private static Advancement modifyCompleteCatalogue(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        lookup.getOptional(RegistryKeys.CAT_VARIANT).ifPresent(catVariantLookup -> {
-            for(RegistryKey<CatVariant> variantKey : COMPLETE_CATALOGUE_CAT_VARIANTS) {
-                Optional<RegistryEntry.Reference<CatVariant>> variant = catVariantLookup.getOptional(variantKey);
+    private static Advancement modifyCompleteCatalogue(Advancement advancement, HolderLookup.Provider lookup) {
+        lookup.lookup(Registries.CAT_VARIANT).ifPresent(catVariantLookup -> {
+            for(ResourceKey<CatVariant> variantKey : COMPLETE_CATALOGUE_CAT_VARIANTS) {
+                Optional<Holder.Reference<CatVariant>> variant = catVariantLookup.get(variantKey);
                 if(variant.isPresent()) {
-                    String name = variantKey.getValue().toString();
-                    advancement.zine$addCriterion(name, TameAnimalCriterion.Conditions.create(
-                            EntityPredicate.Builder.create().components(
-                                    ComponentsPredicate.Builder.create()
-                                            .exact(ComponentMapPredicate.of(DataComponentTypes.CAT_VARIANT, variant.get()))
+                    String name = variantKey.identifier().toString();
+                    advancement.zine$addCriterion(name, TameAnimalTrigger.TriggerInstance.tamedAnimal(
+                            EntityPredicate.Builder.entity().components(
+                                    DataComponentMatchers.Builder.components()
+                                            .exact(DataComponentExactPredicate.expect(DataComponents.CAT_VARIANT, variant.get()))
                                             .build()
                             )
                     ));
@@ -271,14 +273,14 @@ public final class VanillaAdvancementModificationsImpl {
         return advancement;
     }
 
-    private static Advancement modifyExploreNether(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        lookup.getOptional(RegistryKeys.BIOME).ifPresent(biomeLookup -> {
-            for(RegistryKey<Biome> biomeKey : EXPLORE_NETHER_BIOMES) {
-                Optional<RegistryEntry.Reference<Biome>> biome = biomeLookup.getOptional(biomeKey);
+    private static Advancement modifyExploreNether(Advancement advancement, HolderLookup.Provider lookup) {
+        lookup.lookup(Registries.BIOME).ifPresent(biomeLookup -> {
+            for(ResourceKey<Biome> biomeKey : EXPLORE_NETHER_BIOMES) {
+                Optional<Holder.Reference<Biome>> biome = biomeLookup.get(biomeKey);
                 if(biome.isPresent()) {
-                    String name = biomeKey.getValue().toString();
-                    advancement.zine$addCriterion(name, TickCriterion.Conditions.createLocation(
-                            LocationPredicate.Builder.createBiome(biome.get())
+                    String name = biomeKey.identifier().toString();
+                    advancement.zine$addCriterion(name, PlayerTrigger.TriggerInstance.located(
+                            LocationPredicate.Builder.inBiome(biome.get())
                     ));
                     advancement.requirements().zine$addRequirement(List.of(name));
                 }
@@ -287,65 +289,72 @@ public final class VanillaAdvancementModificationsImpl {
         return advancement;
     }
 
-    private static Advancement modifyFishyBusiness(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
+    private static Advancement modifyFishyBusiness(Advancement advancement, HolderLookup.Provider lookup) {
         for(Item item : FISHY_BUSINESS_ITEMS) {
-            String name = Registries.ITEM.getId(item).toString();
-            advancement.zine$addCriterion(name, FishingRodHookedCriterion.Conditions.create(
+            String name = BuiltInRegistries.ITEM.getKey(item).toString();
+            advancement.zine$addCriterion(name, FishingRodHookedTrigger.TriggerInstance.fishedItem(
                     Optional.empty(),
                     Optional.empty(),
-                    Optional.of(ItemPredicate.Builder.create().items(Registries.ITEM, item).build())
+                    Optional.of(ItemPredicate.Builder.item().of(BuiltInRegistries.ITEM, item).build())
             ));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
     }
 
-    private static Advancement modifyFroglights(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        advancement.zine$getCriterion("froglights", Criteria.INVENTORY_CHANGED).ifPresent(conditions ->
-                FROGLIGHTS_ITEMS.forEach(item ->
-                        conditions.zine$addItem(ItemPredicate.Builder.create().items(Registries.ITEM, item).build())
-                )
-        );
+    private static Advancement modifyFroglights(Advancement advancement, HolderLookup.Provider lookup) {
+        advancement.zine$getCriterion("froglights", CriteriaTriggers.INVENTORY_CHANGED).ifPresent(conditions -> {
+            ImmutableList.Builder<ItemPredicate> items = ImmutableList.builder();
+            items.addAll(conditions.items());
+            FROGLIGHTS_ITEMS.forEach(item -> items.add(ItemPredicate.Builder.item().of(BuiltInRegistries.ITEM, item).build()));
+            advancement.zine$addCriterion("froglights", CriteriaTriggers.INVENTORY_CHANGED.createCriterion(
+                    new InventoryChangeTrigger.TriggerInstance(
+                            conditions.player(),
+                            conditions.slots(),
+                            items.build()
+                    )
+            ));
+        });
         return advancement;
     }
 
-    private static Advancement modifyKillAMob(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
+    private static Advancement modifyKillAMob(Advancement advancement, HolderLookup.Provider lookup) {
         for(EntityType<?> entityType : KILLABLE_MOBS) {
-            String name = Registries.ENTITY_TYPE.getId(entityType).toString();
-            advancement.zine$addCriterion(name, OnKilledCriterion.Conditions.createPlayerKilledEntity(
-                    EntityPredicate.Builder.create().type(Registries.ENTITY_TYPE, entityType)
+            String name = BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toString();
+            advancement.zine$addCriterion(name, KilledTrigger.TriggerInstance.playerKilledEntity(
+                    EntityPredicate.Builder.entity().of(BuiltInRegistries.ENTITY_TYPE, entityType)
             ));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
     }
 
-    private static Advancement modifyKillAllMobs(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
+    private static Advancement modifyKillAllMobs(Advancement advancement, HolderLookup.Provider lookup) {
         for(EntityType<?> entityType : KILLABLE_MOBS) {
-            String name = Registries.ENTITY_TYPE.getId(entityType).toString();
-            advancement.zine$addCriterion(name, OnKilledCriterion.Conditions.createPlayerKilledEntity(
-                    EntityPredicate.Builder.create().type(Registries.ENTITY_TYPE, entityType)
+            String name = BuiltInRegistries.ENTITY_TYPE.getKey(entityType).toString();
+            advancement.zine$addCriterion(name, KilledTrigger.TriggerInstance.playerKilledEntity(
+                    EntityPredicate.Builder.entity().of(BuiltInRegistries.ENTITY_TYPE, entityType)
             ));
             advancement.requirements().zine$addRequirement(List.of(name));
         }
         return advancement;
     }
 
-    private static Advancement modifyLeashAllFrogVariants(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        lookup.getOptional(RegistryKeys.FROG_VARIANT).ifPresent(frogVariantLookup -> {
-            ItemPredicate.Builder leadPredicate = ItemPredicate.Builder.create().items(Registries.ITEM, Items.LEAD);
-            for(RegistryKey<FrogVariant> variantKey : LEASH_ALL_FROG_VARIANTS_FROG_VARIANTS) {
-                Optional<RegistryEntry.Reference<FrogVariant>> variant = frogVariantLookup.getOptional(variantKey);
+    private static Advancement modifyLeashAllFrogVariants(Advancement advancement, HolderLookup.Provider lookup) {
+        lookup.lookup(Registries.FROG_VARIANT).ifPresent(frogVariantLookup -> {
+            ItemPredicate.Builder leadPredicate = ItemPredicate.Builder.item().of(BuiltInRegistries.ITEM, Items.LEAD);
+            for(ResourceKey<FrogVariant> variantKey : LEASH_ALL_FROG_VARIANTS_FROG_VARIANTS) {
+                Optional<Holder.Reference<FrogVariant>> variant = frogVariantLookup.get(variantKey);
                 if(variant.isPresent()) {
-                    String name = variantKey.getValue().toString();
-                    advancement.zine$addCriterion(name, PlayerInteractedWithEntityCriterion.Conditions.create(
+                    String name = variantKey.identifier().toString();
+                    advancement.zine$addCriterion(name, PlayerInteractTrigger.TriggerInstance.itemUsedOnEntity(
                             leadPredicate,
                             Optional.of(
-                                    EntityPredicate.contextPredicateFromEntityPredicate(
-                                            EntityPredicate.Builder.create()
-                                                    .type(Registries.ENTITY_TYPE, EntityType.FROG)
-                                                    .components(ComponentsPredicate.Builder.create()
-                                                            .exact(ComponentMapPredicate.of(DataComponentTypes.FROG_VARIANT, variant.get()))
+                                    EntityPredicate.wrap(
+                                            EntityPredicate.Builder.entity()
+                                                    .of(BuiltInRegistries.ENTITY_TYPE, EntityType.FROG)
+                                                    .components(DataComponentMatchers.Builder.components()
+                                                            .exact(DataComponentExactPredicate.expect(DataComponents.FROG_VARIANT, variant.get()))
                                                             .build()
                                                     )
                                     )
@@ -358,16 +367,16 @@ public final class VanillaAdvancementModificationsImpl {
         return advancement;
     }
 
-    private static Advancement modifyLightenUp(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        advancement.zine$getCriterion("lighten_up", Criteria.ITEM_USED_ON_BLOCK)
-                .flatMap(ItemCriterion.Conditions::location)
+    private static Advancement modifyLightenUp(Advancement advancement, HolderLookup.Provider lookup) {
+        advancement.zine$getCriterion("lighten_up", CriteriaTriggers.ITEM_USED_ON_BLOCK)
+                .flatMap(ItemUsedOnLocationTrigger.TriggerInstance::location)
                 .ifPresent(predicate -> {
-                    for(LootCondition lootCondition : predicate.zine$getConditions()) {
-                        if(lootCondition instanceof LocationCheckLootCondition locationCondition) {
+                    for(LootItemCondition lootCondition : predicate.zine$getConditions()) {
+                        if(lootCondition instanceof LocationCheck locationCondition) {
                             locationCondition.predicate()
                                     .flatMap(LocationPredicate::block)
                                     .ifPresent(blockPredicate -> blockPredicate.zine$addBlocks(LIGHTEN_UP_BLOCKS));
-                        }else if(lootCondition instanceof MatchToolLootCondition(Optional<ItemPredicate> optional)) {
+                        }else if(lootCondition instanceof MatchTool(Optional<ItemPredicate> optional)) {
                             optional.ifPresent(itemPredicate -> itemPredicate.zine$addItems(SCRAPING_AXE_ITEMS));
                         }
                     }
@@ -375,76 +384,76 @@ public final class VanillaAdvancementModificationsImpl {
         return advancement;
     }
 
-    private static Advancement modifyLootBastion(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        for(RegistryKey<LootTable> lootTableKey : LOOT_BASTION_LOOT_TABLES) {
-            String name = lootTableKey.getValue().toString();
-            advancement.zine$addCriterion(name, PlayerGeneratesContainerLootCriterion.Conditions.create(lootTableKey));
+    private static Advancement modifyLootBastion(Advancement advancement, HolderLookup.Provider lookup) {
+        for(ResourceKey<LootTable> lootTableKey : LOOT_BASTION_LOOT_TABLES) {
+            String name = lootTableKey.identifier().toString();
+            advancement.zine$addCriterion(name, LootTableTrigger.TriggerInstance.lootTableUsed(lootTableKey));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
     }
 
-    private static Advancement modifyPlantAnySnifferSeed(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
+    private static Advancement modifyPlantAnySnifferSeed(Advancement advancement, HolderLookup.Provider lookup) {
         for(Reference2BooleanMap.Entry<Block> entry : PLANT_SEED_BLOCKS.reference2BooleanEntrySet()) {
             if(!entry.getBooleanValue()) {
                 continue;
             }
             Block block = entry.getKey();
-            String name = Registries.BLOCK.getId(block).toString();
-            advancement.zine$addCriterion(name, ItemCriterion.Conditions.createPlacedBlock(block));
+            String name = BuiltInRegistries.BLOCK.getKey(block).toString();
+            advancement.zine$addCriterion(name, ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(block));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
     }
 
-    private static Advancement modifyPlantSeed(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
+    private static Advancement modifyPlantSeed(Advancement advancement, HolderLookup.Provider lookup) {
         for(Block block : PLANT_SEED_BLOCKS.keySet()) {
-            String name = Registries.BLOCK.getId(block).toString();
-            advancement.zine$addCriterion(name, ItemCriterion.Conditions.createPlacedBlock(block));
+            String name = BuiltInRegistries.BLOCK.getKey(block).toString();
+            advancement.zine$addCriterion(name, ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(block));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
     }
 
-    private static Advancement modifySalvageSherd(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        for(RegistryKey<LootTable> lootTableKey : SALVAGE_SHERD_LOOT_TABLES) {
-            String name = lootTableKey.getValue().toString();
-            advancement.zine$addCriterion(name, PlayerGeneratesContainerLootCriterion.Conditions.create(lootTableKey));
+    private static Advancement modifySalvageSherd(Advancement advancement, HolderLookup.Provider lookup) {
+        for(ResourceKey<LootTable> lootTableKey : SALVAGE_SHERD_LOOT_TABLES) {
+            String name = lootTableKey.identifier().toString();
+            advancement.zine$addCriterion(name, LootTableTrigger.TriggerInstance.lootTableUsed(lootTableKey));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
     }
 
-    private static Advancement modifyTacticalFishing(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
+    private static Advancement modifyTacticalFishing(Advancement advancement, HolderLookup.Provider lookup) {
         for(Item item : TACTICAL_FISHING_ITEMS) {
-            String name = Registries.ITEM.getId(item).toString();
-            advancement.zine$addCriterion(name, FilledBucketCriterion.Conditions.create(
-                    ItemPredicate.Builder.create().items(Registries.ITEM, item)
+            String name = BuiltInRegistries.ITEM.getKey(item).toString();
+            advancement.zine$addCriterion(name, FilledBucketTrigger.TriggerInstance.filledBucket(
+                    ItemPredicate.Builder.item().of(BuiltInRegistries.ITEM, item)
             ));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
     }
 
-    private static Advancement modifyTrimWithAnyArmorPattern(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        for(RegistryKey<Recipe<?>> recipeKey : TRIM_WITH_ANY_ARMOR_PATTERN_RECIPES) {
-            String name = "armor_trimmed_" + recipeKey.getValue().toString();
-            advancement.zine$addCriterion(name, RecipeCraftedCriterion.Conditions.create(recipeKey));
+    private static Advancement modifyTrimWithAnyArmorPattern(Advancement advancement, HolderLookup.Provider lookup) {
+        for(ResourceKey<Recipe<?>> recipeKey : TRIM_WITH_ANY_ARMOR_PATTERN_RECIPES) {
+            String name = "armor_trimmed_" + recipeKey.identifier();
+            advancement.zine$addCriterion(name, RecipeCraftedTrigger.TriggerInstance.craftedItem(recipeKey));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
     }
 
-    private static Advancement modifyWaxOff(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        advancement.zine$getCriterion("wax_off", Criteria.ITEM_USED_ON_BLOCK)
-                .flatMap(ItemCriterion.Conditions::location)
+    private static Advancement modifyWaxOff(Advancement advancement, HolderLookup.Provider lookup) {
+        advancement.zine$getCriterion("wax_off", CriteriaTriggers.ITEM_USED_ON_BLOCK)
+                .flatMap(ItemUsedOnLocationTrigger.TriggerInstance::location)
                 .ifPresent(predicate -> {
-                    for(LootCondition lootCondition : predicate.zine$getConditions()) {
-                        if(lootCondition instanceof LocationCheckLootCondition locationCondition) {
+                    for(LootItemCondition lootCondition : predicate.zine$getConditions()) {
+                        if(lootCondition instanceof LocationCheck locationCondition) {
                             locationCondition.predicate()
                                     .flatMap(LocationPredicate::block)
                                     .ifPresent(blockPredicate -> blockPredicate.zine$addBlocks(WAX_OFF_BLOCKS));
-                        }else if(lootCondition instanceof MatchToolLootCondition(Optional<ItemPredicate> optional)) {
+                        }else if(lootCondition instanceof MatchTool(Optional<ItemPredicate> optional)) {
                             optional.ifPresent(itemPredicate -> itemPredicate.zine$addItems(SCRAPING_AXE_ITEMS));
                         }
                     }
@@ -452,12 +461,12 @@ public final class VanillaAdvancementModificationsImpl {
         return advancement;
     }
 
-    private static Advancement modifyWaxOn(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        advancement.zine$getCriterion("wax_on", Criteria.ITEM_USED_ON_BLOCK)
-                .flatMap(ItemCriterion.Conditions::location)
+    private static Advancement modifyWaxOn(Advancement advancement, HolderLookup.Provider lookup) {
+        advancement.zine$getCriterion("wax_on", CriteriaTriggers.ITEM_USED_ON_BLOCK)
+                .flatMap(ItemUsedOnLocationTrigger.TriggerInstance::location)
                 .ifPresent(predicate -> {
-                    for(LootCondition lootCondition : predicate.zine$getConditions()) {
-                        if(lootCondition instanceof LocationCheckLootCondition locationCondition) {
+                    for(LootItemCondition lootCondition : predicate.zine$getConditions()) {
+                        if(lootCondition instanceof LocationCheck locationCondition) {
                             locationCondition.predicate()
                                     .flatMap(LocationPredicate::block)
                                     .ifPresent(blockPredicate -> blockPredicate.zine$addBlocks(WAX_ON_BLOCKS));
@@ -467,16 +476,16 @@ public final class VanillaAdvancementModificationsImpl {
         return advancement;
     }
 
-    private static Advancement modifyWholePack(Advancement advancement, RegistryWrapper.WrapperLookup lookup) {
-        lookup.getOptional(RegistryKeys.WOLF_VARIANT).ifPresent(wolfVariantLookup -> {
-            for(RegistryKey<WolfVariant> variantKey : WHOLE_PACK_WOLF_VARIANTS) {
-                Optional<RegistryEntry.Reference<WolfVariant>> variant = wolfVariantLookup.getOptional(variantKey);
+    private static Advancement modifyWholePack(Advancement advancement, HolderLookup.Provider lookup) {
+        lookup.lookup(Registries.WOLF_VARIANT).ifPresent(wolfVariantLookup -> {
+            for(ResourceKey<WolfVariant> variantKey : WHOLE_PACK_WOLF_VARIANTS) {
+                Optional<Holder.Reference<WolfVariant>> variant = wolfVariantLookup.get(variantKey);
                 if(variant.isPresent()) {
-                    String name = variantKey.getValue().toString();
-                    advancement.zine$addCriterion(name, TameAnimalCriterion.Conditions.create(
-                            EntityPredicate.Builder.create().components(
-                                    ComponentsPredicate.Builder.create()
-                                            .exact(ComponentMapPredicate.of(DataComponentTypes.WOLF_VARIANT, variant.get()))
+                    String name = variantKey.identifier().toString();
+                    advancement.zine$addCriterion(name, TameAnimalTrigger.TriggerInstance.tamedAnimal(
+                            EntityPredicate.Builder.entity().components(
+                                    DataComponentMatchers.Builder.components()
+                                            .exact(DataComponentExactPredicate.expect(DataComponents.WOLF_VARIANT, variant.get()))
                                             .build()
                             )
                     ));
@@ -488,10 +497,10 @@ public final class VanillaAdvancementModificationsImpl {
     }
 
     private static <T> TreeSet<T> set(Registry<T> registry) {
-        return new TreeSet<>(Comparator.comparingInt(registry::getRawId));
+        return new TreeSet<>(Comparator.comparingInt(registry::getId));
     }
 
-    private static <T> TreeSet<RegistryKey<T>> registryKeySet() {
-        return new TreeSet<>(Comparator.comparing(RegistryKey::getValue));
+    private static <T> TreeSet<ResourceKey<T>> registryKeySet() {
+        return new TreeSet<>(Comparator.comparing(ResourceKey::identifier));
     }
 }

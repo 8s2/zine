@@ -1,24 +1,24 @@
 package com.eightsidedsquare.zine.common.world.structure;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.world.gen.feature.PlacedFeature;
+import net.minecraft.core.Holder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public interface ZineFeaturePoolElement {
 
-    default RegistryEntry<PlacedFeature> zine$getFeature() {
+    default Holder<PlacedFeature> zine$getFeature() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setFeature(RegistryEntry<PlacedFeature> feature) {
+    default void zine$setFeature(Holder<PlacedFeature> feature) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default NbtCompound zine$getNbt() {
+    default CompoundTag zine$getNbt() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setNbt(NbtCompound nbt) {
+    default void zine$setNbt(CompoundTag nbt) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 

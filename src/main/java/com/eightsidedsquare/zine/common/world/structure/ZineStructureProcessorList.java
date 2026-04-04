@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.common.world.structure;
 
-import net.minecraft.structure.processor.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 
 import java.util.List;
 

@@ -1,11 +1,11 @@
 package com.eightsidedsquare.zine.client.item;
 
-import net.minecraft.client.render.item.model.SelectItemModel;
-import net.minecraft.client.render.item.property.select.SelectProperty;
+import net.minecraft.client.renderer.item.SelectItemModel;
+import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
 
 import java.util.List;
 
-public interface ZineSelectItemModelUnbakedSwitch<P extends SelectProperty<T>, T> {
+public interface ZineSelectItemModelUnbakedSwitch<P extends SelectItemModelProperty<T>, T> {
 
     default void zine$setProperty(P property) {
         throw new UnsupportedOperationException("Implemented via mixin.");

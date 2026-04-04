@@ -4,15 +4,15 @@ import com.eightsidedsquare.zine.common.util.codec.CodecUtil;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.util.ExtraCodecs;
 
 import java.util.List;
 
 public record DiscreteGradient(List<Integer> colors) implements Gradient {
 
-    public static final MapCodec<DiscreteGradient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            CodecUtil.nonEmptyListCodec(Codecs.RGB).fieldOf("colors").forGetter(DiscreteGradient::colors)
-    ).apply(instance, DiscreteGradient::new));
+    public static final MapCodec<DiscreteGradient> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            CodecUtil.nonEmptyListCodec(ExtraCodecs.RGB_COLOR_CODEC).fieldOf("colors").forGetter(DiscreteGradient::colors)
+    ).apply(i, DiscreteGradient::new));
 
     public DiscreteGradient(int... colors) {
         this(IntList.of(colors));

@@ -1,9 +1,9 @@
 package com.eightsidedsquare.zine.client;
 
 import com.eightsidedsquare.zine.client.atlas.AtlasEvents;
-import com.eightsidedsquare.zine.client.atlas.ConnectedTexturesAtlasSource;
-import com.eightsidedsquare.zine.client.atlas.GeneratorAtlasSource;
-import com.eightsidedsquare.zine.client.atlas.RemapAtlasSource;
+import com.eightsidedsquare.zine.client.atlas.ConnectedTexturesSpriteSource;
+import com.eightsidedsquare.zine.client.atlas.GeneratorSpriteSource;
+import com.eightsidedsquare.zine.client.atlas.RemapSpriteSource;
 import com.eightsidedsquare.zine.client.atlas.generator.SpriteGenerator;
 import com.eightsidedsquare.zine.client.atlas.gradient.Gradient;
 import com.eightsidedsquare.zine.client.block.ConnectedBlockStateModel;
@@ -17,9 +17,9 @@ import com.eightsidedsquare.zine.client.trim.ArmorTrimRegistryImpl;
 import com.eightsidedsquare.zine.common.item.tooltip.CompositeTooltipData;
 import com.eightsidedsquare.zine.core.ZineMod;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
-import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.client.rendering.v1.ClientTooltipComponentCallback;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.resources.Identifier;
 
 public class ZineClient implements ClientModInitializer {
 
@@ -31,9 +31,11 @@ public class ZineClient implements ClientModInitializer {
 
         this.registerEvents();
 
-        REGISTRY.atlasSource("generator", GeneratorAtlasSource.CODEC);
-        REGISTRY.atlasSource("remap", RemapAtlasSource.CODEC);
-        REGISTRY.atlasSource("connected_textures", ConnectedTexturesAtlasSource.CODEC);
+//        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(MaterialMappingLoader.ID, MaterialMappingLoader.INSTANCE);
+
+        REGISTRY.spriteSource("generator", GeneratorSpriteSource.CODEC);
+        REGISTRY.spriteSource("remap", RemapSpriteSource.CODEC);
+        REGISTRY.spriteSource("connected_textures", ConnectedTexturesSpriteSource.CODEC);
 
         REGISTRY.blockStateModel("connected", ConnectedBlockStateModel.Unbaked.CODEC);
         REGISTRY.blockStateModel("tessellating", TessellatingBlockStateModel.Unbaked.CODEC);
@@ -45,13 +47,13 @@ public class ZineClient implements ClientModInitializer {
     }
 
     private void registerEvents() {
-        AtlasEvents.modifySourcesEvent(Identifier.ofVanilla("items")).register(ArmorTrimRegistryImpl::modifyItemsAtlas);
-        AtlasEvents.modifySourcesEvent(Identifier.ofVanilla("armor_trims")).register(ArmorTrimRegistryImpl::modifyArmorTrimsAtlas);
+        AtlasEvents.modifySourcesEvent(Identifier.withDefaultNamespace("items")).register(ArmorTrimRegistryImpl::modifyItemsAtlas);
+        AtlasEvents.modifySourcesEvent(Identifier.withDefaultNamespace("armor_trims")).register(ArmorTrimRegistryImpl::modifyArmorTrimsAtlas);
         ModelEvents.ADD_UNBAKED.register(ArmorTrimRegistryImpl::addUnbakedModels);
         ItemModelEvents.BEFORE_BAKE.register(ArmorTrimRegistryImpl::modifyItemModels);
-        TooltipComponentCallback.EVENT.register(tooltipData -> switch (tooltipData) {
+        ClientTooltipComponentCallback.EVENT.register(tooltipData -> switch (tooltipData) {
             case CompositeTooltipData compositeTooltipData -> new CompositeTooltipComponent(compositeTooltipData);
-            case TooltipComponentWrapper(TooltipComponent component) -> component;
+            case TooltipComponentWrapper(ClientTooltipComponent component) -> component;
             default -> null;
         });
     }

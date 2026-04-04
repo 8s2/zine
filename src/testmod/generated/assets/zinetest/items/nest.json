@@ -1,0 +1,7 @@
+{
+  "model": {
+    "type": "zinetest:nest",
+    "base": "minecraft:item/generated",
+    "template": "minecraft:builtin/generated"
+  }
+}

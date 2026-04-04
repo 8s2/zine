@@ -1,9 +1,9 @@
 package com.eightsidedsquare.zine.common.world.density_function;
 
-import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.gen.densityfunction.DensityFunction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.world.level.levelgen.DensityFunction;
 
-public class MutableNoisePos implements DensityFunction.NoisePos {
+public class MutableNoisePos implements DensityFunction.FunctionContext {
 
     private int x;
     private int y;

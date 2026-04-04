@@ -1,7 +1,7 @@
 package com.eightsidedsquare.zine.mixin.predicate;
 
 import com.eightsidedsquare.zine.common.predicate.ZineEntityFlagsPredicate;
-import net.minecraft.predicate.entity.EntityFlagsPredicate;
+import net.minecraft.advancements.criterion.EntityFlagsPredicate;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,7 +20,7 @@ public abstract class EntityFlagsPredicateMixin implements ZineEntityFlagsPredic
     private Optional<Boolean> isOnFire;
 
     @Shadow @Final @Mutable
-    private Optional<Boolean> isSneaking;
+    private Optional<Boolean> isCrouching;
 
     @Shadow @Final @Mutable
     private Optional<Boolean> isSprinting;
@@ -52,7 +52,7 @@ public abstract class EntityFlagsPredicateMixin implements ZineEntityFlagsPredic
 
     @Override
     public void zine$setSneaking(@Nullable Boolean sneaking) {
-        this.isSneaking = Optional.ofNullable(sneaking);
+        this.isCrouching = Optional.ofNullable(sneaking);
     }
 
     @Override

@@ -6,14 +6,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.registry.Registries;
-import net.minecraft.state.property.Property;
-import net.minecraft.storage.ReadView;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Util;
-import net.minecraft.util.math.Box;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.phys.AABB;
 import org.apache.commons.lang3.mutable.*;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
@@ -36,11 +36,11 @@ public final class CodecUtil {
             },
             String::valueOf
     );
-    public static final Codec<Block> BLOCK = Registries.BLOCK.getCodec();
-    public static final Codec<SpawnReason> SPAWN_REASON = SpawnReasonIds.IDS.getCodec(Identifier.CODEC);
-    public static final Codec<Box> CODEC = Codec.DOUBLE.listOf().comapFlatMap(
-            vertices -> Util.decodeFixedLengthList(vertices, 6)
-                    .map(list -> new Box(list.getFirst(), list.get(1), list.get(2), list.get(3), list.get(4), list.get(5))),
+    public static final Codec<Block> BLOCK = BuiltInRegistries.BLOCK.byNameCodec();
+    public static final Codec<EntitySpawnReason> SPAWN_REASON = SpawnReasonIds.IDS.codec(Identifier.CODEC);
+    public static final Codec<AABB> AABB = Codec.DOUBLE.listOf().comapFlatMap(
+            vertices -> Util.fixedSize(vertices, 6)
+                    .map(list -> new AABB(list.getFirst(), list.get(1), list.get(2), list.get(3), list.get(4), list.get(5))),
             box -> List.of(box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ)
     );
     public static final Codec<MutableBoolean> MUTABLE_BOOLEAN = Codec.BOOL.xmap(MutableBoolean::new, MutableBoolean::booleanValue);
@@ -52,7 +52,7 @@ public final class CodecUtil {
     public static final Codec<MutableDouble> MUTABLE_DOUBLE = Codec.DOUBLE.xmap(MutableDouble::new, MutableDouble::doubleValue);
     public static final Codec<Vector2ic> VECTOR_2I = Codec.INT.listOf()
             .comapFlatMap(
-                    list -> Util.decodeFixedLengthList(list, 2)
+                    list -> Util.fixedSize(list, 2)
                             .map(components -> new Vector2i(components.getFirst(), components.get(1))),
                     vec -> List.of(vec.x(), vec.y())
             );
@@ -95,7 +95,7 @@ public final class CodecUtil {
 
     public static Codec<Block> blockCodecWithProperties(Property<?>... properties) {
         return BLOCK.validate(block -> {
-            Collection<Property<?>> blockProperties = block.getStateManager().getProperties();
+            Collection<Property<?>> blockProperties = block.getStateDefinition().getProperties();
             for (Property<?> property : properties) {
                 if(!blockProperties.contains(property)) {
                     return DataResult.error(() -> block + " does not contain property " + property);
@@ -129,15 +129,15 @@ public final class CodecUtil {
     }
 
     public static Codec<Block> blockCodecWithPropertiesOf(Block block) {
-        return blockCodecWithProperties(block.getStateManager().getProperties().toArray(new Property<?>[0]));
+        return blockCodecWithProperties(block.getStateDefinition().getProperties().toArray(new Property<?>[0]));
     }
 
-    public static <T> void readToList(ReadView view, String key, List<T> list, Codec<? extends Collection<? extends T>> codec) {
+    public static <T> void readToList(ValueInput view, String key, List<T> list, Codec<? extends Collection<? extends T>> codec) {
         list.clear();
         view.read(key, codec).ifPresent(list::addAll);
     }
 
-    public static <K, V> void readToMap(ReadView view, String key, Map<K, V> map, Codec<? extends Map<? extends K, ? extends V>> codec) {
+    public static <K, V> void readToMap(ValueInput view, String key, Map<K, V> map, Codec<? extends Map<? extends K, ? extends V>> codec) {
         map.clear();
         view.read(key, codec).ifPresent(map::putAll);
     }

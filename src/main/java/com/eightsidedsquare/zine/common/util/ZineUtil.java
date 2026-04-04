@@ -1,25 +1,29 @@
 package com.eightsidedsquare.zine.common.util;
 
+import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.item.equipment.EquipmentType;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.world.item.equipment.ArmorType;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.ToIntFunction;
 
 public final class ZineUtil {
     private ZineUtil() {
     }
 
-    public static final EquipmentType[] HUMANOID_EQUIPMENT_TYPES = new EquipmentType[]{
-            EquipmentType.HELMET,
-            EquipmentType.CHESTPLATE,
-            EquipmentType.LEGGINGS,
-            EquipmentType.BOOTS
+    public static final ArmorType[] HUMANOID_EQUIPMENT_TYPES = new ArmorType[]{
+            ArmorType.HELMET,
+            ArmorType.CHESTPLATE,
+            ArmorType.LEGGINGS,
+            ArmorType.BOOTS
     };
 
     public static <T> List<T> addOrUnfreeze(List<T> list, T value) {
@@ -62,33 +66,92 @@ public final class ZineUtil {
         return map;
     }
 
-    public static <E, T> RegistryEntryList<T> mergeValue(RegistryEntryList<T> registryEntryList, Function<E, RegistryEntry<T>> mapper, E value) {
+    public static <E, T> HolderSet<T> mergeValue(HolderSet<T> registryEntryList, Function<E, Holder<T>> mapper, E value) {
         if(registryEntryList.size() == 0) {
-            return RegistryEntryList.of(mapper, value);
+            return HolderSet.direct(mapper, value);
         }
-        List<RegistryEntry<T>> list = new ObjectArrayList<>(registryEntryList.iterator());
+        List<Holder<T>> list = new ObjectArrayList<>(registryEntryList.iterator());
         list.add(mapper.apply(value));
-        return RegistryEntryList.of(list);
+        return HolderSet.direct(list);
     }
 
-    public static <E, T> RegistryEntryList<T> mergeValues(RegistryEntryList<T> registryEntryList, Function<E, RegistryEntry<T>> mapper, Collection<E> values) {
+    public static <E, T> HolderSet<T> mergeValues(HolderSet<T> registryEntryList, Function<E, Holder<T>> mapper, Collection<E> values) {
         if(registryEntryList.size() == 0) {
-            return RegistryEntryList.of(mapper, values);
+            return HolderSet.direct(mapper, values);
         }
-        List<RegistryEntry<T>> list = new ObjectArrayList<>(registryEntryList.iterator());
+        List<Holder<T>> list = new ObjectArrayList<>(registryEntryList.iterator());
         values.forEach(value -> list.add(mapper.apply(value)));
-        return RegistryEntryList.of(list);
+        return HolderSet.direct(list);
     }
 
-    public static <T> RegistryEntryList<T> mergeValues(RegistryEntryList<T> first, RegistryEntryList<T> second) {
+    public static <T> HolderSet<T> mergeValues(HolderSet<T> first, HolderSet<T> second) {
         if(first.size() == 0) {
             return second;
         }else if(second.size() == 0) {
             return first;
         }
-        List<RegistryEntry<T>> list = new ObjectArrayList<>(first.iterator());
+        List<Holder<T>> list = new ObjectArrayList<>(first.iterator());
         second.forEach(list::add);
-        return RegistryEntryList.of(list);
+        return HolderSet.direct(list);
     }
 
+    public static <KA, KB, V> Map<KB, V> mapKeys(Map<KA, V> map, Function<KA, KB> keyFunction) {
+        ImmutableMap.Builder<KB, V> builder = ImmutableMap.builder();
+        map.forEach((k, v) -> builder.put(keyFunction.apply(k), v));
+        return builder.build();
+    }
+
+    public static <K, VA, VB> Map<K, VB> mapValues(Map<K, VA> map, Function<VA, VB> valueFunction) {
+        ImmutableMap.Builder<K, VB> builder = ImmutableMap.builder();
+        map.forEach((k, v) -> builder.put(k, valueFunction.apply(v)));
+        return builder.build();
+    }
+
+    public static <T> T[] lengthenArray(T[] arr, int newLength, IntFunction<T[]> generator) {
+        T[] newArr = generator.apply(newLength);
+        System.arraycopy(arr, 0, newArr, 0, arr.length);
+        return newArr;
+    }
+
+    public static <T extends Enum<T>, U extends Enum<U>> T[] addEnumValues(
+            T[] values,
+            U[] customValues,
+            EnumConvertor<T, U> convertor
+    ) {
+        int len = values.length;
+        T[] newValues = Arrays.copyOf(values, len + customValues.length);
+        int ordinal = values[len - 1].ordinal();
+        for (int i = 0; i < customValues.length; i++) {
+            U value = customValues[i];
+            newValues[i + len] = convertor.apply(value, ++ordinal);
+        }
+        return newValues;
+    }
+
+    public static <T extends Enum<T>, U extends Enum<U>> T[] addEnumValues(
+            T[] values,
+            U[] customValues,
+            ToIntFunction<T> idGetter,
+            IndexedEnumConvertor<T, U> convertor
+    ) {
+        int len = values.length;
+        T[] newValues = Arrays.copyOf(values, len + customValues.length);
+        int ordinal = values[len - 1].ordinal();
+        int id = idGetter.applyAsInt(values[len - 1]);
+        for (int i = 0; i < customValues.length; i++) {
+            U value = customValues[i];
+            newValues[i + len] = convertor.apply(value, ++ordinal, ++id);
+        }
+        return newValues;
+    }
+
+    @FunctionalInterface
+    public interface EnumConvertor<T extends Enum<T>, U extends Enum<U>> {
+        T apply(U value, int ordinal);
+    }
+
+    @FunctionalInterface
+    public interface IndexedEnumConvertor<T extends Enum<T>, U extends Enum<U>> {
+        T apply(U value, int ordinal, int id);
+    }
 }

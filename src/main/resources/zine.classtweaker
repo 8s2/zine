@@ -1,0 +1,139 @@
+classTweaker v1 official
+transitive-inject-interface	net/minecraft/advancements/Advancement com/eightsidedsquare/zine/common/advancement/ZineAdvancement
+transitive-inject-interface	net/minecraft/advancements/AdvancementRewards com/eightsidedsquare/zine/common/advancement/ZineAdvancementRewards
+transitive-inject-interface	net/minecraft/advancements/DisplayInfo com/eightsidedsquare/zine/common/advancement/ZineDisplayInfo
+transitive-inject-interface	net/minecraft/client/Minecraft com/eightsidedsquare/zine/client/util/ZineMinecraft
+transitive-inject-interface	com/mojang/blaze3d/platform/NativeImage com/eightsidedsquare/zine/client/atlas/ZineNativeImage
+transitive-inject-interface	net/minecraft/world/item/Item com/eightsidedsquare/zine/common/item/ZineItem
+transitive-inject-interface	net/minecraft/world/item/Item$Properties com/eightsidedsquare/zine/common/item/ZineItemProperties
+transitive-inject-interface	net/minecraft/world/item/enchantment/Enchantment$Builder com/eightsidedsquare/zine/common/enchantment/ZineEnchantmentBuilder
+transitive-inject-interface	net/minecraft/advancements/criterion/DamagePredicate com/eightsidedsquare/zine/common/predicate/ZineDamagePredicate
+transitive-inject-interface	net/minecraft/advancements/criterion/DamageSourcePredicate com/eightsidedsquare/zine/common/predicate/ZineDamageSourcePredicate
+transitive-inject-interface	net/minecraft/advancements/criterion/DistancePredicate com/eightsidedsquare/zine/common/predicate/ZineDistancePredicate
+transitive-inject-interface	net/minecraft/advancements/criterion/EntityFlagsPredicate com/eightsidedsquare/zine/common/predicate/ZineEntityFlagsPredicate
+transitive-inject-interface	net/minecraft/advancements/criterion/EntityPredicate com/eightsidedsquare/zine/common/predicate/ZineEntityPredicate
+transitive-inject-interface	net/minecraft/advancements/criterion/EntityPredicate com/eightsidedsquare/zine/common/predicate/ZineEntityPredicateLocation
+transitive-inject-interface	net/minecraft/advancements/criterion/EntityPredicate$LocationWrapper com/eightsidedsquare/zine/common/predicate/ZineEntityPredicateLocation
+transitive-inject-interface	net/minecraft/advancements/criterion/EntityTypePredicate com/eightsidedsquare/zine/common/predicate/ZineEntityTypePredicate
+transitive-inject-interface	net/minecraft/advancements/criterion/ItemPredicate com/eightsidedsquare/zine/common/predicate/ZineItemPredicate
+transitive-inject-interface	net/minecraft/advancements/criterion/LocationPredicate com/eightsidedsquare/zine/common/predicate/ZineLocationPredicate
+transitive-inject-interface	net/minecraft/advancements/criterion/MobEffectsPredicate com/eightsidedsquare/zine/common/predicate/ZineMobEffectsPredicate
+transitive-inject-interface	net/minecraft/advancements/criterion/NbtPredicate com/eightsidedsquare/zine/common/predicate/ZineNbtPredicate
+transitive-inject-interface	net/minecraft/network/chat/Component com/eightsidedsquare/zine/common/text/ZineComponent
+transitive-inject-interface	net/minecraft/network/chat/Style com/eightsidedsquare/zine/common/text/ZineStyle
+transitive-inject-interface	net/minecraft/advancements/criterion/EntityEquipmentPredicate com/eightsidedsquare/zine/common/predicate/ZineEntityEquipmentPredicate
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/pools/FeaturePoolElement com/eightsidedsquare/zine/common/world/structure/ZineFeaturePoolElement
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/pools/SinglePoolElement com/eightsidedsquare/zine/common/world/structure/ZineSinglePoolElement
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/pools/ListPoolElement com/eightsidedsquare/zine/common/world/structure/ZineListPoolElement
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool com/eightsidedsquare/zine/common/world/structure/ZineStructureTemplatePool
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templatesystem/ProcessorRule com/eightsidedsquare/zine/common/world/structure/ZineProcessorRule
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templatesystem/RuleProcessor com/eightsidedsquare/zine/common/world/structure/ZineRuleProcessor
+transitive-inject-interface	net/minecraft/advancements/criterion/BlockPredicate com/eightsidedsquare/zine/common/predicate/ZineBlockPredicate
+transitive-inject-interface	net/minecraft/advancements/criterion/FluidPredicate com/eightsidedsquare/zine/common/predicate/ZineFluidPredicate
+transitive-inject-interface	net/minecraft/advancements/criterion/LightPredicate com/eightsidedsquare/zine/common/predicate/ZineLightPredicate
+transitive-inject-interface	net/minecraft/network/chat/MutableComponent com/eightsidedsquare/zine/common/text/ZineMutableComponent
+transitive-inject-interface	net/minecraft/advancements/criterion/ContextAwarePredicate com/eightsidedsquare/zine/common/predicate/ZineContextAwarePredicate
+transitive-inject-interface	net/minecraft/resources/ResourceKey com/eightsidedsquare/zine/common/registry/ZineResourceKey<TT;>
+transitive-inject-interface	net/minecraft/util/FormattedCharSequence com/eightsidedsquare/zine/common/text/ZineFormattedCharSequence
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templatesystem/StructureProcessorList com/eightsidedsquare/zine/common/world/structure/ZineStructureProcessorList
+transitive-inject-interface	net/minecraft/client/gui/screens/inventory/tooltip/ClientTooltipComponent com/eightsidedsquare/zine/client/gui/ZineClientTooltipComponent
+transitive-inject-interface	net/minecraft/world/entity/animal/feline/CatVariant com/eightsidedsquare/zine/common/entity/variant/ZineCatVariant
+transitive-inject-interface	net/minecraft/world/entity/animal/frog/FrogVariant com/eightsidedsquare/zine/common/entity/variant/ZineFrogVariant
+transitive-inject-interface	net/minecraft/client/resources/model/ModelBaker com/eightsidedsquare/zine/client/model/ZineModelBaker
+transitive-inject-interface	net/minecraft/client/renderer/texture/atlas/sources/PalettedPermutations com/eightsidedsquare/zine/client/atlas/ZinePalettedPermutations
+transitive-inject-interface	net/minecraft/advancements/AdvancementRequirements com/eightsidedsquare/zine/common/advancement/ZineAdvancementRequirements
+transitive-inject-interface	net/minecraft/core/component/DataComponentMap$Builder com/eightsidedsquare/zine/common/util/ZineDataComponentMapBuilder
+transitive-inject-interface	net/minecraft/core/component/DataComponentExactPredicate com/eightsidedsquare/zine/common/predicate/ZineDataComponentExactPredicate
+transitive-inject-interface	net/minecraft/world/entity/animal/wolf/WolfVariant com/eightsidedsquare/zine/common/entity/variant/ZineWolfVariant
+transitive-inject-interface	net/minecraft/world/entity/animal/wolf/WolfVariant$AssetInfo com/eightsidedsquare/zine/common/entity/variant/ZineWolfVariant$ZineAssetInfo
+transitive-inject-interface	net/minecraft/advancements/criterion/SlotsPredicate com/eightsidedsquare/zine/common/predicate/ZineSlotsPredicate
+transitive-inject-interface	net/minecraft/advancements/criterion/MovementPredicate com/eightsidedsquare/zine/common/predicate/ZineMovementPredicate
+transitive-inject-interface	net/minecraft/client/resources/model/sprite/MaterialBaker com/eightsidedsquare/zine/client/model/ZineMaterialBaker
+transitive-inject-interface net/minecraft/client/resources/model/sprite/Material com/eightsidedsquare/zine/client/model/ZineMaterial
+transitive-inject-interface net/minecraft/client/resources/model/sprite/Material$Baked com/eightsidedsquare/zine/client/model/ZineMaterial$Baked
+transitive-inject-interface	net/minecraft/client/color/item/Constant com/eightsidedsquare/zine/client/item/tint/ZineConstant
+transitive-inject-interface	net/minecraft/client/color/item/CustomModelDataSource com/eightsidedsquare/zine/client/item/tint/ZineCustomModelDataSource
+transitive-inject-interface	net/minecraft/client/color/item/Dye com/eightsidedsquare/zine/client/item/tint/ZineDye
+transitive-inject-interface	net/minecraft/client/color/item/Firework com/eightsidedsquare/zine/client/item/tint/ZineFirework
+transitive-inject-interface	net/minecraft/client/color/item/GrassColorSource com/eightsidedsquare/zine/client/item/tint/ZineGrassColorSource
+transitive-inject-interface	net/minecraft/client/color/item/MapColor com/eightsidedsquare/zine/client/item/tint/ZineMapColor
+transitive-inject-interface	net/minecraft/client/color/item/Potion com/eightsidedsquare/zine/client/item/tint/ZinePotion
+transitive-inject-interface	net/minecraft/client/renderer/item/CuboidItemModelWrapper$Unbaked com/eightsidedsquare/zine/client/item/ZineUnbakedCuboidItemModelWrapper
+transitive-inject-interface	net/minecraft/client/renderer/item/CompositeModel$Unbaked com/eightsidedsquare/zine/client/item/ZineUnbakedCompositeModel
+transitive-inject-interface	net/minecraft/client/renderer/item/ConditionalItemModel$Unbaked com/eightsidedsquare/zine/client/item/ZineUnbakedConditionalItemModel
+transitive-inject-interface	net/minecraft/client/renderer/item/ItemStackRenderState com/eightsidedsquare/zine/client/item/ZineItemStackRenderState
+transitive-inject-interface	net/minecraft/client/renderer/item/ItemStackRenderState$LayerRenderState com/eightsidedsquare/zine/client/item/ZineItemStackRenderState$ZineLayerRenderState
+transitive-inject-interface	net/minecraft/client/renderer/item/RangeSelectItemModel$Unbaked com/eightsidedsquare/zine/client/item/ZineUnbakedRangeSelectItemModel
+transitive-inject-interface	net/minecraft/client/renderer/item/SelectItemModel$Unbaked com/eightsidedsquare/zine/client/item/ZineUnbakedSelectItemModel
+transitive-inject-interface	net/minecraft/client/renderer/item/SelectItemModel$UnbakedSwitch com/eightsidedsquare/zine/client/item/ZineSelectItemModelUnbakedSwitch<TP;TT;>
+transitive-inject-interface	net/minecraft/client/renderer/item/SpecialModelWrapper$Unbaked com/eightsidedsquare/zine/client/item/ZineUnbakedSpecialModelWrapper
+transitive-inject-interface	net/minecraft/client/color/item/TeamColor com/eightsidedsquare/zine/client/item/tint/ZineTeamColor
+transitive-inject-interface	net/minecraft/world/entity/animal/pig/PigVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobVariant<Lnet/minecraft/world/entity/animal/pig/PigVariant$ModelType;>
+transitive-inject-interface	net/minecraft/world/entity/variant/BiomeCheck com/eightsidedsquare/zine/common/entity/spawn/ZineBiomeCheck
+transitive-inject-interface	net/minecraft/world/entity/variant/ModelAndTexture com/eightsidedsquare/zine/common/entity/variant/ZineModelAndTexture<TT;>
+transitive-inject-interface	net/minecraft/world/entity/variant/MoonBrightnessCheck com/eightsidedsquare/zine/common/entity/spawn/ZineMoonBrightnessCheck
+transitive-inject-interface	net/minecraft/world/entity/variant/SpawnContext com/eightsidedsquare/zine/common/entity/spawn/ZineSpawnContext
+transitive-inject-interface	net/minecraft/world/entity/variant/StructureCheck com/eightsidedsquare/zine/common/entity/spawn/ZineStructureCheck
+transitive-inject-interface	net/minecraft/world/entity/animal/cow/CowVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobVariant<Lnet/minecraft/world/entity/animal/cow/CowVariant$ModelType;>
+transitive-inject-interface	net/minecraft/world/entity/animal/chicken/ChickenVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobVariant<Lnet/minecraft/world/entity/animal/chicken/ChickenVariant$ModelType;>
+transitive-inject-interface	net/minecraft/world/entity/animal/wolf/WolfSoundVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobSoundVariant<Lnet/minecraft/world/entity/animal/wolf/WolfSoundVariant$WolfSoundSet;>
+transitive-inject-interface	net/minecraft/world/entity/animal/wolf/WolfSoundVariant$WolfSoundSet com/eightsidedsquare/zine/common/entity/variant/ZineWolfSoundSet
+transitive-inject-interface	net/minecraft/world/entity/animal/pig/PigSoundVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobSoundVariant<Lnet/minecraft/world/entity/animal/pig/PigSoundVariant$PigSoundSet;>
+transitive-inject-interface	net/minecraft/world/entity/animal/pig/PigSoundVariant$PigSoundSet com/eightsidedsquare/zine/common/entity/variant/ZineSoundSet
+transitive-inject-interface	net/minecraft/world/entity/animal/chicken/ChickenSoundVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobSoundVariant<Lnet/minecraft/world/entity/animal/chicken/ChickenSoundVariant$ChickenSoundSet;>
+transitive-inject-interface	net/minecraft/world/entity/animal/chicken/ChickenSoundVariant$ChickenSoundSet com/eightsidedsquare/zine/common/entity/variant/ZineSoundSet
+transitive-inject-interface	net/minecraft/world/entity/animal/cow/CowSoundVariant com/eightsidedsquare/zine/common/entity/variant/ZineSoundSet
+transitive-inject-interface	net/minecraft/world/entity/animal/feline/CatSoundVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobSoundVariant<Lnet/minecraft/world/entity/animal/feline/CatSoundVariant$CatSoundSet;>
+transitive-inject-interface	net/minecraft/world/entity/animal/feline/CatSoundVariant$CatSoundSet com/eightsidedsquare/zine/common/entity/variant/ZineCatSoundSet
+transitive-inject-interface	net/minecraft/advancements/criterion/DataComponentMatchers com/eightsidedsquare/zine/common/predicate/ZineDataComponentMatchers
+transitive-inject-interface	net/minecraft/world/item/WeatheringCopperItems com/eightsidedsquare/zine/common/util/ZineWeatheringCopperSet<Lnet/minecraft/world/item/Item;>
+transitive-inject-interface	net/minecraft/world/level/block/WeatheringCopperBlocks com/eightsidedsquare/zine/common/util/ZineWeatheringCopperSet<Lnet/minecraft/world/level/block/Block;>
+transitive-inject-interface	net/minecraft/core/ClientAsset$ResourceTexture com/eightsidedsquare/zine/common/entity/variant/ZineClientAssetResourceTexture
+transitive-inject-interface	net/minecraft/client/renderer/texture/SpriteLoader$Preparations com/eightsidedsquare/zine/client/util/ZineSpriteLoaderPreparations
+transitive-inject-interface	net/minecraft/client/resources/model/ResolvableModel$Resolver com/eightsidedsquare/zine/client/model/ZineResolvableModelResolver
+accessible class net/minecraft/client/resources/model/ClientItemInfoLoader$PendingLoad
+accessible field net/minecraft/client/renderer/item/ClientItem model Lnet/minecraft/client/renderer/item/ItemModel$Unbaked;
+mutable field net/minecraft/client/renderer/item/ClientItem model Lnet/minecraft/client/renderer/item/ItemModel$Unbaked;
+accessible method net/minecraft/world/effect/MobEffect <init> (Lnet/minecraft/world/effect/MobEffectCategory;I)V
+accessible method net/minecraft/world/effect/MobEffect <init> (Lnet/minecraft/world/effect/MobEffectCategory;ILnet/minecraft/core/particles/ParticleOptions;)V
+accessible method net/minecraft/world/entity/ai/village/poi/PoiTypes getBlockStates (Lnet/minecraft/world/level/block/Block;)Ljava/util/Set;
+accessible method net/minecraft/world/level/levelgen/feature/featuresize/FeatureSizeType <init> (Lcom/mojang/serialization/MapCodec;)V
+accessible method net/minecraft/core/Holder$Reference bindValue (Ljava/lang/Object;)V
+accessible field net/minecraft/core/component/DataComponentMap$Builder map Lit/unimi/dsi/fastutil/objects/Reference2ObjectMap;
+accessible class net/minecraft/advancements/criterion/LocationPredicate$PositionPredicate
+accessible method net/minecraft/advancements/criterion/LocationPredicate$PositionPredicate of (Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;)Ljava/util/Optional;
+accessible method net/minecraft/world/entity/ai/village/poi/PoiTypes registerBlockStates (Lnet/minecraft/core/Holder;Ljava/util/Set;)V
+accessible class net/minecraft/client/gui/Font$PreparedTextBuilder
+accessible method net/minecraft/client/data/models/blockstates/MultiVariantGenerator validateAndExpandProperties (Ljava/util/Set;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/client/data/models/blockstates/PropertyDispatch;)Ljava/util/Set;
+accessible method net/minecraft/client/data/models/blockstates/PropertyDispatch getEntries ()Ljava/util/Map;
+accessible method net/minecraft/client/renderer/entity/LivingEntityRenderer addLayer (Lnet/minecraft/client/renderer/entity/layers/RenderLayer;)Z
+accessible field net/minecraft/client/renderer/entity/LivingEntityRenderer itemModelResolver Lnet/minecraft/client/renderer/item/ItemModelResolver;
+accessible field net/minecraft/client/renderer/entity/EntityRenderer entityRenderDispatcher Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;
+accessible field net/minecraft/client/gui/screens/Screen minecraft Lnet/minecraft/client/Minecraft;
+accessible method net/minecraft/client/gui/screens/inventory/AbstractContainerScreen addItemSlotMouseAction (Lnet/minecraft/client/gui/ItemSlotMouseAction;)V
+accessible field net/minecraft/world/level/block/state/BlockBehaviour soundType Lnet/minecraft/world/level/block/SoundType;
+mutable field net/minecraft/world/level/block/state/BlockBehaviour soundType Lnet/minecraft/world/level/block/SoundType;
+accessible field net/minecraft/client/multiplayer/PlayerInfo skinLookup Ljava/util/function/Supplier;
+accessible class net/minecraft/client/gui/font/glyphs/BakedSheetGlyph$GlyphInstance
+accessible field net/minecraft/network/chat/contents/objects/ObjectInfos ID_MAPPER Lnet/minecraft/util/ExtraCodecs$LateBoundIdMapper;
+accessible field net/minecraft/network/chat/contents/data/DataSources ID_MAPPER Lnet/minecraft/util/ExtraCodecs$LateBoundIdMapper;
+accessible method net/minecraft/server/jsonrpc/OutgoingRpcMethod$OutgoingRpcMethodBuilder build ()Lnet/minecraft/server/jsonrpc/OutgoingRpcMethod;
+accessible method net/minecraft/client/data/models/blockstates/PropertyDispatch$C1 <init> (Lnet/minecraft/world/level/block/state/properties/Property;)V
+accessible method net/minecraft/client/data/models/blockstates/PropertyDispatch$C2 <init> (Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;)V
+accessible method net/minecraft/client/data/models/blockstates/PropertyDispatch$C3 <init> (Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;)V
+accessible method net/minecraft/client/data/models/blockstates/PropertyDispatch$C4 <init> (Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;)V
+accessible method net/minecraft/client/data/models/blockstates/PropertyDispatch$C5 <init> (Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;Lnet/minecraft/world/level/block/state/properties/Property;)V
+accessible method net/minecraft/client/data/AtlasProvider storeAtlas (Lnet/minecraft/data/CachedOutput;Lnet/minecraft/resources/Identifier;Ljava/util/List;)Ljava/util/concurrent/CompletableFuture;
+accessible class net/minecraft/client/resources/model/ModelBakery$InternerImpl
+accessible method net/minecraft/client/resources/model/ModelBakery$InternerImpl <init> ()V
+accessible class net/minecraft/client/resources/model/ModelManager$ResolvedModels
+accessible class net/minecraft/client/resources/model/ModelBakery$ModelBakerImpl
+accessible class net/minecraft/client/resources/model/ModelManager$ReloadState
+accessible field net/minecraft/client/resources/model/cuboid/CuboidModel GSON Lcom/google/gson/Gson;
+accessible class net/minecraft/client/resources/model/cuboid/CuboidModelElement$Deserializer
+accessible method net/minecraft/client/resources/model/cuboid/CuboidModelElement$Deserializer <init> ()V
+accessible class net/minecraft/client/resources/model/cuboid/CuboidFace$Deserializer
+accessible method net/minecraft/client/resources/model/cuboid/CuboidFace$Deserializer <init> ()V
+accessible class net/minecraft/client/resources/model/cuboid/ItemModelGenerator$ItemLayerKey
+accessible method net/minecraft/client/resources/model/cuboid/ItemModelGenerator bakeExtrudedSprite (Lnet/minecraft/client/resources/model/geometry/QuadCollection$Builder;Lnet/minecraft/client/resources/model/ModelBaker$Interner;Lnet/minecraft/client/renderer/block/dispatch/ModelState;Lnet/minecraft/client/resources/model/geometry/BakedQuad$MaterialInfo;)V
+accessible method net/minecraft/client/resources/model/cuboid/FaceBakery defaultFaceUV (Lorg/joml/Vector3fc;Lorg/joml/Vector3fc;Lnet/minecraft/core/Direction;)Lnet/minecraft/client/resources/model/cuboid/CuboidFace$UVs;

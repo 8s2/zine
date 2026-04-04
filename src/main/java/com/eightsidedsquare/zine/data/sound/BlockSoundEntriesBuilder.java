@@ -1,7 +1,7 @@
 package com.eightsidedsquare.zine.data.sound;
 
-import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.sound.SoundEvent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.block.SoundType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
@@ -10,10 +10,10 @@ import java.util.function.Function;
 
 public class BlockSoundEntriesBuilder {
 
-    private final BlockSoundGroup blockSoundGroup;
+    private final SoundType blockSoundGroup;
     private final EnumMap<Type, SoundEntryBuilder> entryBuilders;
 
-    private BlockSoundEntriesBuilder(BlockSoundGroup blockSoundGroup) {
+    private BlockSoundEntriesBuilder(SoundType blockSoundGroup) {
         this.blockSoundGroup = blockSoundGroup;
         this.entryBuilders = new EnumMap<>(Type.class);
         for(Type type : Type.values()) {
@@ -23,7 +23,7 @@ public class BlockSoundEntriesBuilder {
         }
     }
 
-    public static BlockSoundEntriesBuilder of(BlockSoundGroup blockSoundGroup) {
+    public static BlockSoundEntriesBuilder of(SoundType blockSoundGroup) {
         return new BlockSoundEntriesBuilder(blockSoundGroup);
     }
 
@@ -178,22 +178,22 @@ public class BlockSoundEntriesBuilder {
     }
 
     public enum Type {
-        BREAK("block.generic.break", BlockSoundGroup::getBreakSound),
-        PLACE("block.generic.place", BlockSoundGroup::getPlaceSound),
-        HIT("block.generic.hit", BlockSoundGroup::getHitSound),
-        STEP("block.generic.footsteps", BlockSoundGroup::getStepSound),
-        FALL(BlockSoundGroup::getFallSound);
+        BREAK("block.generic.break", SoundType::getBreakSound),
+        PLACE("block.generic.place", SoundType::getPlaceSound),
+        HIT("block.generic.hit", SoundType::getHitSound),
+        STEP("block.generic.footsteps", SoundType::getStepSound),
+        FALL(SoundType::getFallSound);
 
         @Nullable
         private final String subtitle;
-        private final Function<BlockSoundGroup, SoundEvent> soundEventGetter;
+        private final Function<SoundType, SoundEvent> soundEventGetter;
 
-        Type(@Nullable String subtitle, Function<BlockSoundGroup, SoundEvent> soundEventGetter) {
+        Type(@Nullable String subtitle, Function<SoundType, SoundEvent> soundEventGetter) {
             this.subtitle = subtitle;
             this.soundEventGetter = soundEventGetter;
         }
 
-        Type(Function<BlockSoundGroup, SoundEvent> soundEventGetter) {
+        Type(Function<SoundType, SoundEvent> soundEventGetter) {
             this(null, soundEventGetter);
         }
 
@@ -202,7 +202,7 @@ public class BlockSoundEntriesBuilder {
             return this.subtitle;
         }
 
-        public SoundEvent get(BlockSoundGroup blockSoundGroup) {
+        public SoundEvent get(SoundType blockSoundGroup) {
             return this.soundEventGetter.apply(blockSoundGroup);
         }
     }

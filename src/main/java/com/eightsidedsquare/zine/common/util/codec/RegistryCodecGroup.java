@@ -1,12 +1,12 @@
 package com.eightsidedsquare.zine.common.util.codec;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.entity.data.TrackedDataHandler;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.resources.ResourceKey;
 
 /**
  * <p>A RegistryCodecGroup holds codecs and packet codecs which can be useful when working with a dynamic registry.
@@ -14,35 +14,35 @@ import net.minecraft.registry.entry.RegistryEntry;
  */
 public interface RegistryCodecGroup<T> {
 
-    static <T> RegistryCodecGroup<T> create(RegistryKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
+    static <T> RegistryCodecGroup<T> create(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
         return new RegistryCodecGroupImpl<>(registryKey, codec, networkCodec);
     }
 
-    static <T> RegistryCodecGroup<T> create(RegistryKey<Registry<T>> registryKey, Codec<T> codec) {
+    static <T> RegistryCodecGroup<T> create(ResourceKey<Registry<T>> registryKey, Codec<T> codec) {
         return new RegistryCodecGroupImpl<>(registryKey, codec, codec);
     }
 
-    static <T> RegistryCodecGroup.Tracked<T> createTracked(RegistryKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
-        return new RegistryCodecGroupImpl.TrackedImpl<>(registryKey, codec, networkCodec);
+    static <T> Serialized<T> createTracked(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
+        return new RegistryCodecGroupImpl.SerializedImpl<>(registryKey, codec, networkCodec);
     }
 
-    static <T> RegistryCodecGroup.Tracked<T> createTracked(RegistryKey<Registry<T>> registryKey, Codec<T> codec) {
-        return new RegistryCodecGroupImpl.TrackedImpl<>(registryKey, codec, codec);
+    static <T> Serialized<T> createTracked(ResourceKey<Registry<T>> registryKey, Codec<T> codec) {
+        return new RegistryCodecGroupImpl.SerializedImpl<>(registryKey, codec, codec);
     }
 
-    RegistryKey<Registry<T>> registryKey();
+    ResourceKey<Registry<T>> key();
 
     Codec<T> codec();
 
     Codec<T> networkCodec();
 
-    Codec<RegistryEntry<T>> entryCodec();
+    Codec<Holder<T>> holderCodec();
 
-    PacketCodec<RegistryByteBuf, RegistryEntry<T>> packetCodec();
+    StreamCodec<RegistryFriendlyByteBuf, Holder<T>> streamCodec();
 
-    interface Tracked<T> extends RegistryCodecGroup<T> {
+    interface Serialized<T> extends RegistryCodecGroup<T> {
 
-        TrackedDataHandler<RegistryEntry<T>> trackedDataHandler();
+        EntityDataSerializer<Holder<T>> dataSerializer();
 
     }
 

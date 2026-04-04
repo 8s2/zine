@@ -1,8 +1,8 @@
 package com.eightsidedsquare.zine.common.registry;
 
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 
 /**
  * A registry queue allows queueing of values to register for registering them when appropriate.
@@ -26,7 +26,7 @@ public interface RegistryQueue<T> {
      * @param value the value to register
      * @return the enqueued value wrapped in a registry entry
      */
-    RegistryEntry.Reference<T> reference(String name, T value);
+    Holder.Reference<T> reference(String name, T value);
 
     /**
      * Registers all queued values.

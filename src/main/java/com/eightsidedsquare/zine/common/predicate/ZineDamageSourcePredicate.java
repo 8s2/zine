@@ -1,8 +1,8 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.predicate.TagPredicate;
-import net.minecraft.predicate.entity.EntityPredicate;
+import net.minecraft.advancements.criterion.EntityPredicate;
+import net.minecraft.advancements.criterion.TagPredicate;
+import net.minecraft.world.damagesource.DamageType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;

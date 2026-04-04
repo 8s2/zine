@@ -1,62 +1,82 @@
 package com.eightsidedsquare.zine.mixin.entity.variant;
 
-import com.eightsidedsquare.zine.common.entity.variant.ZineWolfSoundVariant;
-import net.minecraft.entity.passive.WolfSoundVariant;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.sound.SoundEvent;
+import com.eightsidedsquare.zine.common.entity.variant.ZineAgeableMobSoundVariant;
+import com.eightsidedsquare.zine.common.entity.variant.ZineWolfSoundSet;
+import net.minecraft.core.Holder;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.animal.wolf.WolfSoundVariant;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(WolfSoundVariant.class)
-public abstract class WolfSoundVariantMixin implements ZineWolfSoundVariant {
+public abstract class WolfSoundVariantMixin implements ZineAgeableMobSoundVariant<WolfSoundVariant.WolfSoundSet> {
 
     @Shadow @Final @Mutable
-    private RegistryEntry<SoundEvent> ambientSound;
+    private WolfSoundVariant.WolfSoundSet adultSounds;
 
     @Shadow @Final @Mutable
-    private RegistryEntry<SoundEvent> deathSound;
-
-    @Shadow @Final @Mutable
-    private RegistryEntry<SoundEvent> growlSound;
-
-    @Shadow @Final @Mutable
-    private RegistryEntry<SoundEvent> hurtSound;
-
-    @Shadow @Final @Mutable
-    private RegistryEntry<SoundEvent> pantSound;
-
-    @Shadow @Final @Mutable
-    private RegistryEntry<SoundEvent> whineSound;
+    private WolfSoundVariant.WolfSoundSet babySounds;
 
     @Override
-    public void zine$setAmbientSound(RegistryEntry<SoundEvent> ambientSound) {
-        this.ambientSound = ambientSound;
+    public void zine$setAdultSounds(WolfSoundVariant.WolfSoundSet adultSounds) {
+        this.adultSounds = adultSounds;
     }
 
     @Override
-    public void zine$setDeathSound(RegistryEntry<SoundEvent> deathSound) {
-        this.deathSound = deathSound;
+    public void zine$setBabySounds(WolfSoundVariant.WolfSoundSet babySounds) {
+        this.babySounds = babySounds;
     }
 
-    @Override
-    public void zine$setGrowlSound(RegistryEntry<SoundEvent> growlSound) {
-        this.growlSound = growlSound;
-    }
+    @Mixin(WolfSoundVariant.WolfSoundSet.class)
+    public static abstract class WolfSoundSetMixin implements ZineWolfSoundSet {
+        @Shadow @Final @Mutable
+        private Holder<SoundEvent> ambientSound;
 
-    @Override
-    public void zine$setHurtSound(RegistryEntry<SoundEvent> hurtSound) {
-        this.hurtSound = hurtSound;
-    }
+        @Shadow @Final @Mutable
+        private Holder<SoundEvent> deathSound;
 
-    @Override
-    public void zine$setPantSound(RegistryEntry<SoundEvent> pantSound) {
-        this.pantSound = pantSound;
-    }
+        @Shadow @Final @Mutable
+        private Holder<SoundEvent> growlSound;
 
-    @Override
-    public void zine$setWhineSound(RegistryEntry<SoundEvent> whineSound) {
-        this.whineSound = whineSound;
+        @Shadow @Final @Mutable
+        private Holder<SoundEvent> hurtSound;
+
+        @Shadow @Final @Mutable
+        private Holder<SoundEvent> pantSound;
+
+        @Shadow @Final @Mutable
+        private Holder<SoundEvent> whineSound;
+
+        @Override
+        public void zine$setAmbientSound(Holder<SoundEvent> ambientSound) {
+            this.ambientSound = ambientSound;
+        }
+
+        @Override
+        public void zine$setDeathSound(Holder<SoundEvent> deathSound) {
+            this.deathSound = deathSound;
+        }
+
+        @Override
+        public void zine$setGrowlSound(Holder<SoundEvent> growlSound) {
+            this.growlSound = growlSound;
+        }
+
+        @Override
+        public void zine$setHurtSound(Holder<SoundEvent> hurtSound) {
+            this.hurtSound = hurtSound;
+        }
+
+        @Override
+        public void zine$setPantSound(Holder<SoundEvent> pantSound) {
+            this.pantSound = pantSound;
+        }
+
+        @Override
+        public void zine$setWhineSound(Holder<SoundEvent> whineSound) {
+            this.whineSound = whineSound;
+        }
     }
 }

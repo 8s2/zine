@@ -1,8 +1,6 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import net.minecraft.predicate.NbtPredicate;
-import net.minecraft.predicate.component.ComponentsPredicate;
-import net.minecraft.predicate.entity.*;
+import net.minecraft.advancements.criterion.*;
 import org.jetbrains.annotations.Nullable;
 
 public interface ZineEntityPredicate {
@@ -19,11 +17,11 @@ public interface ZineEntityPredicate {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setLocation(EntityPredicate.PositionalPredicates location) {
+    default void zine$setLocation(EntityPredicate.LocationWrapper location) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setEffects(@Nullable EntityEffectPredicate effects) {
+    default void zine$setEffects(@Nullable MobEffectsPredicate effects) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
@@ -67,7 +65,7 @@ public interface ZineEntityPredicate {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setComponents(ComponentsPredicate components) {
+    default void zine$setComponents(DataComponentMatchers components) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 }

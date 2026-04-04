@@ -1,13 +1,8 @@
 package com.eightsidedsquare.zine.common.advancement;
 
-import net.minecraft.advancement.AdvancementCriterion;
-import net.minecraft.advancement.AdvancementDisplay;
-import net.minecraft.advancement.AdvancementRequirements;
-import net.minecraft.advancement.AdvancementRewards;
-import net.minecraft.advancement.criterion.Criterion;
-import net.minecraft.advancement.criterion.CriterionConditions;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.advancements.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -19,7 +14,7 @@ public interface ZineAdvancement {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setDisplay(@Nullable AdvancementDisplay display) {
+    default void zine$setDisplay(@Nullable DisplayInfo display) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
@@ -27,15 +22,15 @@ public interface ZineAdvancement {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$addCriterion(String name, AdvancementCriterion<?> criterion) {
+    default void zine$addCriterion(String name, Criterion<?> criterion) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default <T extends CriterionConditions> void zine$addCriterion(String name, Criterion<T> trigger, T conditions) {
-        this.zine$addCriterion(name, new AdvancementCriterion<>(trigger, conditions));
+    default <T extends CriterionTriggerInstance> void zine$addCriterion(String name, CriterionTrigger<T> trigger, T conditions) {
+        this.zine$addCriterion(name, new Criterion<>(trigger, conditions));
     }
 
-    default void zine$setCriteria(Map<String, AdvancementCriterion<?>> criteria) {
+    default void zine$setCriteria(Map<String, Criterion<?>> criteria) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
@@ -47,11 +42,11 @@ public interface ZineAdvancement {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setName(@Nullable Text name) {
+    default void zine$setName(@Nullable Component name) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default <T extends CriterionConditions> Optional<T> zine$getCriterion(String name, Criterion<T> criterion) {
+    default <T extends CriterionTriggerInstance> Optional<T> zine$getCriterion(String name, CriterionTrigger<T> criterion) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 

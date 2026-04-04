@@ -1,23 +1,26 @@
 package com.eightsidedsquare.zine.common.util.codec;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.component.ComponentMap;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
  * <p>Utility interface for writing and reading data to objects with via
- * {@link ReadView}, {@link WriteView}, and {@link RegistryByteBuf}.
+ * {@link ValueInput}, {@link ValueOutput}, and {@link RegistryFriendlyByteBuf}.
  *
  * <p>Offers a setup similar to the {@link com.mojang.serialization.codecs.RecordCodecBuilder},
  * except it mutates a given instance rather than creating a new one.
@@ -123,13 +126,13 @@ public interface DataHelper<T> {
         return new DataHelperImpl.BuilderImpl<>();
     }
 
-    void read(ReadView view, T object);
+    void read(ValueInput view, T object);
 
-    void write(WriteView view, T object);
+    void write(ValueOutput view, T object);
 
-    <I extends RegistryByteBuf> void read(I buf, T object);
+    <I extends RegistryFriendlyByteBuf> void read(I buf, T object);
 
-    <I extends RegistryByteBuf> void write(I buf, T object);
+    <I extends RegistryFriendlyByteBuf> void write(I buf, T object);
 
     interface Builder<T> {
 
@@ -137,18 +140,18 @@ public interface DataHelper<T> {
          * Adds a field to the data helper builder.
          * @param codec the codec of the field
          * @param packetCodec the packet codec of the field
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <F> type of the field
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         <F> FieldBuilder<F, T> field(@Nullable Codec<F> codec,
-                                     @Nullable PacketCodec<? super RegistryByteBuf, F> packetCodec,
+                                     @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec,
                                      String key);
 
         /**
          * Adds a non-syncing field to the data helper builder.
          * @param codec the codec of the field
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <F> type of the field
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
@@ -162,7 +165,7 @@ public interface DataHelper<T> {
          * @param <F> type of the field
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
-        default <F> FieldBuilder<F, T> field(PacketCodec<? super RegistryByteBuf, F> packetCodec) {
+        default <F> FieldBuilder<F, T> field(StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec) {
             return this.field(null, packetCodec, "");
         }
 
@@ -171,17 +174,17 @@ public interface DataHelper<T> {
          * <p>Internally, values are wrapped in an {@link java.util.Optional} in order to handle null values properly.
          * @param codec the codec of the field
          * @param packetCodec the packet codec of the field
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <F> type of the field
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
-        <F> NullableFieldBuilder<F, T> nullableField(@Nullable Codec<F> codec, @Nullable PacketCodec<? super RegistryByteBuf, F> packetCodec, String key);
+        <F> NullableFieldBuilder<F, T> nullableField(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec, String key);
 
         /**
          * Adds a non-syncing nullable field to the data helper builder.
          * <p>Internally, values are wrapped in an {@link java.util.Optional} in order to handle null values properly.
          * @param codec the codec of the field
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <F> type of the field
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
@@ -196,7 +199,7 @@ public interface DataHelper<T> {
          * @param <F> type of the field
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
-        default <F> NullableFieldBuilder<F, T> nullableField(PacketCodec<? super RegistryByteBuf, F> packetCodec) {
+        default <F> NullableFieldBuilder<F, T> nullableField(StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec) {
             return this.nullableField(null, packetCodec, "");
         }
 
@@ -204,19 +207,19 @@ public interface DataHelper<T> {
          * Adds a list field to the data helper builder
          * @param codec the codec of the list field
          * @param packetCodec the packet codec of the list field
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <F> type of the list field element
          * @param <L> type of the list field
          * @apiNote {@link ListFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
         <F, L extends Collection<F>> ListFieldBuilder<F, L, T> listField(@Nullable Codec<L> codec,
-                                                                         @Nullable PacketCodec<? super RegistryByteBuf, L> packetCodec,
+                                                                         @Nullable StreamCodec<? super RegistryFriendlyByteBuf, L> packetCodec,
                                                                          String key);
 
         /**
          * Adds a non-syncing list field to the data helper builder
          * @param codec the codec of the list field
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <F> type of the list field element
          * @param <L> type of the list field
          * @apiNote {@link ListFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
@@ -232,7 +235,7 @@ public interface DataHelper<T> {
          * @param <L> type of the list field
          * @apiNote {@link ListFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
-        default <F, L extends Collection<F>> ListFieldBuilder<F, L, T> listField(PacketCodec<? super RegistryByteBuf, L> packetCodec) {
+        default <F, L extends Collection<F>> ListFieldBuilder<F, L, T> listField(StreamCodec<? super RegistryFriendlyByteBuf, L> packetCodec) {
             return this.listField(null, packetCodec, "");
         }
 
@@ -241,19 +244,19 @@ public interface DataHelper<T> {
          * <p>The codec and packet codec are converted to list types.
          * @param codec the codec of an element of the list field
          * @param packetCodec the packet codec of an element of the list field
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <F> type of the list field element
          * @apiNote {@link ListFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
         <F> ListFieldBuilder<F, List<F>, T> listFieldOf(@Nullable Codec<F> codec,
-                                                        @Nullable PacketCodec<? super RegistryByteBuf, F> packetCodec,
+                                                        @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec,
                                                         String key);
 
         /**
          * <p>Adds a non-syncing list field to the data helper builder.
          * <p>The codec is converted to a list type.
          * @param codec the codec of an element of the list field
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <F> type of the list field element
          * @apiNote {@link ListFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
@@ -268,7 +271,7 @@ public interface DataHelper<T> {
          * @param <F> type of the list field element
          * @apiNote {@link ListFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
-        default <F> ListFieldBuilder<F, List<F>, T> listFieldOf(PacketCodec<? super RegistryByteBuf, F> packetCodec) {
+        default <F> ListFieldBuilder<F, List<F>, T> listFieldOf(StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec) {
             return this.listFieldOf(null, packetCodec, "");
         }
 
@@ -276,20 +279,20 @@ public interface DataHelper<T> {
          * Adds a map field to the data helper builder
          * @param codec the codec of the map field
          * @param packetCodec the packet codec of the map field
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <K> type of the map field key
          * @param <V> type of the map field value
          * @param <M> type of the map field
          * @apiNote {@link MapFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
         <K, V, M extends Map<K, V>> MapFieldBuilder<K, V, M, T> mapField(@Nullable Codec<M> codec,
-                                                                         @Nullable PacketCodec<? super RegistryByteBuf, M> packetCodec,
+                                                                         @Nullable StreamCodec<? super RegistryFriendlyByteBuf, M> packetCodec,
                                                                          String key);
 
         /**
          * Adds a non-syncing map field to the data helper builder
          * @param codec the codec of the map field
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <K> type of the map field key
          * @param <V> type of the map field value
          * @param <M> type of the map field
@@ -307,7 +310,7 @@ public interface DataHelper<T> {
          * @param <M> type of the map field
          * @apiNote {@link MapFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
-        default <K, V, M extends Map<K, V>> MapFieldBuilder<K, V, M, T> mapField(PacketCodec<? super RegistryByteBuf, M> packetCodec) {
+        default <K, V, M extends Map<K, V>> MapFieldBuilder<K, V, M, T> mapField(StreamCodec<? super RegistryFriendlyByteBuf, M> packetCodec) {
             return this.mapField(null, packetCodec, "");
         }
 
@@ -318,15 +321,15 @@ public interface DataHelper<T> {
          * @param elementCodec the codec of the map field element
          * @param keyPacketCodec the packet codec of the map field key
          * @param elementPacketCodec the packet codec of the map field element
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <K> type of the map field key
          * @param <V> type of the map field value
          * @apiNote {@link MapFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
         <K, V> MapFieldBuilder<K, V, Map<K, V>, T> mapFieldOf(@Nullable Codec<K> keyCodec,
                                                               @Nullable Codec<V> elementCodec,
-                                                              @Nullable PacketCodec<? super RegistryByteBuf, K> keyPacketCodec,
-                                                              @Nullable PacketCodec<? super RegistryByteBuf, V> elementPacketCodec,
+                                                              @Nullable StreamCodec<? super RegistryFriendlyByteBuf, K> keyPacketCodec,
+                                                              @Nullable StreamCodec<? super RegistryFriendlyByteBuf, V> elementPacketCodec,
                                                               String key);
 
         /**
@@ -334,7 +337,7 @@ public interface DataHelper<T> {
          * <p>The codecs are used to create a codec for the map field.
          * @param keyCodec the codec of the map field key
          * @param elementCodec the codec of the map field element
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <K> type of the map field key
          * @param <V> type of the map field value
          * @apiNote {@link MapFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
@@ -354,101 +357,101 @@ public interface DataHelper<T> {
          * @param <V> type of the map field value
          * @apiNote {@link MapFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
-        default <K, V> MapFieldBuilder<K, V, Map<K, V>, T> mapFieldOf(PacketCodec<? super RegistryByteBuf, K> keyPacketCodec,
-                                                                      PacketCodec<? super RegistryByteBuf, V> elementPacketCodec) {
+        default <K, V> MapFieldBuilder<K, V, Map<K, V>, T> mapFieldOf(StreamCodec<? super RegistryFriendlyByteBuf, K> keyPacketCodec,
+                                                                      StreamCodec<? super RegistryFriendlyByteBuf, V> elementPacketCodec) {
             return this.mapFieldOf(null, null, keyPacketCodec, elementPacketCodec, "");
         }
 
         /**
          * Adds a boolean field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         FieldBuilder<Boolean, T> booleanField(String key);
 
         /**
          * Adds a byte field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         FieldBuilder<Byte, T> byteField(String key);
 
         /**
          * Adds a short field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         FieldBuilder<Short, T> shortField(String key);
 
         /**
          * Adds an int field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         FieldBuilder<Integer, T> intField(String key);
 
         /**
          * Adds a long field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         FieldBuilder<Long, T> longField(String key);
 
         /**
          * Adds a float field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         FieldBuilder<Float, T> floatField(String key);
 
         /**
          * Adds a double field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         FieldBuilder<Double, T> doubleField(String key);
 
         /**
          * Adds a string field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         FieldBuilder<String, T> stringField(String key);
 
         /**
          * Adds a {@link BlockPos} field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
-        FieldBuilder<NbtElement, T> nbtElementField(String key);
+        FieldBuilder<Tag, T> nbtElementField(String key);
 
         /**
          * Adds a {@link BlockPos} field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         FieldBuilder<UUID, T> uuidField(String key);
 
         /**
          * Adds a {@link BlockPos} field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         FieldBuilder<BlockPos, T> blockPosField(String key);
 
         /**
          * Adds a {@link BlockState} field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         FieldBuilder<BlockState, T> blockStateField(String key);
 
         /**
-         * Adds a {@link ComponentMap} field to the data helper builder
-         * @param key mapping used when encoding to {@link WriteView} and decoding from {@link ReadView}
+         * Adds a {@link DataComponentMap} field to the data helper builder
+         * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
-        FieldBuilder<ComponentMap, T> componentMapField(String key);
+        FieldBuilder<DataComponentMap, T> componentMapField(String key);
 
         /**
          * Builds the data helper

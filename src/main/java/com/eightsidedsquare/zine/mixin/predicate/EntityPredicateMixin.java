@@ -1,10 +1,8 @@
 package com.eightsidedsquare.zine.mixin.predicate;
 
 import com.eightsidedsquare.zine.common.predicate.ZineEntityPredicate;
-import com.eightsidedsquare.zine.common.predicate.ZineEntityPredicatePositionalPredicates;
-import net.minecraft.predicate.NbtPredicate;
-import net.minecraft.predicate.component.ComponentsPredicate;
-import net.minecraft.predicate.entity.*;
+import com.eightsidedsquare.zine.common.predicate.ZineEntityPredicateLocation;
+import net.minecraft.advancements.criterion.*;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,22 +12,22 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.Optional;
 
 @Mixin(EntityPredicate.class)
-public abstract class EntityPredicateMixin implements ZineEntityPredicate, ZineEntityPredicatePositionalPredicates {
+public abstract class EntityPredicateMixin implements ZineEntityPredicate, ZineEntityPredicateLocation {
 
     @Shadow @Final @Mutable
-    private Optional<EntityTypePredicate> type;
+    private Optional<EntityTypePredicate> entityType;
 
     @Shadow @Final @Mutable
-    private Optional<DistancePredicate> distance;
+    private Optional<DistancePredicate> distanceToPlayer;
 
     @Shadow @Final @Mutable
     private Optional<MovementPredicate> movement;
 
     @Shadow @Final @Mutable
-    private EntityPredicate.PositionalPredicates location;
+    private EntityPredicate.LocationWrapper location;
 
     @Shadow @Final @Mutable
-    private Optional<EntityEffectPredicate> effects;
+    private Optional<MobEffectsPredicate> effects;
 
     @Shadow @Final @Mutable
     private Optional<NbtPredicate> nbt;
@@ -41,7 +39,7 @@ public abstract class EntityPredicateMixin implements ZineEntityPredicate, ZineE
     private Optional<EntityEquipmentPredicate> equipment;
 
     @Shadow @Final @Mutable
-    private Optional<EntitySubPredicate> typeSpecific;
+    private Optional<EntitySubPredicate> subPredicate;
 
     @Shadow @Final @Mutable
     private Optional<Integer> periodicTick;
@@ -62,16 +60,16 @@ public abstract class EntityPredicateMixin implements ZineEntityPredicate, ZineE
     private Optional<SlotsPredicate> slots;
 
     @Shadow @Final @Mutable
-    private ComponentsPredicate components;
+    private DataComponentMatchers components;
 
     @Override
     public void zine$setType(@Nullable EntityTypePredicate type) {
-        this.type = Optional.ofNullable(type);
+        this.entityType = Optional.ofNullable(type);
     }
 
     @Override
     public void zine$setDistance(@Nullable DistancePredicate distance) {
-        this.distance = Optional.ofNullable(distance);
+        this.distanceToPlayer = Optional.ofNullable(distance);
     }
 
     @Override
@@ -80,12 +78,12 @@ public abstract class EntityPredicateMixin implements ZineEntityPredicate, ZineE
     }
 
     @Override
-    public void zine$setLocation(EntityPredicate.PositionalPredicates location) {
+    public void zine$setLocation(EntityPredicate.LocationWrapper location) {
         this.location = location;
     }
 
     @Override
-    public void zine$setEffects(@Nullable EntityEffectPredicate effects) {
+    public void zine$setEffects(@Nullable MobEffectsPredicate effects) {
         this.effects = Optional.ofNullable(effects);
     }
 
@@ -106,7 +104,7 @@ public abstract class EntityPredicateMixin implements ZineEntityPredicate, ZineE
 
     @Override
     public void zine$setTypeSpecific(@Nullable EntitySubPredicate typeSpecific) {
-        this.typeSpecific = Optional.ofNullable(typeSpecific);
+        this.subPredicate = Optional.ofNullable(typeSpecific);
     }
 
     @Override
@@ -140,7 +138,7 @@ public abstract class EntityPredicateMixin implements ZineEntityPredicate, ZineE
     }
 
     @Override
-    public void zine$setComponents(ComponentsPredicate components) {
+    public void zine$setComponents(DataComponentMatchers components) {
         this.components = components;
     }
 

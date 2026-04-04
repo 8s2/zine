@@ -1,9 +1,9 @@
 package com.eightsidedsquare.zine.common.advancement;
 
 import net.fabricmc.fabric.api.event.Event;
-import net.minecraft.advancement.Advancement;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.util.Identifier;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.Identifier;
 
 public final class AdvancementEvents {
     private AdvancementEvents() {
@@ -19,7 +19,7 @@ public final class AdvancementEvents {
 
     @FunctionalInterface
     public interface ModifyAdvancement {
-        Advancement modifyAdvancement(Advancement advancement, RegistryWrapper.WrapperLookup wrapperLookup);
+        Advancement modifyAdvancement(Advancement advancement, HolderLookup.Provider wrapperLookup);
     }
 
 }

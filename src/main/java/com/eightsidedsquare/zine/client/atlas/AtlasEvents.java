@@ -3,8 +3,8 @@ package com.eightsidedsquare.zine.client.atlas;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.event.Event;
-import net.minecraft.client.texture.atlas.AtlasSource;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.renderer.texture.atlas.SpriteSource;
+import net.minecraft.resources.Identifier;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public final class AtlasEvents {
          * Called to modify the sources of a sprite atlas by manipulating the sources list or sources within it.
          * @param sources the list of sprite sources for the given atlas
          */
-        void modifySources(List<AtlasSource> sources);
+        void modifySources(List<SpriteSource> sources);
     }
 
 }

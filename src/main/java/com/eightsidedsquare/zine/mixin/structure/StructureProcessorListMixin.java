@@ -2,8 +2,8 @@ package com.eightsidedsquare.zine.mixin.structure;
 
 import com.eightsidedsquare.zine.common.util.ZineUtil;
 import com.eightsidedsquare.zine.common.world.structure.ZineStructureProcessorList;
-import net.minecraft.structure.processor.StructureProcessor;
-import net.minecraft.structure.processor.StructureProcessorList;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;

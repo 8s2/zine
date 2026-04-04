@@ -4,12 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.minecraft.data.DataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
-import net.minecraft.data.DataWriter;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +24,18 @@ import java.util.concurrent.CompletableFuture;
  */
 public abstract class ParticleTextureDataProvider implements DataProvider {
 
-    private final DataOutput.PathResolver pathResolver;
+    private final PackOutput.PathProvider pathResolver;
 
-    public ParticleTextureDataProvider(FabricDataOutput output) {
-        this.pathResolver = output.getResolver(DataOutput.OutputType.RESOURCE_PACK, "particles");
+    public ParticleTextureDataProvider(FabricPackOutput output) {
+        this.pathResolver = output.createPathProvider(PackOutput.Target.RESOURCE_PACK, "particles");
     }
 
-    protected abstract void generate(ParticleTextureDataConsumer consumer);
+    protected abstract void generate(Output output);
 
     protected final Identifier[] rangeAscending(Identifier texture, int minInclusive, int maxInclusive) {
         Identifier[] textures = this.createRangeArray(minInclusive, maxInclusive);
         for(int i = minInclusive; i <= maxInclusive; i++) {
-            textures[i] = texture.withSuffixedPath("_" + i);
+            textures[i] = texture.withSuffix("_" + i);
         }
         return textures;
     }
@@ -42,7 +43,7 @@ public abstract class ParticleTextureDataProvider implements DataProvider {
     protected final Identifier[] rangeDescending(Identifier texture, int minInclusive, int maxInclusive) {
         Identifier[] textures = this.createRangeArray(minInclusive, maxInclusive);
         for(int i = minInclusive; i <= maxInclusive; i++) {
-            textures[maxInclusive + minInclusive - i] = texture.withSuffixedPath("_" + i);
+            textures[maxInclusive + minInclusive - i] = texture.withSuffix("_" + i);
         }
         return textures;
     }
@@ -57,18 +58,18 @@ public abstract class ParticleTextureDataProvider implements DataProvider {
     }
 
     @Override
-    public CompletableFuture<?> run(DataWriter writer) {
+    public CompletableFuture<?> run(CachedOutput writer) {
         List<CompletableFuture<?>> futures = new ArrayList<>();
         Map<Identifier, List<Identifier>> map = new Object2ObjectOpenHashMap<>();
         this.generate((particleType, textures) ->
-                map.put(Registries.PARTICLE_TYPE.getId(particleType), textures)
+                map.put(BuiltInRegistries.PARTICLE_TYPE.getKey(particleType), textures)
         );
         map.forEach((id, textures) -> {
             JsonObject jsonObject = new JsonObject();
             JsonArray jsonArray = new JsonArray();
             textures.forEach(texture -> jsonArray.add(texture.toString()));
             jsonObject.add("textures", jsonArray);
-            futures.add(DataProvider.writeToPath(writer, jsonObject, this.pathResolver.resolveJson(id)));
+            futures.add(DataProvider.saveStable(writer, jsonObject, this.pathResolver.json(id)));
         });
         return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
     }
@@ -76,5 +77,23 @@ public abstract class ParticleTextureDataProvider implements DataProvider {
     @Override
     public String getName() {
         return "Particle Texture Data";
+    }
+
+    @FunctionalInterface
+    public interface Output {
+
+        void accept(ParticleType<?> particleType, List<Identifier> textures);
+
+        default void accept(ParticleType<?> particleType, Identifier... textures) {
+            this.accept(particleType, List.of(textures));
+        }
+
+        /**
+         * Accepts the particle type with its registered ID as its single texture
+         */
+        default void accept(ParticleType<?> particleType) {
+            this.accept(particleType, BuiltInRegistries.PARTICLE_TYPE.getKey(particleType));
+        }
+
     }
 }
