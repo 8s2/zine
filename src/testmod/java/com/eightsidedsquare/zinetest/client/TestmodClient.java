@@ -13,7 +13,7 @@ import com.eightsidedsquare.zine.client.model.ModelEvents;
 import com.eightsidedsquare.zine.client.registry.ClientRegistryHelper;
 import com.eightsidedsquare.zine.client.trim.ArmorTrimRegistry;
 import com.eightsidedsquare.zinetest.core.TestmodBlocks;
-import com.eightsidedsquare.zinetest.core.TestmodInit;
+import com.eightsidedsquare.zinetest.core.Testmod;
 import com.eightsidedsquare.zinetest.core.TestmodItems;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
@@ -44,9 +44,9 @@ import java.util.Map;
 
 public class TestmodClient implements ClientModInitializer {
 
-    public static final ClientRegistryHelper REGISTRY = ClientRegistryHelper.create(TestmodInit.MOD_ID);
-    public static final Identifier NEST_MODEL = TestmodInit.id("nest");
-    private static final Identifier TEST_MODEL = TestmodInit.id("item/test");
+    public static final ClientRegistryHelper REGISTRY = ClientRegistryHelper.create(Testmod.MOD_ID);
+    public static final Identifier NEST_MODEL = Testmod.id("nest");
+    private static final Identifier TEST_MODEL = Testmod.id("item/test");
     private static final boolean SHOW_TEST_HUD = false;
 
     @Override
@@ -65,7 +65,7 @@ public class TestmodClient implements ClientModInitializer {
                             new Vector3f(0, -5, 1f),
                             0.05f
                     ),
-                    TestmodInit.id("goo"),
+                    Testmod.id("goo"),
                     new SpriteProperties(16, 16, 64, 2, false)
             ));
             sources.add(new RemapSpriteSource(
@@ -75,7 +75,7 @@ public class TestmodClient implements ClientModInitializer {
                                     Map.of(
                                             0, RemapSpriteSource.texture(
                                                     Identifier.parse("block/debug"),
-                                                    TestmodInit.id("block/offset"),
+                                                    Testmod.id("block/offset"),
                                                     -16,
                                                     16
                                             ),
@@ -85,15 +85,15 @@ public class TestmodClient implements ClientModInitializer {
 
                     ),
                     List.of(
-                            RemapSpriteSource.mapping(TestmodInit.id("block/bricks_uv"), null, "_bricks"),
-                            RemapSpriteSource.mapping(TestmodInit.id("block/stone_bricks_uv"), null, "_stone_bricks"),
-                            RemapSpriteSource.mapping(TestmodInit.id("block/mud_bricks_uv"), null, "_mud_bricks"),
-                            RemapSpriteSource.mapping(TestmodInit.id("block/tiles_uv"), null, "_tiles"),
-                            RemapSpriteSource.mapping(TestmodInit.id("block/cut_uv"), "cut_", null),
-                            RemapSpriteSource.mapping(TestmodInit.id("block/full_uv"), null, "_block")
+                            RemapSpriteSource.mapping(Testmod.id("block/bricks_uv"), null, "_bricks"),
+                            RemapSpriteSource.mapping(Testmod.id("block/stone_bricks_uv"), null, "_stone_bricks"),
+                            RemapSpriteSource.mapping(Testmod.id("block/mud_bricks_uv"), null, "_mud_bricks"),
+                            RemapSpriteSource.mapping(Testmod.id("block/tiles_uv"), null, "_tiles"),
+                            RemapSpriteSource.mapping(Testmod.id("block/cut_uv"), "cut_", null),
+                            RemapSpriteSource.mapping(Testmod.id("block/full_uv"), null, "_block")
                     )
             ));
-            sources.add(new ConnectedTexturesSpriteSource(TestmodInit.id("block/wood")));
+            sources.add(new ConnectedTexturesSpriteSource(Testmod.id("block/wood")));
 //            sources.add(new SingleFile(Identifier.withDefaultNamespace("item/egg")));
 //            sources.add(new SingleFile(Identifier.withDefaultNamespace("item/brown_egg")));
 //            sources.add(new SingleFile(Identifier.withDefaultNamespace("item/blue_egg")));
@@ -111,7 +111,7 @@ public class TestmodClient implements ClientModInitializer {
             ModelTemplates.FLAT_ITEM.create(TestmodItems.TOURMALINE, TextureMapping.layer0(TestmodItems.TOURMALINE), modelCollector);
             ModelTemplates.FLAT_ITEM.create(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE, TextureMapping.layer0(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE), modelCollector);
             ModelTemplates.CUBE_ALL.create(TestmodBlocks.TOURMALINE_BLOCK, TextureMapping.cube(TestmodBlocks.TOURMALINE_BLOCK), modelCollector);
-            ModelTemplates.CUBE_ALL.create(TestmodBlocks.GOO, TextureMapping.cube(new Material(TestmodInit.id("goo"))), modelCollector);
+            ModelTemplates.CUBE_ALL.create(TestmodBlocks.GOO, TextureMapping.cube(new Material(Testmod.id("goo"))), modelCollector);
             ModelTemplates.CUBE_ALL.create(TestmodBlocks.WOOD, TextureMapping.cube(TextureMapping.getBlockTexture(TestmodBlocks.WOOD, "_all")), modelCollector);
             ModelTemplates.CUBE_ALL.create(TestmodBlocks.RAINBOW, TextureMapping.cube(TextureMapping.getBlockTexture(TestmodBlocks.RAINBOW)), modelCollector);
         });
@@ -141,9 +141,9 @@ public class TestmodClient implements ClientModInitializer {
             translations.putIfAbsent(TestmodItems.RAINBOW.getDescriptionId(), "Rainbow");
             translations.putIfAbsent(TestmodItems.BIG_DIAMOND.getDescriptionId(), "Big Diamond");
         });
-        ArmorTrimRegistry.registerMaterial(TestmodInit.TOURMALINE_TRIM_MATERIAL);
-        ArmorTrimRegistry.registerMaterial(TestmodInit.OBSIDIAN_TRIM_MATERIAL);
-        ArmorTrimRegistry.registerPattern(TestmodInit.CHECKERED_TRIM_PATTERN);
+        ArmorTrimRegistry.registerMaterial(Testmod.TOURMALINE_TRIM_MATERIAL);
+        ArmorTrimRegistry.registerMaterial(Testmod.OBSIDIAN_TRIM_MATERIAL);
+        ArmorTrimRegistry.registerPattern(Testmod.CHECKERED_TRIM_PATTERN);
 
         REGISTRY.itemModel("transformed", TransformedItemModel.Unbaked.CODEC);
         REGISTRY.itemModel("nest", UnbakedNestItemModel.CODEC);
@@ -151,7 +151,7 @@ public class TestmodClient implements ClientModInitializer {
         REGISTRY.blockStateModel("nest", NestBlockStateModel.Unbaked.CODEC);
 
         if(SHOW_TEST_HUD) {
-            HudElementRegistry.attachElementAfter(VanillaHudElements.TITLE_AND_SUBTITLE, TestmodInit.id("test"), (ctx, tickCounter) -> {
+            HudElementRegistry.attachElementAfter(VanillaHudElements.TITLE_AND_SUBTITLE, Testmod.id("test"), (ctx, tickCounter) -> {
                 Font font = Minecraft.getInstance().font;
                 MutableComponent text = Component.literal("ABC 123").withStyle(ChatFormatting.ITALIC, ChatFormatting.BOLD);
                 ctx.text(font, text, 10, 10, -1, false);

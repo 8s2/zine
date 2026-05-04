@@ -2,7 +2,7 @@ package com.eightsidedsquare.zine.mixin.predicate;
 
 import com.eightsidedsquare.zine.common.predicate.ZineDataComponentMatchers;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import net.minecraft.advancements.criterion.DataComponentMatchers;
+import net.minecraft.advancements.predicates.DataComponentMatchers;
 import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.predicates.DataComponentPredicate;
 import org.spongepowered.asm.mixin.Final;

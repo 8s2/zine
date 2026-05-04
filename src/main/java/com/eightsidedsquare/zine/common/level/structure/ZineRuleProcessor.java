@@ -1,4 +1,4 @@
-package com.eightsidedsquare.zine.common.world.structure;
+package com.eightsidedsquare.zine.common.level.structure;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule;

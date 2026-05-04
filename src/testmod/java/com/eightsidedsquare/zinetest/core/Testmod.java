@@ -21,7 +21,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.RuleProcessor
 
 import java.util.List;
 
-public class TestmodInit implements ModInitializer {
+public class Testmod implements ModInitializer {
 
     public static final String MOD_ID = "zinetest";
     public static final RegistryHelper REGISTRY = RegistryHelper.create(MOD_ID);

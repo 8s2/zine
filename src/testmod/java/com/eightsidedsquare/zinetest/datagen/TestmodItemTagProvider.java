@@ -1,11 +1,11 @@
 package com.eightsidedsquare.zinetest.datagen;
 
-import com.eightsidedsquare.zinetest.core.TestmodItems;
+import com.eightsidedsquare.zinetest.core.references.TestmodItemIds;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.Items;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -17,8 +17,8 @@ public class TestmodItemTagProvider extends FabricTagsProvider.ItemTagsProvider 
 
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
-        this.valueLookupBuilder(ItemTags.TRIM_MATERIALS)
-                .add(TestmodItems.TOURMALINE)
-                .add(Items.OBSIDIAN);
+        this.builder(ItemTags.TRIM_MATERIALS)
+                .add(TestmodItemIds.TOURMALINE)
+                .add(BlockItemIds.OBSIDIAN.item());
     }
 }

@@ -4,6 +4,7 @@ import com.eightsidedsquare.zine.common.registry.FreezeRegistriesEventsImpl;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.WritableRegistry;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -12,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MappedRegistry.class)
 public abstract class MappedRegistryMixin implements WritableRegistry<Object> {
 
-    @Inject(method = "freeze", at = @At(value = "FIELD", target = "Lnet/minecraft/core/MappedRegistry;frozen:Z", ordinal = 1))
+    @Inject(method = "freeze", at = @At(value = "FIELD", target = "Lnet/minecraft/core/MappedRegistry;frozen:Z", ordinal = 0, opcode = Opcodes.PUTFIELD))
     private void zine$beforeFreeze(CallbackInfoReturnable<Registry<?>> cir) {
         FreezeRegistriesEventsImpl.apply(true, this);
     }

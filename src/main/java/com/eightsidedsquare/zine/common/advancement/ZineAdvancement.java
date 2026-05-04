@@ -1,6 +1,8 @@
 package com.eightsidedsquare.zine.common.advancement;
 
 import net.minecraft.advancements.*;
+import net.minecraft.advancements.triggers.Criterion;
+import net.minecraft.advancements.triggers.CriterionTrigger;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;

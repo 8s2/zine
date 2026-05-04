@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import net.minecraft.advancements.criterion.MobEffectsPredicate;
+import net.minecraft.advancements.predicates.MobEffectsPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 

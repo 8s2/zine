@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.mixin.structure;
 
-import com.eightsidedsquare.zine.common.world.structure.ZineProcessorRule;
+import com.eightsidedsquare.zine.common.level.structure.ZineProcessorRule;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.PosRuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule;

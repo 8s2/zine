@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(Font.class)
 public interface FontAccessor {
 
-    @Invoker("lambda$drawInBatch8xOutline$0")
+    @Invoker("lambda$prepare8xTextOutline$0")
     boolean zine$invokeAcceptOutline(
             Font.PreparedTextBuilder drawer,
             float[] advance,

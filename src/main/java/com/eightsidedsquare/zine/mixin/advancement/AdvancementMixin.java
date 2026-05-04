@@ -3,6 +3,8 @@ package com.eightsidedsquare.zine.mixin.advancement;
 import com.eightsidedsquare.zine.common.advancement.ZineAdvancement;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
 import net.minecraft.advancements.*;
+import net.minecraft.advancements.triggers.Criterion;
+import net.minecraft.advancements.triggers.CriterionTrigger;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;

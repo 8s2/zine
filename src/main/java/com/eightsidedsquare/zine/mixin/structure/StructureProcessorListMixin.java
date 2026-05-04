@@ -1,7 +1,7 @@
 package com.eightsidedsquare.zine.mixin.structure;
 
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import com.eightsidedsquare.zine.common.world.structure.ZineStructureProcessorList;
+import com.eightsidedsquare.zine.common.level.structure.ZineStructureProcessorList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import org.spongepowered.asm.mixin.Final;

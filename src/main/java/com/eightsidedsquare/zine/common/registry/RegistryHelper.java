@@ -21,8 +21,8 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityDataRegistry
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
-import net.minecraft.advancements.CriterionTrigger;
-import net.minecraft.advancements.criterion.EntitySubPredicate;
+import net.minecraft.advancements.predicates.entity.EntitySubPredicate;
+import net.minecraft.advancements.triggers.CriterionTrigger;
 import net.minecraft.commands.synchronization.ArgumentTypeInfo;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -45,6 +45,7 @@ import net.minecraft.network.chat.numbers.NumberFormat;
 import net.minecraft.network.chat.numbers.NumberFormatType;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.references.BlockItemId;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.dialog.Dialog;
@@ -109,6 +110,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.DecoratedPotPattern;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -204,6 +206,23 @@ public interface RegistryHelper {
     }
 
     /**
+     * @param blockName the name of the block form of the item
+     * @param itemName the name of the item form of the block
+     * @return a new {@link BlockItemId} instance
+     */
+    default BlockItemId blockItemId(String blockName, String itemName) {
+        return BlockItemId.create(this.id(blockName), this.id(itemName));
+    }
+
+    /**
+     * @param name the name of the block and item
+     * @return a new {@link BlockItemId} instance
+     */
+    default BlockItemId blockItemId(String name) {
+        return this.blockItemId(name, name);
+    }
+
+    /**
      * Registers a value to the given registry.
      * @param registry the static registry to register {@code value} to
      * @param name the path of the registered value's identifier
@@ -212,6 +231,17 @@ public interface RegistryHelper {
      */
     default <T, V extends T> V register(Registry<T> registry, String name, V value) {
         return Registry.register(registry, this.id(name), value);
+    }
+
+    /**
+     * Registers a value to the given registry.
+     * @param registry the static registry to register {@code value} to
+     * @param key the key to register the value with
+     * @param value the value to register
+     * @return {@code value}, now registered
+     */
+    default <T, V extends T> V register(Registry<T> registry, ResourceKey<T> key, V value) {
+        return Registry.register(registry, key, value);
     }
 
     /**
@@ -226,13 +256,14 @@ public interface RegistryHelper {
     }
 
     /**
-     * Creates a registry queue. See {@link RegistryQueue} for more info.
-     * @param registry the registry that the registry queue uses
-     * @return the registry queue
-     * @param <T> the type of the registry
+     * Registers a value to the given registry.
+     * @param registry the static registry to register {@code value} to
+     * @param key the key to register the value with
+     * @param value the value to register
+     * @return registered {@code value} wrapped in a {@link Holder.Reference}
      */
-    default <T> RegistryQueue<T> createQueue(Registry<T> registry) {
-        return new RegistryQueueImpl<>(registry, this);
+    default <T> Holder.Reference<T> registerReference(Registry<T> registry, ResourceKey<T> key, T value) {
+        return Registry.registerForHolder(registry, key, value);
     }
 
     /**
@@ -331,7 +362,7 @@ public interface RegistryHelper {
      * @return the registered block created by the {@code factory} with {@code settings}
      * @param <T> the type of the block
      */
-    default <T extends Block> T block(String name, net.minecraft.world.level.block.state.BlockBehaviour.Properties settings, Function<net.minecraft.world.level.block.state.BlockBehaviour.Properties, T> factory) {
+    default <T extends Block> T block(String name, BlockBehaviour.Properties settings, Function<BlockBehaviour.Properties, T> factory) {
         return this.block(name, factory.apply(settings.setId(this.key(Registries.BLOCK, name))));
     }
 
@@ -341,7 +372,7 @@ public interface RegistryHelper {
      * @param settings the block's settings
      * @return the registered block with {@code settings}
      */
-    default Block block(String name, net.minecraft.world.level.block.state.BlockBehaviour.Properties settings) {
+    default Block block(String name, BlockBehaviour.Properties settings) {
         return this.block(name, settings, Block::new);
     }
 
@@ -368,7 +399,7 @@ public interface RegistryHelper {
      * @return the registered block created by the {@code factory} with {@code settings}
      * @param <T> the type of the block
      */
-    default <T extends Block> T blockWithItem(String name, net.minecraft.world.level.block.state.BlockBehaviour.Properties settings, Function<net.minecraft.world.level.block.state.BlockBehaviour.Properties, T> factory) {
+    default <T extends Block> T blockWithItem(String name, BlockBehaviour.Properties settings, Function<BlockBehaviour.Properties, T> factory) {
         return this.registerBlockItem(name, this.block(name, settings, factory));
     }
 
@@ -379,7 +410,7 @@ public interface RegistryHelper {
      * @param settings the block's settings
      * @return the registered block with {@code settings}
      */
-    default Block blockWithItem(String name, net.minecraft.world.level.block.state.BlockBehaviour.Properties settings) {
+    default Block blockWithItem(String name, BlockBehaviour.Properties settings) {
         return this.registerBlockItem(name, this.block(name, settings));
     }
 
@@ -1629,23 +1660,13 @@ public interface RegistryHelper {
     }
 
     /**
-     * @param name the name of the structure processor type
-     * @param type the structure processor type to register
-     * @return the registered structure processor type
-     * @param <T> the type of structure processor
-     */
-    default <T extends StructureProcessor> StructureProcessorType<T> structureProcessor(String name, StructureProcessorType<T> type) {
-        return this.register(BuiltInRegistries.STRUCTURE_PROCESSOR, name, type);
-    }
-
-    /**
-     * @param name the name of the structure processor type
+     * @param name the name of the structure processor
      * @param codec the codec of the structure processor
-     * @return the registered structure processor type
+     * @return the registered structure processor codec
      * @param <T> the type of structure processor
      */
-    default <T extends StructureProcessor> StructureProcessorType<T> structureProcessor(String name, MapCodec<T> codec) {
-        return this.structureProcessor(name, () -> codec);
+    default <T extends StructureProcessor> MapCodec<T> structureProcessor(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.STRUCTURE_PROCESSOR, name, codec);
     }
 
     /**
@@ -1722,7 +1743,7 @@ public interface RegistryHelper {
      * @return the registered entity sub-predicate codec
      * @param <T> the type of entity sub-predicate
      */
-    default <T extends EntitySubPredicate> MapCodec<T> entitySubPredicate(String name, MapCodec<T> codec) {
+    default <T extends EntitySubPredicate> Codec<T> entitySubPredicate(String name, Codec<T> codec) {
         return this.register(BuiltInRegistries.ENTITY_SUB_PREDICATE_TYPE, name, codec);
     }
 

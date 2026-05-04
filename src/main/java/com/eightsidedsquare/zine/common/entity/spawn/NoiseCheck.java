@@ -1,11 +1,11 @@
 package com.eightsidedsquare.zine.common.entity.spawn;
 
 import com.eightsidedsquare.zine.common.util.codec.CodecUtil;
-import com.eightsidedsquare.zine.common.world.NoiseRouterNoise;
-import com.eightsidedsquare.zine.common.world.density_function.MutableNoisePos;
+import com.eightsidedsquare.zine.common.level.NoiseRouterNoise;
+import com.eightsidedsquare.zine.common.level.density_function.MutableNoisePos;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.variant.SpawnCondition;

@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.mixin.structure;
 
-import com.eightsidedsquare.zine.common.world.structure.ZineRuleProcessor;
+import com.eightsidedsquare.zine.common.level.structure.ZineRuleProcessor;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleProcessor;

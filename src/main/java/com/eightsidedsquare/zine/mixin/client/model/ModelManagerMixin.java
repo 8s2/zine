@@ -190,7 +190,7 @@ public abstract class ModelManagerMixin {
         }
     }
 
-    @Mixin(targets = "net.minecraft.client.resources.model.ModelManager$1")
+    @Mixin(targets = "net.minecraft.client.resources.model.ModelManager$MaterialBakerImpl")
     public static abstract class MaterialBakerImplMixin implements ZineMaterialBaker {
         @Shadow @Final
         private Map<Material, Material.Baked> bakedMaterials;

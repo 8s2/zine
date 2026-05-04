@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public interface TestmodBlockEntities {
 
-    BlockEntityType<NestBlockEntity> NEST = TestmodInit.REGISTRY.blockEntity(
+    BlockEntityType<NestBlockEntity> NEST = Testmod.REGISTRY.blockEntity(
             "nest",
             FabricBlockEntityTypeBuilder.create(NestBlockEntity::new, TestmodBlocks.NEST)
     );

@@ -15,7 +15,7 @@
       "com.eightsidedsquare.zinetest.client.TestmodClient"
     ],
     "main": [
-      "com.eightsidedsquare.zinetest.core.TestmodInit"
+      "com.eightsidedsquare.zinetest.core.Testmod"
     ],
     "fabric-datagen": [
       "com.eightsidedsquare.zinetest.datagen.TestmodDatagen"

@@ -1,4 +1,4 @@
-package com.eightsidedsquare.zine.common.world.density_function;
+package com.eightsidedsquare.zine.common.level.density_function;
 
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.levelgen.DensityFunction;

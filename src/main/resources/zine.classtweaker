@@ -7,35 +7,33 @@ transitive-inject-interface	com/mojang/blaze3d/platform/NativeImage com/eightsid
 transitive-inject-interface	net/minecraft/world/item/Item com/eightsidedsquare/zine/common/item/ZineItem
 transitive-inject-interface	net/minecraft/world/item/Item$Properties com/eightsidedsquare/zine/common/item/ZineItemProperties
 transitive-inject-interface	net/minecraft/world/item/enchantment/Enchantment$Builder com/eightsidedsquare/zine/common/enchantment/ZineEnchantmentBuilder
-transitive-inject-interface	net/minecraft/advancements/criterion/DamagePredicate com/eightsidedsquare/zine/common/predicate/ZineDamagePredicate
-transitive-inject-interface	net/minecraft/advancements/criterion/DamageSourcePredicate com/eightsidedsquare/zine/common/predicate/ZineDamageSourcePredicate
-transitive-inject-interface	net/minecraft/advancements/criterion/DistancePredicate com/eightsidedsquare/zine/common/predicate/ZineDistancePredicate
-transitive-inject-interface	net/minecraft/advancements/criterion/EntityFlagsPredicate com/eightsidedsquare/zine/common/predicate/ZineEntityFlagsPredicate
-transitive-inject-interface	net/minecraft/advancements/criterion/EntityPredicate com/eightsidedsquare/zine/common/predicate/ZineEntityPredicate
-transitive-inject-interface	net/minecraft/advancements/criterion/EntityPredicate com/eightsidedsquare/zine/common/predicate/ZineEntityPredicateLocation
-transitive-inject-interface	net/minecraft/advancements/criterion/EntityPredicate$LocationWrapper com/eightsidedsquare/zine/common/predicate/ZineEntityPredicateLocation
-transitive-inject-interface	net/minecraft/advancements/criterion/EntityTypePredicate com/eightsidedsquare/zine/common/predicate/ZineEntityTypePredicate
-transitive-inject-interface	net/minecraft/advancements/criterion/ItemPredicate com/eightsidedsquare/zine/common/predicate/ZineItemPredicate
-transitive-inject-interface	net/minecraft/advancements/criterion/LocationPredicate com/eightsidedsquare/zine/common/predicate/ZineLocationPredicate
-transitive-inject-interface	net/minecraft/advancements/criterion/MobEffectsPredicate com/eightsidedsquare/zine/common/predicate/ZineMobEffectsPredicate
-transitive-inject-interface	net/minecraft/advancements/criterion/NbtPredicate com/eightsidedsquare/zine/common/predicate/ZineNbtPredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/DamagePredicate com/eightsidedsquare/zine/common/predicate/ZineDamagePredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/DamageSourcePredicate com/eightsidedsquare/zine/common/predicate/ZineDamageSourcePredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/DistancePredicate com/eightsidedsquare/zine/common/predicate/ZineDistancePredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/entity/EntityFlagsPredicate com/eightsidedsquare/zine/common/predicate/ZineEntityFlagsPredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/entity/EntityPredicate com/eightsidedsquare/zine/common/predicate/ZineEntityPredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/entity/EntityTypePredicate com/eightsidedsquare/zine/common/predicate/ZineEntityTypePredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/ItemPredicate com/eightsidedsquare/zine/common/predicate/ZineItemPredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/LocationPredicate com/eightsidedsquare/zine/common/predicate/ZineLocationPredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/MobEffectsPredicate com/eightsidedsquare/zine/common/predicate/ZineMobEffectsPredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/NbtPredicate com/eightsidedsquare/zine/common/predicate/ZineNbtPredicate
 transitive-inject-interface	net/minecraft/network/chat/Component com/eightsidedsquare/zine/common/text/ZineComponent
 transitive-inject-interface	net/minecraft/network/chat/Style com/eightsidedsquare/zine/common/text/ZineStyle
-transitive-inject-interface	net/minecraft/advancements/criterion/EntityEquipmentPredicate com/eightsidedsquare/zine/common/predicate/ZineEntityEquipmentPredicate
-transitive-inject-interface	net/minecraft/world/level/levelgen/structure/pools/FeaturePoolElement com/eightsidedsquare/zine/common/world/structure/ZineFeaturePoolElement
-transitive-inject-interface	net/minecraft/world/level/levelgen/structure/pools/SinglePoolElement com/eightsidedsquare/zine/common/world/structure/ZineSinglePoolElement
-transitive-inject-interface	net/minecraft/world/level/levelgen/structure/pools/ListPoolElement com/eightsidedsquare/zine/common/world/structure/ZineListPoolElement
-transitive-inject-interface	net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool com/eightsidedsquare/zine/common/world/structure/ZineStructureTemplatePool
-transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templatesystem/ProcessorRule com/eightsidedsquare/zine/common/world/structure/ZineProcessorRule
-transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templatesystem/RuleProcessor com/eightsidedsquare/zine/common/world/structure/ZineRuleProcessor
-transitive-inject-interface	net/minecraft/advancements/criterion/BlockPredicate com/eightsidedsquare/zine/common/predicate/ZineBlockPredicate
-transitive-inject-interface	net/minecraft/advancements/criterion/FluidPredicate com/eightsidedsquare/zine/common/predicate/ZineFluidPredicate
-transitive-inject-interface	net/minecraft/advancements/criterion/LightPredicate com/eightsidedsquare/zine/common/predicate/ZineLightPredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/entity/EntityEquipmentPredicate com/eightsidedsquare/zine/common/predicate/ZineEntityEquipmentPredicate
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/pools/FeaturePoolElement com/eightsidedsquare/zine/common/level/structure/ZineFeaturePoolElement
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/pools/SinglePoolElement com/eightsidedsquare/zine/common/level/structure/ZineSinglePoolElement
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/pools/ListPoolElement com/eightsidedsquare/zine/common/level/structure/ZineListPoolElement
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/pools/StructureTemplatePool com/eightsidedsquare/zine/common/level/structure/ZineStructureTemplatePool
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templatesystem/ProcessorRule com/eightsidedsquare/zine/common/level/structure/ZineProcessorRule
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templatesystem/RuleProcessor com/eightsidedsquare/zine/common/level/structure/ZineRuleProcessor
+transitive-inject-interface	net/minecraft/advancements/predicates/BlockPredicate com/eightsidedsquare/zine/common/predicate/ZineBlockPredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/FluidPredicate com/eightsidedsquare/zine/common/predicate/ZineFluidPredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/LightPredicate com/eightsidedsquare/zine/common/predicate/ZineLightPredicate
 transitive-inject-interface	net/minecraft/network/chat/MutableComponent com/eightsidedsquare/zine/common/text/ZineMutableComponent
-transitive-inject-interface	net/minecraft/advancements/criterion/ContextAwarePredicate com/eightsidedsquare/zine/common/predicate/ZineContextAwarePredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/ContextAwarePredicate com/eightsidedsquare/zine/common/predicate/ZineContextAwarePredicate
 transitive-inject-interface	net/minecraft/resources/ResourceKey com/eightsidedsquare/zine/common/registry/ZineResourceKey<TT;>
 transitive-inject-interface	net/minecraft/util/FormattedCharSequence com/eightsidedsquare/zine/common/text/ZineFormattedCharSequence
-transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templatesystem/StructureProcessorList com/eightsidedsquare/zine/common/world/structure/ZineStructureProcessorList
+transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templatesystem/StructureProcessorList com/eightsidedsquare/zine/common/level/structure/ZineStructureProcessorList
 transitive-inject-interface	net/minecraft/client/gui/screens/inventory/tooltip/ClientTooltipComponent com/eightsidedsquare/zine/client/gui/ZineClientTooltipComponent
 transitive-inject-interface	net/minecraft/world/entity/animal/feline/CatVariant com/eightsidedsquare/zine/common/entity/variant/ZineCatVariant
 transitive-inject-interface	net/minecraft/world/entity/animal/frog/FrogVariant com/eightsidedsquare/zine/common/entity/variant/ZineFrogVariant
@@ -46,8 +44,8 @@ transitive-inject-interface	net/minecraft/core/component/DataComponentMap$Builde
 transitive-inject-interface	net/minecraft/core/component/DataComponentExactPredicate com/eightsidedsquare/zine/common/predicate/ZineDataComponentExactPredicate
 transitive-inject-interface	net/minecraft/world/entity/animal/wolf/WolfVariant com/eightsidedsquare/zine/common/entity/variant/ZineWolfVariant
 transitive-inject-interface	net/minecraft/world/entity/animal/wolf/WolfVariant$AssetInfo com/eightsidedsquare/zine/common/entity/variant/ZineWolfVariant$ZineAssetInfo
-transitive-inject-interface	net/minecraft/advancements/criterion/SlotsPredicate com/eightsidedsquare/zine/common/predicate/ZineSlotsPredicate
-transitive-inject-interface	net/minecraft/advancements/criterion/MovementPredicate com/eightsidedsquare/zine/common/predicate/ZineMovementPredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/SlotsPredicate com/eightsidedsquare/zine/common/predicate/ZineSlotsPredicate
+transitive-inject-interface	net/minecraft/advancements/predicates/entity/MovementPredicate com/eightsidedsquare/zine/common/predicate/ZineMovementPredicate
 transitive-inject-interface	net/minecraft/client/resources/model/sprite/MaterialBaker com/eightsidedsquare/zine/client/model/ZineMaterialBaker
 transitive-inject-interface net/minecraft/client/resources/model/sprite/Material com/eightsidedsquare/zine/client/model/ZineMaterial
 transitive-inject-interface net/minecraft/client/resources/model/sprite/Material$Baked com/eightsidedsquare/zine/client/model/ZineMaterial$Baked
@@ -85,12 +83,12 @@ transitive-inject-interface	net/minecraft/world/entity/animal/chicken/ChickenSou
 transitive-inject-interface	net/minecraft/world/entity/animal/cow/CowSoundVariant com/eightsidedsquare/zine/common/entity/variant/ZineSoundSet
 transitive-inject-interface	net/minecraft/world/entity/animal/feline/CatSoundVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobSoundVariant<Lnet/minecraft/world/entity/animal/feline/CatSoundVariant$CatSoundSet;>
 transitive-inject-interface	net/minecraft/world/entity/animal/feline/CatSoundVariant$CatSoundSet com/eightsidedsquare/zine/common/entity/variant/ZineCatSoundSet
-transitive-inject-interface	net/minecraft/advancements/criterion/DataComponentMatchers com/eightsidedsquare/zine/common/predicate/ZineDataComponentMatchers
-transitive-inject-interface	net/minecraft/world/item/WeatheringCopperItems com/eightsidedsquare/zine/common/util/ZineWeatheringCopperSet<Lnet/minecraft/world/item/Item;>
-transitive-inject-interface	net/minecraft/world/level/block/WeatheringCopperBlocks com/eightsidedsquare/zine/common/util/ZineWeatheringCopperSet<Lnet/minecraft/world/level/block/Block;>
+transitive-inject-interface	net/minecraft/advancements/predicates/DataComponentMatchers com/eightsidedsquare/zine/common/predicate/ZineDataComponentMatchers
 transitive-inject-interface	net/minecraft/core/ClientAsset$ResourceTexture com/eightsidedsquare/zine/common/entity/variant/ZineClientAssetResourceTexture
 transitive-inject-interface	net/minecraft/client/renderer/texture/SpriteLoader$Preparations com/eightsidedsquare/zine/client/util/ZineSpriteLoaderPreparations
 transitive-inject-interface	net/minecraft/client/resources/model/ResolvableModel$Resolver com/eightsidedsquare/zine/client/model/ZineResolvableModelResolver
+transitive-inject-interface net/minecraft/world/level/block/state/BlockBehaviour com/eightsidedsquare/zine/common/block/ZineBlockBehaviour
+transitive-inject-interface net/minecraft/world/level/block/state/BlockBehaviour$BlockStateBase com/eightsidedsquare/zine/common/block/ZineBlockBehaviour$ZineBlockStateBase
 accessible class net/minecraft/client/resources/model/ClientItemInfoLoader$PendingLoad
 accessible field net/minecraft/client/renderer/item/ClientItem model Lnet/minecraft/client/renderer/item/ItemModel$Unbaked;
 mutable field net/minecraft/client/renderer/item/ClientItem model Lnet/minecraft/client/renderer/item/ItemModel$Unbaked;
@@ -100,8 +98,8 @@ accessible method net/minecraft/world/entity/ai/village/poi/PoiTypes getBlockSta
 accessible method net/minecraft/world/level/levelgen/feature/featuresize/FeatureSizeType <init> (Lcom/mojang/serialization/MapCodec;)V
 accessible method net/minecraft/core/Holder$Reference bindValue (Ljava/lang/Object;)V
 accessible field net/minecraft/core/component/DataComponentMap$Builder map Lit/unimi/dsi/fastutil/objects/Reference2ObjectMap;
-accessible class net/minecraft/advancements/criterion/LocationPredicate$PositionPredicate
-accessible method net/minecraft/advancements/criterion/LocationPredicate$PositionPredicate of (Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;Lnet/minecraft/advancements/criterion/MinMaxBounds$Doubles;)Ljava/util/Optional;
+accessible class net/minecraft/advancements/predicates/LocationPredicate$PositionPredicate
+accessible method net/minecraft/advancements/predicates/LocationPredicate$PositionPredicate of (Lnet/minecraft/advancements/predicates/MinMaxBounds$Doubles;Lnet/minecraft/advancements/predicates/MinMaxBounds$Doubles;Lnet/minecraft/advancements/predicates/MinMaxBounds$Doubles;)Ljava/util/Optional;
 accessible method net/minecraft/world/entity/ai/village/poi/PoiTypes registerBlockStates (Lnet/minecraft/core/Holder;Ljava/util/Set;)V
 accessible class net/minecraft/client/gui/Font$PreparedTextBuilder
 accessible method net/minecraft/client/data/models/blockstates/MultiVariantGenerator validateAndExpandProperties (Ljava/util/Set;Lnet/minecraft/world/level/block/Block;Lnet/minecraft/client/data/models/blockstates/PropertyDispatch;)Ljava/util/Set;

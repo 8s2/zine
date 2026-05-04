@@ -1,4 +1,4 @@
-package com.eightsidedsquare.zine.common.world.structure;
+package com.eightsidedsquare.zine.common.level.structure;
 
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;

@@ -1,4 +1,4 @@
-package com.eightsidedsquare.zine.common.world;
+package com.eightsidedsquare.zine.common.level;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.StringRepresentable;

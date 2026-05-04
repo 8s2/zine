@@ -2,6 +2,7 @@ package com.eightsidedsquare.zine.mixin;
 
 import com.eightsidedsquare.zine.common.enchantment.ZineEnchantmentBuilder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +21,7 @@ public abstract class EnchantmentBuilderMixin implements ZineEnchantmentBuilder 
     private HolderSet<Enchantment> exclusiveSet;
 
     @Shadow @Final @Mutable
-    private net.minecraft.core.component.DataComponentMap.Builder effectMapBuilder;
+    private DataComponentMap.Builder effectMapBuilder;
 
     @Override
     public Enchantment.EnchantmentDefinition zine$getDefinition() {
@@ -39,12 +40,12 @@ public abstract class EnchantmentBuilderMixin implements ZineEnchantmentBuilder 
     }
 
     @Override
-    public net.minecraft.core.component.DataComponentMap.Builder zine$getEffectMap() {
+    public DataComponentMap.Builder zine$getEffectMap() {
         return this.effectMapBuilder;
     }
 
     @Override
-    public Enchantment.Builder zine$effectMap(net.minecraft.core.component.DataComponentMap.Builder effectMap) {
+    public Enchantment.Builder zine$effectMap(DataComponentMap.Builder effectMap) {
         this.effectMapBuilder = effectMap;
         return (Enchantment.Builder) (Object) this;
     }

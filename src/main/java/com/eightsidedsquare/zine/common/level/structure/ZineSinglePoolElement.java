@@ -1,4 +1,4 @@
-package com.eightsidedsquare.zine.common.world.structure;
+package com.eightsidedsquare.zine.common.level.structure;
 
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.Holder;

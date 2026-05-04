@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.mixin.structure;
 
-import com.eightsidedsquare.zine.common.world.structure.ZineSinglePoolElement;
+import com.eightsidedsquare.zine.common.level.structure.ZineSinglePoolElement;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.Identifier;

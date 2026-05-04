@@ -66,6 +66,16 @@ public final class ZineUtil {
         return map;
     }
 
+    public static <K, V> Map<K, V> putAllOrUnfreeze(Map<K, V> map, Map<K, V> values) {
+        try {
+            map.putAll(values);
+        } catch (UnsupportedOperationException e) {
+            map = new Object2ObjectOpenHashMap<>(map);
+            map.putAll(values);
+        }
+        return map;
+    }
+
     public static <E, T> HolderSet<T> mergeValue(HolderSet<T> registryEntryList, Function<E, Holder<T>> mapper, E value) {
         if(registryEntryList.size() == 0) {
             return HolderSet.direct(mapper, value);

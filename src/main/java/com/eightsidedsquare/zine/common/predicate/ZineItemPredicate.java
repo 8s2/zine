@@ -1,7 +1,7 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import net.minecraft.advancements.criterion.DataComponentMatchers;
-import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.predicates.DataComponentMatchers;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Nullable;
