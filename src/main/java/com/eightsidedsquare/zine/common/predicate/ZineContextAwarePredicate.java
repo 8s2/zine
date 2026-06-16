@@ -5,7 +5,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.List;
 
 public interface ZineContextAwarePredicate {
-
     default List<LootItemCondition> zine$getConditions() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -21,5 +20,4 @@ public interface ZineContextAwarePredicate {
     default void zine$addConditions(List<LootItemCondition> conditions) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

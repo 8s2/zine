@@ -2,11 +2,7 @@ package com.eightsidedsquare.zinetest.client;
 
 import com.eightsidedsquare.zine.client.atlas.AtlasEvents;
 import com.eightsidedsquare.zine.client.atlas.ConnectedTexturesSpriteSource;
-import com.eightsidedsquare.zine.client.atlas.GeneratorSpriteSource;
 import com.eightsidedsquare.zine.client.atlas.RemapSpriteSource;
-import com.eightsidedsquare.zine.client.atlas.generator.NoiseSpriteGenerator;
-import com.eightsidedsquare.zine.client.atlas.generator.SpriteProperties;
-import com.eightsidedsquare.zine.client.atlas.gradient.Gradient1D;
 import com.eightsidedsquare.zine.client.item.ItemModelEvents;
 import com.eightsidedsquare.zine.client.language.LanguageEvents;
 import com.eightsidedsquare.zine.client.model.ModelEvents;
@@ -35,15 +31,11 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Map;
 
 public class TestmodClient implements ClientModInitializer {
-
     public static final ClientRegistryHelper REGISTRY = ClientRegistryHelper.create(Testmod.MOD_ID);
     public static final Identifier NEST_MODEL = Testmod.id("nest");
     private static final Identifier TEST_MODEL = Testmod.id("item/test");
@@ -52,22 +44,6 @@ public class TestmodClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         AtlasEvents.modifySourcesEvent(Identifier.withDefaultNamespace("blocks")).register(sources -> {
-            sources.add(new GeneratorSpriteSource(
-                    new NoiseSpriteGenerator(
-                            Gradient1D.builder()
-                                    .pt(0xff1a372c, 0.2f)
-                                    .pt(0xff42bb1f, 0.6f)
-                                    .pt(0xffcaf732, 0.9f)
-                                    .build(),
-                            new NormalNoise.NoiseParameters(1, 1, 1, 1),
-                            42069L,
-                            new Vector2f(3f, 2f),
-                            new Vector3f(0, -5, 1f),
-                            0.05f
-                    ),
-                    Testmod.id("goo"),
-                    new SpriteProperties(16, 16, 64, 2, false)
-            ));
             sources.add(new RemapSpriteSource(
                     List.of(
                             RemapSpriteSource.textureSet(
@@ -111,7 +87,6 @@ public class TestmodClient implements ClientModInitializer {
             ModelTemplates.FLAT_ITEM.create(TestmodItems.TOURMALINE, TextureMapping.layer0(TestmodItems.TOURMALINE), modelCollector);
             ModelTemplates.FLAT_ITEM.create(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE, TextureMapping.layer0(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE), modelCollector);
             ModelTemplates.CUBE_ALL.create(TestmodBlocks.TOURMALINE_BLOCK, TextureMapping.cube(TestmodBlocks.TOURMALINE_BLOCK), modelCollector);
-            ModelTemplates.CUBE_ALL.create(TestmodBlocks.GOO, TextureMapping.cube(new Material(Testmod.id("goo"))), modelCollector);
             ModelTemplates.CUBE_ALL.create(TestmodBlocks.WOOD, TextureMapping.cube(TextureMapping.getBlockTexture(TestmodBlocks.WOOD, "_all")), modelCollector);
             ModelTemplates.CUBE_ALL.create(TestmodBlocks.RAINBOW, TextureMapping.cube(TextureMapping.getBlockTexture(TestmodBlocks.RAINBOW)), modelCollector);
         });
@@ -119,7 +94,6 @@ public class TestmodClient implements ClientModInitializer {
             assetCollector.accept(TestmodItems.TOURMALINE, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodItems.TOURMALINE)));
             assetCollector.accept(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE)));
             assetCollector.accept(TestmodItems.TOURMALINE_BLOCK, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlocks.TOURMALINE_BLOCK)));
-            assetCollector.accept(TestmodItems.GOO, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlocks.GOO)));
             assetCollector.accept(TestmodItems.WOOD, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlocks.WOOD)));
             assetCollector.accept(TestmodItems.RAINBOW, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlocks.RAINBOW)));
             assetCollector.accept(TestmodItems.BIG_DIAMOND, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(Blocks.DIAMOND_BLOCK)));
@@ -128,15 +102,11 @@ public class TestmodClient implements ClientModInitializer {
             pluginCtx.registerBlockStateResolver(TestmodBlocks.TOURMALINE_BLOCK, ctx -> {
                 ctx.setModel(ctx.block().defaultBlockState(), new SingleVariant.Unbaked(new Variant(ModelLocationUtils.getModelLocation(TestmodBlocks.TOURMALINE_BLOCK))).asRoot());
             });
-            pluginCtx.registerBlockStateResolver(TestmodBlocks.GOO, ctx -> {
-                ctx.setModel(ctx.block().defaultBlockState(), new SingleVariant.Unbaked(new Variant(ModelLocationUtils.getModelLocation(TestmodBlocks.GOO))).asRoot());
-            });
         });
         LanguageEvents.MODIFY_TRANSLATIONS.register((translations, languageCode, rightToLeft) -> {
             translations.putIfAbsent(TestmodItems.TOURMALINE.getDescriptionId(), "Tourmaline");
             translations.putIfAbsent(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.getDescriptionId(), "Checkered Armor Trim");
             translations.putIfAbsent(TestmodItems.TOURMALINE_BLOCK.getDescriptionId(), "Block of Tourmaline");
-            translations.putIfAbsent(TestmodItems.GOO.getDescriptionId(), "Goo");
             translations.putIfAbsent(TestmodItems.WOOD.getDescriptionId(), "Wood");
             translations.putIfAbsent(TestmodItems.RAINBOW.getDescriptionId(), "Rainbow");
             translations.putIfAbsent(TestmodItems.BIG_DIAMOND.getDescriptionId(), "Big Diamond");

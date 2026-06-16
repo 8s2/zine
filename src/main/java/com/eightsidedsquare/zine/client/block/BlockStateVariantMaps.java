@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.world.level.block.state.properties.Property;
 
 public final class BlockStateVariantMaps {
-
     public static <T1 extends Comparable<T1>> PropertyDispatch.C1<BlockStateModel, T1> custom(Property<T1> property) {
         return new PropertyDispatch.C1<>(property);
     }

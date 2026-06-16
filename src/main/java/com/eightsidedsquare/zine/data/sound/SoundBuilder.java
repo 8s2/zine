@@ -7,7 +7,6 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
 
 public class SoundBuilder {
-
     private static final Codec<SoundBuilder> SOUND_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.STRING.fieldOf("name").forGetter(soundBuilder -> soundBuilder.name),
             ExtraCodecs.POSITIVE_FLOAT.optionalFieldOf("volume", 1f).forGetter(soundBuilder -> soundBuilder.volume),
@@ -117,5 +116,4 @@ public class SoundBuilder {
             return this.name;
         }
     }
-
 }

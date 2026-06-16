@@ -10,7 +10,6 @@ import java.util.function.BiConsumer;
 
 @FunctionalInterface
 public interface ItemAssetCollector extends BiConsumer<Identifier, ClientItem> {
-
     default void accept(Identifier id, ItemModel.Unbaked unbaked) {
         this.accept(id, new ClientItem(unbaked, ClientItem.Properties.DEFAULT));
     }
@@ -22,5 +21,4 @@ public interface ItemAssetCollector extends BiConsumer<Identifier, ClientItem> {
     default void accept(ItemLike item, ItemModel.Unbaked unbaked) {
         this.accept(BuiltInRegistries.ITEM.getKey(item.asItem()), unbaked);
     }
-
 }

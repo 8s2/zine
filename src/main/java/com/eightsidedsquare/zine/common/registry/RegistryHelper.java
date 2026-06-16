@@ -61,6 +61,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.StatType;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.BlockItemTagId;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Util;
 import net.minecraft.util.debug.DebugSubscription;
 import net.minecraft.util.valueproviders.FloatProvider;
@@ -165,7 +167,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.nbt.NbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.score.ScoreboardNameProvider;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.Set;
@@ -181,7 +183,6 @@ import java.util.function.*;
  * an implementation of this class or {@link RegistryHelperImpl} can be made, with methods to support them.
  */
 public interface RegistryHelper {
-
     /**
      * Creates an instance of the default implementation of {@link RegistryHelper}.
      */
@@ -203,6 +204,33 @@ public interface RegistryHelper {
      */
     default <T> ResourceKey<T> key(ResourceKey<? extends Registry<T>> registryKey, String name) {
         return ResourceKey.create(registryKey, this.id(name));
+    }
+
+    /**
+     * @param registryKey the registry key of the tag key
+     * @param name the name of the tag
+     * @return the tag key
+     * @param <T> the type of tag
+     */
+    default <T> TagKey<T> tagKey(ResourceKey<? extends Registry<T>> registryKey, String name) {
+        return TagKey.create(registryKey, this.id(name));
+    }
+
+    /**
+     * @param blockName the name of the block tag
+     * @param itemName the name of the item tag
+     * @return the block item tag id
+     */
+    default BlockItemTagId blockItemTag(String blockName, String itemName) {
+        return BlockItemTagId.create(this.id(blockName), this.id(itemName));
+    }
+
+    /**
+     * @param name the name of the block and item tag
+     * @return the block item tag id
+     */
+    default BlockItemTagId blockItemTag(String name) {
+        return this.blockItemTag(name, name);
     }
 
     /**

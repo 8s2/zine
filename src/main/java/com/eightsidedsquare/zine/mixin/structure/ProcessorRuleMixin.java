@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ProcessorRule.class)
 public abstract class ProcessorRuleMixin implements ZineProcessorRule {
-
     @Shadow @Final @Mutable
     private RuleTest inputPredicate;
 

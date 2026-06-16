@@ -8,7 +8,6 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import java.util.List;
 
 public record CompositeTooltipData(List<Either<Component, TooltipComponent>> data) implements TooltipComponent {
-
     public static Builder builder() {
         return new Builder();
     }
@@ -30,5 +29,4 @@ public record CompositeTooltipData(List<Either<Component, TooltipComponent>> dat
             return new CompositeTooltipData(this.data.build());
         }
     }
-
 }

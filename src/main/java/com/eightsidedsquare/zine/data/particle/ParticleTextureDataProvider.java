@@ -23,7 +23,6 @@ import java.util.concurrent.CompletableFuture;
  * <p>Register an instance of the class with {@link FabricDataGenerator.Pack#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}.
  */
 public abstract class ParticleTextureDataProvider implements DataProvider {
-
     private final PackOutput.PathProvider pathResolver;
 
     public ParticleTextureDataProvider(FabricPackOutput output) {
@@ -81,7 +80,6 @@ public abstract class ParticleTextureDataProvider implements DataProvider {
 
     @FunctionalInterface
     public interface Output {
-
         void accept(ParticleType<?> particleType, List<Identifier> textures);
 
         default void accept(ParticleType<?> particleType, Identifier... textures) {
@@ -94,6 +92,5 @@ public abstract class ParticleTextureDataProvider implements DataProvider {
         default void accept(ParticleType<?> particleType) {
             this.accept(particleType, BuiltInRegistries.PARTICLE_TYPE.getKey(particleType));
         }
-
     }
 }

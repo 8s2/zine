@@ -6,7 +6,6 @@ import net.minecraft.world.entity.variant.SpawnContext;
 import net.minecraft.world.level.ServerLevelAccessor;
 
 public interface ZineSpawnContext {
-
     static SpawnContext of(ServerLevelAccessor world, BlockPos pos, EntitySpawnReason spawnReason) {
         SpawnContext ctx = SpawnContext.create(world, pos);
         ctx.zine$setSpawnReason(spawnReason);
@@ -25,5 +24,4 @@ public interface ZineSpawnContext {
     default EntitySpawnReason zine$getSpawnReason() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

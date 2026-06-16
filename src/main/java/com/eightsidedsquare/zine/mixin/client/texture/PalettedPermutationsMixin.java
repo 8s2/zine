@@ -15,7 +15,6 @@ import java.util.function.Supplier;
 
 @Mixin(PalettedPermutations.class)
 public abstract class PalettedPermutationsMixin implements ZinePalettedPermutations {
-
     @Shadow @Final @Mutable
     private List<Identifier> textures;
     @Shadow @Final @Mutable

@@ -3,13 +3,12 @@ package com.eightsidedsquare.zine.client.item;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public interface ZineUnbakedSelectItemModel {
-
-    default void zine$setFallback(@Nullable ItemModel.Unbaked fallback) {
+    default void zine$setFallback(ItemModel.@Nullable Unbaked fallback) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
@@ -24,5 +23,4 @@ public interface ZineUnbakedSelectItemModel {
     default <P extends SelectItemModelProperty<T>, T> void zine$addCases(SelectItemModelProperty.Type<P, T> type, List<SelectItemModel.SwitchCase<T>> cases) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

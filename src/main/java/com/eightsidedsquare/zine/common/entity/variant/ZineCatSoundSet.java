@@ -4,7 +4,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 
 public interface ZineCatSoundSet {
-
     default void zine$setAmbientSound(Holder<SoundEvent> ambientSound) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -40,5 +39,4 @@ public interface ZineCatSoundSet {
     default void zine$setPurreowSound(Holder<SoundEvent> purreowSound) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

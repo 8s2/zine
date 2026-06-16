@@ -26,6 +26,4 @@ public interface MaterialTemplate {
     static MaterialTemplate of(String template) {
         return of(template, false);
     }
-
-
 }

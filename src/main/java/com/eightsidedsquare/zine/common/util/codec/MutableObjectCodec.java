@@ -9,7 +9,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public class MutableObjectCodec<A> implements Codec<A> {
-
     private final Codec<A> baseCodec;
     private final List<Field<A, ?>> fields;
 

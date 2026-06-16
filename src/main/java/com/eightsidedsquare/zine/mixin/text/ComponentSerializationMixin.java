@@ -15,10 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ComponentSerialization.class)
 public abstract class ComponentSerializationMixin {
-
     @Inject(method = "createCodec", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/ComponentSerialization;createLegacyComponentMatcher(Lnet/minecraft/util/ExtraCodecs$LateBoundIdMapper;Ljava/util/function/Function;Ljava/lang/String;)Lcom/mojang/serialization/MapCodec;"))
-    private static void zine$captureTextContentIds(Codec<Component> selfCodec, CallbackInfoReturnable<Codec<Component>> cir, @Local ExtraCodecs.LateBoundIdMapper<String, MapCodec<? extends ComponentContents>> idMapper) {
+    private static void zine$captureTextContentIds(Codec<Component> selfCodec, CallbackInfoReturnable<Codec<Component>> cir, @Local(name = "contentTypes") ExtraCodecs.LateBoundIdMapper<String, MapCodec<? extends ComponentContents>> idMapper) {
         TextUtilImpl.textContentIds = idMapper;
     }
-
 }

@@ -15,7 +15,7 @@ import net.minecraft.client.renderer.texture.atlas.SpriteSource;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,6 @@ import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
 public class RemapSpriteSource implements SpriteSource {
-
     public static final MapCodec<RemapSpriteSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             CodecUtil.nonEmptyListCodec(TextureSet.CODEC).fieldOf("texture_sets").forGetter(RemapSpriteSource::getTextureSets),
             CodecUtil.nonEmptyListCodec(Mapping.CODEC).fieldOf("mappings").forGetter(RemapSpriteSource::getMappings)

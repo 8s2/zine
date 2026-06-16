@@ -7,7 +7,6 @@ import net.minecraft.world.entity.EntityType;
 import java.util.Collection;
 
 public interface ZineEntityTypePredicate {
-
     default void zine$setTypes(HolderSet<EntityType<?>> types) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -27,5 +26,4 @@ public interface ZineEntityTypePredicate {
     default void zine$addTypes(Collection<EntityType<?>> types) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

@@ -6,10 +6,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface ZineSinglePoolElement {
-
     default void zine$setTemplate(Identifier template) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -38,5 +37,4 @@ public interface ZineSinglePoolElement {
     default void zine$setOverrideLiquidSettings(@Nullable LiquidSettings overrideLiquidSettings) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

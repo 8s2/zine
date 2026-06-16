@@ -13,7 +13,6 @@ import java.util.List;
 
 @Mixin(RuleProcessor.class)
 public abstract class RuleProcessorMixin implements ZineRuleProcessor {
-
     @Shadow @Final @Mutable
     private ImmutableList<ProcessorRule> rules;
 

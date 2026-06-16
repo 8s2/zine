@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(SpriteLoader.Preparations.class)
 public abstract class SpriteLoaderPreparationsMixin implements ZineSpriteLoaderPreparations {
-
     @Shadow
     public abstract @Nullable TextureAtlasSprite getSprite(Identifier id);
 

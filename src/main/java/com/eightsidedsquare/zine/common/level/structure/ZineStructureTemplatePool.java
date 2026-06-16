@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public interface ZineStructureTemplatePool {
-
     default ObjectArrayList<StructurePoolElement> zine$getElements() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -33,5 +32,4 @@ public interface ZineStructureTemplatePool {
     default void zine$setFallback(Holder<StructureTemplatePool> fallback) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

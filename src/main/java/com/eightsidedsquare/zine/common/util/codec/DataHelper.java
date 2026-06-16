@@ -9,7 +9,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -115,7 +115,6 @@ import java.util.function.Function;
  * @see DataHelperImpl
  */
 public interface DataHelper<T> {
-
     /**
      * Creates a {@link Builder} for creating a DataHelper with one or more fields.
      * @apiNote The generic type will likely revert to {@code <Object>} causing issues,
@@ -463,13 +462,13 @@ public interface DataHelper<T> {
         Builder<T> apply(Function<T, F> defaultValueGetter, Function<T, F> getter, BiConsumer<T, F> setter);
 
         default Builder<T> apply(F defaultValue, Function<T, F> getter, BiConsumer<T, F> setter) {
-            return this.apply(obj -> defaultValue, getter, setter);
+            return this.apply(_ -> defaultValue, getter, setter);
         }
     }
 
     interface NullableFieldBuilder<F, T> extends FieldBuilder<F, T> {
-        default Builder<T> apply(Function<T, F> getter, BiConsumer<T, F> setter) {
-            return this.apply(obj -> null, getter, setter);
+        default Builder<T> apply(Function<T, @Nullable F> getter, BiConsumer<T, F> setter) {
+            return this.apply(_ -> null, getter, setter);
         }
     }
 
@@ -480,5 +479,4 @@ public interface DataHelper<T> {
     interface MapFieldBuilder<K, V, M extends Map<K, V>, T> {
         Builder<T> apply(Function<T, M> getter);
     }
-
 }

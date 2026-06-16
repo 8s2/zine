@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public abstract class CompositeCheck implements SpawnCondition {
-
     protected List<SpawnCondition> conditions;
 
     public CompositeCheck(List<SpawnCondition> conditions) {
@@ -38,5 +37,4 @@ public abstract class CompositeCheck implements SpawnCondition {
                 ExtraCodecs.nonEmptyList(SpawnCondition.CODEC.listOf()).fieldOf("conditions").forGetter(T::getConditions)
         ).apply(i, factory));
     }
-
 }

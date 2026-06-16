@@ -12,9 +12,6 @@ import java.io.InputStream;
 import java.util.Optional;
 
 public final class SpriteSourceUtil {
-    private SpriteSourceUtil() {
-    }
-
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static TextureData open(ResourceManager resourceManager, Identifier texture) {
@@ -85,4 +82,6 @@ public final class SpriteSourceUtil {
         int apply(int frame, int index, int x, int y, float u, float v);
     }
 
+    private SpriteSourceUtil() {
+    }
 }

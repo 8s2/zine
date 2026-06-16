@@ -6,7 +6,6 @@ import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
 
 public interface ZineUnbakedSpecialModelWrapper {
-
     default void zine$setBase(Identifier base) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -18,5 +17,4 @@ public interface ZineUnbakedSpecialModelWrapper {
     default void zine$setTransformation(@Nullable Transformation transformation) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

@@ -4,7 +4,6 @@ import net.minecraft.core.ClientAsset;
 import net.minecraft.world.entity.variant.SpawnPrioritySelectors;
 
 public interface ZineCatVariant {
-
     default void zine$setAdultAssetInfo(ClientAsset.ResourceTexture adultAssetInfo) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -16,5 +15,4 @@ public interface ZineCatVariant {
     default void zine$setSpawnConditions(SpawnPrioritySelectors spawnConditions) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

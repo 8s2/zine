@@ -2,10 +2,9 @@ package com.eightsidedsquare.zine.common.predicate;
 
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.world.entity.EquipmentSlot;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface ZineEntityEquipmentPredicate {
-
     default void zine$setHead(@Nullable ItemPredicate head) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -45,5 +44,4 @@ public interface ZineEntityEquipmentPredicate {
             case BODY -> this.zine$setBody(itemPredicate);
         }
     }
-
 }

@@ -7,7 +7,6 @@ import net.minecraft.world.effect.MobEffect;
 import java.util.Map;
 
 public interface ZineMobEffectsPredicate {
-
     default void zine$setEffects(Map<Holder<MobEffect>, MobEffectsPredicate.MobEffectInstancePredicate> effects) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -19,5 +18,4 @@ public interface ZineMobEffectsPredicate {
     default void zine$addEffect(Holder<MobEffect> effect) {
         this.zine$addEffect(effect, new MobEffectsPredicate.MobEffectInstancePredicate());
     }
-
 }

@@ -5,7 +5,6 @@ import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import java.util.List;
 
 public interface ZineListPoolElement {
-
     default List<StructurePoolElement> zine$getElements() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -21,5 +20,4 @@ public interface ZineListPoolElement {
     default void zine$addElements(List<StructurePoolElement> elements) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

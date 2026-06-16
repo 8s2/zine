@@ -4,7 +4,6 @@ import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.ApiStatus;
 
 public interface ZineStyle {
-
     default Style zine$copy() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -25,5 +24,4 @@ public interface ZineStyle {
     default void zine$setOutlineColor(int outlineColor) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

@@ -16,7 +16,6 @@ import java.util.function.Predicate;
 
 @Mixin(ContextAwarePredicate.class)
 public abstract class ContextAwarePredicateMixin implements ZineContextAwarePredicate {
-
     @Shadow @Final @Mutable
     private List<LootItemCondition> conditions;
 

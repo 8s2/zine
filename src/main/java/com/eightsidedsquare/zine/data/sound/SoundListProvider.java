@@ -17,7 +17,6 @@ import java.util.concurrent.CompletableFuture;
  * <p>Register an instance of the class with {@link FabricDataGenerator.Pack#addProvider} in a {@link net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint}.
  */
 public abstract class SoundListProvider implements DataProvider {
-
     private final Path outputPath;
 
     public SoundListProvider(FabricPackOutput output) {

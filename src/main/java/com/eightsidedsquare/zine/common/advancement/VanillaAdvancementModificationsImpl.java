@@ -40,9 +40,6 @@ import java.util.Optional;
 import java.util.TreeSet;
 
 public final class VanillaAdvancementModificationsImpl {
-    private VanillaAdvancementModificationsImpl() {
-    }
-
     private static final Identifier ADVENTURING_TIME_ID = Identifier.withDefaultNamespace("adventure/adventuring_time");
     private static final Identifier ALL_EFFECTS_ID = Identifier.withDefaultNamespace("nether/all_effects");
     private static final Identifier ALL_POTIONS_ID = Identifier.withDefaultNamespace("nether/all_potions");
@@ -506,5 +503,8 @@ public final class VanillaAdvancementModificationsImpl {
 
     private static <T> TreeSet<ResourceKey<T>> registryKeySet() {
         return new TreeSet<>(Comparator.comparing(ResourceKey::identifier));
+    }
+
+    private VanillaAdvancementModificationsImpl() {
     }
 }

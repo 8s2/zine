@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin implements ZineMinecraft {
-
     @Shadow @Final private DeltaTracker.Timer deltaTracker;
 
     @Override

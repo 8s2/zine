@@ -25,7 +25,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -33,9 +33,6 @@ import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
 public final class ArmorTrimRegistryImpl {
-    private ArmorTrimRegistryImpl() {
-    }
-
     private static final Identifier TRIM_PALETTE_KEY = Identifier.withDefaultNamespace("trims/color_palettes/trim_palette");
     private static final Map<ResourceKey<TrimMaterial>, CustomMaterial> MATERIALS = new Reference2ObjectOpenHashMap<>();
     private static final Map<ResourceKey<TrimPattern>, CustomPattern> PATTERNS = new Reference2ObjectOpenHashMap<>();
@@ -170,10 +167,12 @@ public final class ArmorTrimRegistryImpl {
         }
     }
 
+    private ArmorTrimRegistryImpl() {
+    }
+
     private record CustomMaterial(String name, Identifier colorPaletteTexture, Map<ArmorType, Identifier> equipmentModelIds) {
     }
 
     private record CustomPattern(Map<EquipmentClientInfo.LayerType, Identifier> equipmentTextures) {
     }
-
 }

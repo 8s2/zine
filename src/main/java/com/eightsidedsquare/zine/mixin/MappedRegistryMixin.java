@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MappedRegistry.class)
 public abstract class MappedRegistryMixin implements WritableRegistry<Object> {
-
     @Inject(method = "freeze", at = @At(value = "FIELD", target = "Lnet/minecraft/core/MappedRegistry;frozen:Z", ordinal = 0, opcode = Opcodes.PUTFIELD))
     private void zine$beforeFreeze(CallbackInfoReturnable<Registry<?>> cir) {
         FreezeRegistriesEventsImpl.apply(true, this);
@@ -22,5 +21,4 @@ public abstract class MappedRegistryMixin implements WritableRegistry<Object> {
     private void zine$afterFreeze(CallbackInfoReturnable<Registry<?>> cir) {
         FreezeRegistriesEventsImpl.apply(false, this);
     }
-
 }

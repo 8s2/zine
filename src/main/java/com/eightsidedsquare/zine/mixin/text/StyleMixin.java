@@ -8,7 +8,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.network.chat.*;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.gen.Invoker;
@@ -21,7 +21,6 @@ import java.util.Objects;
 
 @Mixin(Style.class)
 public abstract class StyleMixin implements ZineStyle {
-
     @Shadow @Final @Nullable
     private TextColor color;
     @Shadow @Final @Nullable
@@ -128,7 +127,7 @@ public abstract class StyleMixin implements ZineStyle {
 
     @Inject(method = "toString", at = @At(value = "INVOKE", target = "Ljava/lang/StringBuilder;append(Ljava/lang/String;)Ljava/lang/StringBuilder;"))
     private void zine$toString(CallbackInfoReturnable<String> cir, @Local(name = "result") StringBuilder result) {
-        if(this.zine$hasOutline()) {
+        if(!this.zine$hasOutline()) {
             return;
         }
         if(result.length() > 1) {

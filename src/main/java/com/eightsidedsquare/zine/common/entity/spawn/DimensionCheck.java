@@ -12,7 +12,6 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class DimensionCheck implements SpawnCondition {
-
     public static final MapCodec<DimensionCheck> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             CodecUtil.nonEmptyListCodec(ResourceKey.codec(Registries.DIMENSION)).fieldOf("dimensions").forGetter(DimensionCheck::getDimensions)
     ).apply(i, DimensionCheck::new));

@@ -1,60 +1,87 @@
 package com.eightsidedsquare.zine.mixin.client.font;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.font.TextRenderable;
+import net.minecraft.client.gui.font.glyphs.BakedGlyph;
+import net.minecraft.client.renderer.feature.TextFeatureRenderer;
 import net.minecraft.network.chat.Style;
 import net.minecraft.util.ARGB;
-import org.spongepowered.asm.mixin.Final;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(Font.PreparedTextBuilder.class)
 public abstract class FontPreparedTextBuilderMixin {
-
-    @Shadow(aliases = "this$0") @Final
-    private Font font;
     @Shadow
     private float x;
     @Shadow
     private float y;
-    @Shadow @Final @Mutable
-    private int color;
+    @Unique @Nullable
+    private List<TextRenderable.Styled> outlineGlyphs;
 
-    @SuppressWarnings("ConstantValue")
-    @Inject(method = "accept(ILnet/minecraft/network/chat/Style;I)Z", at = @At("HEAD"))
-    private void zine$acceptOutline(int index, Style style, int codePoint, CallbackInfoReturnable<Boolean> cir) {
-        if(style.zine$hasOutline()) {
-            int outlineColor = style.zine$getOutlineColor();
-            float originalX = this.x;
-            float originalY = this.y;
-            int originalColor = this.color;
-            float alpha = ARGB.alphaFloat(originalColor) * ARGB.alphaFloat(outlineColor);
-            this.color = ARGB.color(alpha, originalColor);
-            for (int x = -1; x <= 1; x++) {
-                for (int y = -1; y <= 1; y++) {
-                    if (x != 0 || y != 0) {
-                        float[] advance = new float[]{originalX};
-                        ((FontAccessor) this.font).zine$invokeAcceptOutline(
-                                (Font.PreparedTextBuilder) (Object) this,
-                                advance,
-                                x,
-                                originalY,
-                                y,
-                                outlineColor,
-                                index,
-                                style,
-                                codePoint
-                        );
-                    }
+    @Inject(method = "accept(ILnet/minecraft/network/chat/Style;Lnet/minecraft/client/gui/font/glyphs/BakedGlyph;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font$PreparedTextBuilder;addGlyph(Lnet/minecraft/client/gui/font/TextRenderable$Styled;)V"))
+    private void zine$outline(
+            int position,
+            Style style,
+            BakedGlyph glyph,
+            CallbackInfoReturnable<Boolean> cir,
+            @Local(name = "textColor") int textColor,
+            @Local(name = "shadowOffset") float shadowOffset,
+            @Local(name = "boldOffset") float boldOffset
+    ) {
+        if (!style.zine$hasOutline()) {
+            return;
+        } else if (this.outlineGlyphs == null) {
+            this.outlineGlyphs = new ArrayList<>();
+        }
+
+        int outline = style.zine$getOutlineColor();
+        int color = ARGB.color(ARGB.alphaFloat(outline) * ARGB.alphaFloat(textColor), outline);
+        Style outlineStyle = style.zine$withOutlineColor(0).withoutShadow();
+
+        for (int xo = -1; xo <= 1; xo++) {
+            for (int yo = -1; yo <= 1; yo++) {
+                if (xo == 0 && yo == 0) {
+                    continue;
+                }
+                float x = this.x + xo * shadowOffset;
+                float y = this.y + yo * shadowOffset;
+                TextRenderable.Styled outlineGlyph = glyph.createGlyph(x, y, color, 0, outlineStyle, boldOffset, shadowOffset);
+
+                if (outlineGlyph != null) {
+                    this.outlineGlyphs.add(outlineGlyph);
                 }
             }
-            this.x = originalX;
-            this.y = originalY;
-            this.color = originalColor;
+        }
+    }
+
+    @Inject(method = "visit", at = @At("HEAD"))
+    private void zine$outlineDisplayMode(Font.GlyphVisitor visitor, CallbackInfo ci) {
+        if (this.outlineGlyphs == null) {
+            return;
+        }
+        if (visitor instanceof TextFeatureRenderer.GlyphRenderer glyphRenderer) {
+            glyphRenderer.displayMode = Font.DisplayMode.NORMAL;
+
+            for (TextRenderable.Styled glyph : this.outlineGlyphs) {
+                glyphRenderer.acceptGlyph(glyph);
+            }
+
+            glyphRenderer.displayMode = Font.DisplayMode.POLYGON_OFFSET;
+        } else {
+            for (TextRenderable.Styled glyph : this.outlineGlyphs) {
+                visitor.acceptGlyph(glyph);
+            }
         }
     }
 

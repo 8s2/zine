@@ -1,22 +1,24 @@
 package com.eightsidedsquare.zinetest.common.block.entity;
 
-import com.eightsidedsquare.zine.common.block_entity.SyncingBlockEntity;
+import com.eightsidedsquare.zine.common.block.entity.SyncingBlockEntity;
+import com.eightsidedsquare.zine.common.util.codec.DataHelper;
 import com.eightsidedsquare.zinetest.core.TestmodBlockEntities;
-import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.animal.chicken.ChickenVariant;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jspecify.annotations.Nullable;
 
 public class NestBlockEntity extends SyncingBlockEntity {
-
-    private static final Codec<Holder<ChickenVariant>> CODEC = DataComponents.CHICKEN_VARIANT.codec();
+    private static final DataHelper<NestBlockEntity> DATA_HELPER = DataHelper.<NestBlockEntity>builder()
+            .nullableField(DataComponents.CHICKEN_VARIANT.codec(), DataComponents.CHICKEN_VARIANT.streamCodec(), "variant")
+            .apply(NestBlockEntity::getVariant, NestBlockEntity::setVariant)
+            .build();
     @Nullable
     private Holder<ChickenVariant> variant;
 
@@ -25,15 +27,16 @@ public class NestBlockEntity extends SyncingBlockEntity {
     }
 
     @Override
-    protected void saveAdditional(ValueOutput output) {
-        super.saveAdditional(output);
-        output.storeNullable("variant", CODEC, this.variant);
+    public @Nullable DataHelper<? extends BlockEntity> zine$dataHelper() {
+        return DATA_HELPER;
     }
 
-    @Override
-    protected void loadAdditional(ValueInput input) {
-        super.loadAdditional(input);
-        this.variant = input.read("variant", CODEC).orElse(null);
+    public @Nullable Holder<ChickenVariant> getVariant() {
+        return this.variant;
+    }
+
+    public void setVariant(@Nullable Holder<ChickenVariant> variant) {
+        this.variant = variant;
     }
 
     @Override

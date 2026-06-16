@@ -10,7 +10,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class MutableObjectMapCodec<A> extends MapCodec<A> {
-
     private final MapCodec<A> baseCodec;
     private final List<MutableObjectCodec.Field<A, ?>> fields;
 

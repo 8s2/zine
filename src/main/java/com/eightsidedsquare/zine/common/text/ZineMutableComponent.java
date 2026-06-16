@@ -3,7 +3,6 @@ package com.eightsidedsquare.zine.common.text;
 import net.minecraft.network.chat.MutableComponent;
 
 public interface ZineMutableComponent {
-
     default MutableComponent zine$freeze() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -15,5 +14,4 @@ public interface ZineMutableComponent {
     default MutableComponent zine$withOutlineColor(int outlineColor) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

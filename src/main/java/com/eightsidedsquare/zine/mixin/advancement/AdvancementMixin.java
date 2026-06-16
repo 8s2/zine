@@ -7,7 +7,7 @@ import net.minecraft.advancements.triggers.Criterion;
 import net.minecraft.advancements.triggers.CriterionTrigger;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -18,7 +18,6 @@ import java.util.Optional;
 
 @Mixin(Advancement.class)
 public abstract class AdvancementMixin implements ZineAdvancement {
-
     @Shadow @Final @Mutable
     private Optional<Identifier> parent;
 

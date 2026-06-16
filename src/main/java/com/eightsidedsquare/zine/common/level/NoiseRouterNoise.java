@@ -25,13 +25,16 @@ public enum NoiseRouterNoise implements StringRepresentable {
     VEIN_GAP("vein_gap", NoiseRouter::veinGap);
 
     public static final Codec<NoiseRouterNoise> CODEC = StringRepresentable.fromEnum(NoiseRouterNoise::values);
-
     private final String name;
-    public final Function<NoiseRouter, DensityFunction> densityFunctionGetter;
+    private final Function<NoiseRouter, DensityFunction> densityFunctionGetter;
 
     NoiseRouterNoise(String name, Function<NoiseRouter, DensityFunction> densityFunctionGetter) {
         this.name = name;
         this.densityFunctionGetter = densityFunctionGetter;
+    }
+
+    public DensityFunction get(NoiseRouter noiseRouter) {
+        return this.densityFunctionGetter.apply(noiseRouter);
     }
 
     @Override

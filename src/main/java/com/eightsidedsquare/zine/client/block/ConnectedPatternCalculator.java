@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 public class ConnectedPatternCalculator {
-
     public static final Map<Direction, ConnectedPatternCalculator> FAST_CUBE = ImmutableMap.<Direction, ConnectedPatternCalculator>builder()
             .put(Direction.NORTH, create(Direction.NORTH, Direction.UP, Direction.WEST))
             .put(Direction.EAST, create(Direction.EAST, Direction.UP, Direction.NORTH))
@@ -229,6 +228,5 @@ public class ConnectedPatternCalculator {
                 return pattern;
             };
         }
-
     }
 }

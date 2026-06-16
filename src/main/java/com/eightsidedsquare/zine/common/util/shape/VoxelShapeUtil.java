@@ -9,9 +9,6 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public final class VoxelShapeUtil {
-    private VoxelShapeUtil() {
-    }
-
     public static final VoxelShape EMPTY = Shapes.empty();
 
     /**
@@ -121,4 +118,6 @@ public final class VoxelShapeUtil {
         );
     }
 
+    private VoxelShapeUtil() {
+    }
 }

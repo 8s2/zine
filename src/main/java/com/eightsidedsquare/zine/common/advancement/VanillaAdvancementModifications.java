@@ -14,9 +14,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 
 public final class VanillaAdvancementModifications {
-    private VanillaAdvancementModifications() {
-    }
-
     public static void registerAdventuringTimeBiome(ResourceKey<Biome> biomeKey) {
         VanillaAdvancementModificationsImpl.registerAdventuringTimeBiome(biomeKey);
     }
@@ -95,5 +92,8 @@ public final class VanillaAdvancementModifications {
 
     public static void registerWholePackWolfVariant(ResourceKey<WolfVariant> wolfVariantKey) {
         VanillaAdvancementModificationsImpl.registerWholePackWolfVariant(wolfVariantKey);
+    }
+
+    private VanillaAdvancementModifications() {
     }
 }

@@ -5,7 +5,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public interface ZineFeaturePoolElement {
-
     default Holder<PlacedFeature> zine$getFeature() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -21,5 +20,4 @@ public interface ZineFeaturePoolElement {
     default void zine$setNbt(CompoundTag nbt) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

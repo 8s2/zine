@@ -5,7 +5,6 @@ import net.minecraft.world.entity.variant.ModelAndTexture;
 import net.minecraft.world.entity.variant.SpawnPrioritySelectors;
 
 public interface ZineAgeableMobVariant<T> {
-
     default void zine$setModelAndTexture(ModelAndTexture<T> modelAndTexture) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -17,5 +16,4 @@ public interface ZineAgeableMobVariant<T> {
     default void zine$setSpawnConditions(SpawnPrioritySelectors spawnConditions) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record Gradient3D(List<GradientPoint<Gradient2D>> points) implements Gradient {
-
     private static final Codec<GradientPoint<Gradient2D>> POINT_CODEC = RecordCodecBuilder.create(i -> i.group(
             Gradient2D.CODEC.fieldOf("gradient").forGetter(GradientPoint::v),
             Codec.floatRange(0, 1).fieldOf("t").forGetter(GradientPoint::t)

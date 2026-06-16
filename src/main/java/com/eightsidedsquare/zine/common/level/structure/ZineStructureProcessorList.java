@@ -5,7 +5,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import java.util.List;
 
 public interface ZineStructureProcessorList {
-
     default List<StructureProcessor> zine$getProcessors() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -21,5 +20,4 @@ public interface ZineStructureProcessorList {
     default void zine$addProcessors(List<StructureProcessor> processors) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

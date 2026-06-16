@@ -3,12 +3,10 @@ package com.eightsidedsquare.zine.common.advancement;
 import net.minecraft.advancements.AdvancementType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface ZineDisplayInfo {
-
     default void zine$setTitle(Component title) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -40,5 +38,4 @@ public interface ZineDisplayInfo {
     default void zine$setHidden(boolean hidden) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

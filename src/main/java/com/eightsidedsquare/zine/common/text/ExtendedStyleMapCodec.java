@@ -7,7 +7,6 @@ import net.minecraft.util.ExtraCodecs;
 import java.util.stream.Stream;
 
 public class ExtendedStyleMapCodec extends MapCodec<Style> {
-
     private final MapCodec<Style> baseCodec;
     private final MapCodec<Integer> outlineColorCodec;
 

@@ -4,12 +4,11 @@ import net.minecraft.advancements.predicates.DataComponentMatchers;
 import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.item.Item;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
 public interface ZineItemPredicate {
-
     default void zine$setItems(@Nullable HolderSet<Item> items) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -29,5 +28,4 @@ public interface ZineItemPredicate {
     default void zine$setComponents(DataComponentMatchers components) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

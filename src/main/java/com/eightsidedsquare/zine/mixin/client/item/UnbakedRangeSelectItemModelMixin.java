@@ -2,9 +2,10 @@ package com.eightsidedsquare.zine.mixin.client.item;
 
 import com.eightsidedsquare.zine.client.item.ZineUnbakedRangeSelectItemModel;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
+import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.RangeSelectItemModel;
 import net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemModelProperty;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -36,7 +37,7 @@ public abstract class UnbakedRangeSelectItemModelMixin implements ZineUnbakedRan
     }
 
     @Override
-    public void zine$setFallback(@Nullable net.minecraft.client.renderer.item.ItemModel.Unbaked fallback) {
+    public void zine$setFallback(ItemModel.@Nullable Unbaked fallback) {
         this.fallback = Optional.ofNullable(fallback);
     }
 

@@ -6,7 +6,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.rule.blockentity.RuleBlockEntityModifier;
 
 public interface ZineProcessorRule {
-
     default RuleTest zine$getInputPredicate() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -46,5 +45,4 @@ public interface ZineProcessorRule {
     default void zine$setBlockEntityModifier(RuleBlockEntityModifier blockEntityModifier) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

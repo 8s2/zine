@@ -9,7 +9,6 @@ import java.util.Map;
 
 @ApiStatus.Internal
 public interface ZineMappableModelHolder {
-
     ScopedValue<ZineMappableModelHolder> HOLDER = ScopedValue.newInstance();
 
     default void zine$setMappableModels(Map<Identifier, MappableModel.Unbaked> mappableModels) {
@@ -66,5 +65,4 @@ public interface ZineMappableModelHolder {
             return this.materialMappings;
         }
     }
-
 }

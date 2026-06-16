@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(FeaturePoolElement.class)
 public abstract class FeaturePoolElementMixin implements ZineFeaturePoolElement {
-
     @Shadow @Final @Mutable
     private Holder<PlacedFeature> feature;
 

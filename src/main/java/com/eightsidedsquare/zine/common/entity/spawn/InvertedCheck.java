@@ -6,7 +6,6 @@ import net.minecraft.world.entity.variant.SpawnCondition;
 import net.minecraft.world.entity.variant.SpawnContext;
 
 public class InvertedCheck implements SpawnCondition {
-
     public static final MapCodec<InvertedCheck> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             SpawnCondition.CODEC.fieldOf("condition").forGetter(InvertedCheck::getCondition)
     ).apply(i, InvertedCheck::new));

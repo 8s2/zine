@@ -11,12 +11,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
 public interface ZineLocationPredicate {
-
     default void zine$setPosition(MinMaxBounds.Doubles x, MinMaxBounds.Doubles y, MinMaxBounds.Doubles z) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -88,5 +87,4 @@ public interface ZineLocationPredicate {
     default void zine$setCanSeeSky(@Nullable Boolean canSeeSky) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

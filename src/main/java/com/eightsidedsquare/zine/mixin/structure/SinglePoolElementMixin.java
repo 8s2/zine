@@ -8,7 +8,7 @@ import net.minecraft.world.level.levelgen.structure.pools.SinglePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -18,7 +18,6 @@ import java.util.Optional;
 
 @Mixin(SinglePoolElement.class)
 public abstract class SinglePoolElementMixin implements ZineSinglePoolElement {
-
     @Shadow @Final @Mutable
     protected Either<Identifier, StructureTemplate> template;
 

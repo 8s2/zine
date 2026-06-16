@@ -48,7 +48,7 @@ public class Testmod implements ModInitializer {
                                     new ProcessorRule(
                                             new BlockMatchTest(Blocks.TUFF_BRICKS),
                                             AlwaysTrueTest.INSTANCE,
-                                            TestmodBlocks.GOO.defaultBlockState()
+                                            TestmodBlocks.WOOD.defaultBlockState()
                                     )
                             ))
                     );

@@ -3,7 +3,7 @@ package com.eightsidedsquare.zine.mixin.predicate;
 import com.eightsidedsquare.zine.common.predicate.ZineEntityEquipmentPredicate;
 import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.advancements.predicates.entity.EntityEquipmentPredicate;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;

@@ -9,7 +9,6 @@ import net.minecraft.world.level.biome.Biome;
 import java.util.Collection;
 
 public interface ZineBiomeCheck {
-
     default void zine$setRequiredBiomes(HolderSet<Biome> requiredBiomes) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -29,5 +28,4 @@ public interface ZineBiomeCheck {
     default void zine$addRequiredBiomes(HolderGetter<Biome> biomeLookup, Collection<ResourceKey<Biome>> requiredBiomes) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

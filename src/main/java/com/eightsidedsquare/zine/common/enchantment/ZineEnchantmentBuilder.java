@@ -3,10 +3,9 @@ package com.eightsidedsquare.zine.common.enchantment;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.enchantment.Enchantment;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface ZineEnchantmentBuilder {
-
     default Enchantment.EnchantmentDefinition zine$getDefinition() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -31,5 +30,4 @@ public interface ZineEnchantmentBuilder {
     default <T> T zine$getEffect(DataComponentType<T> type) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

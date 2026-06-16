@@ -11,9 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@SuppressWarnings("UnstableApiUsage")
 public class GraphCodec<N> extends BaseGraphCodec<N, GraphCodec.Edge, MutableGraph<N>> {
-
     public GraphCodec(Codec<N> nodeCodec, boolean directed, boolean allowsSelfLoops) {
         super(nodeCodec, Edge.CODEC, directed, allowsSelfLoops);
     }

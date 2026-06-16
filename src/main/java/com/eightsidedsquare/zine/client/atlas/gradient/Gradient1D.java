@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public record Gradient1D(List<GradientPoint<Integer>> points) implements Gradient {
-
     private static final Codec<GradientPoint<Integer>> POINT_CODEC = RecordCodecBuilder.create(i -> i.group(
             ExtraCodecs.RGB_COLOR_CODEC.fieldOf("argb").forGetter(GradientPoint::v),
             Codec.floatRange(0, 1).fieldOf("t").forGetter(GradientPoint::t)

@@ -16,7 +16,6 @@ import java.util.List;
 
 @Mixin(StructureTemplatePool.class)
 public abstract class StructureTemplatePoolMixin implements ZineStructureTemplatePool {
-
     @Shadow @Final
     private ObjectArrayList<StructurePoolElement> templates;
 

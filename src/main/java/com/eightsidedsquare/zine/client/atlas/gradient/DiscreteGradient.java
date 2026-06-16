@@ -9,7 +9,6 @@ import net.minecraft.util.ExtraCodecs;
 import java.util.List;
 
 public record DiscreteGradient(List<Integer> colors) implements Gradient {
-
     public static final MapCodec<DiscreteGradient> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             CodecUtil.nonEmptyListCodec(ExtraCodecs.RGB_COLOR_CODEC).fieldOf("colors").forGetter(DiscreteGradient::colors)
     ).apply(i, DiscreteGradient::new));

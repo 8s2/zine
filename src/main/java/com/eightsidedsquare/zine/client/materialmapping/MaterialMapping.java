@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 public sealed interface MaterialMapping<K, V> {
-
     Map<K, V> mappings();
 
     @Nullable
@@ -139,7 +138,6 @@ public sealed interface MaterialMapping<K, V> {
     }
 
     record Template(Map<String, MaterialTemplate> mappings) implements MaterialMapping<String, MaterialTemplate> {
-
         public Unbaked create(Identifier id) {
             return new Unbaked(ZineUtil.mapValues(this.mappings, template -> template.create(id)));
         }
@@ -186,7 +184,6 @@ public sealed interface MaterialMapping<K, V> {
     }
 
     record TemplateSet(Map<Identifier, Template> mappings) implements MaterialMapping<Identifier, Template> {
-
         public UnbakedSet create(Identifier id) {
             return new UnbakedSet(ZineUtil.mapValues(this.mappings, template -> template.create(id)));
         }

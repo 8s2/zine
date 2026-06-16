@@ -12,7 +12,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public final class TextUtilImpl {
-
     public static ExtraCodecs.LateBoundIdMapper<String, MapCodec<? extends ComponentContents>> textContentIds;
 
     public static void registerTextContent(Identifier id, MapCodec<? extends ComponentContents> codec) {

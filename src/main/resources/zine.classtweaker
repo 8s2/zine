@@ -89,6 +89,7 @@ transitive-inject-interface	net/minecraft/client/renderer/texture/SpriteLoader$P
 transitive-inject-interface	net/minecraft/client/resources/model/ResolvableModel$Resolver com/eightsidedsquare/zine/client/model/ZineResolvableModelResolver
 transitive-inject-interface net/minecraft/world/level/block/state/BlockBehaviour com/eightsidedsquare/zine/common/block/ZineBlockBehaviour
 transitive-inject-interface net/minecraft/world/level/block/state/BlockBehaviour$BlockStateBase com/eightsidedsquare/zine/common/block/ZineBlockBehaviour$ZineBlockStateBase
+transitive-inject-interface net/minecraft/world/level/block/entity/BlockEntity com/eightsidedsquare/zine/common/block/entity/ZineBlockEntity
 accessible class net/minecraft/client/resources/model/ClientItemInfoLoader$PendingLoad
 accessible field net/minecraft/client/renderer/item/ClientItem model Lnet/minecraft/client/renderer/item/ItemModel$Unbaked;
 mutable field net/minecraft/client/renderer/item/ClientItem model Lnet/minecraft/client/renderer/item/ItemModel$Unbaked;
@@ -135,3 +136,5 @@ accessible method net/minecraft/client/resources/model/cuboid/CuboidFace$Deseria
 accessible class net/minecraft/client/resources/model/cuboid/ItemModelGenerator$ItemLayerKey
 accessible method net/minecraft/client/resources/model/cuboid/ItemModelGenerator bakeExtrudedSprite (Lnet/minecraft/client/resources/model/geometry/QuadCollection$Builder;Lnet/minecraft/client/resources/model/ModelBaker$Interner;Lnet/minecraft/client/renderer/block/dispatch/ModelState;Lnet/minecraft/client/resources/model/geometry/BakedQuad$MaterialInfo;)V
 accessible method net/minecraft/client/resources/model/cuboid/FaceBakery defaultFaceUV (Lorg/joml/Vector3fc;Lorg/joml/Vector3fc;Lnet/minecraft/core/Direction;)Lnet/minecraft/client/resources/model/cuboid/CuboidFace$UVs;
+accessible class net/minecraft/client/renderer/feature/TextFeatureRenderer$GlyphRenderer
+accessible field net/minecraft/client/renderer/feature/TextFeatureRenderer$GlyphRenderer displayMode Lnet/minecraft/client/gui/Font$DisplayMode;

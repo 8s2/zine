@@ -16,7 +16,6 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(ServerAdvancementManager.class)
 public abstract class ServerAdvancementManagerMixin {
-
     @Shadow @Final private HolderLookup.Provider registries;
 
     @ModifyVariable(method = "lambda$apply$0", at = @At("HEAD"), argsOnly = true)
@@ -27,5 +26,4 @@ public abstract class ServerAdvancementManagerMixin {
         }
         return advancement;
     }
-
 }

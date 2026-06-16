@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class ZineAtlasDefinitionProvider extends AtlasProvider {
-
     public ZineAtlasDefinitionProvider(FabricPackOutput output) {
         super(output);
     }

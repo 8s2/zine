@@ -5,14 +5,13 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.TypedDataComponent;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(DataComponentMap.Builder.class)
 public abstract class DataComponentMapBuilderMixin implements ZineDataComponentMapBuilder {
-
     @Shadow public abstract <T> DataComponentMap.Builder set(DataComponentType<T> type, @Nullable T value);
 
     @Shadow @Final public Reference2ObjectMap<DataComponentType<?>, Object> map;

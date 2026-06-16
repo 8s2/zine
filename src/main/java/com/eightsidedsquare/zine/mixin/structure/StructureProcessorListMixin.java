@@ -13,7 +13,6 @@ import java.util.List;
 
 @Mixin(StructureProcessorList.class)
 public abstract class StructureProcessorListMixin implements ZineStructureProcessorList {
-
     @Shadow @Final @Mutable
     private List<StructureProcessor> list;
 

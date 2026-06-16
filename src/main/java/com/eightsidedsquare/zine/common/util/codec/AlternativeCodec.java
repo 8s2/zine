@@ -12,7 +12,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class AlternativeCodec<A> implements Codec<A> {
-
     private final List<Entry<A, ?>> entries;
 
     private AlternativeCodec(List<Entry<A, ?>> entries) {
@@ -139,7 +138,6 @@ public class AlternativeCodec<A> implements Codec<A> {
     }
 
     public record Entry<A, B>(Codec<B> codec, Function<A, Optional<B>> to, Function<B, A> from) {
-
         public <T> DataResult<Pair<A, T>> decode(DynamicOps<T> ops, T input) {
             return this.codec.decode(ops, input).map(pair -> pair.mapFirst(this.from));
         }
@@ -153,6 +151,5 @@ public class AlternativeCodec<A> implements Codec<A> {
         private <T> DataResult<T> error() {
             return DataResult.error(() -> "Failed to map input");
         }
-
     }
 }

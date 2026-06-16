@@ -3,7 +3,6 @@ package com.eightsidedsquare.zine.common.predicate;
 import net.minecraft.advancements.predicates.MinMaxBounds;
 
 public interface ZineMovementPredicate {
-
     default void zine$setX(MinMaxBounds.Doubles x) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -31,5 +30,4 @@ public interface ZineMovementPredicate {
     default void zine$setFallDistance(MinMaxBounds.Doubles fallDistance) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

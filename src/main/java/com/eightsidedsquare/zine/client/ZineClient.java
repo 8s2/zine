@@ -2,9 +2,7 @@ package com.eightsidedsquare.zine.client;
 
 import com.eightsidedsquare.zine.client.atlas.AtlasEvents;
 import com.eightsidedsquare.zine.client.atlas.ConnectedTexturesSpriteSource;
-import com.eightsidedsquare.zine.client.atlas.GeneratorSpriteSource;
 import com.eightsidedsquare.zine.client.atlas.RemapSpriteSource;
-import com.eightsidedsquare.zine.client.atlas.generator.SpriteGenerator;
 import com.eightsidedsquare.zine.client.atlas.gradient.Gradient;
 import com.eightsidedsquare.zine.client.block.ConnectedBlockStateModel;
 import com.eightsidedsquare.zine.client.block.TessellatingBlockStateModel;
@@ -12,6 +10,7 @@ import com.eightsidedsquare.zine.client.gui.CompositeTooltipComponent;
 import com.eightsidedsquare.zine.client.gui.TooltipComponentWrapper;
 import com.eightsidedsquare.zine.client.item.ItemModelEvents;
 import com.eightsidedsquare.zine.client.model.ModelEvents;
+import com.eightsidedsquare.zine.client.network.ZineClientNetworking;
 import com.eightsidedsquare.zine.client.registry.ClientRegistryHelper;
 import com.eightsidedsquare.zine.client.trim.ArmorTrimRegistryImpl;
 import com.eightsidedsquare.zine.common.item.tooltip.CompositeTooltipData;
@@ -22,7 +21,6 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.resources.Identifier;
 
 public class ZineClient implements ClientModInitializer {
-
     public static final ClientRegistryHelper REGISTRY = ClientRegistryHelper.create(ZineMod.MOD_ID);
 
     @Override
@@ -31,19 +29,17 @@ public class ZineClient implements ClientModInitializer {
 
         this.registerEvents();
 
-//        ResourceLoader.get(PackType.CLIENT_RESOURCES).registerReloadListener(MaterialMappingLoader.ID, MaterialMappingLoader.INSTANCE);
-
-        REGISTRY.spriteSource("generator", GeneratorSpriteSource.CODEC);
         REGISTRY.spriteSource("remap", RemapSpriteSource.CODEC);
         REGISTRY.spriteSource("connected_textures", ConnectedTexturesSpriteSource.CODEC);
 
         REGISTRY.blockStateModel("connected", ConnectedBlockStateModel.Unbaked.CODEC);
         REGISTRY.blockStateModel("tessellating", TessellatingBlockStateModel.Unbaked.CODEC);
+
+        ZineClientNetworking.init();
     }
 
     private void callBootstraps() {
         Gradient.bootstrap();
-        SpriteGenerator.bootstrap();
     }
 
     private void registerEvents() {

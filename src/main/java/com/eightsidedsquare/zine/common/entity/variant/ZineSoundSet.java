@@ -4,7 +4,6 @@ import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 
 public interface ZineSoundSet {
-
     default void zine$setAmbientSound(Holder<SoundEvent> ambientSound) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -20,5 +19,4 @@ public interface ZineSoundSet {
     default void zine$setStepSound(Holder<SoundEvent> stepSound) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

@@ -12,9 +12,6 @@ import java.util.Map;
 
 @Environment(EnvType.CLIENT)
 public final class AtlasEventsImpl {
-    private AtlasEventsImpl() {
-    }
-
     private static final Map<Identifier, Event<AtlasEvents.ModifySources>> MODIFY_SOURCES_EVENT_MAP = new Object2ObjectOpenHashMap<>();
 
     public static Event<AtlasEvents.ModifySources> getOrCreateModifySourcesEvent(Identifier atlasId) {
@@ -34,4 +31,6 @@ public final class AtlasEventsImpl {
         });
     }
 
+    private AtlasEventsImpl() {
+    }
 }

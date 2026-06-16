@@ -13,7 +13,6 @@ import java.util.List;
 
 @Mixin(ListPoolElement.class)
 public abstract class ListPoolElementMixin implements ZineListPoolElement {
-
     @Shadow @Final @Mutable
     private List<StructurePoolElement> elements;
 

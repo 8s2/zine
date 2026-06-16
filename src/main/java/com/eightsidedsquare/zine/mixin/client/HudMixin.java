@@ -23,5 +23,4 @@ public abstract class HudMixin {
             return original.call(text, formatting);
         }
     }
-
 }

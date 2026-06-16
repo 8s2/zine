@@ -4,12 +4,11 @@ import net.minecraft.commands.CacheableFunction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.storage.loot.LootTable;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public interface ZineAdvancementRewards {
-
     default void zine$setExperience(int experience) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -41,5 +40,4 @@ public interface ZineAdvancementRewards {
     default void zine$setFunction(@Nullable CacheableFunction function) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

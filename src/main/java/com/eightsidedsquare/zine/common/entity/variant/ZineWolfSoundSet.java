@@ -5,7 +5,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.sounds.SoundEvent;
 
 public interface ZineWolfSoundSet {
-
     default void zine$setAmbientSound(Holder<SoundEvent> ambientSound) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -53,5 +52,4 @@ public interface ZineWolfSoundSet {
     default void zine$setWhineSound(SoundEvent whineSound) {
         this.zine$setAmbientSound(BuiltInRegistries.SOUND_EVENT.wrapAsHolder(whineSound));
     }
-
 }

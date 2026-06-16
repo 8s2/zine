@@ -10,7 +10,6 @@ import net.minecraft.client.resources.model.sprite.Material;
 import java.util.function.Consumer;
 
 public record MappedMesh(Mesh mesh, Material.Baked particleMaterial, @BakedQuad.MaterialFlags int materialFlags) implements Mesh {
-
     @Override
     public int size() {
         return this.mesh.size();

@@ -11,9 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@SuppressWarnings("UnstableApiUsage")
 public class ValueGraphCodec<N, V> extends BaseGraphCodec<N, ValueGraphCodec.Edge<V>, MutableValueGraph<N, V>> {
-
     public ValueGraphCodec(Codec<N> nodeCodec, Codec<V> edgeValueCodec, boolean directed, boolean allowsSelfLoops) {
         super(nodeCodec, Edge.createCodec(edgeValueCodec), directed, allowsSelfLoops);
     }

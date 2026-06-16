@@ -3,7 +3,6 @@ package com.eightsidedsquare.zine.client.atlas;
 import net.minecraft.resources.Identifier;
 
 public interface ZinePalettedPermutations {
-
     default void zine$addNamespacedPermutation(String name, Identifier texture) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -23,5 +22,4 @@ public interface ZinePalettedPermutations {
     default void zine$setPaletteKey(Identifier paletteKey) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

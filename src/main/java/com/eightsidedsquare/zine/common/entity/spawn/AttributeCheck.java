@@ -13,7 +13,6 @@ import net.minecraft.world.entity.variant.SpawnContext;
 import java.util.function.Function;
 
 public class AttributeCheck implements SpawnCondition {
-
     @SuppressWarnings("unchecked")
     private static final Codec<EnvironmentAttribute<? extends Number>> ATTRIBUTE_CODEC = EnvironmentAttributes.CODEC.comapFlatMap(
             attribute -> attribute.defaultValue() instanceof Number ?

@@ -1,7 +1,6 @@
 package com.eightsidedsquare.zine.client.util;
 
 public interface ZineMinecraft {
-
     default float zine$getTickProgress(boolean ignoreFreeze) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }

@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 
 public class SoundEntryBuilder {
-
     private final SoundEvent soundEvent;
     private final List<SoundBuilder> sounds = new ArrayList<>();
     private boolean replace = false;

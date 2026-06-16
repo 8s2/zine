@@ -8,7 +8,7 @@ import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -19,7 +19,6 @@ import java.util.Optional;
 
 @Mixin(BlockPredicate.class)
 public abstract class BlockPredicateMixin implements ZineBlockPredicate {
-
     @Shadow @Final @Mutable
     private Optional<HolderSet<Block>> blocks;
 

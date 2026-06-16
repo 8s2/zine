@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public interface Gradient {
-
     ExtraCodecs.LateBoundIdMapper<Identifier, MapCodec<? extends Gradient>> ID_MAPPER = new ExtraCodecs.LateBoundIdMapper<>();
     Codec<Gradient> CODEC = ID_MAPPER.codec(Identifier.CODEC).dispatch(Gradient::getCodec, Function.identity());
 

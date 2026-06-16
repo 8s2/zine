@@ -22,7 +22,6 @@ import java.util.*;
 import java.util.function.Function;
 
 public final class CodecUtil {
-
     public static final Codec<Character> CHARACTER = Codec.string(1, 1).xmap(string -> string.charAt(0), String::valueOf);
     public static final Codec<Integer> INT_STRING = Codec.STRING.comapFlatMap(
             string -> {
@@ -37,7 +36,7 @@ public final class CodecUtil {
             String::valueOf
     );
     public static final Codec<Block> BLOCK = BuiltInRegistries.BLOCK.byNameCodec();
-    public static final Codec<EntitySpawnReason> SPAWN_REASON = SpawnReasonIds.IDS.codec(Identifier.CODEC);
+    public static final Codec<EntitySpawnReason> SPAWN_REASON = SpawnReasonIds.ID_MAPPER.codec(Identifier.CODEC);
     public static final Codec<AABB> AABB = Codec.DOUBLE.listOf().comapFlatMap(
             vertices -> Util.fixedSize(vertices, 6)
                     .map(list -> new AABB(list.getFirst(), list.get(1), list.get(2), list.get(3), list.get(4), list.get(5))),

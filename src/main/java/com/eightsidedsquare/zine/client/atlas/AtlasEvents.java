@@ -10,10 +10,6 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public final class AtlasEvents {
-
-    private AtlasEvents() {
-    }
-
     /**
      * Gets or creates an event for modifying the sources of a sprite atlas.
      * @param atlasId the id of a sprite atlas
@@ -32,4 +28,6 @@ public final class AtlasEvents {
         void modifySources(List<SpriteSource> sources);
     }
 
+    private AtlasEvents() {
+    }
 }

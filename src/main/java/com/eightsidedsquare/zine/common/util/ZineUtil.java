@@ -7,18 +7,12 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.item.equipment.ArmorType;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.IntFunction;
-import java.util.function.ToIntFunction;
 
 public final class ZineUtil {
-    private ZineUtil() {
-    }
-
     public static final ArmorType[] HUMANOID_EQUIPMENT_TYPES = new ArmorType[]{
             ArmorType.HELMET,
             ArmorType.CHESTPLATE,
@@ -117,51 +111,6 @@ public final class ZineUtil {
         return builder.build();
     }
 
-    public static <T> T[] lengthenArray(T[] arr, int newLength, IntFunction<T[]> generator) {
-        T[] newArr = generator.apply(newLength);
-        System.arraycopy(arr, 0, newArr, 0, arr.length);
-        return newArr;
-    }
-
-    public static <T extends Enum<T>, U extends Enum<U>> T[] addEnumValues(
-            T[] values,
-            U[] customValues,
-            EnumConvertor<T, U> convertor
-    ) {
-        int len = values.length;
-        T[] newValues = Arrays.copyOf(values, len + customValues.length);
-        int ordinal = values[len - 1].ordinal();
-        for (int i = 0; i < customValues.length; i++) {
-            U value = customValues[i];
-            newValues[i + len] = convertor.apply(value, ++ordinal);
-        }
-        return newValues;
-    }
-
-    public static <T extends Enum<T>, U extends Enum<U>> T[] addEnumValues(
-            T[] values,
-            U[] customValues,
-            ToIntFunction<T> idGetter,
-            IndexedEnumConvertor<T, U> convertor
-    ) {
-        int len = values.length;
-        T[] newValues = Arrays.copyOf(values, len + customValues.length);
-        int ordinal = values[len - 1].ordinal();
-        int id = idGetter.applyAsInt(values[len - 1]);
-        for (int i = 0; i < customValues.length; i++) {
-            U value = customValues[i];
-            newValues[i + len] = convertor.apply(value, ++ordinal, ++id);
-        }
-        return newValues;
-    }
-
-    @FunctionalInterface
-    public interface EnumConvertor<T extends Enum<T>, U extends Enum<U>> {
-        T apply(U value, int ordinal);
-    }
-
-    @FunctionalInterface
-    public interface IndexedEnumConvertor<T extends Enum<T>, U extends Enum<U>> {
-        T apply(U value, int ordinal, int id);
+    private ZineUtil() {
     }
 }

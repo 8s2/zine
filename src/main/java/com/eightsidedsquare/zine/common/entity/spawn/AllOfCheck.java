@@ -7,7 +7,6 @@ import net.minecraft.world.entity.variant.SpawnContext;
 import java.util.List;
 
 public class AllOfCheck extends CompositeCheck {
-
     public static final MapCodec<AllOfCheck> CODEC = createCodec(AllOfCheck::new);
 
     public AllOfCheck(List<SpawnCondition> conditions) {

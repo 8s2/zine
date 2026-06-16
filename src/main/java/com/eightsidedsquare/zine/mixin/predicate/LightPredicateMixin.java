@@ -15,7 +15,7 @@ public abstract class LightPredicateMixin implements ZineLightPredicate {
     private MinMaxBounds.Ints composite;
 
     @Override
-    public void zine$setRange(MinMaxBounds.Ints range) {
-        this.composite = range;
+    public void zine$setLight(MinMaxBounds.Ints light) {
+        this.composite = light;
     }
 }

@@ -4,7 +4,6 @@ import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperty;
 
 public interface ZineUnbakedConditionalItemModel {
-
     default void zine$setProperty(ConditionalItemModelProperty property) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -16,5 +15,4 @@ public interface ZineUnbakedConditionalItemModel {
     default void zine$setFalseModel(ItemModel.Unbaked model) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

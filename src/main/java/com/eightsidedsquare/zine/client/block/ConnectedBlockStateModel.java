@@ -20,7 +20,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -100,7 +100,7 @@ public class ConnectedBlockStateModel implements BlockStateModel {
                 emitMeshes(meshes, builder, emitter, pattern, material);
             }
             if(particleMaterial == null) {
-                particleMaterial = baker.zine$getMissing();
+                particleMaterial = baker.zine$getMissing(false);
             }
             return new ConnectedBlockStateModel(meshes, particleMaterial, this.fancy, materialFlags);
         }
