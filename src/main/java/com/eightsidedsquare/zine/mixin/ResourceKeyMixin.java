@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ResourceKey.class)
 public abstract class ResourceKeyMixin<T> implements ZineResourceKey<T> {
-
     @Shadow @Final private Identifier registryName;
 
     @Shadow @Final private Identifier identifier;

@@ -11,7 +11,6 @@ import java.util.function.Function;
 
 @SuppressWarnings("unchecked")
 public class StateMapBuilder<V> {
-
     List<Coordinate<?>> coordinates = new ArrayList<>();
     int permutations = 1;
 

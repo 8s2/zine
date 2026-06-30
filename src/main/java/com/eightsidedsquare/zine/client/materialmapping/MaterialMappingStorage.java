@@ -12,7 +12,6 @@ import net.minecraft.resources.Identifier;
 import java.util.Map;
 
 public final class MaterialMappingStorage {
-
     public static final MaterialMappingStorage EMPTY = new MaterialMappingStorage(Map.of());
     private final Map<Identifier, MaterialMapping.BakedSet> mappings;
     private final CacheSlot<ClientLevel, Map<Holder<?>, MaterialMapping.BakedSet>> holderMappingCache = new CacheSlot<>(_ -> new Reference2ObjectOpenHashMap<>());
@@ -41,5 +40,4 @@ public final class MaterialMappingStorage {
         mappings.forEach((id, mapping) -> bakedMappings.put(id, mapping.bake(materials::zine$get)));
         return new MaterialMappingStorage(bakedMappings);
     }
-
 }

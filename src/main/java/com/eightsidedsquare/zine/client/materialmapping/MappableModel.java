@@ -33,7 +33,7 @@ public interface MappableModel {
     }
 
     static MappableModel bake(List<CuboidModelElement> elements, ModelBaker modelBaker, ModelState modelState) {
-        return bake(elements, modelBaker.interner(), modelBaker.zine$getMissing(), modelState);
+        return bake(elements, modelBaker.interner(), modelBaker.zine$getMissing(false), modelState);
     }
 
     static MappableModel bake(List<CuboidModelElement> elements, ModelBaker.Interner interner, Material.Baked material, ModelState modelState) {

@@ -12,11 +12,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.joml.Matrix4fc;
 
 public class TransformedItemModel implements ItemModel {
-
     @Override
     public void update(ItemStackRenderState state, ItemStack stack, ItemModelResolver resolver, ItemDisplayContext displayContext, @Nullable ClientLevel world, @Nullable ItemOwner heldItemContext, int seed) {
         state.appendModelIdentityElement(this);
@@ -39,7 +38,6 @@ public class TransformedItemModel implements ItemModel {
     }
 
     public record Unbaked() implements ItemModel.Unbaked {
-
         public static final MapCodec<Unbaked> CODEC = MapCodec.unit(new Unbaked());
 
         @Override
@@ -54,7 +52,6 @@ public class TransformedItemModel implements ItemModel {
 
         @Override
         public void resolveDependencies(Resolver resolver) {
-
         }
     }
 }

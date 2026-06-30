@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zinetest.datagen;
 
-import com.eightsidedsquare.zinetest.core.TestmodInit;
+import com.eightsidedsquare.zinetest.core.Testmod;
 import com.eightsidedsquare.zinetest.core.TestmodItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
@@ -22,7 +22,7 @@ public class TestmodRecipeProvider extends RecipeProvider {
     public void buildRecipes() {
         this.trimSmithing(
                 TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE,
-                TestmodInit.CHECKERED_TRIM_PATTERN,
+                Testmod.CHECKERED_TRIM_PATTERN,
                 ResourceKey.create(Registries.RECIPE, BuiltInRegistries.ITEM.getKey(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE).withSuffix("_smithing_trim"))
         );
     }

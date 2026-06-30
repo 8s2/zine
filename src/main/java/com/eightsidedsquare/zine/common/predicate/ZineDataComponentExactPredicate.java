@@ -6,7 +6,6 @@ import net.minecraft.core.component.TypedDataComponent;
 import java.util.List;
 
 public interface ZineDataComponentExactPredicate {
-
     default void zine$setComponents(List<TypedDataComponent<?>> components) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -22,5 +21,4 @@ public interface ZineDataComponentExactPredicate {
     default void zine$addComponents(List<TypedDataComponent<?>> components) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

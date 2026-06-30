@@ -113,7 +113,7 @@ public class MappedMeshItemModel<K> implements ItemModel {
             ModelBaker baker = context.blockModelBaker();
             Matrix4fc modelTransform = Transformation.compose(transformation, this.transformation());
             return new MappedMeshItemModel<>(
-                    new MeshCache<>(baker.zine$getMappings(), baker.zine$getMissing(), this.callback(baker)),
+                    new MeshCache<>(baker.zine$getMappings(), baker.zine$getMissing(false), this.callback(baker)),
                     this.keyGetter(),
                     this.foilGetter(),
                     this.tints(),

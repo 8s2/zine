@@ -11,7 +11,6 @@ import org.joml.Vector3fc;
  * @author Geckolib authors
  */
 public class Interpolations {
-
     public static final AnimationChannel.Interpolation LINEAR = AnimationChannel.Interpolations.LINEAR;
     public static final AnimationChannel.Interpolation SPLINE = AnimationChannel.Interpolations.CATMULLROM;
     public static final InterpolationFactory STEP = steps -> easing(Interpolations.step(steps));
@@ -203,5 +202,4 @@ public class Interpolations {
     public interface InterpolationFactory {
         AnimationChannel.Interpolation configure(float value);
     }
-
 }

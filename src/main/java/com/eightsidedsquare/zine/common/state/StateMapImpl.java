@@ -6,7 +6,6 @@ import net.minecraft.world.level.block.state.properties.Property;
 import java.util.List;
 
 public class StateMapImpl<V> implements StateMap<V> {
-
     private final List<Property<?>> properties;
     private final List<V> values;
 

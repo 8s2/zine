@@ -2,7 +2,6 @@ package com.eightsidedsquare.zine.mixin.client.model;
 
 import com.eightsidedsquare.zine.client.materialmapping.*;
 import com.eightsidedsquare.zine.client.model.ModelEvents;
-import com.eightsidedsquare.zine.client.model.ZineMaterialBaker;
 import com.eightsidedsquare.zine.client.util.ZineMappableModelHolder;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -17,16 +16,13 @@ import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.renderer.item.ClientItem;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.client.resources.model.cuboid.CuboidModel;
-import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.client.resources.model.sprite.MaterialBaker;
 import net.minecraft.client.resources.model.sprite.SpriteGetter;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.level.block.state.BlockState;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -187,39 +183,6 @@ public abstract class ModelManagerMixin {
         @Override
         public Map<Identifier, MaterialMapping.UnbakedSet> zine$getMaterialMappings() {
             return this.materialMappings;
-        }
-    }
-
-    @Mixin(targets = "net.minecraft.client.resources.model.ModelManager$1")
-    public static abstract class MaterialBakerImplMixin implements ZineMaterialBaker {
-        @Shadow @Final
-        private Map<Material, Material.Baked> bakedMaterials;
-        @Shadow @Final
-        private Function<Material, Material.Baked> bakerFunction;
-        @Shadow @Final
-        private Material.Baked blockMissing;
-        @Unique
-        private MaterialMappingStorage mappings = MaterialMappingStorage.EMPTY;
-
-        @Override
-        public Material.Baked zine$get(Material material) {
-            Material.Baked baked = this.bakedMaterials.computeIfAbsent(material, this.bakerFunction);
-            return baked == null ? this.blockMissing : baked;
-        }
-
-        @Override
-        public Material.Baked zine$getMissing() {
-            return this.blockMissing;
-        }
-
-        @Override
-        public MaterialMappingStorage zine$getMappings() {
-            return this.mappings;
-        }
-
-        @Override
-        public void zine$setMappings(MaterialMappingStorage mappings) {
-            this.mappings = mappings;
         }
     }
 }

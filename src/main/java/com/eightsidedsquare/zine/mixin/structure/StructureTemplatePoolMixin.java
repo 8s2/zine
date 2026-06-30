@@ -1,7 +1,7 @@
 package com.eightsidedsquare.zine.mixin.structure;
 
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import com.eightsidedsquare.zine.common.world.structure.ZineStructureTemplatePool;
+import com.eightsidedsquare.zine.common.level.structure.ZineStructureTemplatePool;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.Holder;
@@ -16,7 +16,6 @@ import java.util.List;
 
 @Mixin(StructureTemplatePool.class)
 public abstract class StructureTemplatePoolMixin implements ZineStructureTemplatePool {
-
     @Shadow @Final
     private ObjectArrayList<StructurePoolElement> templates;
 

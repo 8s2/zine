@@ -18,7 +18,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 public interface ZineItemProperties {
-
     default Item.Properties zine$nameColor(int color) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -104,5 +103,4 @@ public interface ZineItemProperties {
     default ArmorType zine$getArmorType() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

@@ -6,7 +6,6 @@ import net.minecraft.core.component.predicates.DataComponentPredicate;
 import java.util.Map;
 
 public interface ZineDataComponentMatchers {
-
     default void zine$setExact(DataComponentExactPredicate exact) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -18,5 +17,4 @@ public interface ZineDataComponentMatchers {
     default void zine$addPartial(DataComponentPredicate.Type<?> type, DataComponentPredicate predicate) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

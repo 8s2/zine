@@ -4,14 +4,11 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.resources.Identifier;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
 public final class AdvancementEventsImpl {
-    private AdvancementEventsImpl() {
-    }
-    
     private static final Map<Identifier, Event<AdvancementEvents.ModifyAdvancement>> MODIFY_ADVANCEMENT_EVENT_MAP = new Object2ObjectOpenHashMap<>();
 
     public static Event<AdvancementEvents.ModifyAdvancement> getOrCreateModifyAdvancementEvent(Identifier advancementId) {
@@ -30,5 +27,8 @@ public final class AdvancementEventsImpl {
             }
             return advancement;
         });
+    }
+
+    private AdvancementEventsImpl() {
     }
 }

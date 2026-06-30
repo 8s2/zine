@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(NativeImage.class)
 public abstract class NativeImageMixin implements ZineNativeImage {
-
     @Shadow private long pixels;
 
     @Override

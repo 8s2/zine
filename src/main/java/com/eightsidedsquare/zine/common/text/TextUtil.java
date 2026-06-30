@@ -7,7 +7,6 @@ import net.minecraft.network.chat.contents.objects.ObjectInfo;
 import net.minecraft.resources.Identifier;
 
 public final class TextUtil {
-
     public static void registerTextContent(Identifier id, MapCodec<? extends ComponentContents> codec) {
         TextUtilImpl.registerTextContent(id, codec);
     }

@@ -1,7 +1,7 @@
 package com.eightsidedsquare.zine.mixin.structure;
 
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import com.eightsidedsquare.zine.common.world.structure.ZineListPoolElement;
+import com.eightsidedsquare.zine.common.level.structure.ZineListPoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.ListPoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import org.spongepowered.asm.mixin.Final;
@@ -13,7 +13,6 @@ import java.util.List;
 
 @Mixin(ListPoolElement.class)
 public abstract class ListPoolElementMixin implements ZineListPoolElement {
-
     @Shadow @Final @Mutable
     private List<StructurePoolElement> elements;
 

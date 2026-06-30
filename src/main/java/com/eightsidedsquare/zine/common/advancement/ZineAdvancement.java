@@ -1,15 +1,16 @@
 package com.eightsidedsquare.zine.common.advancement;
 
 import net.minecraft.advancements.*;
+import net.minecraft.advancements.triggers.Criterion;
+import net.minecraft.advancements.triggers.CriterionTrigger;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
 
 public interface ZineAdvancement {
-
     default void zine$setParent(@Nullable Identifier parent) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -49,5 +50,4 @@ public interface ZineAdvancement {
     default <T extends CriterionTriggerInstance> Optional<T> zine$getCriterion(String name, CriterionTrigger<T> criterion) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

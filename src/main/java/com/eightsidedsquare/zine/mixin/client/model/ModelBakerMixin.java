@@ -19,7 +19,7 @@ public interface ModelBakerMixin extends ZineModelBaker {
     }
 
     @Override
-    default Material.Baked zine$getMissing() {
-        return this.materials().zine$getMissing();
+    default Material.Baked zine$getMissing(boolean forceTranslucent) {
+        return this.materials().zine$getMissing(forceTranslucent);
     }
 }

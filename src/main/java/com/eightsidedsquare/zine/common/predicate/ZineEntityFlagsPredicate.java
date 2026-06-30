@@ -1,9 +1,8 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface ZineEntityFlagsPredicate {
-
     default void zine$setOnGround(@Nullable Boolean onGround) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -39,5 +38,4 @@ public interface ZineEntityFlagsPredicate {
     default void zine$setFallFlying(@Nullable Boolean fallFlying) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

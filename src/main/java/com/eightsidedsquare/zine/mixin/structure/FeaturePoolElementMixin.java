@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.mixin.structure;
 
-import com.eightsidedsquare.zine.common.world.structure.ZineFeaturePoolElement;
+import com.eightsidedsquare.zine.common.level.structure.ZineFeaturePoolElement;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(FeaturePoolElement.class)
 public abstract class FeaturePoolElementMixin implements ZineFeaturePoolElement {
-
     @Shadow @Final @Mutable
     private Holder<PlacedFeature> feature;
 

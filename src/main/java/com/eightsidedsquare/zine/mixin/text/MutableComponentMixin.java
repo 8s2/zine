@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MutableComponent.class)
 public abstract class MutableComponentMixin implements Component, ZineMutableComponent {
-
     @Shadow public abstract MutableComponent setStyle(Style style);
 
     @Shadow public abstract Style getStyle();

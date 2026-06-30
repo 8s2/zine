@@ -4,8 +4,11 @@ import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.objects.Reference2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Reference2BooleanOpenHashMap;
 import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.criterion.*;
+import net.minecraft.advancements.predicates.DataComponentMatchers;
+import net.minecraft.advancements.predicates.ItemPredicate;
+import net.minecraft.advancements.predicates.LocationPredicate;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.advancements.triggers.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
@@ -17,6 +20,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.animal.feline.CatVariant;
 import net.minecraft.world.entity.animal.frog.FrogVariant;
 import net.minecraft.world.entity.animal.wolf.WolfVariant;
@@ -36,9 +40,6 @@ import java.util.Optional;
 import java.util.TreeSet;
 
 public final class VanillaAdvancementModificationsImpl {
-    private VanillaAdvancementModificationsImpl() {
-    }
-
     private static final Identifier ADVENTURING_TIME_ID = Identifier.withDefaultNamespace("adventure/adventuring_time");
     private static final Identifier ALL_EFFECTS_ID = Identifier.withDefaultNamespace("nether/all_effects");
     private static final Identifier ALL_POTIONS_ID = Identifier.withDefaultNamespace("nether/all_potions");
@@ -352,7 +353,7 @@ public final class VanillaAdvancementModificationsImpl {
                             Optional.of(
                                     EntityPredicate.wrap(
                                             EntityPredicate.Builder.entity()
-                                                    .of(BuiltInRegistries.ENTITY_TYPE, EntityType.FROG)
+                                                    .of(BuiltInRegistries.ENTITY_TYPE, EntityTypes.FROG)
                                                     .components(DataComponentMatchers.Builder.components()
                                                             .exact(DataComponentExactPredicate.expect(DataComponents.FROG_VARIANT, variant.get()))
                                                             .build()
@@ -502,5 +503,8 @@ public final class VanillaAdvancementModificationsImpl {
 
     private static <T> TreeSet<ResourceKey<T>> registryKeySet() {
         return new TreeSet<>(Comparator.comparing(ResourceKey::identifier));
+    }
+
+    private VanillaAdvancementModificationsImpl() {
     }
 }

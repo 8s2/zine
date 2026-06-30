@@ -2,7 +2,7 @@ package com.eightsidedsquare.zine.mixin.predicate;
 
 import com.eightsidedsquare.zine.common.predicate.ZineContextAwarePredicate;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import net.minecraft.advancements.criterion.ContextAwarePredicate;
+import net.minecraft.advancements.predicates.ContextAwarePredicate;
 import net.minecraft.util.Util;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -16,7 +16,6 @@ import java.util.function.Predicate;
 
 @Mixin(ContextAwarePredicate.class)
 public abstract class ContextAwarePredicateMixin implements ZineContextAwarePredicate {
-
     @Shadow @Final @Mutable
     private List<LootItemCondition> conditions;
 

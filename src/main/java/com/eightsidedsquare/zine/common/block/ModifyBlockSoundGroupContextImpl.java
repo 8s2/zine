@@ -6,7 +6,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 
 public final class ModifyBlockSoundGroupContextImpl implements ModifyBlockSoundGroupCallback.Context {
-
     public static void registerEvents() {
         FreezeRegistriesEvents.beforeFreeze(Registries.BLOCK)
                 .register(registry ->

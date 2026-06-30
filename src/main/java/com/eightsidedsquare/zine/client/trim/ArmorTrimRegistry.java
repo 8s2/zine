@@ -32,9 +32,6 @@ import java.util.Map;
  */
 @Environment(EnvType.CLIENT)
 public final class ArmorTrimRegistry {
-    private ArmorTrimRegistry() {
-    }
-
     /**
      * Registers a material.
      * @param key the registry key of the armor trim material
@@ -88,4 +85,6 @@ public final class ArmorTrimRegistry {
         ArmorTrimRegistryImpl.excludeForItemModelModification(Arrays.stream(items).map(BuiltInRegistries.ITEM::getKey).toArray(Identifier[]::new));
     }
 
+    private ArmorTrimRegistry() {
+    }
 }

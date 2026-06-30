@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceKey;
  * <p>The Tracked subtype registers a tracked data handler for a registry entry.
  */
 public interface RegistryCodecGroup<T> {
-
     static <T> RegistryCodecGroup<T> create(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
         return new RegistryCodecGroupImpl<>(registryKey, codec, networkCodec);
     }
@@ -41,9 +40,6 @@ public interface RegistryCodecGroup<T> {
     StreamCodec<RegistryFriendlyByteBuf, Holder<T>> streamCodec();
 
     interface Serialized<T> extends RegistryCodecGroup<T> {
-
         EntityDataSerializer<Holder<T>> dataSerializer();
-
     }
-
 }

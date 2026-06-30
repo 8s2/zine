@@ -12,9 +12,6 @@ import java.util.function.BiConsumer;
 
 @Environment(EnvType.CLIENT)
 public final class ModelEvents {
-    private ModelEvents() {
-    }
-
     /**
      * Event to dynamically add unbaked models to the game, in a similar manner to data generation.
      */
@@ -34,4 +31,6 @@ public final class ModelEvents {
         void addUnbakedModels(BiConsumer<Identifier, ModelInstance> modelCollector);
     }
 
+    private ModelEvents() {
+    }
 }

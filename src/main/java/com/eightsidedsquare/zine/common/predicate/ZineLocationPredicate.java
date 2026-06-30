@@ -1,9 +1,9 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import net.minecraft.advancements.criterion.BlockPredicate;
-import net.minecraft.advancements.criterion.FluidPredicate;
-import net.minecraft.advancements.criterion.LightPredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.predicates.BlockPredicate;
+import net.minecraft.advancements.predicates.FluidPredicate;
+import net.minecraft.advancements.predicates.LightPredicate;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
@@ -11,12 +11,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.structure.Structure;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
 public interface ZineLocationPredicate {
-
     default void zine$setPosition(MinMaxBounds.Doubles x, MinMaxBounds.Doubles y, MinMaxBounds.Doubles z) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -88,5 +87,4 @@ public interface ZineLocationPredicate {
     default void zine$setCanSeeSky(@Nullable Boolean canSeeSky) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

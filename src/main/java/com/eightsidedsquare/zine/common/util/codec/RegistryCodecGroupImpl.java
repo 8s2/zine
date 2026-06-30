@@ -17,7 +17,6 @@ public record RegistryCodecGroupImpl<T>(ResourceKey<Registry<T>> key,
                                         Codec<Holder<T>> holderCodec,
                                         StreamCodec<RegistryFriendlyByteBuf, Holder<T>> streamCodec)
         implements RegistryCodecGroup<T> {
-
     public RegistryCodecGroupImpl(ResourceKey<Registry<T>> registryKey, Codec<T> codec, Codec<T> networkCodec) {
         this(
                 registryKey,
@@ -35,7 +34,6 @@ public record RegistryCodecGroupImpl<T>(ResourceKey<Registry<T>> key,
                                     StreamCodec<RegistryFriendlyByteBuf, Holder<T>> streamCodec,
                                     EntityDataSerializer<Holder<T>> dataSerializer)
             implements Serialized<T> {
-
         public SerializedImpl(ResourceKey<Registry<T>> registryKey,
                               Codec<T> codec,
                               Codec<T> networkCodec,

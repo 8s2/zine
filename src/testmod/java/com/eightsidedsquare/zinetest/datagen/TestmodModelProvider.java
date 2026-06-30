@@ -5,7 +5,7 @@ import com.eightsidedsquare.zine.client.data.BlockModelDefinitions;
 import com.eightsidedsquare.zinetest.client.NestBlockStateModel;
 import com.eightsidedsquare.zinetest.client.UnbakedNestItemModel;
 import com.eightsidedsquare.zinetest.core.TestmodBlocks;
-import com.eightsidedsquare.zinetest.core.TestmodInit;
+import com.eightsidedsquare.zinetest.core.Testmod;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -56,7 +56,7 @@ public class TestmodModelProvider extends FabricModelProvider {
         generator.blockStateOutput.accept(
                 BlockModelDefinitions.customVariants(
                         TestmodBlocks.NEST,
-                        new NestBlockStateModel.Unbaked(TestmodInit.id("nest"))
+                        new NestBlockStateModel.Unbaked(Testmod.id("nest"))
                 )
         );
     }

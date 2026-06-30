@@ -9,9 +9,6 @@ import net.minecraft.resources.Identifier;
 
 @Environment(EnvType.CLIENT)
 public final class ItemModelEvents {
-    private ItemModelEvents() {
-    }
-
     /**
      * Event to replace or modify unbaked item models before they are baked.
      */
@@ -52,4 +49,6 @@ public final class ItemModelEvents {
         void addUnbakedModels(ItemAssetCollector assetCollector);
     }
 
+    private ItemModelEvents() {
+    }
 }

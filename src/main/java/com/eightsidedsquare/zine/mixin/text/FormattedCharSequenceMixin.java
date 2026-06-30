@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(FormattedCharSequence.class)
 public interface FormattedCharSequenceMixin extends ZineFormattedCharSequence {
-
     @Shadow boolean accept(FormattedCharSink visitor);
 
     @Override

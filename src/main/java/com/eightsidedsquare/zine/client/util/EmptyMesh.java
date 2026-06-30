@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.client.renderer.v1.mesh.QuadView;
 import java.util.function.Consumer;
 
 public final class EmptyMesh implements Mesh {
-
     public static EmptyMesh INSTANCE = new EmptyMesh();
 
     private EmptyMesh() {
@@ -20,11 +19,9 @@ public final class EmptyMesh implements Mesh {
 
     @Override
     public void forEach(Consumer<? super QuadView> action) {
-
     }
 
     @Override
     public void outputTo(QuadEmitter emitter) {
-
     }
 }

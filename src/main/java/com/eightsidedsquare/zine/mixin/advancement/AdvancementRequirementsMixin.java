@@ -12,7 +12,6 @@ import java.util.List;
 
 @Mixin(AdvancementRequirements.class)
 public abstract class AdvancementRequirementsMixin implements ZineAdvancementRequirements {
-
     @Shadow @Final @Mutable
     private List<List<String>> requirements;
 

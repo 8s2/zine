@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.mixin.structure;
 
-import com.eightsidedsquare.zine.common.world.structure.ZineRuleProcessor;
+import com.eightsidedsquare.zine.common.level.structure.ZineRuleProcessor;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleProcessor;
@@ -13,7 +13,6 @@ import java.util.List;
 
 @Mixin(RuleProcessor.class)
 public abstract class RuleProcessorMixin implements ZineRuleProcessor {
-
     @Shadow @Final @Mutable
     private ImmutableList<ProcessorRule> rules;
 

@@ -5,7 +5,6 @@ import net.minecraft.world.entity.animal.wolf.WolfVariant;
 import net.minecraft.world.entity.variant.SpawnPrioritySelectors;
 
 public interface ZineWolfVariant {
-
     default void zine$setAdultInfo(WolfVariant.AssetInfo adultInfo) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -19,7 +18,6 @@ public interface ZineWolfVariant {
     }
 
     interface ZineAssetInfo {
-
         default void zine$setWild(ClientAsset.ResourceTexture wild) {
             throw new UnsupportedOperationException("Implemented via mixin.");
         }
@@ -31,7 +29,5 @@ public interface ZineWolfVariant {
         default void zine$setAngry(ClientAsset.ResourceTexture angry) {
             throw new UnsupportedOperationException("Implemented via mixin.");
         }
-
     }
-
 }

@@ -84,7 +84,7 @@ public class NestBlockStateModel implements BlockStateModel {
         public BlockStateModel bake(ModelBaker baker) {
             return new NestBlockStateModel(
                     baker.zine$getMappableModel(this.model).bake(baker, BlockModelRotation.get(OctahedralGroup.IDENTITY)),
-                    baker.zine$getMissing(),
+                    baker.zine$getMissing(false),
                     baker.zine$getMappings()
             );
         }

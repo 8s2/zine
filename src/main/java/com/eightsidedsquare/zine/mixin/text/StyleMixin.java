@@ -1,26 +1,26 @@
 package com.eightsidedsquare.zine.mixin.text;
 
+import com.eightsidedsquare.zine.common.text.ExtendedStyleMapCodec;
 import com.eightsidedsquare.zine.common.text.ZineStyle;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.network.chat.*;
-import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
+import org.jspecify.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
+import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
 @Mixin(Style.class)
 public abstract class StyleMixin implements ZineStyle {
-
     @Shadow @Final @Nullable
     private TextColor color;
     @Shadow @Final @Nullable
@@ -127,7 +127,7 @@ public abstract class StyleMixin implements ZineStyle {
 
     @Inject(method = "toString", at = @At(value = "INVOKE", target = "Ljava/lang/StringBuilder;append(Ljava/lang/String;)Ljava/lang/StringBuilder;"))
     private void zine$toString(CallbackInfoReturnable<String> cir, @Local(name = "result") StringBuilder result) {
-        if(this.zine$hasOutline()) {
+        if(!this.zine$hasOutline()) {
             return;
         }
         if(result.length() > 1) {
@@ -148,5 +148,16 @@ public abstract class StyleMixin implements ZineStyle {
         System.arraycopy(originalValues, 0, values, 0, originalValues.length);
         values[values.length - 1] = this.outlineColor;
         return original.call((Object) values);
+    }
+
+    @Mixin(Style.Serializer.class)
+    public static abstract class SerializerMixin {
+        @Shadow @Final @Mutable
+        public static MapCodec<Style> MAP_CODEC;
+
+        @Inject(method = "<clinit>", at = @At(value = "FIELD", target = "Lnet/minecraft/network/chat/Style$Serializer;MAP_CODEC:Lcom/mojang/serialization/MapCodec;", shift = At.Shift.AFTER, opcode = Opcodes.PUTSTATIC))
+        private static void zine$modifyCodec(CallbackInfo ci) {
+            MAP_CODEC = new ExtendedStyleMapCodec(MAP_CODEC);
+        }
     }
 }

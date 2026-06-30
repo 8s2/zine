@@ -3,7 +3,6 @@ package com.eightsidedsquare.zine.client.registry;
 import net.minecraft.resources.Identifier;
 
 public class ClientRegistryHelperImpl implements ClientRegistryHelper {
-
     private final String namespace;
 
     ClientRegistryHelperImpl(String namespace) {

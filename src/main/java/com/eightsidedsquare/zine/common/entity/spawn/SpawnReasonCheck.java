@@ -12,7 +12,6 @@ import net.minecraft.world.entity.variant.SpawnContext;
 import java.util.List;
 
 public class SpawnReasonCheck implements SpawnCondition {
-
     public static final MapCodec<SpawnReasonCheck> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             CodecUtil.grammaticalListMapCodec(
                     "reason",

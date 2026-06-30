@@ -7,7 +7,6 @@ import net.minecraft.world.entity.variant.SpawnCondition;
 import net.minecraft.world.entity.variant.SpawnContext;
 
 public class RandomCheck implements SpawnCondition {
-
     public static final MapCodec<RandomCheck> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
             ExtraCodecs.floatRange(0, 1).fieldOf("chance").forGetter(RandomCheck::getChance)
     ).apply(i, RandomCheck::new));

@@ -1,9 +1,8 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 
 public interface ZineDistancePredicate {
-
     default void zine$setX(MinMaxBounds.Doubles x) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -23,5 +22,4 @@ public interface ZineDistancePredicate {
     default void zine$setAbsolute(MinMaxBounds.Doubles absolute) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

@@ -1,7 +1,7 @@
 package com.eightsidedsquare.zine.mixin.entity.spawn;
 
 import com.eightsidedsquare.zine.common.entity.spawn.ZineMoonBrightnessCheck;
-import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.world.entity.variant.MoonBrightnessCheck;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

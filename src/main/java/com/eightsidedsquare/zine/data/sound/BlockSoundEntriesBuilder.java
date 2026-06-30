@@ -2,14 +2,13 @@ package com.eightsidedsquare.zine.data.sound;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.SoundType;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class BlockSoundEntriesBuilder {
-
     private final SoundType blockSoundGroup;
     private final EnumMap<Type, SoundEntryBuilder> entryBuilders;
 
@@ -218,5 +217,4 @@ public class BlockSoundEntriesBuilder {
     private interface TriEntryFunction<T1, T2, T3>  {
         void apply(SoundEntryBuilder soundEntryBuilder, T1 t1, T2 t2, T3 t3);
     }
-
 }

@@ -5,7 +5,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 
 public final class FreezeRegistriesEvents {
-
     public static <T> Event<Callback<T>> beforeFreeze(ResourceKey<? extends Registry<T>> registryKey) {
         return FreezeRegistriesEventsImpl.getOrCreateEvent(true, registryKey);
     }
@@ -24,12 +23,9 @@ public final class FreezeRegistriesEvents {
 
     @FunctionalInterface
     public interface Callback<T> {
-
         void onFreeze(Registry<T> registry);
-
     }
 
     private FreezeRegistriesEvents() {
     }
-
 }

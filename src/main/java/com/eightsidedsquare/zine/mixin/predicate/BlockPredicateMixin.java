@@ -2,13 +2,13 @@ package com.eightsidedsquare.zine.mixin.predicate;
 
 import com.eightsidedsquare.zine.common.predicate.ZineBlockPredicate;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import net.minecraft.advancements.criterion.BlockPredicate;
-import net.minecraft.advancements.criterion.NbtPredicate;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.advancements.predicates.BlockPredicate;
+import net.minecraft.advancements.predicates.NbtPredicate;
+import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -19,7 +19,6 @@ import java.util.Optional;
 
 @Mixin(BlockPredicate.class)
 public abstract class BlockPredicateMixin implements ZineBlockPredicate {
-
     @Shadow @Final @Mutable
     private Optional<HolderSet<Block>> blocks;
 

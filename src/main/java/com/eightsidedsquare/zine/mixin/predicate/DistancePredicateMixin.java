@@ -1,8 +1,8 @@
 package com.eightsidedsquare.zine.mixin.predicate;
 
 import com.eightsidedsquare.zine.common.predicate.ZineDistancePredicate;
-import net.minecraft.advancements.criterion.DistancePredicate;
-import net.minecraft.advancements.criterion.MinMaxBounds;
+import net.minecraft.advancements.predicates.DistancePredicate;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;

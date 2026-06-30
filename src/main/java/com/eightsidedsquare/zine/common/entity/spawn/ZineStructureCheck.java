@@ -9,7 +9,6 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import java.util.Collection;
 
 public interface ZineStructureCheck {
-
     default void zine$setRequiredStructures(HolderSet<Structure> requiredStructures) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -29,5 +28,4 @@ public interface ZineStructureCheck {
     default void zine$addRequiredStructures(HolderGetter<Structure> structureLookup, Collection<ResourceKey<Structure>> requiredStructures) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

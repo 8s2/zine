@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.client.resources.model.ModelBaker;
 
 public interface CustomMeshUnbakedBlockStateModel extends CustomUnbakedBlockStateModel {
-
     int getMeshCount();
 
     BlockStateModel bake(MutableMesh builder, QuadEmitter emitter, Mesh[] meshes, ModelBaker baker);
@@ -24,6 +23,5 @@ public interface CustomMeshUnbakedBlockStateModel extends CustomUnbakedBlockStat
 
     @Override
     default void resolveDependencies(Resolver resolver) {
-
     }
 }

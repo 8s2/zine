@@ -7,7 +7,6 @@ import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.ApiStatus;
 
 public interface ZineMaterialBaker {
-
     default Material.Baked zine$get(Material material) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -20,7 +19,7 @@ public interface ZineMaterialBaker {
         return this.zine$get(new Material(sprite));
     }
 
-    default Material.Baked zine$getMissing() {
+    default Material.Baked zine$getMissing(boolean forceTranslucent) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
@@ -37,7 +36,7 @@ public interface ZineMaterialBaker {
     }
 
     default TextureAtlasSprite zine$getMissingSprite() {
-        return this.zine$getMissing().sprite();
+        return this.zine$getMissing(false).sprite();
     }
 
     default MaterialMappingStorage zine$getMappings() {
@@ -46,7 +45,5 @@ public interface ZineMaterialBaker {
 
     @ApiStatus.Internal
     default void zine$setMappings(MaterialMappingStorage mappings) {
-
     }
-
 }

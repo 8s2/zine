@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @Mixin(targets = "net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer$TrimSpriteKey")
 public abstract class TrimSpriteKeyMixin {
-
     @Shadow @Final private ArmorTrim trim;
 
     @ModifyReturnValue(method = "spriteId", at = @At("RETURN"))
@@ -26,5 +25,4 @@ public abstract class TrimSpriteKeyMixin {
         }
         return original;
     }
-
 }

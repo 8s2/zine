@@ -1,6 +1,5 @@
 package com.eightsidedsquare.zine.client.registry;
 
-import com.eightsidedsquare.zine.client.atlas.generator.SpriteGenerator;
 import com.eightsidedsquare.zine.client.atlas.gradient.Gradient;
 import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.client.model.loading.v1.CustomUnbakedBlockStateModel;
@@ -28,7 +27,6 @@ import net.minecraft.resources.Identifier;
 import java.util.function.BiConsumer;
 
 public interface ClientRegistryHelper {
-
     /**
      * Creates an instance of the default implementation of {@link ClientRegistryHelper}.
      */
@@ -160,15 +158,6 @@ public interface ClientRegistryHelper {
      */
     default <T extends SpecialModelRenderer.Unbaked<?>> MapCodec<T> specialModel(String name, MapCodec<T> codec) {
         return this.register(name, codec, SpecialModelRenderers.ID_MAPPER::put);
-    }
-
-    /**
-     * @param name the name of the sprite generator
-     * @param codec the codec of the sprite generator
-     * @return the registered sprite generator codec
-     */
-    default <T extends SpriteGenerator> MapCodec<T> spriteGenerator(String name, MapCodec<T> codec) {
-        return this.register(name, codec, SpriteGenerator.ID_MAPPER::put);
     }
 
     /**

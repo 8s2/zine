@@ -10,7 +10,6 @@ import java.util.Map;
 
 @SuppressWarnings("unchecked")
 public final class FreezeRegistriesEventsImpl {
-
     private static final Map<ResourceKey<? extends Registry<?>>, Event<FreezeRegistriesEvents.Callback<?>>> BEFORE = new Object2ObjectOpenHashMap<>();
     private static final Map<ResourceKey<? extends Registry<?>>, Event<FreezeRegistriesEvents.Callback<?>>> AFTER = new Object2ObjectOpenHashMap<>();
 

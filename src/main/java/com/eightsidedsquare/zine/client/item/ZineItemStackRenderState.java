@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public interface ZineItemStackRenderState {
-
     Supplier<Vector3f[]> CUBE_VERTICES = Suppliers.memoize(() -> {
         Vector3f[] vertices = new Vector3f[8];
         int i = 0;
@@ -32,7 +31,6 @@ public interface ZineItemStackRenderState {
     }
 
     interface ZineLayerRenderState {
-
         default void zine$setMatrixTransformation(boolean beforeDisplayTransforms, Consumer<PoseStack> matrixTransformation) {
             throw new UnsupportedOperationException("Implemented via mixin.");
         }
@@ -40,7 +38,5 @@ public interface ZineItemStackRenderState {
         default void zine$setMatrixTransformation(Consumer<PoseStack> matrixTransformation) {
             this.zine$setMatrixTransformation(false, matrixTransformation);
         }
-
     }
-
 }

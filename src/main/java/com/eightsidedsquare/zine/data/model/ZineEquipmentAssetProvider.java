@@ -13,7 +13,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public abstract class ZineEquipmentAssetProvider extends FabricCodecDataProvider<EquipmentClientInfo> {
-
     public ZineEquipmentAssetProvider(FabricPackOutput packOutput, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(packOutput, registriesFuture, PackOutput.Target.RESOURCE_PACK, "equipment", EquipmentClientInfo.CODEC);
     }

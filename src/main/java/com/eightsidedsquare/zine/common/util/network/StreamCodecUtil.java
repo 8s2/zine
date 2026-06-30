@@ -3,6 +3,7 @@ package com.eightsidedsquare.zine.common.util.network;
 import com.google.common.collect.ImmutableList;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.IdMapper;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.FriendlyByteBuf;
@@ -11,6 +12,8 @@ import net.minecraft.network.SkipPacketDecoderException;
 import net.minecraft.network.VarInt;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ByIdMap;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -20,7 +23,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import org.apache.commons.lang3.mutable.*;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -29,7 +32,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public final class StreamCodecUtil {
-
     public static final StreamCodec<FriendlyByteBuf, BlockState> BLOCK_STATE = state(Block.BLOCK_STATE_REGISTRY, Block::getId);
     public static final StreamCodec<FriendlyByteBuf, FluidState> FLUID_STATE = state(Fluid.FLUID_STATE_REGISTRY);
     public static final StreamCodec<RegistryFriendlyByteBuf, DataComponentMap> COMPONENT_MAP = TypedDataComponent.STREAM_CODEC.apply(ByteBufCodecs.list()).map(
@@ -84,6 +86,8 @@ public final class StreamCodecUtil {
     public static final StreamCodec<ByteBuf, OptionalLong> OPTIONAL_LONG = primitiveOptional(ByteBufCodecs.LONG, OptionalLong::of, OptionalLong::empty, OptionalLong::isPresent, OptionalLong::getAsLong);
     public static final StreamCodec<ByteBuf, OptionalLong> OPTIONAL_VAR_LONG = primitiveOptional(ByteBufCodecs.VAR_LONG, OptionalLong::of, OptionalLong::empty, OptionalLong::isPresent, OptionalLong::getAsLong);
     public static final StreamCodec<ByteBuf, OptionalDouble> OPTIONAL_DOUBLE = primitiveOptional(ByteBufCodecs.DOUBLE, OptionalDouble::of, OptionalDouble::empty, OptionalDouble::isPresent, OptionalDouble::getAsDouble);
+    public static final StreamCodec<ByteBuf, Identifier> SHORT_IDENTIFIER = ByteBufCodecs.STRING_UTF8.map(Identifier::parse, Identifier::toShortString);
+    public static final StreamCodec<ByteBuf, ResourceKey<? extends Registry<?>>> SHORT_REGISTRY_KEY = SHORT_IDENTIFIER.map(ResourceKey::createRegistryKey, ResourceKey::identifier);
 
     public static <B, V> StreamCodec<B, MutableObject<V>> mutable(StreamCodec<B, V> streamCodec) {
         return streamCodec.map(MutableObject::new, MutableObject::get);

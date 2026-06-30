@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.item.properties.select.SelectItemModelPrope
 import java.util.List;
 
 public interface ZineSelectItemModelUnbakedSwitch<P extends SelectItemModelProperty<T>, T> {
-
     default void zine$setProperty(P property) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -22,5 +21,4 @@ public interface ZineSelectItemModelUnbakedSwitch<P extends SelectItemModelPrope
     default void zine$addCase(SelectItemModel.SwitchCase<T> switchCase) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

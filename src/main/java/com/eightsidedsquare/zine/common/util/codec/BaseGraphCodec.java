@@ -9,9 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@SuppressWarnings("UnstableApiUsage")
 public abstract class BaseGraphCodec<N, E extends BaseGraphCodec.Edge, G> implements Codec<G> {
-
     private final MapCodec<List<N>> nodesCodec;
     private final MapCodec<List<E>> edgesCodec;
     private final boolean directed;

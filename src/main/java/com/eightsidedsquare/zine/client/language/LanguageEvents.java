@@ -6,9 +6,6 @@ import net.fabricmc.fabric.api.event.EventFactory;
 import java.util.Map;
 
 public final class LanguageEvents {
-    private LanguageEvents() {
-    }
-
     /**
      * Event to modify the translations map when languages are loaded.
      */
@@ -33,5 +30,8 @@ public final class LanguageEvents {
          * Use {@link Map#putIfAbsent(Object, Object)} to add translations without risking an override.
          */
         void modify(Map<String, String> translations, String languageCode, boolean bidirectional);
+    }
+
+    private LanguageEvents() {
     }
 }

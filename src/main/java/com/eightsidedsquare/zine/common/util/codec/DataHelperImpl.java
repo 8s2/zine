@@ -14,14 +14,13 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 public class DataHelperImpl<T> implements DataHelper<T> {
-
     private final List<DataHelper<T>> fields;
 
     public DataHelperImpl(List<DataHelper<T>> fields) {
@@ -269,7 +268,6 @@ public class DataHelperImpl<T> implements DataHelper<T> {
     }
 
     static final class ListField<F, L extends Collection<F>, T> extends AbstractField<L, T> {
-
         ListField(@Nullable Codec<L> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, L> packetCodec, String key, Function<T, L> getter) {
             super(codec, packetCodec, key, getter);
         }
@@ -300,7 +298,6 @@ public class DataHelperImpl<T> implements DataHelper<T> {
     }
 
     static final class MapField<K, V, M extends Map<K, V>, T> extends AbstractField<M, T> {
-
         MapField(@Nullable Codec<M> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, M> packetCodec, String key, Function<T, M> getter) {
             super(codec, packetCodec, key, getter);
         }
@@ -328,6 +325,5 @@ public class DataHelperImpl<T> implements DataHelper<T> {
         <I extends RegistryFriendlyByteBuf> void write(I buf, StreamCodec<? super RegistryFriendlyByteBuf, M> packetCodec, T object) {
             packetCodec.encode(buf, this.getter.apply(object));
         }
-
     }
 }

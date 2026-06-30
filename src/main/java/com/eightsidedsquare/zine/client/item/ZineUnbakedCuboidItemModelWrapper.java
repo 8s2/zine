@@ -8,7 +8,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 public interface ZineUnbakedCuboidItemModelWrapper {
-
     default void zine$addTint(ItemTintSource tint) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -28,5 +27,4 @@ public interface ZineUnbakedCuboidItemModelWrapper {
     default void zine$setTransformation(@Nullable Transformation transformation) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

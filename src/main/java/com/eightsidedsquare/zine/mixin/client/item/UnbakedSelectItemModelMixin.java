@@ -1,9 +1,10 @@
 package com.eightsidedsquare.zine.mixin.client.item;
 
 import com.eightsidedsquare.zine.client.item.ZineUnbakedSelectItemModel;
+import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public abstract class UnbakedSelectItemModelMixin implements ZineUnbakedSelectIt
     private SelectItemModel.UnbakedSwitch<?, ?> unbakedSwitch;
 
     @Override
-    public void zine$setFallback(@Nullable net.minecraft.client.renderer.item.ItemModel.Unbaked fallback) {
+    public void zine$setFallback(ItemModel.@Nullable Unbaked fallback) {
         this.fallback = Optional.ofNullable(fallback);
     }
 

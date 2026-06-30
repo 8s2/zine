@@ -2,7 +2,7 @@ package com.eightsidedsquare.zine.mixin.predicate;
 
 import com.eightsidedsquare.zine.common.predicate.ZineMobEffectsPredicate;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
-import net.minecraft.advancements.criterion.MobEffectsPredicate;
+import net.minecraft.advancements.predicates.MobEffectsPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.world.effect.MobEffect;
 import org.spongepowered.asm.mixin.Final;

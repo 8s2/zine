@@ -6,7 +6,6 @@ import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.client.resources.model.sprite.Material;
 
 public final class ZineClientUtil {
-
     public static Mesh bake(MutableMesh builder) {
         Mesh mesh = builder.immutableCopy();
         builder.clear();

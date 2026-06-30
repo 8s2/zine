@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.SoundType;
 
 @FunctionalInterface
 public interface ModifyBlockSoundGroupCallback {
-
     Event<ModifyBlockSoundGroupCallback> EVENT = EventFactory.createArrayBacked(
             ModifyBlockSoundGroupCallback.class,
             callbacks -> ctx -> {
@@ -22,7 +21,6 @@ public interface ModifyBlockSoundGroupCallback {
     void modify(Context ctx);
 
     interface Context {
-
         void setSoundGroup(Block block, SoundType soundGroup);
 
         default void setSoundGroup(SoundType soundGroup, Block... blocks) {
@@ -34,7 +32,5 @@ public interface ModifyBlockSoundGroupCallback {
         default Registry<Block> registry() {
             return BuiltInRegistries.BLOCK;
         }
-
     }
-
 }

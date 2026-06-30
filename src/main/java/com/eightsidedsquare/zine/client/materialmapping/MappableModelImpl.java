@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 public record MappableModelImpl(Map<String, Mesh> meshes) implements MappableModel {
-
     @Override
     public void outputTo(QuadEmitter emitter, MaterialMapping.@Nullable Baked mapping) {
         if (mapping == null) {

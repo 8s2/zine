@@ -1,14 +1,13 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.TagPredicate;
+import net.minecraft.advancements.predicates.TagPredicate;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.world.damagesource.DamageType;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public interface ZineDamageSourcePredicate {
-
     default void zine$setTags(List<TagPredicate<DamageType>> tags) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -32,5 +31,4 @@ public interface ZineDamageSourcePredicate {
     default void zine$setDirect(@Nullable Boolean direct) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

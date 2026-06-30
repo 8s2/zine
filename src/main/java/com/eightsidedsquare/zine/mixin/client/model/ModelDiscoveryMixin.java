@@ -18,7 +18,6 @@ import java.util.Map;
 
 @Mixin(ModelDiscovery.class)
 public abstract class ModelDiscoveryMixin implements ZineMappableModelHolder {
-
     @Shadow @Final
     private static Logger LOGGER;
     @Shadow @Final @Mutable

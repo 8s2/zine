@@ -1,14 +1,13 @@
 package com.eightsidedsquare.zine.common.predicate;
 
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
+import net.minecraft.advancements.predicates.StatePropertiesPredicate;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.material.Fluid;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
 public interface ZineFluidPredicate {
-
     default void zine$setFluids(@Nullable HolderSet<Fluid> fluids) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
@@ -24,5 +23,4 @@ public interface ZineFluidPredicate {
     default void zine$setState(@Nullable StatePropertiesPredicate state) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
-
 }

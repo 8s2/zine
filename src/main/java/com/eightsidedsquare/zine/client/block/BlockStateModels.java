@@ -11,7 +11,6 @@ import net.minecraft.util.random.WeightedList;
 import java.util.List;
 
 public final class BlockStateModels {
-
     /**
      * Creates a {@link SingleVariant.Unbaked} for the given model variant
      */
@@ -95,5 +94,4 @@ public final class BlockStateModels {
 
     private BlockStateModels() {
     }
-
 }
