@@ -44,7 +44,6 @@ public class ZineClient implements ClientModInitializer {
 
     private void registerEvents() {
         AtlasEvents.modifySourcesEvent(Identifier.withDefaultNamespace("items")).register(ArmorTrimRegistryImpl::modifyItemsAtlas);
-        AtlasEvents.modifySourcesEvent(Identifier.withDefaultNamespace("armor_trims")).register(ArmorTrimRegistryImpl::modifyArmorTrimsAtlas);
         ModelEvents.ADD_UNBAKED.register(ArmorTrimRegistryImpl::addUnbakedModels);
         ItemModelEvents.BEFORE_BAKE.register(ArmorTrimRegistryImpl::modifyItemModels);
         ClientTooltipComponentCallback.EVENT.register(tooltipData -> switch (tooltipData) {

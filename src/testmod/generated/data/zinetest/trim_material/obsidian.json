@@ -1,7 +1,7 @@
 {
-  "asset_name": "obsidian",
   "description": {
     "color": "#3B2754",
     "text": "Obsidian"
-  }
+  },
+  "palette_id": "zinetest:trim/obsidian"
 }

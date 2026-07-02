@@ -1,7 +1,6 @@
 package com.eightsidedsquare.zinetest.common.block;
 
 import com.eightsidedsquare.zinetest.common.block.entity.NestBlockEntity;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -29,11 +28,6 @@ public class NestBlock extends BaseEntityBlock {
     @Override
     public VoxelShape zine$getClientOutlineShape(BlockState state, BlockGetter level, BlockHitResult hitResult, CollisionContext context) {
         return context.isDescending() ? Shapes.block() : SHAPE;
-    }
-
-    @Override
-    protected MapCodec<? extends BaseEntityBlock> codec() {
-        return null;
     }
 
     @Override

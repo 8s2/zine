@@ -120,7 +120,6 @@
     "client.model.ModelManagerMixin$ResolvedModelsMixin",
     "client.model.ResolvableModelResolverMixin",
     "client.render.LevelExtractorMixin",
-    "client.render.TrimSpriteKeyMixin",
     "client.text.ComponentMixin",
     "client.texture.NativeImageMixin",
     "client.texture.PalettedPermutationsMixin",

@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.renderer.item.properties.select.TrimMaterialProperty;
 import net.minecraft.client.renderer.texture.atlas.SpriteSource;
 import net.minecraft.client.renderer.texture.atlas.sources.PalettedPermutations;
-import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -24,7 +23,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
-import net.minecraft.world.item.equipment.trim.TrimPattern;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
@@ -33,9 +31,8 @@ import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
 public final class ArmorTrimRegistryImpl {
-    private static final Identifier TRIM_PALETTE_KEY = Identifier.withDefaultNamespace("trims/color_palettes/trim_palette");
+    private static final Identifier TRIM_PALETTE_KEY = Identifier.withDefaultNamespace("trim_base");
     private static final Map<ResourceKey<TrimMaterial>, CustomMaterial> MATERIALS = new Reference2ObjectOpenHashMap<>();
-    private static final Map<ResourceKey<TrimPattern>, CustomPattern> PATTERNS = new Reference2ObjectOpenHashMap<>();
     private static final Set<Identifier> ITEM_MODEL_EXCLUDE = new ObjectOpenHashSet<>();
     private static final Map<Item, ArmorType> ARMOR_ITEMS = new Reference2ObjectOpenHashMap<>();
 
@@ -48,23 +45,7 @@ public final class ArmorTrimRegistryImpl {
     }
 
     static void registerMaterial(ResourceKey<TrimMaterial> key) {
-        registerMaterial(key, key.identifier().getPath(), key.identifier().withPrefix("trims/color_palettes/"), createEquipmentModelIds(key));
-    }
-
-    private static void registerPattern(ResourceKey<TrimPattern> key, CustomPattern pattern) {
-        PATTERNS.put(key, pattern);
-    }
-
-    static void registerPattern(ResourceKey<TrimPattern> key, Map<EquipmentClientInfo.LayerType, Identifier> equipmentTextures) {
-        registerPattern(key, new CustomPattern(equipmentTextures));
-    }
-
-    static void registerPattern(ResourceKey<TrimPattern> key) {
-        Map<EquipmentClientInfo.LayerType, Identifier> equipmentTextures = ImmutableMap.<EquipmentClientInfo.LayerType, Identifier>builder()
-                .put(EquipmentClientInfo.LayerType.HUMANOID, key.identifier().withPrefix("trims/entity/humanoid/"))
-                .put(EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS, key.identifier().withPrefix("trims/entity/humanoid_leggings/"))
-                .build();
-        registerPattern(key, equipmentTextures);
+        registerMaterial(key, key.identifier().getPath(), key.identifier().withPrefix("trim/"), createEquipmentModelIds(key));
     }
 
     static void excludeForItemModelModification(Identifier... ids) {
@@ -80,19 +61,8 @@ public final class ArmorTrimRegistryImpl {
         return builder.build();
     }
 
-    public static boolean containsMaterial(ResourceKey<TrimMaterial> key) {
-        return MATERIALS.containsKey(key);
-    }
-
     public static void modifyItemsAtlas(List<SpriteSource> sources) {
         modifyPalettedSource(sources, ArmorTrimRegistryImpl::applyMaterials);
-    }
-
-    public static void modifyArmorTrimsAtlas(List<SpriteSource> sources) {
-        modifyPalettedSource(sources, source -> {
-            applyMaterials(source);
-            applyPatterns(source);
-        });
     }
 
     public static void addArmorItem(Item item, ArmorType armorType) {
@@ -109,10 +79,6 @@ public final class ArmorTrimRegistryImpl {
 
     private static void applyMaterials(PalettedPermutations source) {
         MATERIALS.values().forEach(entry -> source.zine$addNamespacedPermutation(entry.name, entry.colorPaletteTexture));
-    }
-
-    private static void applyPatterns(PalettedPermutations source) {
-        PATTERNS.values().forEach(entry -> entry.equipmentTextures.values().forEach(source::zine$addTexture));
     }
 
     public static ItemModel.Unbaked modifyItemModels(Identifier id, ItemModel.Unbaked unbaked) {
@@ -171,8 +137,5 @@ public final class ArmorTrimRegistryImpl {
     }
 
     private record CustomMaterial(String name, Identifier colorPaletteTexture, Map<ArmorType, Identifier> equipmentModelIds) {
-    }
-
-    private record CustomPattern(Map<EquipmentClientInfo.LayerType, Identifier> equipmentTextures) {
     }
 }

@@ -111,7 +111,6 @@ import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -128,10 +127,8 @@ import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicateType;
-import net.minecraft.world.level.levelgen.carver.CarverConfiguration;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSizeType;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
@@ -147,12 +144,10 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProviderType;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
-import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
 import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasBinding;
@@ -1394,35 +1389,23 @@ public interface RegistryHelper {
     }
 
     /**
-     * @param name the name of the carver
-     * @param carver the carver to register
-     * @return the registered carver
-     * @param <T> the type of the carver config
-     * @param <C> the type of the carver
+     * @param name the name of the carver type
+     * @param codec the codec of the carver
+     * @return the registered carver type codec
+     * @param <T> the type of the carver
      */
-    default <T extends CarverConfiguration, C extends WorldCarver<T>> C carver(String name, C carver) {
-        return this.register(BuiltInRegistries.CARVER, name, carver);
+    default <T extends WorldCarver> MapCodec<T> carver(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.CARVER_TYPE, name, codec);
     }
 
     /**
-     * @param name the name of the feature
-     * @param feature the feature to register
-     * @return the registered feature
-     * @param <T> the type of the feature config
-     * @param <F> the type of the feature
+     * @param name the name of the feature type
+     * @param codec the codec of the feature
+     * @return the registered feature type codec
+     * @param <T> the type of feature
      */
-    default <T extends FeatureConfiguration, F extends Feature<T>> F feature(String name, F feature) {
-        return this.register(BuiltInRegistries.FEATURE, name, feature);
-    }
-
-    /**
-     * @param name the name of the structure placement type
-     * @param type the structure placement type to register
-     * @return the registered structure placement type
-     * @param <T> the type of structure placement
-     */
-    default <T extends StructurePlacement> StructurePlacementType<T> structurePlacement(String name, StructurePlacementType<T> type) {
-        return this.register(BuiltInRegistries.STRUCTURE_PLACEMENT, name, type);
+    default <T extends Feature> MapCodec<T> feature(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.FEATURE_TYPE, name, codec);
     }
 
     /**
@@ -1431,8 +1414,8 @@ public interface RegistryHelper {
      * @return the registered structure placement type
      * @param <T> the type of structure placement
      */
-    default <T extends StructurePlacement> StructurePlacementType<T> structurePlacement(String name, MapCodec<T> codec) {
-        return this.structurePlacement(name, () -> codec);
+    default <T extends StructurePlacement> MapCodec<T> structurePlacement(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.STRUCTURE_PLACEMENT, name, codec);
     }
 
     /**
@@ -1489,22 +1472,12 @@ public interface RegistryHelper {
 
     /**
      * @param name the name of the placement modifier type
-     * @param type the placement modifier type to register
-     * @return the registered placement modifier type
+     * @param codec the codec of the placement modifier
+     * @return the registered placement modifier type codec
      * @param <T> the type of placement modifier
      */
-    default <T extends PlacementModifier> PlacementModifierType<T> placementModifier(String name, PlacementModifierType<T> type) {
-        return this.register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, name, type);
-    }
-
-    /**
-     * @param name the name of the placement modifier type
-     * @param codec the codec of the placemenet modifier
-     * @return the registered placement modifier type
-     * @param <T> the type of placement modifier
-     */
-    default <T extends PlacementModifier> PlacementModifierType<T> placementModifier(String name, MapCodec<T> codec) {
-        return this.placementModifier(name, () -> codec);
+    default <T extends PlacementModifier> MapCodec<T> placementModifier(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, name, codec);
     }
 
     /**
@@ -1654,7 +1627,7 @@ public interface RegistryHelper {
      * @param <T> the type of material condition
      */
     default <T extends SurfaceRules.ConditionSource> MapCodec<T> materialCondition(String name, MapCodec<T> codec) {
-        return this.register(BuiltInRegistries.MATERIAL_CONDITION, name, codec);
+        return this.register(BuiltInRegistries.MATERIAL_CONDITION_TYPE, name, codec);
     }
 
     /**
@@ -1664,7 +1637,7 @@ public interface RegistryHelper {
      * @param <T> the type of material rule
      */
     default <T extends SurfaceRules.RuleSource> MapCodec<T> materialRule(String name, MapCodec<T> codec) {
-        return this.register(BuiltInRegistries.MATERIAL_RULE, name, codec);
+        return this.register(BuiltInRegistries.MATERIAL_RULE_TYPE, name, codec);
     }
 
     /**
@@ -1675,16 +1648,6 @@ public interface RegistryHelper {
      */
     default <T extends DensityFunction> MapCodec<T> densityFunction(String name, MapCodec<T> codec) {
         return this.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, name, codec);
-    }
-
-    /**
-     * @param name the name of the block type
-     * @param codec the codec of the block type
-     * @return the registered block type codec
-     * @param <T> the type of block type
-     */
-    default <T extends Block> MapCodec<T> blockType(String name, MapCodec<T> codec) {
-        return this.register(BuiltInRegistries.BLOCK_TYPE, name, codec);
     }
 
     /**
@@ -1725,24 +1688,6 @@ public interface RegistryHelper {
      */
     default <T extends PoolAliasBinding> MapCodec<T> poolAliasBinding(String name, MapCodec<T> codec) {
         return this.register(BuiltInRegistries.POOL_ALIAS_BINDING_TYPE, name, codec);
-    }
-
-    /**
-     * @param name the name of the decorated pot pattern
-     * @param pattern the decorated pot pattern to register
-     * @return the registered decorated pot pattern
-     */
-    default DecoratedPotPattern decoratedPotPattern(String name, DecoratedPotPattern pattern) {
-        return this.register(BuiltInRegistries.DECORATED_POT_PATTERN, name, pattern);
-    }
-
-    /**
-     * Registers a {@link DecoratedPotPattern} using {@code name} as the pattern's asset id.
-     * @param name the name of the decorated pot pattern
-     * @return the registered decorated pot pattern
-     */
-    default DecoratedPotPattern decoratedPotPattern(String name) {
-        return this.decoratedPotPattern(name, new DecoratedPotPattern(this.id(name)));
     }
 
     /**

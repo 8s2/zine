@@ -113,7 +113,6 @@ public class TestmodClient implements ClientModInitializer {
         });
         ArmorTrimRegistry.registerMaterial(Testmod.TOURMALINE_TRIM_MATERIAL);
         ArmorTrimRegistry.registerMaterial(Testmod.OBSIDIAN_TRIM_MATERIAL);
-        ArmorTrimRegistry.registerPattern(Testmod.CHECKERED_TRIM_PATTERN);
 
         REGISTRY.itemModel("transformed", TransformedItemModel.Unbaked.CODEC);
         REGISTRY.itemModel("nest", UnbakedNestItemModel.CODEC);
