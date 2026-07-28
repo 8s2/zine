@@ -24,7 +24,7 @@ public final class ZineClientNetworking {
                     try {
                         RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(FriendlyByteBufs.create(), level.registryAccess());
                         buf.writeBytes(payload.data());
-                        read(buf, dataHelper, blockEntity);
+                        dataHelper.readUnchecked(buf, blockEntity);
                     } catch (Throwable e) {
                         try {
                             reporter.close();
@@ -38,11 +38,6 @@ public final class ZineClientNetworking {
                 }
             });
         });
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T extends BlockEntity> void read(RegistryFriendlyByteBuf buf, DataHelper<T> dataHelper, BlockEntity blockEntity) {
-        dataHelper.read(buf, (T) blockEntity);
     }
 
     private ZineClientNetworking() {

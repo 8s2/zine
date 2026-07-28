@@ -34,7 +34,7 @@ import java.util.function.Function;
  *
  *     private final List<BlockPos> positions = new ArrayList<>();
  *     @Nullable
- *     private Text name;
+ *     private Component name;
  *     private int weight;
  *
  *     public List<BlockPos> getPositions() {
@@ -42,11 +42,11 @@ import java.util.function.Function;
  *     }
  *
  *     @Nullable
- *     public Text getName() {
+ *     public Component getName() {
  *         return this.name;
  *     }
  *
- *     public void setName(@Nullable Text name) {
+ *     public void setName(@Nullable Component name) {
  *         this.name = name;
  *     }
  *
@@ -62,53 +62,53 @@ import java.util.function.Function;
  * }</pre>
  * Let's say that <strong>MyObject</strong> is required to implement methods for reading and writing to data and byte buffers:
  * <pre>{@code
- * public void readData(ReadView view) {}
+ * public void readData(ValueInput input) {}
  *
- * public void writeData(WriteView view) {}
+ * public void writeData(ValueOutput output) {}
  *
- * public void readFromBuf(RegistryByteBuf buf) {}
+ * public void readFromBuf(RegistryFriendlyByteBuf buf) {}
  *
- * public void writeToBuf(RegistryByteBuf buf) {}
+ * public void writeToBuf(RegistryFriendlyByteBuf buf) {}
  * }</pre>
  * <p>Manually handling each field for each method can become quite cumbersome, especially as the number of fields grow.
  * <p>This is where a DataHelper can be built to handle all four methods at once:
  * <pre>{@code
  * static final DataHelper<MyObject> DATA_HELPER = DataHelper.<MyObject>builder()
- *         .listFieldOf(BlockPos.CODEC, BlockPos.PACKET_CODEC, "positions")
+ *         .listFieldOf(BlockPos.CODEC, BlockPos.STREAM_CODEC, "positions")
  *         .apply(MyObject::getPositions)
- *         .nullableField(TextCodecs.CODEC, TextCodecs.UNLIMITED_REGISTRY_PACKET_CODEC, "name")
+ *         .nullableField(ComponentSerialization.CODEC, ComponentSerialization.STREAM_CODEC, "name")
  *         .apply(MyObject::getName, MyObject::setName)
  *         .intField("weight")
  *         .apply(0, MyObject::getWeight, MyObject::setWeight)
  *         .build();
  * }</pre>
  * <p>The building process follows a pattern wherein first a field type is declared
- * (with a codec, packet codec, and key for data encoding),
+ * (with a codec, stream codec, and key for data encoding),
  * followed by an {@code apply} method call which provides a getter method reference
  * (fields that aren't collections or maps must also provide a default value and setter method reference).
  * <p>See the methods of {@link Builder} for all the supported field types.
  * <p>The codec parameter can be {@code null} to prevent data reading and writing,
- * and the packet codec parameter can be {@code null} to prevent buf reading and writing.
- * Both cannot be null, however. There are overloaded builder methods for adding fields without codecs or packet codecs.
+ * and the stream codec parameter can be {@code null} to prevent buf reading and writing.
+ * Both cannot be null, however. There are overloaded builder methods for adding fields without codecs or stream codecs.
  * <p>For this example, the DataHelper is a static constant
  * as the field types for <strong>MyObject</strong> are consistent.
  * An instance field of DataHelper might be needed for objects with generic type(s)
- * in order to handle type-specific codecs and packet codecs.
+ * in order to handle type-specific codecs and stream codecs.
  * <p>Finally, the DataHelper can be applied to each method as follows:
  * <pre>{@code
- * public void readData(ReadView view) {
- *     DATA_HELPER.read(view, this);
+ * public void readData(ValueInput input) {
+ *     DATA_HELPER.read(input, this);
  * }
  *
- * public void writeData(WriteView view) {
- *     DATA_HELPER.write(view, this);
+ * public void writeData(ValueOutput output) {
+ *     DATA_HELPER.write(output, this);
  * }
  *
- * public void readFromBuf(RegistryByteBuf buf) {
+ * public void readFromBuf(RegistryFriendlyByteBuf buf) {
  *     DATA_HELPER.read(buf, this);
  * }
  *
- * public void writeToBuf(RegistryByteBuf buf) {
+ * public void writeToBuf(RegistryFriendlyByteBuf buf) {
  *     DATA_HELPER.write(buf, this);
  * }
  * }</pre>
@@ -125,26 +125,46 @@ public interface DataHelper<T> {
         return new DataHelperImpl.BuilderImpl<>();
     }
 
-    void read(ValueInput view, T object);
+    void read(ValueInput input, T object);
 
-    void write(ValueOutput view, T object);
+    void write(ValueOutput output, T object);
 
     <I extends RegistryFriendlyByteBuf> void read(I buf, T object);
 
     <I extends RegistryFriendlyByteBuf> void write(I buf, T object);
+
+    @SuppressWarnings("unchecked")
+    default void readUnchecked(ValueInput input, Object object) {
+        this.read(input, (T) object);
+    }
+
+    @SuppressWarnings("unchecked")
+    default void writeUnchecked(ValueOutput output, Object object) {
+        this.write(output, (T) object);
+    }
+
+    @SuppressWarnings("unchecked")
+    default <I extends RegistryFriendlyByteBuf> void readUnchecked(I buf, Object object) {
+        this.read(buf, (T) object);
+    }
+
+    @SuppressWarnings("unchecked")
+    default <I extends RegistryFriendlyByteBuf> void writeUnchecked(I buf, Object object) {
+        this.write(buf, (T) object);
+    }
 
     interface Builder<T> {
 
         /**
          * Adds a field to the data helper builder.
          * @param codec the codec of the field
-         * @param packetCodec the packet codec of the field
+         * @param streamCodec the stream codec of the field
          * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <F> type of the field
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
         <F> FieldBuilder<F, T> field(@Nullable Codec<F> codec,
-                                     @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec,
+                                     @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec,
                                      String key);
 
         /**
@@ -160,24 +180,24 @@ public interface DataHelper<T> {
 
         /**
          * Adds a non-serializing field to the data helper builder.
-         * @param packetCodec the packet codec of the field
+         * @param streamCodec the stream codec of the field
          * @param <F> type of the field
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
-        default <F> FieldBuilder<F, T> field(StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec) {
-            return this.field(null, packetCodec, "");
+        default <F> FieldBuilder<F, T> field(StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec) {
+            return this.field(null, streamCodec, "");
         }
 
         /**
          * <p>Adds a nullable field to the data helper builder.
          * <p>Internally, values are wrapped in an {@link java.util.Optional} in order to handle null values properly.
          * @param codec the codec of the field
-         * @param packetCodec the packet codec of the field
+         * @param streamCodec the stream codec of the field
          * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <F> type of the field
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
-        <F> NullableFieldBuilder<F, T> nullableField(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec, String key);
+        <F> NullableFieldBuilder<F, T> nullableField(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec, String key);
 
         /**
          * Adds a non-syncing nullable field to the data helper builder.
@@ -194,25 +214,25 @@ public interface DataHelper<T> {
         /**
          * Adds a non-serializing nullable field to the data helper builder.
          * <p>Internally, values are wrapped in an {@link java.util.Optional} in order to handle null values properly.
-         * @param packetCodec the packet codec of the field
+         * @param streamCodec the stream codec of the field
          * @param <F> type of the field
          * @apiNote {@link FieldBuilder#apply(Object, Function, BiConsumer)} must be called afterward to continue building the data helper
          */
-        default <F> NullableFieldBuilder<F, T> nullableField(StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec) {
-            return this.nullableField(null, packetCodec, "");
+        default <F> NullableFieldBuilder<F, T> nullableField(StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec) {
+            return this.nullableField(null, streamCodec, "");
         }
 
         /**
          * Adds a list field to the data helper builder
          * @param codec the codec of the list field
-         * @param packetCodec the packet codec of the list field
+         * @param streamCodec the stream codec of the list field
          * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <F> type of the list field element
          * @param <L> type of the list field
          * @apiNote {@link ListFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
         <F, L extends Collection<F>> ListFieldBuilder<F, L, T> listField(@Nullable Codec<L> codec,
-                                                                         @Nullable StreamCodec<? super RegistryFriendlyByteBuf, L> packetCodec,
+                                                                         @Nullable StreamCodec<? super RegistryFriendlyByteBuf, L> streamCodec,
                                                                          String key);
 
         /**
@@ -229,26 +249,26 @@ public interface DataHelper<T> {
 
         /**
          * Adds a non-serializing list field to the data helper builder
-         * @param packetCodec the packet codec of the list field
+         * @param streamCodec the stream codec of the list field
          * @param <F> type of the list field element
          * @param <L> type of the list field
          * @apiNote {@link ListFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
-        default <F, L extends Collection<F>> ListFieldBuilder<F, L, T> listField(StreamCodec<? super RegistryFriendlyByteBuf, L> packetCodec) {
-            return this.listField(null, packetCodec, "");
+        default <F, L extends Collection<F>> ListFieldBuilder<F, L, T> listField(StreamCodec<? super RegistryFriendlyByteBuf, L> streamCodec) {
+            return this.listField(null, streamCodec, "");
         }
 
         /**
          * <p>Adds a list field to the data helper builder.
-         * <p>The codec and packet codec are converted to list types.
+         * <p>The codec and stream codec are converted to list types.
          * @param codec the codec of an element of the list field
-         * @param packetCodec the packet codec of an element of the list field
+         * @param streamCodec the stream codec of an element of the list field
          * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <F> type of the list field element
          * @apiNote {@link ListFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
         <F> ListFieldBuilder<F, List<F>, T> listFieldOf(@Nullable Codec<F> codec,
-                                                        @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec,
+                                                        @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec,
                                                         String key);
 
         /**
@@ -265,19 +285,19 @@ public interface DataHelper<T> {
 
         /**
          * <p>Adds a non-serializing list field to the data helper builder.
-         * <p>The packet codec is converted to a list type.
-         * @param packetCodec the packet codec of an element of the list field
+         * <p>The stream codec is converted to a list type.
+         * @param streamCodec the stream codec of an element of the list field
          * @param <F> type of the list field element
          * @apiNote {@link ListFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
-        default <F> ListFieldBuilder<F, List<F>, T> listFieldOf(StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec) {
-            return this.listFieldOf(null, packetCodec, "");
+        default <F> ListFieldBuilder<F, List<F>, T> listFieldOf(StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec) {
+            return this.listFieldOf(null, streamCodec, "");
         }
 
         /**
          * Adds a map field to the data helper builder
          * @param codec the codec of the map field
-         * @param packetCodec the packet codec of the map field
+         * @param streamCodec the stream codec of the map field
          * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <K> type of the map field key
          * @param <V> type of the map field value
@@ -285,7 +305,7 @@ public interface DataHelper<T> {
          * @apiNote {@link MapFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
         <K, V, M extends Map<K, V>> MapFieldBuilder<K, V, M, T> mapField(@Nullable Codec<M> codec,
-                                                                         @Nullable StreamCodec<? super RegistryFriendlyByteBuf, M> packetCodec,
+                                                                         @Nullable StreamCodec<? super RegistryFriendlyByteBuf, M> streamCodec,
                                                                          String key);
 
         /**
@@ -303,23 +323,23 @@ public interface DataHelper<T> {
 
         /**
          * Adds a non-serializing map field to the data helper builder
-         * @param packetCodec the packet codec of the map field
+         * @param streamCodec the stream codec of the map field
          * @param <K> type of the map field key
          * @param <V> type of the map field value
          * @param <M> type of the map field
          * @apiNote {@link MapFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
-        default <K, V, M extends Map<K, V>> MapFieldBuilder<K, V, M, T> mapField(StreamCodec<? super RegistryFriendlyByteBuf, M> packetCodec) {
-            return this.mapField(null, packetCodec, "");
+        default <K, V, M extends Map<K, V>> MapFieldBuilder<K, V, M, T> mapField(StreamCodec<? super RegistryFriendlyByteBuf, M> streamCodec) {
+            return this.mapField(null, streamCodec, "");
         }
 
         /**
          * <p>Adds a map field to the data helper builder.
-         * <p>The codecs and packet codecs are used to create a codec and packet codec for the map field.
+         * <p>The codecs and stream codecs are used to create a codec and stream codec for the map field.
          * @param keyCodec the codec of the map field key
          * @param elementCodec the codec of the map field element
-         * @param keyPacketCodec the packet codec of the map field key
-         * @param elementPacketCodec the packet codec of the map field element
+         * @param keyStreamCodec the stream codec of the map field key
+         * @param elementStreamCodec the stream codec of the map field element
          * @param key mapping used when encoding to {@link ValueOutput} and decoding from {@link ValueInput}
          * @param <K> type of the map field key
          * @param <V> type of the map field value
@@ -327,8 +347,8 @@ public interface DataHelper<T> {
          */
         <K, V> MapFieldBuilder<K, V, Map<K, V>, T> mapFieldOf(@Nullable Codec<K> keyCodec,
                                                               @Nullable Codec<V> elementCodec,
-                                                              @Nullable StreamCodec<? super RegistryFriendlyByteBuf, K> keyPacketCodec,
-                                                              @Nullable StreamCodec<? super RegistryFriendlyByteBuf, V> elementPacketCodec,
+                                                              @Nullable StreamCodec<? super RegistryFriendlyByteBuf, K> keyStreamCodec,
+                                                              @Nullable StreamCodec<? super RegistryFriendlyByteBuf, V> elementStreamCodec,
                                                               String key);
 
         /**
@@ -349,16 +369,16 @@ public interface DataHelper<T> {
 
         /**
          * <p>Adds a non-serializing map field to the data helper builder.
-         * <p>The packet codecs are used to create a packet codec for the map field.
-         * @param keyPacketCodec the packet codec of the map field key
-         * @param elementPacketCodec the packet codec of the map field element
+         * <p>The stream codecs are used to create a stream codec for the map field.
+         * @param keyStreamCodec the stream codec of the map field key
+         * @param elementStreamCodec the stream codec of the map field element
          * @param <K> type of the map field key
          * @param <V> type of the map field value
          * @apiNote {@link MapFieldBuilder#apply(Function)} must be called afterward to continue building the data helper
          */
-        default <K, V> MapFieldBuilder<K, V, Map<K, V>, T> mapFieldOf(StreamCodec<? super RegistryFriendlyByteBuf, K> keyPacketCodec,
-                                                                      StreamCodec<? super RegistryFriendlyByteBuf, V> elementPacketCodec) {
-            return this.mapFieldOf(null, null, keyPacketCodec, elementPacketCodec, "");
+        default <K, V> MapFieldBuilder<K, V, Map<K, V>, T> mapFieldOf(StreamCodec<? super RegistryFriendlyByteBuf, K> keyStreamCodec,
+                                                                      StreamCodec<? super RegistryFriendlyByteBuf, V> elementStreamCodec) {
+            return this.mapFieldOf(null, null, keyStreamCodec, elementStreamCodec, "");
         }
 
         /**

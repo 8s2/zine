@@ -28,16 +28,16 @@ public class DataHelperImpl<T> implements DataHelper<T> {
     }
 
     @Override
-    public void read(ValueInput view, T object) {
+    public void read(ValueInput input, T object) {
         for (DataHelper<T> field : this.fields) {
-            field.read(view, object);
+            field.read(input, object);
         }
     }
 
     @Override
-    public void write(ValueOutput view, T object) {
+    public void write(ValueOutput output, T object) {
         for (DataHelper<T> field : this.fields) {
-            field.write(view, object);
+            field.write(output, object);
         }
     }
 
@@ -65,16 +65,16 @@ public class DataHelperImpl<T> implements DataHelper<T> {
         }
 
         @Override
-        public <F> FieldBuilder<F, T> field(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec, String key) {
+        public <F> FieldBuilder<F, T> field(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec, String key) {
             return (defaultValue, getter, setter) ->
-                    this.add(new Field<>(codec, packetCodec, key, defaultValue, getter, setter));
+                    this.add(new Field<>(codec, streamCodec, key, defaultValue, getter, setter));
         }
 
         @Override
-        public <F> NullableFieldBuilder<F, T> nullableField(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec, String key) {
+        public <F> NullableFieldBuilder<F, T> nullableField(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec, String key) {
             return (defaultValue, getter, setter) -> this.field(
                             codec == null ? null : ExtraCodecs.optionalEmptyMap(codec),
-                            packetCodec == null ? null : ByteBufCodecs.optional(packetCodec.cast()),
+                            streamCodec == null ? null : ByteBufCodecs.optional(streamCodec.cast()),
                             key
                     )
                     .apply(
@@ -85,29 +85,29 @@ public class DataHelperImpl<T> implements DataHelper<T> {
         }
 
         @Override
-        public <F, L extends Collection<F>> ListFieldBuilder<F, L, T> listField(@Nullable Codec<L> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, L> packetCodec, String key) {
-            return getter -> this.add(new ListField<>(codec, packetCodec, key, getter));
+        public <F, L extends Collection<F>> ListFieldBuilder<F, L, T> listField(@Nullable Codec<L> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, L> streamCodec, String key) {
+            return getter -> this.add(new ListField<>(codec, streamCodec, key, getter));
         }
 
         @Override
-        public <F> ListFieldBuilder<F, List<F>, T> listFieldOf(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec, String key) {
+        public <F> ListFieldBuilder<F, List<F>, T> listFieldOf(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec, String key) {
             return this.listField(
                     codec == null ? null : codec.listOf(),
-                    packetCodec == null ? null : ByteBufCodecs.collection(ArrayList::new, packetCodec),
+                    streamCodec == null ? null : ByteBufCodecs.collection(ArrayList::new, streamCodec),
                     key
             );
         }
 
         @Override
-        public <K, V, M extends Map<K, V>> MapFieldBuilder<K, V, M, T> mapField(@Nullable Codec<M> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, M> packetCodec, String key) {
-            return getter -> this.add(new MapField<>(codec, packetCodec, key, getter));
+        public <K, V, M extends Map<K, V>> MapFieldBuilder<K, V, M, T> mapField(@Nullable Codec<M> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, M> streamCodec, String key) {
+            return getter -> this.add(new MapField<>(codec, streamCodec, key, getter));
         }
 
         @Override
-        public <K, V> MapFieldBuilder<K, V, Map<K, V>, T> mapFieldOf(@Nullable Codec<K> keyCodec, @Nullable Codec<V> elementCodec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, K> keyPacketCodec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, V> elementPacketCodec, String key) {
+        public <K, V> MapFieldBuilder<K, V, Map<K, V>, T> mapFieldOf(@Nullable Codec<K> keyCodec, @Nullable Codec<V> elementCodec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, K> keyStreamCodec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, V> elementStreamCodec, String key) {
             return this.mapField(
                     keyCodec == null || elementCodec == null ? null : Codec.unboundedMap(keyCodec, elementCodec),
-                    keyPacketCodec == null || elementPacketCodec == null ? null : ByteBufCodecs.map(HashMap::new, keyPacketCodec, elementPacketCodec),
+                    keyStreamCodec == null || elementStreamCodec == null ? null : ByteBufCodecs.map(HashMap::new, keyStreamCodec, elementStreamCodec),
                     key
             );
         }
@@ -185,16 +185,16 @@ public class DataHelperImpl<T> implements DataHelper<T> {
 
     static abstract class AbstractField<F, T> implements DataHelper<T> {
         @Nullable final Codec<F> codec;
-        @Nullable final StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec;
+        @Nullable final StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec;
         final String key;
         final Function<T, F> getter;
 
-        AbstractField(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec, String key, Function<T, F> getter) {
-            if(codec == null && packetCodec == null) {
-                throw new IllegalArgumentException("Both codec and packet codec cannot be null for field " + key);
+        AbstractField(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec, String key, Function<T, F> getter) {
+            if(codec == null && streamCodec == null) {
+                throw new IllegalArgumentException("Both codec and stream codec cannot be null for field " + key);
             }
             this.codec = codec;
-            this.packetCodec = packetCodec;
+            this.streamCodec = streamCodec;
             this.key = key;
             this.getter = getter;
         }
@@ -203,35 +203,35 @@ public class DataHelperImpl<T> implements DataHelper<T> {
 
         abstract void write(ValueOutput view, Codec<F> codec, T object);
 
-        abstract <I extends RegistryFriendlyByteBuf> void read(I buf, StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec, T object);
+        abstract <I extends RegistryFriendlyByteBuf> void read(I buf, StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec, T object);
 
-        abstract <I extends RegistryFriendlyByteBuf> void write(I buf, StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec, T object);
+        abstract <I extends RegistryFriendlyByteBuf> void write(I buf, StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec, T object);
 
         @Override
-        public final void read(ValueInput view, T object) {
+        public final void read(ValueInput input, T object) {
             if(this.codec != null) {
-                this.read(view, this.codec, object);
+                this.read(input, this.codec, object);
             }
         }
 
         @Override
-        public final void write(ValueOutput view, T object) {
+        public final void write(ValueOutput output, T object) {
             if(this.codec != null) {
-                this.write(view, this.codec, object);
+                this.write(output, this.codec, object);
             }
         }
 
         @Override
         public final <I extends RegistryFriendlyByteBuf> void read(I buf, T object) {
-            if(this.packetCodec != null) {
-                this.read(buf, this.packetCodec, object);
+            if(this.streamCodec != null) {
+                this.read(buf, this.streamCodec, object);
             }
         }
 
         @Override
         public final <I extends RegistryFriendlyByteBuf> void write(I buf, T object) {
-            if(this.packetCodec != null) {
-                this.write(buf, this.packetCodec, object);
+            if(this.streamCodec != null) {
+                this.write(buf, this.streamCodec, object);
             }
         }
     }
@@ -240,8 +240,8 @@ public class DataHelperImpl<T> implements DataHelper<T> {
         private final Function<T, F> defaultValueGetter;
         private final BiConsumer<T, F> setter;
 
-        Field(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec, String key, Function<T, F> defaultValueGetter, Function<T, F> getter, BiConsumer<T, F> setter) {
-            super(codec, packetCodec, key, getter);
+        Field(@Nullable Codec<F> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec, String key, Function<T, F> defaultValueGetter, Function<T, F> getter, BiConsumer<T, F> setter) {
+            super(codec, streamCodec, key, getter);
             this.defaultValueGetter = defaultValueGetter;
             this.setter = setter;
         }
@@ -257,19 +257,19 @@ public class DataHelperImpl<T> implements DataHelper<T> {
         }
 
         @Override
-        <I extends RegistryFriendlyByteBuf> void read(I buf, StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec, T object) {
-            this.setter.accept(object, packetCodec.decode(buf));
+        <I extends RegistryFriendlyByteBuf> void read(I buf, StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec, T object) {
+            this.setter.accept(object, streamCodec.decode(buf));
         }
 
         @Override
-        <I extends RegistryFriendlyByteBuf> void write(I buf, StreamCodec<? super RegistryFriendlyByteBuf, F> packetCodec, T object) {
-            packetCodec.encode(buf, this.getter.apply(object));
+        <I extends RegistryFriendlyByteBuf> void write(I buf, StreamCodec<? super RegistryFriendlyByteBuf, F> streamCodec, T object) {
+            streamCodec.encode(buf, this.getter.apply(object));
         }
     }
 
     static final class ListField<F, L extends Collection<F>, T> extends AbstractField<L, T> {
-        ListField(@Nullable Codec<L> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, L> packetCodec, String key, Function<T, L> getter) {
-            super(codec, packetCodec, key, getter);
+        ListField(@Nullable Codec<L> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, L> streamCodec, String key, Function<T, L> getter) {
+            super(codec, streamCodec, key, getter);
         }
 
         @Override
@@ -285,21 +285,21 @@ public class DataHelperImpl<T> implements DataHelper<T> {
         }
 
         @Override
-        <I extends RegistryFriendlyByteBuf> void read(I buf, StreamCodec<? super RegistryFriendlyByteBuf, L> packetCodec, T object) {
+        <I extends RegistryFriendlyByteBuf> void read(I buf, StreamCodec<? super RegistryFriendlyByteBuf, L> streamCodec, T object) {
             L list = this.getter.apply(object);
             list.clear();
-            list.addAll(packetCodec.decode(buf));
+            list.addAll(streamCodec.decode(buf));
         }
 
         @Override
-        <I extends RegistryFriendlyByteBuf> void write(I buf, StreamCodec<? super RegistryFriendlyByteBuf, L> packetCodec, T object) {
-            packetCodec.encode(buf, this.getter.apply(object));
+        <I extends RegistryFriendlyByteBuf> void write(I buf, StreamCodec<? super RegistryFriendlyByteBuf, L> streamCodec, T object) {
+            streamCodec.encode(buf, this.getter.apply(object));
         }
     }
 
     static final class MapField<K, V, M extends Map<K, V>, T> extends AbstractField<M, T> {
-        MapField(@Nullable Codec<M> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, M> packetCodec, String key, Function<T, M> getter) {
-            super(codec, packetCodec, key, getter);
+        MapField(@Nullable Codec<M> codec, @Nullable StreamCodec<? super RegistryFriendlyByteBuf, M> streamCodec, String key, Function<T, M> getter) {
+            super(codec, streamCodec, key, getter);
         }
 
         @Override
@@ -315,15 +315,15 @@ public class DataHelperImpl<T> implements DataHelper<T> {
         }
 
         @Override
-        <I extends RegistryFriendlyByteBuf> void read(I buf, StreamCodec<? super RegistryFriendlyByteBuf, M> packetCodec, T object) {
+        <I extends RegistryFriendlyByteBuf> void read(I buf, StreamCodec<? super RegistryFriendlyByteBuf, M> streamCodec, T object) {
             M map = this.getter.apply(object);
             map.clear();
-            map.putAll(packetCodec.decode(buf));
+            map.putAll(streamCodec.decode(buf));
         }
 
         @Override
-        <I extends RegistryFriendlyByteBuf> void write(I buf, StreamCodec<? super RegistryFriendlyByteBuf, M> packetCodec, T object) {
-            packetCodec.encode(buf, this.getter.apply(object));
+        <I extends RegistryFriendlyByteBuf> void write(I buf, StreamCodec<? super RegistryFriendlyByteBuf, M> streamCodec, T object) {
+            streamCodec.encode(buf, this.getter.apply(object));
         }
     }
 }
