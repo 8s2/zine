@@ -14,7 +14,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -31,20 +30,14 @@ public abstract class ChunkHolderMixin {
         DataHelper<? extends BlockEntity> dataHelper = blockEntity.zine$dataHelper();
         if(dataHelper != null) {
             RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(FriendlyByteBufs.create(), level.registryAccess());
-            zine$write(buf, dataHelper, blockEntity);
+            dataHelper.writeUnchecked(buf, blockEntity);
             this.broadcast(
                     players,
                     new ClientboundCustomPayloadPacket(
-                            new ClientboundBlockEntitySyncPayload(blockPos, blockEntity.getType(), buf.array())
+                            new ClientboundBlockEntitySyncPayload(blockPos.immutable(), blockEntity.getType(), buf.array())
                     )
             );
             ci.cancel();
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    @Unique
-    private static <T extends BlockEntity> void zine$write(RegistryFriendlyByteBuf buf, DataHelper<T> dataHelper, BlockEntity blockEntity) {
-        dataHelper.write(buf, (T) blockEntity);
     }
 }
