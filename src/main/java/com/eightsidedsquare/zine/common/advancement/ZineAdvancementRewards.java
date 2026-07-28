@@ -1,6 +1,8 @@
 package com.eightsidedsquare.zine.common.advancement;
 
 import net.minecraft.commands.CacheableFunction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -13,15 +15,15 @@ public interface ZineAdvancementRewards {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$setLoot(List<ResourceKey<LootTable>> loot) {
+    default void zine$setLoot(HolderSet<LootTable> loot) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$addLootTable(ResourceKey<LootTable> lootTable) {
+    default void zine$addLootTable(Holder<LootTable> lootTable) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default void zine$addLootTables(List<ResourceKey<LootTable>> lootTables) {
+    default void zine$addLootTables(HolderSet<LootTable> lootTables) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 

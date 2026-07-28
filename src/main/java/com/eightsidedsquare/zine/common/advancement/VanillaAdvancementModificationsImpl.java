@@ -11,6 +11,7 @@ import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.triggers.*;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentExactPredicate;
 import net.minecraft.core.component.DataComponents;
@@ -372,7 +373,7 @@ public final class VanillaAdvancementModificationsImpl {
         advancement.zine$getCriterion("lighten_up", CriteriaTriggers.ITEM_USED_ON_BLOCK)
                 .flatMap(ItemUsedOnLocationTrigger.TriggerInstance::location)
                 .ifPresent(predicate -> {
-                    for(LootItemCondition lootCondition : predicate.zine$getConditions()) {
+                    for(LootItemCondition lootCondition : predicate.value().zine$iterate()) {
                         if(lootCondition instanceof LocationCheck locationCondition) {
                             locationCondition.predicate()
                                     .flatMap(LocationPredicate::block)
@@ -386,40 +387,44 @@ public final class VanillaAdvancementModificationsImpl {
     }
 
     private static Advancement modifyLootBastion(Advancement advancement, HolderLookup.Provider lookup) {
+        HolderLookup.RegistryLookup<LootTable> lootTableLookup = lookup.lookupOrThrow(Registries.LOOT_TABLE);
         for(ResourceKey<LootTable> lootTableKey : LOOT_BASTION_LOOT_TABLES) {
             String name = lootTableKey.identifier().toString();
-            advancement.zine$addCriterion(name, LootTableTrigger.TriggerInstance.lootTableUsed(lootTableKey));
+            advancement.zine$addCriterion(name, LootTableTrigger.TriggerInstance.lootTableUsed(lootTableLookup.getOrThrow(lootTableKey)));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
     }
 
     private static Advancement modifyPlantAnySnifferSeed(Advancement advancement, HolderLookup.Provider lookup) {
+        HolderLookup.RegistryLookup<Block> blockLookup = lookup.lookupOrThrow(Registries.BLOCK);
         for(Reference2BooleanMap.Entry<Block> entry : PLANT_SEED_BLOCKS.reference2BooleanEntrySet()) {
             if(!entry.getBooleanValue()) {
                 continue;
             }
             Block block = entry.getKey();
             String name = BuiltInRegistries.BLOCK.getKey(block).toString();
-            advancement.zine$addCriterion(name, ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(block));
+            advancement.zine$addCriterion(name, ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(blockLookup, block));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
     }
 
     private static Advancement modifyPlantSeed(Advancement advancement, HolderLookup.Provider lookup) {
+        HolderLookup.RegistryLookup<Block> blockLookup = lookup.lookupOrThrow(Registries.BLOCK);
         for(Block block : PLANT_SEED_BLOCKS.keySet()) {
             String name = BuiltInRegistries.BLOCK.getKey(block).toString();
-            advancement.zine$addCriterion(name, ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(block));
+            advancement.zine$addCriterion(name, ItemUsedOnLocationTrigger.TriggerInstance.placedBlock(blockLookup, block));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
     }
 
     private static Advancement modifySalvageSherd(Advancement advancement, HolderLookup.Provider lookup) {
+        HolderLookup.RegistryLookup<LootTable> lootTableLookup = lookup.lookupOrThrow(Registries.LOOT_TABLE);
         for(ResourceKey<LootTable> lootTableKey : SALVAGE_SHERD_LOOT_TABLES) {
             String name = lootTableKey.identifier().toString();
-            advancement.zine$addCriterion(name, LootTableTrigger.TriggerInstance.lootTableUsed(lootTableKey));
+            advancement.zine$addCriterion(name, LootTableTrigger.TriggerInstance.lootTableUsed(lootTableLookup.getOrThrow(lootTableKey)));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
@@ -437,9 +442,10 @@ public final class VanillaAdvancementModificationsImpl {
     }
 
     private static Advancement modifyTrimWithAnyArmorPattern(Advancement advancement, HolderLookup.Provider lookup) {
+        HolderLookup.RegistryLookup<Recipe<?>> recipeLookup = lookup.lookupOrThrow(Registries.RECIPE);
         for(ResourceKey<Recipe<?>> recipeKey : TRIM_WITH_ANY_ARMOR_PATTERN_RECIPES) {
             String name = "armor_trimmed_" + recipeKey.identifier();
-            advancement.zine$addCriterion(name, RecipeCraftedTrigger.TriggerInstance.craftedItem(recipeKey));
+            advancement.zine$addCriterion(name, RecipeCraftedTrigger.TriggerInstance.craftedItem(HolderSet.direct(recipeLookup.getOrThrow(recipeKey))));
             advancement.requirements().zine$addRequirement(0, name);
         }
         return advancement;
@@ -449,7 +455,7 @@ public final class VanillaAdvancementModificationsImpl {
         advancement.zine$getCriterion("wax_off", CriteriaTriggers.ITEM_USED_ON_BLOCK)
                 .flatMap(ItemUsedOnLocationTrigger.TriggerInstance::location)
                 .ifPresent(predicate -> {
-                    for(LootItemCondition lootCondition : predicate.zine$getConditions()) {
+                    for(LootItemCondition lootCondition : predicate.value().zine$iterate()) {
                         if(lootCondition instanceof LocationCheck locationCondition) {
                             locationCondition.predicate()
                                     .flatMap(LocationPredicate::block)
@@ -466,7 +472,7 @@ public final class VanillaAdvancementModificationsImpl {
         advancement.zine$getCriterion("wax_on", CriteriaTriggers.ITEM_USED_ON_BLOCK)
                 .flatMap(ItemUsedOnLocationTrigger.TriggerInstance::location)
                 .ifPresent(predicate -> {
-                    for(LootItemCondition lootCondition : predicate.zine$getConditions()) {
+                    for(LootItemCondition lootCondition : predicate.value().zine$iterate()) {
                         if(lootCondition instanceof LocationCheck locationCondition) {
                             locationCondition.predicate()
                                     .flatMap(LocationPredicate::block)

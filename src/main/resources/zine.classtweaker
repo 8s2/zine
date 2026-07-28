@@ -29,8 +29,8 @@ transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templat
 transitive-inject-interface	net/minecraft/advancements/predicates/BlockPredicate com/eightsidedsquare/zine/common/predicate/ZineBlockPredicate
 transitive-inject-interface	net/minecraft/advancements/predicates/FluidPredicate com/eightsidedsquare/zine/common/predicate/ZineFluidPredicate
 transitive-inject-interface	net/minecraft/advancements/predicates/LightPredicate com/eightsidedsquare/zine/common/predicate/ZineLightPredicate
+transitive-inject-interface	net/minecraft/world/level/storage/loot/predicates/LootItemCondition com/eightsidedsquare/zine/common/predicate/ZineLootItemCondition
 transitive-inject-interface	net/minecraft/network/chat/MutableComponent com/eightsidedsquare/zine/common/text/ZineMutableComponent
-transitive-inject-interface	net/minecraft/advancements/predicates/ContextAwarePredicate com/eightsidedsquare/zine/common/predicate/ZineContextAwarePredicate
 transitive-inject-interface	net/minecraft/resources/ResourceKey com/eightsidedsquare/zine/common/registry/ZineResourceKey<TT;>
 transitive-inject-interface	net/minecraft/util/FormattedCharSequence com/eightsidedsquare/zine/common/text/ZineFormattedCharSequence
 transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templatesystem/StructureProcessorList com/eightsidedsquare/zine/common/level/structure/ZineStructureProcessorList

@@ -57,7 +57,7 @@ public final class MappableItemModel implements MappableModel {
                 continue;
             }
             BakedQuad.MaterialInfo materialInfo = this.interner.materialInfo(
-                    BakedQuad.MaterialInfo.of(material, material.sprite().transparency(), layerIndex, true, 0)
+                    BakedQuad.MaterialInfo.of(material, material.sprite().transparency(), layerIndex, null, 0)
             );
             ItemModelGenerator.bakeExtrudedSprite(builder, this.interner, this.modelState, materialInfo);
         }

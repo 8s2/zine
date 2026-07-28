@@ -4,6 +4,8 @@ import com.eightsidedsquare.zine.common.advancement.ZineAdvancementRewards;
 import com.eightsidedsquare.zine.common.util.ZineUtil;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.commands.CacheableFunction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -15,6 +17,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Mixin(AdvancementRewards.class)
 public abstract class AdvancementRewardsMixin implements ZineAdvancementRewards {
@@ -23,7 +26,7 @@ public abstract class AdvancementRewardsMixin implements ZineAdvancementRewards 
     private int experience;
 
     @Shadow @Final @Mutable
-    private List<ResourceKey<LootTable>> loot;
+    private HolderSet<LootTable> loot;
 
     @Shadow @Final @Mutable
     private List<ResourceKey<Recipe<?>>> recipes;
@@ -37,18 +40,18 @@ public abstract class AdvancementRewardsMixin implements ZineAdvancementRewards 
     }
 
     @Override
-    public void zine$setLoot(List<ResourceKey<LootTable>> loot) {
+    public void zine$setLoot(HolderSet<LootTable> loot) {
         this.loot = loot;
     }
 
     @Override
-    public void zine$addLootTable(ResourceKey<LootTable> lootTable) {
-        this.loot = ZineUtil.addOrUnfreeze(this.loot, lootTable);
+    public void zine$addLootTable(Holder<LootTable> lootTable) {
+        this.loot = ZineUtil.mergeValue(this.loot, Function.identity(), lootTable);
     }
 
     @Override
-    public void zine$addLootTables(List<ResourceKey<LootTable>> lootTables) {
-        this.loot = ZineUtil.addAllOrUnfreeze(this.loot, lootTables);
+    public void zine$addLootTables(HolderSet<LootTable> lootTables) {
+        this.loot = ZineUtil.mergeValues(this.loot, lootTables);
     }
 
     @Override

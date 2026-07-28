@@ -136,7 +136,6 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerTy
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacerType;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
@@ -1482,22 +1481,12 @@ public interface RegistryHelper {
 
     /**
      * @param name the name of the block state provider type
-     * @param type the block state provider type to register
-     * @return the registered block state provider type
+     * @param codec the codec of the block state provider type
+     * @return the registered block state provider type codec
      * @param <T> the type of block state provider
      */
-    default <T extends BlockStateProvider> BlockStateProviderType<T> blockStateProvider(String name, BlockStateProviderType<T> type) {
-        return this.register(BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE, name, type);
-    }
-
-    /**
-     * @param name the name of the block state provider type
-     * @param codec the codec of the block state provider
-     * @return the registered block state provider type
-     * @param <T> the type of block state provider
-     */
-    default <T extends BlockStateProvider> BlockStateProviderType<T> blockStateProvider(String name, MapCodec<T> codec) {
-        return this.blockStateProvider(name, new BlockStateProviderType<>(codec));
+    default <T extends BlockStateProvider> MapCodec<T> blockStateProvider(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE, name, codec);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.eightsidedsquare.zine.core;
 
+import com.eightsidedsquare.zine.common.advancement.AdvancementEventsImpl;
 import com.eightsidedsquare.zine.common.advancement.VanillaAdvancementModificationsImpl;
 import com.eightsidedsquare.zine.common.block.ModifyBlockSoundGroupContextImpl;
 import com.eightsidedsquare.zine.common.entity.spawn.*;
@@ -21,6 +22,7 @@ public class ZineMod implements ModInitializer {
     public void onInitialize() {
         ZineDataComponents.init();
 
+        AdvancementEventsImpl.registerEvents();
         VanillaAdvancementModificationsImpl.registerEvents();
 
         ModifyBlockSoundGroupContextImpl.registerEvents();

@@ -3,6 +3,8 @@ package com.eightsidedsquare.zine.common.advancement;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.fabricmc.fabric.api.event.registry.DynamicRegistrySetupCallback;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import org.jspecify.annotations.Nullable;
 
@@ -27,6 +29,17 @@ public final class AdvancementEventsImpl {
             }
             return advancement;
         });
+    }
+
+    public static void registerEvents() {
+//        DynamicRegistrySetupCallback.EVENT.register(view -> {
+//            view.registerEntryAdded(Registries.ADVANCEMENT, (rawId, id, advancement) -> {
+//                Event<AdvancementEvents.ModifyAdvancement> event = AdvancementEventsImpl.getModifyAdvancementEvent(id);
+//                if (event != null) {
+//                    event.invoker().modifyAdvancement(advancement, view.asRegistryAccess());
+//                }
+//            });
+//        });
     }
 
     private AdvancementEventsImpl() {
