@@ -1730,29 +1730,14 @@ public interface RegistryHelper {
     }
 
     /**
-     * Registers a {@link MapDecorationType} wrapped in a {@link Holder.Reference}.
-     * {@code name} is used as the map decoration type's asset id.
-     * @param name the name of the map decoration type
-     * @param showOnItemFrame {@code true} for showing the map decoration on item frames
-     * @param mapColor the color of the map decoration in RGB format
-     * @param explorationMapElement {@code true} disallows the map from being expanded in a cartography table
-     * @param trackCount {@code true} for tracking the amount of this map decoration on a map
-     * @return the registered map decoration type
-     */
-    default Holder.Reference<MapDecorationType> mapDecoration(String name, boolean showOnItemFrame, int mapColor, boolean explorationMapElement, boolean trackCount) {
-        return this.mapDecoration(name, new MapDecorationType(this.id(name), showOnItemFrame, mapColor, explorationMapElement, trackCount));
-    }
-
-    /**
-     * Registers a {@link MapDecorationType} wrapped in a {@link Holder.Reference}.
-     * {@code mapColor} is defaulted to white and {@code explorationMapElement} is defaulted to {@code false}.
+     * Registers a {@link MapDecorationType} wrapped in a {@link Holder.Reference}
      * @param name the name of the map decoration type
      * @param showOnItemFrame {@code true} for showing the map decoration on item frames
      * @param trackCount {@code true} for tracking the amount of this map decoration on a map
      * @return the registered map decoration type
      */
     default Holder.Reference<MapDecorationType> mapDecoration(String name, boolean showOnItemFrame, boolean trackCount) {
-        return this.mapDecoration(name, showOnItemFrame, -1, false, trackCount);
+        return this.mapDecoration(name, new MapDecorationType(this.id(name), showOnItemFrame, trackCount));
     }
 
     /**

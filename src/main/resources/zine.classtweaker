@@ -54,7 +54,6 @@ transitive-inject-interface	net/minecraft/client/color/item/CustomModelDataSourc
 transitive-inject-interface	net/minecraft/client/color/item/Dye com/eightsidedsquare/zine/client/item/tint/ZineDye
 transitive-inject-interface	net/minecraft/client/color/item/Firework com/eightsidedsquare/zine/client/item/tint/ZineFirework
 transitive-inject-interface	net/minecraft/client/color/item/GrassColorSource com/eightsidedsquare/zine/client/item/tint/ZineGrassColorSource
-transitive-inject-interface	net/minecraft/client/color/item/MapColor com/eightsidedsquare/zine/client/item/tint/ZineMapColor
 transitive-inject-interface	net/minecraft/client/color/item/Potion com/eightsidedsquare/zine/client/item/tint/ZinePotion
 transitive-inject-interface	net/minecraft/client/renderer/item/CuboidItemModelWrapper$Unbaked com/eightsidedsquare/zine/client/item/ZineUnbakedCuboidItemModelWrapper
 transitive-inject-interface	net/minecraft/client/renderer/item/CompositeModel$Unbaked com/eightsidedsquare/zine/client/item/ZineUnbakedCompositeModel
@@ -138,3 +137,5 @@ accessible method net/minecraft/client/resources/model/cuboid/ItemModelGenerator
 accessible method net/minecraft/client/resources/model/cuboid/FaceBakery defaultFaceUV (Lorg/joml/Vector3fc;Lorg/joml/Vector3fc;Lnet/minecraft/core/Direction;)Lnet/minecraft/client/resources/model/cuboid/CuboidFace$UVs;
 accessible class net/minecraft/client/renderer/feature/TextFeatureRenderer$GlyphRenderer
 accessible field net/minecraft/client/renderer/feature/TextFeatureRenderer$GlyphRenderer displayMode Lnet/minecraft/client/gui/Font$DisplayMode;
+accessible field net/minecraft/client/resources/model/EquipmentClientInfo$Builder layersByType Ljava/util/Map;
+accessible field net/minecraft/client/resources/model/EquipmentClientInfo$Builder trimOverrides Lcom/google/common/collect/ImmutableList$Builder;

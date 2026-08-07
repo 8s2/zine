@@ -2,6 +2,7 @@ package com.eightsidedsquare.zine.common.util.network;
 
 import com.google.common.collect.ImmutableList;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentMap;
@@ -88,6 +89,11 @@ public final class StreamCodecUtil {
     public static final StreamCodec<ByteBuf, OptionalDouble> OPTIONAL_DOUBLE = primitiveOptional(ByteBufCodecs.DOUBLE, OptionalDouble::of, OptionalDouble::empty, OptionalDouble::isPresent, OptionalDouble::getAsDouble);
     public static final StreamCodec<ByteBuf, Identifier> SHORT_IDENTIFIER = ByteBufCodecs.STRING_UTF8.map(Identifier::parse, Identifier::toShortString);
     public static final StreamCodec<ByteBuf, ResourceKey<? extends Registry<?>>> SHORT_REGISTRY_KEY = SHORT_IDENTIFIER.map(ResourceKey::createRegistryKey, ResourceKey::identifier);
+    public static final StreamCodec<ByteBuf, ByteBuf> BYTE_BUF = ByteBufCodecs.BYTE_ARRAY.map(Unpooled::wrappedBuffer, ByteBuf::array);
+    public static final StreamCodec<RegistryFriendlyByteBuf, RegistryFriendlyByteBuf> REGISTRY_FRIENDLY_BYTE_BUF = StreamCodec.of(
+            (output, value) -> ByteBufCodecs.BYTE_ARRAY.encode(output, value.array()),
+            input -> new RegistryFriendlyByteBuf(Unpooled.wrappedBuffer(ByteBufCodecs.BYTE_ARRAY.decode(input)), input.registryAccess())
+    );
 
     public static <B, V> StreamCodec<B, MutableObject<V>> mutable(StreamCodec<B, V> streamCodec) {
         return streamCodec.map(MutableObject::new, MutableObject::get);
