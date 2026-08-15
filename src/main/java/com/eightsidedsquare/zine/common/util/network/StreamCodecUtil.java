@@ -3,10 +3,14 @@ package com.eightsidedsquare.zine.common.util.network;
 import com.google.common.collect.ImmutableList;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.advancements.predicates.DataComponentMatchers;
+import net.minecraft.advancements.predicates.ItemPredicate;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.TypedDataComponent;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.SkipPacketDecoderException;
@@ -72,6 +76,15 @@ public final class StreamCodecUtil {
             ByteBufCodecs.VAR_INT,
             BoundingBox::maxZ,
             BoundingBox::new
+    );
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemPredicate> ITEM_PREDICATE = StreamCodec.composite(
+            ByteBufCodecs.holderSet(Registries.ITEM).apply(ByteBufCodecs::optional),
+            ItemPredicate::items,
+            MinMaxBounds.Ints.STREAM_CODEC,
+            ItemPredicate::count,
+            DataComponentMatchers.STREAM_CODEC,
+            ItemPredicate::components,
+            ItemPredicate::new
     );
     public static final StreamCodec<ByteBuf, MutableBoolean> MUTABLE_BOOLEAN = ByteBufCodecs.BOOL.map(MutableBoolean::new, MutableBoolean::booleanValue);
     public static final StreamCodec<ByteBuf, MutableByte> MUTABLE_BYTE = ByteBufCodecs.BYTE.map(MutableByte::new, MutableByte::byteValue);

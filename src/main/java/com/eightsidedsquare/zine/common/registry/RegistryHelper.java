@@ -1,10 +1,13 @@
 package com.eightsidedsquare.zine.common.registry;
 
 import com.eightsidedsquare.zine.common.item.CustomIngredientSerializerImpl;
+import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
 import com.eightsidedsquare.zine.common.recipe.RecipeTypeImpl;
 import com.eightsidedsquare.zine.common.text.TextUtil;
 import com.eightsidedsquare.zine.common.text.TextUtilImpl;
 import com.eightsidedsquare.zine.common.util.codec.RegistryCodecGroup;
+import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
+import com.eightsidedsquare.zine.core.ZineBuiltinRegistries;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
@@ -123,11 +126,11 @@ import net.minecraft.world.level.gamerules.GameRule;
 import net.minecraft.world.level.gamerules.GameRuleCategory;
 import net.minecraft.world.level.gamerules.GameRuleType;
 import net.minecraft.world.level.gamerules.GameRuleTypeVisitor;
-import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicateType;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
+import net.minecraft.world.level.levelgen.densityfunction.DensityFunction;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSizeType;
@@ -198,6 +201,15 @@ public interface RegistryHelper {
      */
     default <T> ResourceKey<T> key(ResourceKey<? extends Registry<T>> registryKey, String name) {
         return ResourceKey.create(registryKey, this.id(name));
+    }
+
+    /**
+     * @param name the name of the registry
+     * @return the registry key
+     * @param <T> the type of the registry key
+     */
+    default <T> ResourceKey<Registry<T>> registryKey(String name) {
+        return ResourceKey.createRegistryKey(this.id(name));
     }
 
     /**
@@ -2037,6 +2049,27 @@ public interface RegistryHelper {
      */
     default <T extends SlotSource> MapCodec<T> slotSource(String name, MapCodec<T> codec) {
         return this.register(BuiltInRegistries.SLOT_SOURCE_TYPE, name, codec);
+    }
+
+    /**
+     * @param name the name of the tooltip image
+     * @param codec the codec of the tooltip image
+     * @param streamCodec the stream codec of the tooltip image
+     * @return the registered tooltip image synced codec
+     * @param <T> the type of tooltip image
+     */
+    default <T extends TooltipImage> SyncedCodec<T> tooltipImage(String name, MapCodec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
+        return this.tooltipImage(name, new SyncedCodec<>(codec, streamCodec));
+    }
+
+    /**
+     * @param name the name of the tooltip image
+     * @param type the synced codec of the tooltip image
+     * @return the registered tooltip image synced codec
+     * @param <T> the type of tooltip image
+     */
+    default <T extends TooltipImage> SyncedCodec<T> tooltipImage(String name, SyncedCodec<T> type) {
+        return this.register(ZineBuiltinRegistries.TOOLTIP_IMAGE, name, type);
     }
 
     /**

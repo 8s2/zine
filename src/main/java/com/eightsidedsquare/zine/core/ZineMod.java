@@ -20,6 +20,8 @@ public class ZineMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ZineBuiltinRegistries.init();
+        ZineTooltipImages.init();
         ZineDataComponents.init();
 
         AdvancementEventsImpl.registerEvents();

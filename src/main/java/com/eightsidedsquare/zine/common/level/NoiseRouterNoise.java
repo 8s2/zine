@@ -2,8 +2,8 @@ package com.eightsidedsquare.zine.common.level;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.level.levelgen.DensityFunction;
 import net.minecraft.world.level.levelgen.NoiseRouter;
+import net.minecraft.world.level.levelgen.densityfunction.DensityFunction;
 
 import java.util.function.Function;
 
