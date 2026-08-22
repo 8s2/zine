@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ClientAsset.ResourceTexture.class)
 public abstract class ClientAssetResourceTextureMixin implements ZineClientAssetResourceTexture {
-
     @Shadow @Final @Mutable
     private Identifier id;
 

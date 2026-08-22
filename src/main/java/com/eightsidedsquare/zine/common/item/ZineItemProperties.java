@@ -1,5 +1,6 @@
 package com.eightsidedsquare.zine.common.item;
 
+import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -92,6 +93,14 @@ public interface ZineItemProperties {
 
     default Item.Properties zine$lore(List<Component> lines) {
         throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$tooltipImage(TooltipImage image) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$tooltipImage(TooltipImage.Builder builder) {
+        return this.zine$tooltipImage(builder.build());
     }
 
     default Item.Properties zine$lore(Component... lines) {

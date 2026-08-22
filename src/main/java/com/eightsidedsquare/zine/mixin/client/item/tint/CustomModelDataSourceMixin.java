@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(CustomModelDataSource.class)
 public abstract class CustomModelDataSourceMixin implements ZineCustomModelDataSource {
-
     @Shadow @Final @Mutable
     private int index;
 

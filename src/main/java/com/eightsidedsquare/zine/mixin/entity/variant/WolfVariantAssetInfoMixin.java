@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(WolfVariant.AssetInfo.class)
 public abstract class WolfVariantAssetInfoMixin implements ZineWolfVariant.ZineAssetInfo {
-
     @Shadow @Final @Mutable
     private ClientAsset.ResourceTexture wild;
 

@@ -17,7 +17,6 @@ import java.util.Optional;
 
 @Mixin(DamageSourcePredicate.class)
 public abstract class DamageSourcePredicateMixin implements ZineDamageSourcePredicate {
-
     @Shadow @Final @Mutable
     private List<TagPredicate<DamageType>> tags;
 

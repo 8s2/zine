@@ -18,7 +18,6 @@ import java.util.function.Function;
 
 @Mixin(StructureCheck.class)
 public abstract class StructureCheckMixin implements ZineStructureCheck {
-
     @Shadow @Final @Mutable
     private HolderSet<Structure> requiredStructures;
 

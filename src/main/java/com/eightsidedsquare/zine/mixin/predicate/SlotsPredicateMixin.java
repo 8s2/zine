@@ -14,7 +14,6 @@ import java.util.Map;
 
 @Mixin(SlotsPredicate.class)
 public abstract class SlotsPredicateMixin implements ZineSlotsPredicate {
-
     @Shadow @Final @Mutable
     private Map<SlotRange, ItemPredicate> slots;
 

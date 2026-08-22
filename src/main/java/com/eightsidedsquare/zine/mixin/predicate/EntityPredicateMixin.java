@@ -14,7 +14,6 @@ import java.util.Map;
 
 @Mixin(EntityPredicate.class)
 public abstract class EntityPredicateMixin implements ZineEntityPredicate {
-
     @Shadow @Final @Mutable
     private Map<Codec<? extends EntitySubPredicate>, EntitySubPredicate> parts;
     @Shadow @Final @Mutable

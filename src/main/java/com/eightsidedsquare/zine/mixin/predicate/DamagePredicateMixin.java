@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @Mixin(DamagePredicate.class)
 public abstract class DamagePredicateMixin implements ZineDamagePredicate {
-
     @Shadow @Final @Mutable
     private MinMaxBounds.Doubles dealtDamage;
 

@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(CowSoundVariant.class)
 public abstract class CowSoundVariantMixin implements ZineSoundSet {
-
     @Shadow @Final @Mutable
     private Holder<SoundEvent> ambientSound;
 

@@ -1077,10 +1077,12 @@ public interface RegistryHelper {
     /**
      * Registers a {@link VillagerType} with namespaced {@code name} as its name.
      * @param name the name of the villager type
-     * @return the registered villager type
+     * @return the registered villager type key
      */
-    default VillagerType villagerType(String name) {
-        return this.register(BuiltInRegistries.VILLAGER_TYPE, name, new VillagerType());
+    default ResourceKey<VillagerType> villagerType(String name) {
+        ResourceKey<VillagerType> key = this.key(Registries.VILLAGER_TYPE, name);
+        this.register(BuiltInRegistries.VILLAGER_TYPE, key, new VillagerType());
+        return key;
     }
 
     /**

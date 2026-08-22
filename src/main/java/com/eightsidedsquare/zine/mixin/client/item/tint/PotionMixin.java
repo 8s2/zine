@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Potion.class)
 public abstract class PotionMixin implements ZinePotion {
-
     @Shadow @Final @Mutable
     private int defaultColor;
 

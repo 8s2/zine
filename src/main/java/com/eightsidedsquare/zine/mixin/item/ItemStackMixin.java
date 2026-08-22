@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin implements DataComponentHolder {
-
     @WrapOperation(method = "getDisplayName", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 1))
     private MutableComponent zine$applyTextColorToHoverable(MutableComponent text, ChatFormatting formatting, Operation<MutableComponent> original) {
         return this.zine$applyTextColor(text, formatting, original);
@@ -32,5 +31,4 @@ public abstract class ItemStackMixin implements DataComponentHolder {
             return original.call(text, formatting);
         }
     }
-
 }

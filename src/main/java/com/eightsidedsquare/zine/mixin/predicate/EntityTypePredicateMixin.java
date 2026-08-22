@@ -17,7 +17,6 @@ import java.util.function.Function;
 
 @Mixin(EntityTypePredicate.class)
 public abstract class EntityTypePredicateMixin implements ZineEntityTypePredicate {
-
     @Shadow @Final @Mutable
     private HolderSet<EntityType<?>> types;
 

@@ -35,7 +35,7 @@ public abstract class DisplayInfoMixin implements ZineDisplayInfo {
     private boolean showToast;
 
     @Shadow @Final @Mutable
-    private boolean announceChat;
+    private boolean announceToChat;
 
     @Shadow @Final @Mutable
     private boolean hidden;
@@ -72,7 +72,7 @@ public abstract class DisplayInfoMixin implements ZineDisplayInfo {
 
     @Override
     public void zine$setAnnounceToChat(boolean announceToChat) {
-        this.announceChat = announceToChat;
+        this.announceToChat = announceToChat;
     }
 
     @Override

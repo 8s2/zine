@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(CowVariant.class)
 public abstract class CowVariantMixin implements ZineAgeableMobVariant<CowVariant.ModelType> {
-
     @Shadow @Final @Mutable
     private ModelAndTexture<CowVariant.ModelType> modelAndTexture;
 

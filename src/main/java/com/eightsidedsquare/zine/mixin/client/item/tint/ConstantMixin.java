@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Constant.class)
 public abstract class ConstantMixin implements ZineConstant {
-
     @Shadow @Final @Mutable
     private int value;
 

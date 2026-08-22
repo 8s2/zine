@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(WolfVariant.class)
 public abstract class WolfVariantMixin implements ZineWolfVariant {
-
     @Shadow @Final @Mutable
     private WolfVariant.AssetInfo adultInfo;
 

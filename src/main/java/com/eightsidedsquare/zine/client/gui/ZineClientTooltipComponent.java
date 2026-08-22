@@ -6,13 +6,9 @@ import net.minecraft.network.chat.Component;
 import java.util.List;
 
 public interface ZineClientTooltipComponent {
-
     default void zine$cacheDimensions(Font font) {
-
     }
 
     default void zine$appendSearchableText(List<Component> texts) {
-
     }
-
 }

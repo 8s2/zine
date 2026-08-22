@@ -13,8 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ClientLevel.class)
 public abstract class ClientLevelMixin implements LevelAccessorMixin {
-    @Shadow
-    @Final
+    @Shadow @Final
     private Minecraft minecraft;
 
     @Override

@@ -38,7 +38,6 @@ import java.util.function.Function;
 
 @Mixin(ModelManager.class)
 public abstract class ModelManagerMixin {
-
     @Unique
     private static final ScopedValue<CompletableFuture<ZineMappableModelHolder>> HOLDER_FUTURE = ScopedValue.newInstance();
 

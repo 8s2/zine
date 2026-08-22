@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.function.UnaryOperator;
 
 public class CustomMultiVariantGenerator implements BlockModelDefinitionGenerator {
-
     private final Block block;
     private final Map<PropertyValueList, BlockStateModel.Unbaked> variants;
     private final Set<Property<?>> definedProperties;
@@ -88,6 +87,5 @@ public class CustomMultiVariantGenerator implements BlockModelDefinitionGenerato
         public CustomMultiVariantGenerator with(BlockStateModel.Unbaked model) {
             return CustomMultiVariantGenerator.create(this.block, model);
         }
-
     }
 }

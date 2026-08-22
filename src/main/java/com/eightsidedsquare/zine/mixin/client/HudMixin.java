@@ -13,7 +13,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Hud.class)
 public abstract class HudMixin {
-    @Shadow private ItemStack lastToolHighlight;
+    @Shadow
+    private ItemStack lastToolHighlight;
 
     @WrapOperation(method = "extractSelectedItemName", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/chat/MutableComponent;withStyle(Lnet/minecraft/ChatFormatting;)Lnet/minecraft/network/chat/MutableComponent;", ordinal = 0))
     private MutableComponent zine$applyNameColor(MutableComponent text, ChatFormatting formatting, Operation<MutableComponent> original) {

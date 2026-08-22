@@ -18,7 +18,6 @@ import java.util.Optional;
 
 @Mixin(FluidPredicate.class)
 public abstract class FluidPredicateMixin implements ZineFluidPredicate {
-
     @Shadow @Final @Mutable
     private Optional<HolderSet<Fluid>> fluids;
 

@@ -4,7 +4,7 @@ import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import net.minecraft.world.level.block.state.properties.Property;
 
-public final class BlockStateVariantMaps {
+public final class PropertyDispatches {
     public static <T1 extends Comparable<T1>> PropertyDispatch.C1<BlockStateModel.Unbaked, T1> custom(Property<T1> property) {
         return new PropertyDispatch.C1<>(property);
     }
@@ -33,7 +33,7 @@ public final class BlockStateVariantMaps {
         return new PropertyDispatch.C5<>(property1, property2, property3, property4, property5);
     }
 
-    private BlockStateVariantMaps() {
+    private PropertyDispatches() {
     }
 
 }

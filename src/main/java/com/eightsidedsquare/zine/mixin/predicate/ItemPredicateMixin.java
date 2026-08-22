@@ -19,7 +19,6 @@ import java.util.Optional;
 
 @Mixin(ItemPredicate.class)
 public abstract class ItemPredicateMixin implements ZineItemPredicate {
-
     @Shadow @Final @Mutable
     private Optional<HolderSet<Item>> items;
 

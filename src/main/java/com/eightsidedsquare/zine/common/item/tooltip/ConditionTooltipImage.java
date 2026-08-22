@@ -2,6 +2,7 @@ package com.eightsidedsquare.zine.common.item.tooltip;
 
 import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
 import com.eightsidedsquare.zine.common.util.network.StreamCodecUtil;
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.predicates.ItemPredicate;
@@ -41,13 +42,13 @@ public record ConditionTooltipImage(List<ConditionCase> cases, Optional<TooltipI
     }
 
     @Override
-    public @Nullable TooltipComponent getTooltipImage(ItemStack itemStack, TooltipDisplay display) {
+    public @Nullable TooltipComponent getTooltip(ItemStack itemStack, TooltipDisplay display) {
         for (ConditionCase conditionCase : this.cases) {
             if (conditionCase.condition.test(itemStack)) {
-                return conditionCase.image.getTooltipImage(itemStack, display);
+                return conditionCase.image.getTooltip(itemStack, display);
             }
         }
-        return this.fallback.map(image -> image.getTooltipImage(itemStack, display)).orElse(null);
+        return TooltipImage.getTooltip(this.fallback, itemStack, display).orElse(null);
     }
 
     @Override
@@ -77,5 +78,41 @@ public record ConditionTooltipImage(List<ConditionCase> cases, Optional<TooltipI
                 ConditionCase::image,
                 ConditionCase::new
         );
+    }
+
+    public static class Builder implements TooltipImage.Builder {
+        private final ImmutableList.Builder<ConditionCase> cases = ImmutableList.builder();
+        @Nullable TooltipImage fallback;
+
+        public Builder addCase(ItemPredicate condition, TooltipImage image)  {
+            this.cases.add(new ConditionCase(condition, image));
+            return this;
+        }
+
+        public Builder addCase(ItemPredicate.Builder conditionBuilder, TooltipImage.Builder imageBuilder) {
+            return this.addCase(conditionBuilder.build(), imageBuilder.build());
+        }
+
+        public Builder addCase(ItemPredicate condition, TooltipImage.Builder imageBuilder) {
+            return this.addCase(condition, imageBuilder.build());
+        }
+
+        public Builder addCase(ItemPredicate.Builder conditionBuilder, TooltipImage image) {
+            return this.addCase(conditionBuilder.build(), image);
+        }
+
+        public Builder fallback(@Nullable TooltipImage fallback) {
+            this.fallback = fallback;
+            return this;
+        }
+
+        public Builder fallback(TooltipImage.Builder builder) {
+            return this.fallback(builder.build());
+        }
+
+        @Override
+        public TooltipImage build() {
+            return new ConditionTooltipImage(this.cases.build(), Optional.ofNullable(this.fallback));
+        }
     }
 }

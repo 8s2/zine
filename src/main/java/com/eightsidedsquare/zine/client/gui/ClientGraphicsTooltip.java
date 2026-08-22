@@ -73,10 +73,25 @@ public class ClientGraphicsTooltip implements ClientTooltipComponent {
             }
         }
         for (GraphicsTooltip.Sprite sprite : this.sprites) {
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite.sprite(), x + sprite.x(), y + sprite.y(), sprite.width(), sprite.height(), sprite.color());
+            graphics.blitSprite(
+                    RenderPipelines.GUI_TEXTURED,
+                    sprite.sprite(),
+                    x + sprite.x(),
+                    y + sprite.y(),
+                    sprite.width(),
+                    sprite.height(),
+                    sprite.color()
+            );
         }
         for (GraphicsTooltip.Rectangle rectangle : this.rectangles) {
-            graphics.fillGradient(rectangle.x(), rectangle.y(), rectangle.x() + rectangle.width(), rectangle.y() + rectangle.height(), rectangle.fromColor(), rectangle.toColor());
+            graphics.fillGradient(
+                    x + rectangle.x(),
+                    y + rectangle.y(),
+                    x + rectangle.x() + rectangle.width(),
+                    y + rectangle.y() + rectangle.height(),
+                    rectangle.fromColor(),
+                    rectangle.toColor()
+            );
         }
     }
 

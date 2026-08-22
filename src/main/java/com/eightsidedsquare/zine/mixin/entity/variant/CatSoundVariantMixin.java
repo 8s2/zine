@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(CatSoundVariant.class)
 public abstract class CatSoundVariantMixin implements ZineAgeableMobSoundVariant<CatSoundVariant.CatSoundSet> {
-
     @Shadow @Final @Mutable
     private CatSoundVariant.CatSoundSet adultSounds;
 
@@ -31,7 +30,6 @@ public abstract class CatSoundVariantMixin implements ZineAgeableMobSoundVariant
 
     @Mixin(CatSoundVariant.CatSoundSet.class)
     public static abstract class CatSoundSetMixin implements ZineCatSoundSet {
-
         @Shadow @Final @Mutable
         private Holder<SoundEvent> ambientSound;
 
@@ -103,6 +101,5 @@ public abstract class CatSoundVariantMixin implements ZineAgeableMobSoundVariant
         public void zine$setPurreowSound(Holder<SoundEvent> purreowSound) {
             this.purreowSound = purreowSound;
         }
-
     }
 }

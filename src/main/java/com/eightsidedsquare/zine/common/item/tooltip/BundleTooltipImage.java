@@ -19,7 +19,7 @@ public final class BundleTooltipImage implements TooltipImage {
     );
 
     @Override
-    public @Nullable TooltipComponent getTooltipImage(ItemStack itemStack, TooltipDisplay display) {
+    public @Nullable TooltipComponent getTooltip(ItemStack itemStack, TooltipDisplay display) {
         BundleContents bundleContents = itemStack.get(DataComponents.BUNDLE_CONTENTS);
         return bundleContents == null ? null : new BundleTooltip(bundleContents);
     }
@@ -32,6 +32,10 @@ public final class BundleTooltipImage implements TooltipImage {
     @Override
     public SyncedCodec<? extends TooltipImage> type() {
         return TYPE;
+    }
+
+    public static TooltipImage.Builder builder() {
+        return () -> INSTANCE;
     }
 
     private BundleTooltipImage() {

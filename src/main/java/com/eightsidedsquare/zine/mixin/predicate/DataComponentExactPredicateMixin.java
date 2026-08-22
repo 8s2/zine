@@ -13,7 +13,6 @@ import java.util.List;
 
 @Mixin(DataComponentExactPredicate.class)
 public abstract class DataComponentExactPredicateMixin implements ZineDataComponentExactPredicate {
-
     @Shadow @Final @Mutable
     private List<TypedDataComponent<?>> expectedComponents;
 

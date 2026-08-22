@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ChickenSoundVariant.class)
 public abstract class ChickenSoundVariantMixin implements ZineAgeableMobSoundVariant<ChickenSoundVariant.ChickenSoundSet> {
-
     @Shadow @Final @Mutable
     private ChickenSoundVariant.ChickenSoundSet adultSounds;
 
@@ -31,7 +30,6 @@ public abstract class ChickenSoundVariantMixin implements ZineAgeableMobSoundVar
 
     @Mixin(ChickenSoundVariant.ChickenSoundSet.class)
     public static abstract class ChickenSoundSetMixin implements ZineSoundSet {
-
         @Shadow @Final @Mutable
         private Holder<SoundEvent> ambientSound;
 

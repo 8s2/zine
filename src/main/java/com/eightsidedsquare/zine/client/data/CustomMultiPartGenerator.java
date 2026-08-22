@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 public class CustomMultiPartGenerator implements BlockModelDefinitionGenerator {
-
     private final Block block;
     private final BlockStateModelDispatcher.MultiPartDefinition multipart = new BlockStateModelDispatcher.MultiPartDefinition(new ObjectArrayList<>());
 

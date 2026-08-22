@@ -14,7 +14,6 @@ import java.util.Map;
 
 @Mixin(MobEffectsPredicate.class)
 public abstract class MobEffectsPredicateMixin implements ZineMobEffectsPredicate {
-
     @Shadow @Final @Mutable
     private Map<Holder<MobEffect>, MobEffectsPredicate.MobEffectInstancePredicate> effectMap;
 

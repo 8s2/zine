@@ -17,6 +17,7 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 public interface TooltipImage {
@@ -24,13 +25,17 @@ public interface TooltipImage {
     StreamCodec<RegistryFriendlyByteBuf, TooltipImage> STREAM_CODEC = ByteBufCodecs.registry(ZineRegistries.TOOLTIP_IMAGE).dispatch(TooltipImage::type, SyncedCodec::streamCodec);
 
     @Nullable
-    TooltipComponent getTooltipImage(ItemStack itemStack, TooltipDisplay display);
+    TooltipComponent getTooltip(ItemStack itemStack, TooltipDisplay display);
 
     default boolean canShow(TooltipDisplay display) {
         return true;
     }
 
     SyncedCodec<? extends TooltipImage> type();
+
+    static Optional<TooltipComponent> getTooltip(Optional<TooltipImage> optional, ItemStack itemStack, TooltipDisplay display) {
+        return optional.flatMap(image -> Optional.ofNullable(image.getTooltip(itemStack, display)));
+    }
 
     private static Codec<TooltipImage> createCodec() {
         Codec<TooltipImage> dispatched = ZineBuiltinRegistries.TOOLTIP_IMAGE.byNameCodec()
@@ -48,5 +53,10 @@ public interface TooltipImage {
                         image -> image instanceof TextTooltip.Image(Component text) ? Either.right(text) : Either.left(image)
                 )
         );
+    }
+
+    @FunctionalInterface
+    interface Builder {
+        TooltipImage build();
     }
 }

@@ -12,11 +12,9 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(MaterialBaker.class)
 public abstract class MaterialBakerMixin implements ZineMaterialBaker {
-    @Shadow
-    @Final
+    @Shadow @Final
     private Material.Baked missingSprite;
-    @Shadow
-    @Final
+    @Shadow @Final
     private Material.Baked missingSpriteForceTranslucent;
     @Unique
     private MaterialMappingStorage mappings = MaterialMappingStorage.EMPTY;

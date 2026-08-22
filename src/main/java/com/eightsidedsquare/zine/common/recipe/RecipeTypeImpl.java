@@ -3,7 +3,7 @@ package com.eightsidedsquare.zine.common.recipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 
-public class RecipeTypeImpl<T extends Recipe<?>> implements RecipeType<T> {
+public final class RecipeTypeImpl<T extends Recipe<?>> implements RecipeType<T> {
     private final String id;
 
     public RecipeTypeImpl(String id) {

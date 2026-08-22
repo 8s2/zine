@@ -20,7 +20,6 @@ import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
 public class ConnectedTexturesSpriteSource implements SpriteSource {
-
     public static final MapCodec<ConnectedTexturesSpriteSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Identifier.CODEC.fieldOf("base_name").forGetter(ConnectedTexturesSpriteSource::getBaseName),
             Identifier.CODEC.optionalFieldOf("all").forGetter(source -> Optional.of(source.allTexture)),
@@ -172,7 +171,7 @@ public class ConnectedTexturesSpriteSource implements SpriteSource {
             TextureData se = data.get(pattern.getSE());
             TextureData sw = data.get(pattern.getSW());
             Identifier texture = pattern.addSuffix(this.getBaseName());
-            regions.add(texture, spriteOpener -> {
+            regions.add(texture, _ -> {
                 NativeImage nativeImage = SpriteSourceUtil.createNativeImage(width, height, (index, x, y, u, v) ->
                         (x >= halfWidth ? (y >= halfHeight ? se : ne) : (y >= halfHeight ? sw : nw)).data()[index]
                 );

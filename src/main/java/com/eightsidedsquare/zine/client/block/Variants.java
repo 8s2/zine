@@ -8,7 +8,6 @@ import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.block.Block;
 
 public final class Variants {
-
     public static Variant variant(Identifier modelId, Variant.SimpleModelState modelState) {
         return new Variant(modelId, modelState);
     }
@@ -59,5 +58,4 @@ public final class Variants {
     
     private Variants() {
     }
-    
 }

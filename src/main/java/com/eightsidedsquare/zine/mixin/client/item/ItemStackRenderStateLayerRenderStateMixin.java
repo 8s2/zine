@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 
 @Mixin(ItemStackRenderState.LayerRenderState.class)
 public abstract class ItemStackRenderStateLayerRenderStateMixin implements ZineItemStackRenderState.ZineLayerRenderState {
-
     @Unique
     @Nullable
     private Consumer<PoseStack> matrixTransformation;

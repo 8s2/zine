@@ -3,6 +3,7 @@ package com.eightsidedsquare.zine.common.item.tooltip;
 import com.eightsidedsquare.zine.common.util.codec.CodecUtil;
 import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
 import com.eightsidedsquare.zine.common.util.network.StreamCodecUtil;
+import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -16,6 +17,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.component.TooltipDisplay;
 import org.joml.Vector2i;
 import org.joml.Vector2ic;
@@ -23,13 +25,24 @@ import org.joml.Vector2ic;
 import java.util.List;
 import java.util.function.Function;
 
-public record GraphicsTooltip(List<Text> texts, List<Sprite> sprites, List<Rectangle> rectangles) implements TooltipComponent {
-    public record Image(List<Text> texts, List<Sprite> sprites, List<Rectangle> rectangles) implements TooltipImage {
+public record GraphicsTooltip(
+        List<Text> texts,
+        List<Sprite> sprites,
+        List<Rectangle> rectangles,
+        List<Item> items
+) implements TooltipComponent {
+    public record Image(
+            List<Text> texts,
+            List<Sprite> sprites,
+            List<Rectangle> rectangles,
+            List<Item> items
+    ) implements TooltipImage {
         public static final SyncedCodec<Image> TYPE = new SyncedCodec<>(
                 RecordCodecBuilder.mapCodec(i -> i.group(
                         Text.CODEC.listOf().optionalFieldOf("texts", List.of()).forGetter(Image::texts),
                         Sprite.CODEC.listOf().optionalFieldOf("sprites", List.of()).forGetter(Image::sprites),
-                        Rectangle.CODEC.listOf().optionalFieldOf("rectangles", List.of()).forGetter(Image::rectangles)
+                        Rectangle.CODEC.listOf().optionalFieldOf("rectangles", List.of()).forGetter(Image::rectangles),
+                        Item.CODEC.listOf().optionalFieldOf("items", List.of()).forGetter(Image::items)
                 ).apply(i, Image::new)),
                 StreamCodec.composite(
                         Text.STREAM_CODEC.apply(ByteBufCodecs.list()),
@@ -38,17 +51,79 @@ public record GraphicsTooltip(List<Text> texts, List<Sprite> sprites, List<Recta
                         Image::sprites,
                         Rectangle.STREAM_CODEC.apply(ByteBufCodecs.list()),
                         Image::rectangles,
+                        Item.STREAM_CODEC.apply(ByteBufCodecs.list()),
+                        Image::items,
                         Image::new
                 )
         );
         @Override
-        public TooltipComponent getTooltipImage(ItemStack itemStack, TooltipDisplay display) {
-            return new GraphicsTooltip(this.texts, this.sprites, this.rectangles);
+        public TooltipComponent getTooltip(ItemStack itemStack, TooltipDisplay display) {
+            return new GraphicsTooltip(this.texts, this.sprites, this.rectangles, this.items);
         }
 
         @Override
         public SyncedCodec<? extends TooltipImage> type() {
             return TYPE;
+        }
+
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        public static class Builder implements TooltipImage.Builder {
+            private final ImmutableList.Builder<Text> texts = ImmutableList.builder();
+            private final ImmutableList.Builder<Sprite> sprites = ImmutableList.builder();
+            private final ImmutableList.Builder<Rectangle> rectangles = ImmutableList.builder();
+            private final ImmutableList.Builder<Item> items = ImmutableList.builder();
+
+            public Builder text(Component text, int x, int y, int maxWidth) {
+                this.texts.add(new Text(text, x, y, maxWidth));
+                return this;
+            }
+
+            public Builder text(Component text, int x, int y) {
+                return this.text(text, x, y, 0);
+            }
+
+            public Builder text(Component text, int maxWidth) {
+                return this.text(text, 0, 0, maxWidth);
+            }
+
+            public Builder text(Component text) {
+                return this.text(text, 0, 0, 0);
+            }
+
+            public Builder sprite(Identifier sprite, int x, int y, int width, int height, int color) {
+                this.sprites.add(new Sprite(sprite, x, y, width, height, color));
+                return this;
+            }
+
+            public Builder sprite(Identifier sprite, int x, int y, int width, int height) {
+                return this.sprite(sprite, x, y, width, height, -1);
+            }
+
+            public Builder rectangle(int x, int y, int width, int height, int fromColor, int toColor) {
+                this.rectangles.add(new Rectangle(x, y, width, height, fromColor, toColor));
+                return this;
+            }
+
+            public Builder rectangle(int x, int y, int width, int height, int color) {
+                return this.rectangle(x, y, width, height, color, color);
+            }
+
+            public Builder rectangle(int x, int y, int width, int height) {
+                return this.rectangle(x, y, width, height, -1);
+            }
+
+            public Builder item(int x, int y, ItemStackTemplate item) {
+                this.items.add(new Item(x, y, item));
+                return this;
+            }
+
+            @Override
+            public TooltipImage build() {
+                return new GraphicsTooltip.Image(this.texts.build(), this.sprites.build(), this.rectangles.build(), this.items.build());
+            }
         }
     }
 
@@ -161,6 +236,30 @@ public record GraphicsTooltip(List<Text> texts, List<Sprite> sprites, List<Recta
 
         public Vector2ic color() {
             return new Vector2i(this.fromColor, this.toColor);
+        }
+    }
+
+    public record Item(int x, int y, ItemStackTemplate item) {
+        public static final Codec<Item> CODEC = RecordCodecBuilder.create(i -> i.group(
+                CodecUtil.VECTOR_2I.optionalFieldOf("pos", new Vector2i()).forGetter(Item::pos),
+                ItemStackTemplate.CODEC.fieldOf("item").forGetter(Item::item)
+        ).apply(i, Item::new));
+        public static final StreamCodec<RegistryFriendlyByteBuf, Item> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT,
+                Item::x,
+                ByteBufCodecs.VAR_INT,
+                Item::y,
+                ItemStackTemplate.STREAM_CODEC,
+                Item::item,
+                Item::new
+        );
+
+        public Item(Vector2ic pos, ItemStackTemplate item) {
+            this(pos.x(), pos.y(), item);
+        }
+
+        public Vector2ic pos() {
+            return new Vector2i(this.x, this.y);
         }
     }
 }

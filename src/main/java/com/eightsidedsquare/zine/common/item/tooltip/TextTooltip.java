@@ -18,13 +18,17 @@ public record TextTooltip(Component text) implements TooltipComponent {
         );
 
         @Override
-        public TooltipComponent getTooltipImage(ItemStack itemStack, TooltipDisplay display) {
+        public TooltipComponent getTooltip(ItemStack itemStack, TooltipDisplay display) {
             return new TextTooltip(this.text);
         }
 
         @Override
         public SyncedCodec<? extends TooltipImage> type() {
             return TYPE;
+        }
+
+        public static TooltipImage.Builder builder(Component text) {
+            return () -> new Image(text);
         }
     }
 }

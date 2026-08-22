@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @Mixin(SessionSearchTrees.class)
 public abstract class SessionSearchTreesMixin {
-
     @ModifyExpressionValue(method = "lambda$getTooltipLines$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getTooltipLines(Lnet/minecraft/world/item/Item$TooltipContext;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;"))
     private static List<Component> zine$addSearchableTexts(List<Component> texts, @Local(argsOnly = true) ItemStack stack) {
         Optional<TooltipComponent> data = stack.getTooltipImage();
@@ -27,5 +26,4 @@ public abstract class SessionSearchTreesMixin {
         }
         return texts;
     }
-
 }

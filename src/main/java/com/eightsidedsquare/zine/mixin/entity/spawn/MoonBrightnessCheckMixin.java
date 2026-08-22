@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(MoonBrightnessCheck.class)
 public abstract class MoonBrightnessCheckMixin implements ZineMoonBrightnessCheck {
-
     @Shadow @Final @Mutable
     private MinMaxBounds.Doubles range;
 

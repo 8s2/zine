@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @Mixin(EntityFlagsPredicate.class)
 public abstract class EntityFlagsPredicateMixin implements ZineEntityFlagsPredicate {
-
     @Shadow @Final @Mutable
     private Optional<Boolean> isOnGround;
 

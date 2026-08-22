@@ -21,7 +21,6 @@ import java.util.function.Function;
 
 @Mixin(AdvancementRewards.class)
 public abstract class AdvancementRewardsMixin implements ZineAdvancementRewards {
-
     @Shadow @Final @Mutable
     private int experience;
 
