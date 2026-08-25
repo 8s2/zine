@@ -126,7 +126,6 @@ import net.minecraft.world.level.gamerules.GameRule;
 import net.minecraft.world.level.gamerules.GameRuleCategory;
 import net.minecraft.world.level.gamerules.GameRuleType;
 import net.minecraft.world.level.gamerules.GameRuleTypeVisitor;
-import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicateType;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
@@ -145,6 +144,8 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProviderType;
+import net.minecraft.world.level.levelgen.material.condition.MaterialCondition;
+import net.minecraft.world.level.levelgen.material.rule.MaterialRule;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
@@ -1629,7 +1630,7 @@ public interface RegistryHelper {
      * @return the registered material condition codec
      * @param <T> the type of material condition
      */
-    default <T extends SurfaceRules.ConditionSource> MapCodec<T> materialCondition(String name, MapCodec<T> codec) {
+    default <T extends MaterialCondition> MapCodec<T> materialCondition(String name, MapCodec<T> codec) {
         return this.register(BuiltInRegistries.MATERIAL_CONDITION_TYPE, name, codec);
     }
 
@@ -1639,7 +1640,7 @@ public interface RegistryHelper {
      * @return the registered material rule codec
      * @param <T> the type of material rule
      */
-    default <T extends SurfaceRules.RuleSource> MapCodec<T> materialRule(String name, MapCodec<T> codec) {
+    default <T extends MaterialRule> MapCodec<T> materialRule(String name, MapCodec<T> codec) {
         return this.register(BuiltInRegistries.MATERIAL_RULE_TYPE, name, codec);
     }
 

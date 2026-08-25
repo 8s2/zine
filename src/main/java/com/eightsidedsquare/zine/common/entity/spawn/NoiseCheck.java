@@ -6,11 +6,11 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.variant.SpawnCondition;
 import net.minecraft.world.entity.variant.SpawnContext;
-import net.minecraft.world.level.levelgen.NoiseRouter;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.densityfunction.DensityFunction;
+import net.minecraft.world.level.levelgen.densityfunction.SamplerContext;
 
 import java.util.List;
 
@@ -51,9 +51,10 @@ public class NoiseCheck implements SpawnCondition {
     @Override
     public boolean test(SpawnContext spawnContext) {
         BlockPos pos = spawnContext.pos();
-        ServerLevel world = spawnContext.level().getLevel();
-        NoiseRouter noiseRouter = world.getChunkSource().randomState().router();
-        double sample = this.noise.get(noiseRouter).compute(new DensityFunction.SinglePointContext(pos.getX(), pos.getY(), pos.getZ()));
+        RandomState randomState = spawnContext.level().getLevel().getChunkSource().randomState();
+        DensityFunction densityFunction = this.noise.get(randomState.router);
+        float sample = randomState.getSampler(densityFunction)
+                .sampleValue(SamplerContext.EMPTY_UNCACHED, pos.getX(), pos.getY(), pos.getZ());
         for(MinMaxBounds.Doubles range : this.ranges) {
             if(range.matches(sample)) {
                 return true;

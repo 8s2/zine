@@ -14,7 +14,7 @@ public enum NoiseRouterNoise implements StringRepresentable {
     EROSION("erosion", NoiseRouter::erosion),
     DEPTH("depth", NoiseRouter::depth),
     RIDGES("ridges", NoiseRouter::ridges),
-    PRELIMINARY_SURFACE_LEVEL("preliminary_surface_level", NoiseRouter::preliminarySurfaceLevel),
+    CHUNK_SURFACE_LEVEL("chunk_surface_level", NoiseRouter::chunkSurfaceLevel),
     FINAL_DENSITY("final_density", NoiseRouter::finalDensity);
 
     public static final Codec<NoiseRouterNoise> CODEC = StringRepresentable.fromEnum(NoiseRouterNoise::values);
