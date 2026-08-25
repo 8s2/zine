@@ -1,13 +1,14 @@
 package com.eightsidedsquare.zinetest.core;
 
 import com.eightsidedsquare.zinetest.common.block.entity.NestBlockEntity;
+import com.eightsidedsquare.zinetest.core.references.TestmodBlockEntityTypeIds;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public interface TestmodBlockEntities {
 
     BlockEntityType<NestBlockEntity> NEST = Testmod.REGISTRY.blockEntity(
-            "nest",
+            TestmodBlockEntityTypeIds.NEST,
             FabricBlockEntityTypeBuilder.create(NestBlockEntity::new, TestmodBlocks.NEST)
     );
 

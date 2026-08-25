@@ -3,7 +3,6 @@ package com.eightsidedsquare.zine.core;
 import com.eightsidedsquare.zine.common.advancement.AdvancementEventsImpl;
 import com.eightsidedsquare.zine.common.advancement.VanillaAdvancementModificationsImpl;
 import com.eightsidedsquare.zine.common.block.ModifyBlockSoundGroupContextImpl;
-import com.eightsidedsquare.zine.common.entity.spawn.*;
 import com.eightsidedsquare.zine.common.network.ClientboundBlockEntitySyncPayload;
 import com.eightsidedsquare.zine.common.registry.RegistryHelper;
 import net.fabricmc.api.ModInitializer;
@@ -23,20 +22,12 @@ public class ZineMod implements ModInitializer {
         ZineBuiltinRegistries.init();
         ZineTooltipImages.init();
         ZineDataComponents.init();
+        ZineSpawnConditions.init();
 
         AdvancementEventsImpl.registerEvents();
         VanillaAdvancementModificationsImpl.registerEvents();
 
         ModifyBlockSoundGroupContextImpl.registerEvents();
-
-        REGISTRY.spawnCondition("all_of", AllOfCheck.CODEC);
-        REGISTRY.spawnCondition("any_of", AnyOfCheck.CODEC);
-        REGISTRY.spawnCondition("attribute", AttributeCheck.CODEC);
-        REGISTRY.spawnCondition("dimension", DimensionCheck.CODEC);
-        REGISTRY.spawnCondition("inverted", InvertedCheck.CODEC);
-        REGISTRY.spawnCondition("noise", NoiseCheck.CODEC);
-        REGISTRY.spawnCondition("random", RandomCheck.CODEC);
-        REGISTRY.spawnCondition("spawn_reason", SpawnReasonCheck.CODEC);
 
         PayloadTypeRegistry.clientboundPlay()
                 .register(ClientboundBlockEntitySyncPayload.TYPE, ClientboundBlockEntitySyncPayload.STREAM_CODEC);

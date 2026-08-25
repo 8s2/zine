@@ -5,6 +5,9 @@ import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 
-public interface ZineRegistries {
-    ResourceKey<Registry<SyncedCodec<? extends TooltipImage>>> TOOLTIP_IMAGE = ZineMod.REGISTRY.registryKey("tooltip_image");
+public final class ZineRegistries {
+    public static final ResourceKey<Registry<SyncedCodec<? extends TooltipImage>>> TOOLTIP_IMAGE = ZineMod.REGISTRY.registryKey("tooltip_image");
+
+    private ZineRegistries() {
+    }
 }
