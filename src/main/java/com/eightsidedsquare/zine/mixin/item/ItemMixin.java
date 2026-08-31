@@ -2,6 +2,8 @@ package com.eightsidedsquare.zine.mixin.item;
 
 import com.eightsidedsquare.zine.client.trim.ArmorTrimRegistryImpl;
 import com.eightsidedsquare.zine.common.item.ZineItem;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.Identifier;
@@ -28,7 +30,7 @@ public abstract class ItemMixin implements ZineItem {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void zine$init(Item.Properties properties, CallbackInfo ci) {
         ArmorType armorType = properties.zine$getArmorType();
-        if(armorType != null) {
+        if (armorType != null && FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             ArmorTrimRegistryImpl.addArmorItem((Item) (Object) this, armorType);
         }
     }
