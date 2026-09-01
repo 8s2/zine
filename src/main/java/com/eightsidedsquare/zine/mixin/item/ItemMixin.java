@@ -24,12 +24,4 @@ public abstract class ItemMixin implements ZineItem {
     public boolean zine$modelEquals(Identifier modelId) {
         return modelId.equals(this.components().get(DataComponents.ITEM_MODEL));
     }
-
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void zine$init(Item.Properties properties, CallbackInfo ci) {
-        ArmorType armorType = properties.zine$getArmorType();
-        if(armorType != null) {
-            ArmorTrimRegistryImpl.addArmorItem((Item) (Object) this, armorType);
-        }
-    }
 }

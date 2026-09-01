@@ -91,6 +91,7 @@
     "client.gui.GuiGraphicsExtractorMixin",
     "client.gui.SessionSearchTreesMixin",
     "client.item.ClientItemInfoLoaderMixin",
+    "client.item.ItemMixin",
     "client.item.ItemStackRenderStateLayerRenderStateMixin",
     "client.item.ItemStackRenderStateMixin",
     "client.item.SelectItemModelUnbakedSwitchMixin",
