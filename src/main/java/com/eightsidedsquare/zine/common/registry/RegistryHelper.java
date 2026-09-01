@@ -163,7 +163,8 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.nbt.NbtProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import net.minecraft.world.level.storage.loot.providers.score.ScoreboardNameProvider;
 import org.jspecify.annotations.Nullable;
 
@@ -1309,13 +1310,23 @@ public interface RegistryHelper {
     }
 
     /**
-     * @param name the name of the loot number provider
-     * @param codec the codec of the loot number provider
-     * @return the registered loot number provider codec
-     * @param <T> the type of loot number provider
+     * @param name the name of the context float provider
+     * @param codec the codec of the context float provider
+     * @return the registered context float provider codec
+     * @param <T> the type of context float provider
      */
-    default <T extends NumberProvider> MapCodec<T> lootNumberProvider(String name, MapCodec<T> codec) {
-        return this.register(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE, name, codec);
+    default <T extends ContextFloatProvider> MapCodec<T> contextFloatProvider(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.CONTEXT_FLOAT_PROVIDER_TYPE, name, codec);
+    }
+
+    /**
+     * @param name the name of the context int provider
+     * @param codec the codec of the context int provider
+     * @return the registered context int provider codec
+     * @param <T> the type of context int provider
+     */
+    default <T extends ContextIntProvider> MapCodec<T> contextIntProvider(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.CONTEXT_INT_PROVIDER_TYPE, name, codec);
     }
 
     /**
