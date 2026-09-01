@@ -47,7 +47,6 @@ public class ValueGraphCodec<N, V> extends BaseGraphCodec<N, ValueGraphCodec.Edg
     }
 
     public record Edge<V>(int u, int v, V value) implements BaseGraphCodec.Edge {
-
         public static <V> Codec<Edge<V>> createCodec(Codec<V> valueCodec) {
             return RecordCodecBuilder.create(instance -> instance.group(
                     CodecUtil.VECTOR_2I.fieldOf("uv").forGetter(edge -> new Vector2i(edge.u, edge.v)),

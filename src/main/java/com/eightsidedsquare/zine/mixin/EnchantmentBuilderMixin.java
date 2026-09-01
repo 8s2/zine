@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Enchantment.Builder.class)
 public abstract class EnchantmentBuilderMixin implements ZineEnchantmentBuilder {
-
     @Shadow @Final @Mutable
     private Enchantment.EnchantmentDefinition definition;
 
@@ -55,5 +54,4 @@ public abstract class EnchantmentBuilderMixin implements ZineEnchantmentBuilder 
     public <T> @Nullable T zine$getEffect(DataComponentType<T> type) {
         return (T) this.effectMapBuilder.map.get(type);
     }
-
 }
