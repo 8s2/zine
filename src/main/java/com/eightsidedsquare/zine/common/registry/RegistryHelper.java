@@ -350,7 +350,7 @@ public interface RegistryHelper {
      * @param <T> the type of item
      */
     default <T extends Item> T blockItem(BlockItemId id, Block block, BiFunction<Block, Item.Properties, T> factory, Item.Properties properties) {
-        T item = this.item(id.item(), p -> factory.apply(block, p), properties);
+        T item = this.item(id.item(), p -> factory.apply(block, p.useBlockDescriptionPrefix()), properties);
         Item.BY_BLOCK.put(block, item);
         return item;
     }
