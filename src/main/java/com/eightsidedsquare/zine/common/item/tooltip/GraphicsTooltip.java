@@ -130,7 +130,7 @@ public record GraphicsTooltip(
     public record Text(Component text, int x, int y, int maxWidth) {
         public static final Codec<Text> CODEC = RecordCodecBuilder.create(i -> i.group(
                 ComponentSerialization.CODEC.fieldOf("text").forGetter(Text::text),
-                CodecUtil.VECTOR_2I.optionalFieldOf("pos", new Vector2i()).forGetter(Text::pos),
+                CodecUtil.VECTOR2I.optionalFieldOf("pos", new Vector2i()).forGetter(Text::pos),
                 ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("max_width", 0).forGetter(Text::maxWidth)
         ).apply(i, Text::new));
         public static final StreamCodec<RegistryFriendlyByteBuf, Text> STREAM_CODEC = StreamCodec.composite(
@@ -157,8 +157,10 @@ public record GraphicsTooltip(
     public record Sprite(Identifier sprite, int x, int y, int width, int height, int color) {
         public static final Codec<Sprite> CODEC = RecordCodecBuilder.create(i -> i.group(
                 Identifier.CODEC.fieldOf("sprite").forGetter(Sprite::sprite),
-                CodecUtil.VECTOR_2I.optionalFieldOf("pos", new Vector2i()).forGetter(Sprite::pos),
-                CodecUtil.VECTOR_2I.optionalFieldOf("size", new Vector2i(1)).forGetter(Sprite::size),
+                Codec.INT.optionalFieldOf("x", 0).forGetter(Sprite::x),
+                Codec.INT.optionalFieldOf("y", 0).forGetter(Sprite::y),
+                Codec.INT.optionalFieldOf("width", 1).forGetter(Sprite::width),
+                Codec.INT.optionalFieldOf("height", 1).forGetter(Sprite::height),
                 ExtraCodecs.STRING_ARGB_COLOR.optionalFieldOf("color", -1).forGetter(Sprite::color)
         ).apply(i, Sprite::new));
         public static final StreamCodec<ByteBuf, Sprite> STREAM_CODEC = StreamCodec.composite(
@@ -176,18 +178,6 @@ public record GraphicsTooltip(
                 Sprite::color,
                 Sprite::new
         );
-
-        public Sprite(Identifier sprite, Vector2ic pos, Vector2ic size, int color) {
-            this(sprite, pos.x(), pos.y(), size.x(), size.y(), color);
-        }
-
-        public Vector2ic pos() {
-            return new Vector2i(this.x, this.y);
-        }
-
-        public Vector2ic size() {
-            return new Vector2i(this.width, this.height);
-        }
     }
 
     public record Rectangle(int x, int y, int width, int height, int fromColor, int toColor) {
@@ -202,8 +192,10 @@ public record GraphicsTooltip(
                 color -> color.x() == color.y() ? Either.left(color.x()) : Either.right(color)
         );
         public static final Codec<Rectangle> CODEC = RecordCodecBuilder.create(i -> i.group(
-                CodecUtil.VECTOR_2I.optionalFieldOf("pos", new Vector2i()).forGetter(Rectangle::pos),
-                CodecUtil.VECTOR_2I.optionalFieldOf("size", new Vector2i(1)).forGetter(Rectangle::size),
+                Codec.INT.optionalFieldOf("x", 0).forGetter(Rectangle::x),
+                Codec.INT.optionalFieldOf("y", 0).forGetter(Rectangle::y),
+                Codec.INT.optionalFieldOf("width", 1).forGetter(Rectangle::width),
+                Codec.INT.optionalFieldOf("height", 1).forGetter(Rectangle::height),
                 COLOR_CODEC.optionalFieldOf("color", new Vector2i(-1)).forGetter(Rectangle::color)
         ).apply(i, Rectangle::new));
         public static final StreamCodec<ByteBuf, Rectangle> STREAM_CODEC = StreamCodec.composite(
@@ -222,16 +214,8 @@ public record GraphicsTooltip(
                 Rectangle::new
         );
 
-        public Rectangle(Vector2ic pos, Vector2ic size, Vector2ic color) {
-            this(pos.x(), pos.y(), size.x(), size.y(), color.x(), color.y());
-        }
-
-        public Vector2ic pos() {
-            return new Vector2i(this.x, this.y);
-        }
-
-        public Vector2ic size() {
-            return new Vector2i(this.width, this.height);
+        public Rectangle(int x, int y, int width, int height, Vector2ic color) {
+            this(x, y, width, height, color.x(), color.y());
         }
 
         public Vector2ic color() {
@@ -241,7 +225,8 @@ public record GraphicsTooltip(
 
     public record Item(int x, int y, ItemStackTemplate item) {
         public static final Codec<Item> CODEC = RecordCodecBuilder.create(i -> i.group(
-                CodecUtil.VECTOR_2I.optionalFieldOf("pos", new Vector2i()).forGetter(Item::pos),
+                Codec.INT.optionalFieldOf("x", 0).forGetter(Item::x),
+                Codec.INT.optionalFieldOf("y", 0).forGetter(Item::y),
                 ItemStackTemplate.CODEC.fieldOf("item").forGetter(Item::item)
         ).apply(i, Item::new));
         public static final StreamCodec<RegistryFriendlyByteBuf, Item> STREAM_CODEC = StreamCodec.composite(
@@ -253,13 +238,5 @@ public record GraphicsTooltip(
                 Item::item,
                 Item::new
         );
-
-        public Item(Vector2ic pos, ItemStackTemplate item) {
-            this(pos.x(), pos.y(), item);
-        }
-
-        public Vector2ic pos() {
-            return new Vector2i(this.x, this.y);
-        }
     }
 }

@@ -32,7 +32,7 @@ public class TransformedItemModel implements ItemModel {
         state.zine$getLastLayer().zine$setMatrixTransformation(matrices -> {
             float t = 0.25f * (user.tickCount + Minecraft.getInstance().zine$getTickProgress());
             matrices.translate(0.5f, 0.5f, 0);
-            matrices.mulPose(Axis.ZN.rotation(t));
+            matrices.rotate(Axis.ZN.rotation(t));
             matrices.translate(-0.5f, -0.5f, 0);
         });
     }
@@ -41,7 +41,7 @@ public class TransformedItemModel implements ItemModel {
         public static final MapCodec<Unbaked> CODEC = MapCodec.unit(new Unbaked());
 
         @Override
-        public MapCodec<? extends net.minecraft.client.renderer.item.ItemModel.Unbaked> type() {
+        public MapCodec<? extends ItemModel.Unbaked> type() {
             return CODEC;
         }
 
