@@ -8,8 +8,8 @@ import com.eightsidedsquare.zine.client.language.LanguageEvents;
 import com.eightsidedsquare.zine.client.model.ModelEvents;
 import com.eightsidedsquare.zine.client.registry.ClientRegistryHelper;
 import com.eightsidedsquare.zine.client.trim.ArmorTrimRegistry;
-import com.eightsidedsquare.zinetest.core.TestmodBlocks;
 import com.eightsidedsquare.zinetest.core.Testmod;
+import com.eightsidedsquare.zinetest.core.TestmodBlockItems;
 import com.eightsidedsquare.zinetest.core.TestmodItems;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
@@ -24,7 +24,6 @@ import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.block.dispatch.SingleVariant;
 import net.minecraft.client.renderer.block.dispatch.Variant;
-import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -84,32 +83,32 @@ public class TestmodClient implements ClientModInitializer {
         });
         ModelEvents.ADD_UNBAKED.register(modelCollector -> {
             ModelTemplates.FLAT_ITEM.create(TEST_MODEL, TextureMapping.layer0(Items.EMERALD), modelCollector);
-            ModelTemplates.FLAT_ITEM.create(TestmodItems.TOURMALINE, TextureMapping.layer0(TestmodItems.TOURMALINE), modelCollector);
-            ModelTemplates.FLAT_ITEM.create(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE, TextureMapping.layer0(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE), modelCollector);
-            ModelTemplates.CUBE_ALL.create(TestmodBlocks.TOURMALINE_BLOCK, TextureMapping.cube(TestmodBlocks.TOURMALINE_BLOCK), modelCollector);
-            ModelTemplates.CUBE_ALL.create(TestmodBlocks.WOOD, TextureMapping.cube(TextureMapping.getBlockTexture(TestmodBlocks.WOOD, "_all")), modelCollector);
-            ModelTemplates.CUBE_ALL.create(TestmodBlocks.RAINBOW, TextureMapping.cube(TextureMapping.getBlockTexture(TestmodBlocks.RAINBOW)), modelCollector);
+            ModelTemplates.FLAT_ITEM.create(TestmodItems.TOURMALINE.item(), TextureMapping.layer0(TestmodItems.TOURMALINE.item()), modelCollector);
+            ModelTemplates.FLAT_ITEM.create(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.item(), TextureMapping.layer0(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.item()), modelCollector);
+            ModelTemplates.CUBE_ALL.create(TestmodBlockItems.TOURMALINE_BLOCK.block(), TextureMapping.cube(TestmodBlockItems.TOURMALINE_BLOCK.block()), modelCollector);
+            ModelTemplates.CUBE_ALL.create(TestmodBlockItems.WOOD.block(), TextureMapping.cube(TextureMapping.getBlockTexture(TestmodBlockItems.WOOD.block(), "_all")), modelCollector);
+            ModelTemplates.CUBE_ALL.create(TestmodBlockItems.RAINBOW.block(), TextureMapping.cube(TextureMapping.getBlockTexture(TestmodBlockItems.RAINBOW.block())), modelCollector);
         });
         ItemModelEvents.ADD_UNBAKED.register(assetCollector -> {
-            assetCollector.accept(TestmodItems.TOURMALINE, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodItems.TOURMALINE)));
-            assetCollector.accept(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE)));
-            assetCollector.accept(TestmodItems.TOURMALINE_BLOCK, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlocks.TOURMALINE_BLOCK)));
-            assetCollector.accept(TestmodItems.WOOD, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlocks.WOOD)));
-            assetCollector.accept(TestmodItems.RAINBOW, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlocks.RAINBOW)));
-            assetCollector.accept(TestmodItems.BIG_DIAMOND, ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(Blocks.DIAMOND_BLOCK)));
+            assetCollector.accept(TestmodItems.TOURMALINE.item(), ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodItems.TOURMALINE.item())));
+            assetCollector.accept(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.item(), ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.item())));
+            assetCollector.accept(TestmodBlockItems.TOURMALINE_BLOCK.item(), ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlockItems.TOURMALINE_BLOCK.block())));
+            assetCollector.accept(TestmodBlockItems.WOOD.item(), ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlockItems.WOOD.block())));
+            assetCollector.accept(TestmodBlockItems.RAINBOW.item(), ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(TestmodBlockItems.RAINBOW.block())));
+            assetCollector.accept(TestmodBlockItems.BIG_DIAMOND.item(), ItemModelUtils.plainModel(ModelLocationUtils.getModelLocation(Blocks.DIAMOND_BLOCK)));
         });
         ModelLoadingPlugin.register(pluginCtx -> {
-            pluginCtx.registerBlockStateResolver(TestmodBlocks.TOURMALINE_BLOCK, ctx -> {
-                ctx.setModel(ctx.block().defaultBlockState(), new SingleVariant.Unbaked(new Variant(ModelLocationUtils.getModelLocation(TestmodBlocks.TOURMALINE_BLOCK))).asRoot());
+            pluginCtx.registerBlockStateResolver(TestmodBlockItems.TOURMALINE_BLOCK.block(), ctx -> {
+                ctx.setModel(ctx.block().defaultBlockState(), new SingleVariant.Unbaked(new Variant(ModelLocationUtils.getModelLocation(TestmodBlockItems.TOURMALINE_BLOCK.block()))).asRoot());
             });
         });
         LanguageEvents.MODIFY_TRANSLATIONS.register((translations, languageCode, rightToLeft) -> {
-            translations.putIfAbsent(TestmodItems.TOURMALINE.getDescriptionId(), "Tourmaline");
-            translations.putIfAbsent(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.getDescriptionId(), "Checkered Armor Trim");
-            translations.putIfAbsent(TestmodItems.TOURMALINE_BLOCK.getDescriptionId(), "Block of Tourmaline");
-            translations.putIfAbsent(TestmodItems.WOOD.getDescriptionId(), "Wood");
-            translations.putIfAbsent(TestmodItems.RAINBOW.getDescriptionId(), "Rainbow");
-            translations.putIfAbsent(TestmodItems.BIG_DIAMOND.getDescriptionId(), "Big Diamond");
+            translations.putIfAbsent(TestmodItems.TOURMALINE.item().getDescriptionId(), "Tourmaline");
+            translations.putIfAbsent(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.item().getDescriptionId(), "Checkered Armor Trim");
+            translations.putIfAbsent(TestmodBlockItems.TOURMALINE_BLOCK.block().getDescriptionId(), "Block of Tourmaline");
+            translations.putIfAbsent(TestmodBlockItems.WOOD.block().getDescriptionId(), "Wood");
+            translations.putIfAbsent(TestmodBlockItems.RAINBOW.block().getDescriptionId(), "Rainbow");
+            translations.putIfAbsent(TestmodBlockItems.BIG_DIAMOND.block().getDescriptionId(), "Big Diamond");
         });
         ArmorTrimRegistry.registerMaterial(Testmod.TOURMALINE_TRIM_MATERIAL);
         ArmorTrimRegistry.registerMaterial(Testmod.OBSIDIAN_TRIM_MATERIAL);

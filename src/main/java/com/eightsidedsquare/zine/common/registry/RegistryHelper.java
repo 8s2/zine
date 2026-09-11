@@ -3,6 +3,7 @@ package com.eightsidedsquare.zine.common.registry;
 import com.eightsidedsquare.zine.common.item.CustomIngredientSerializerImpl;
 import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
 import com.eightsidedsquare.zine.common.recipe.RecipeTypeImpl;
+import com.eightsidedsquare.zine.common.registry.holder.*;
 import com.eightsidedsquare.zine.common.text.TextUtil;
 import com.eightsidedsquare.zine.common.text.TextUtilImpl;
 import com.eightsidedsquare.zine.common.util.codec.RegistryCodecGroup;
@@ -303,146 +304,171 @@ public interface RegistryHelper {
     }
 
     /**
-     * @param id the resource key of the item
-     * @param item the item to register
-     * @return the registered item
-     * @param <T> the type of item
-     */
-    default <T extends Item> T item(ResourceKey<Item> id, T item) {
-        return this.register(BuiltInRegistries.ITEM, id, item);
-    }
-
-    /**
-     * @param id the resource key of the item
+     * @param name the name of the item
      * @param factory the factory to instantiate the item given its properties
      * @param properties the properties of the item
-     * @return the instantiated and registered item
-     * @param <T> the type of item
+     * @return the item holder containing the registered item and its id
      */
-    default <T extends Item> T item(ResourceKey<Item> id, Function<Item.Properties, T> factory, Item.Properties properties) {
-        return this.item(id, factory.apply(properties.setId(id)));
+    default ItemHolder item(String name, Function<Item.Properties, ? extends Item> factory, Item.Properties properties) {
+        ResourceKey<Item> id = this.key(Registries.ITEM, name);
+        Item item = this.register(BuiltInRegistries.ITEM, id, factory.apply(properties.setId(id)));
+        return new ItemHolder(item, id);
     }
 
     /**
-     * @param id the resource key of the item
+     * @param name the name of the item
      * @param properties the properties of the item
-     * @return the instantiated and registered item
+     * @return the item holder containing the registered item and its id
      */
-    default Item item(ResourceKey<Item> id, Item.Properties properties) {
-        return this.item(id, Item::new, properties);
+    default ItemHolder item(String name, Item.Properties properties) {
+        return this.item(name, Item::new, properties);
     }
 
     /**
-     * @param id the resource key of the item
-     * @param type the entity type of the spawn egg item
-     * @return the instantiated and registered spawn egg item
+     * @param name the name of the item
+     * @param type the entity type that the spawn egg spawns
+     * @return the item holder containing the registered item and its id
      */
-    default SpawnEggItem spawnEggItem(ResourceKey<Item> id, EntityType<?> type) {
-        return this.item(id, SpawnEggItem::new, new Item.Properties().spawnEgg(type));
+    default ItemHolder spawnEggItem(String name, EntityType<?> type) {
+        return this.item(name, SpawnEggItem::new, new Item.Properties().spawnEgg(type));
     }
 
     /**
-     * @param id the block item id of the block item
-     * @param block the block of the block item
-     * @param factory the factory to instantiate the block item given its block and properties
-     * @param properties the properties of the item
-     * @return the instantiated and registered item
-     * @param <T> the type of item
-     */
-    default <T extends Item> T blockItem(BlockItemId id, Block block, BiFunction<Block, Item.Properties, T> factory, Item.Properties properties) {
-        T item = this.item(id.item(), p -> factory.apply(block, p.useBlockDescriptionPrefix()), properties);
-        Item.BY_BLOCK.put(block, item);
-        return item;
-    }
-
-    /**
-     * @param id the block item id of the block item
-     * @param block the block of the block item
-     * @param factory the factory to instantiate the block item given its block and properties
-     * @return the instantiated and registered item
-     * @param <T> the type of item
-     */
-    default <T extends Item> T blockItem(BlockItemId id, Block block, BiFunction<Block, Item.Properties, T> factory) {
-        return this.blockItem(id, block, factory, new Item.Properties());
-    }
-
-    /**
-     * @param id the block item id of the block item
-     * @param block the block of the block item
-     * @param properties the properties of the item
-     * @return the instantiated and registered item
-     */
-    default BlockItem blockItem(BlockItemId id, Block block, Item.Properties properties) {
-        return this.blockItem(id, block, BlockItem::new, properties);
-    }
-
-    /**
-     * @param id the block item id of the block item
-     * @param block the block of the block item
-     * @return the instantiated and registered item
-     */
-    default BlockItem blockItem(BlockItemId id, Block block) {
-        return this.blockItem(id, block, BlockItem::new, new Item.Properties());
-    }
-
-    /**
-     * @param id the resource key of the block
-     * @param block the block to register
-     * @return the registered block
-     * @param <T> the type of block
-     */
-    default <T extends Block> T block(ResourceKey<Block> id, T block) {
-        return this.register(BuiltInRegistries.BLOCK, id, block);
-    }
-
-    /**
-     * @param id the resource key of the block
+     * @param name the name of the block
      * @param factory the factory to instantiate the block given its properties
      * @param properties the properties of the block
-     * @return the instantiated and registered block
-     * @param <T> the type of block
+     * @return the block holder containing the registered block and its id
      */
-    default <T extends Block> T block(ResourceKey<Block> id, Function<BlockBehaviour.Properties, T> factory, BlockBehaviour.Properties properties) {
-        return this.block(id, factory.apply(properties.setId(id)));
+    default BlockHolder block(
+            String name,
+            Function<BlockBehaviour.Properties, ? extends Block> factory,
+            BlockBehaviour.Properties properties
+    ) {
+        ResourceKey<Block> id = this.key(Registries.BLOCK, name);
+        Block block = this.register(BuiltInRegistries.BLOCK, id, factory.apply(properties.setId(id)));
+        return new BlockHolder(block, id);
     }
 
     /**
-     * @param id the resource key of the block
+     * @param name the name of the block
      * @param properties the properties of the block
-     * @return the instantiated and registered block
+     * @return the block holder containing the registered block and its id
      */
-    default Block block(ResourceKey<Block> id, BlockBehaviour.Properties properties) {
-        return this.block(id, Block::new, properties);
+    default BlockHolder block(String name, BlockBehaviour.Properties properties) {
+        return this.block(name, Block::new, properties);
     }
 
     /**
-     * @param id the block item id of the block
-     * @param block the block to register
-     * @return the registered block
-     * @param <T> the type of block
+     * @param blockName the name of the block
+     * @param blockFactory the factory to instantiate the block given its properties
+     * @param blockProperties the properties of the block
+     * @param itemName the name of the item
+     * @param itemFactory the factory to instantiate the item given its block and properties
+     * @param itemProperties the properties of the item
+     * @return the block item holder containing the registered block, item, and their ids
      */
-    default <T extends Block> T block(BlockItemId id, T block) {
-        return this.block(id.block(), block);
+    default BlockItemHolder blockItem(
+            String blockName,
+            Function<BlockBehaviour.Properties, ? extends Block> blockFactory,
+            BlockBehaviour.Properties blockProperties,
+            String itemName,
+            BiFunction<Block, Item.Properties, ? extends Item> itemFactory,
+            Item.Properties itemProperties
+    ) {
+        BlockHolder blockHolder = this.block(blockName, blockFactory, blockProperties);
+        ItemHolder itemHolder = this.item(itemName, p -> itemFactory.apply(blockHolder.block(), p), itemProperties.useBlockDescriptionPrefix());
+        Item.BY_BLOCK.put(blockHolder.block(), itemHolder.item());
+        return new BlockItemHolder(blockHolder, itemHolder);
     }
 
     /**
-     * @param id the block item id of the block
-     * @param factory the factory to instantiate the block given its properties
-     * @param properties the properties of the block
-     * @return the instantiated and registered block
-     * @param <T> the type of block
+     * @param name the name of the block and item
+     * @param blockFactory the factory to instantiate the block given its properties
+     * @param blockProperties the properties of the block
+     * @param itemFactory the factory to instantiate the item given its block and properties
+     * @param itemProperties the properties of the item
+     * @return the block item holder containing the registered block, item, and their ids
      */
-    default <T extends Block> T block(BlockItemId id, Function<BlockBehaviour.Properties, T> factory, BlockBehaviour.Properties properties) {
-        return this.block(id.block(), factory, properties);
+    default BlockItemHolder blockItem(
+            String name,
+            Function<BlockBehaviour.Properties, ? extends Block> blockFactory,
+            BlockBehaviour.Properties blockProperties,
+            BiFunction<Block, Item.Properties, ? extends Item> itemFactory,
+            Item.Properties itemProperties
+    ) {
+        return this.blockItem(name, blockFactory, blockProperties, name, itemFactory, itemProperties);
     }
 
     /**
-     * @param id the block item id of the block
-     * @param properties the properties of the block
-     * @return the instantiated and registered block
+     * @param name the name of the block and item
+     * @param blockProperties the properties of the block
+     * @param itemFactory the factory to instantiate the item given its block and properties
+     * @param itemProperties the properties of the item
+     * @return the block item holder containing the registered block, item, and their ids
      */
-    default Block block(BlockItemId id, BlockBehaviour.Properties properties) {
-        return this.block(id.block(), properties);
+    default BlockItemHolder blockItem(
+            String name,
+            BlockBehaviour.Properties blockProperties,
+            BiFunction<Block, Item.Properties, ? extends Item> itemFactory,
+            Item.Properties itemProperties
+    ) {
+        return this.blockItem(name, Block::new, blockProperties, itemFactory, itemProperties);
+    }
+
+    /**
+     * @param name the name of the block and item
+     * @param blockFactory the factory to instantiate the block given its properties
+     * @param blockProperties the properties of the block
+     * @param itemProperties the properties of the item
+     * @return the block item holder containing the registered block, item, and their ids
+     */
+    default BlockItemHolder blockItem(
+            String name,
+            Function<BlockBehaviour.Properties, ? extends Block> blockFactory,
+            BlockBehaviour.Properties blockProperties,
+            Item.Properties itemProperties
+    ) {
+        return this.blockItem(name, blockFactory, blockProperties, BlockItem::new, itemProperties);
+    }
+
+    /**
+     * @param name the name of the block and item
+     * @param blockProperties the properties of the block
+     * @param itemProperties the properties of the item
+     * @return the block item holder containing the registered block, item, and their ids
+     */
+    default BlockItemHolder blockItem(
+            String name,
+            BlockBehaviour.Properties blockProperties,
+            Item.Properties itemProperties
+    ) {
+        return this.blockItem(name, Block::new, blockProperties, itemProperties);
+    }
+
+    /**
+     * @param name the name of the block and item
+     * @param blockFactory the factory to instantiate the block given its properties
+     * @param blockProperties the properties of the block
+     * @return the block item holder containing the registered block, item, and their ids
+     */
+    default BlockItemHolder blockItem(
+            String name,
+            Function<BlockBehaviour.Properties, ? extends Block> blockFactory,
+            BlockBehaviour.Properties blockProperties
+    ) {
+        return this.blockItem(name, blockFactory, blockProperties, new Item.Properties());
+    }
+
+    /**
+     * @param name the name of the block and item
+     * @param blockProperties the properties of the block
+     * @return the block item holder containing the registered block, item, and their ids
+     */
+    default BlockItemHolder blockItem(
+            String name,
+            BlockBehaviour.Properties blockProperties
+    ) {
+        return this.blockItem(name, Block::new, blockProperties);
     }
 
     /**
@@ -451,26 +477,30 @@ public interface RegistryHelper {
      * {@link EntityType.Builder#createLiving(EntityType.EntityFactory, MobCategory, UnaryOperator)},
      * or {@link EntityType.Builder#createMob(EntityType.EntityFactory, MobCategory, UnaryOperator)}
      * to create a builder.
-     * @param id the resource key of the entity type
+     * @param name the name of the entity type
      * @param builder the entity type builder
-     * @return the built and registered entity type
+     * @return the entity type holder containing the built and registered entity type and its id
      * @param <T> the type of the entity
      */
-    default <T extends Entity> EntityType<T> entity(ResourceKey<EntityType<?>> id, EntityType.Builder<T> builder) {
-        return this.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(id));
+    default <T extends Entity> EntityTypeHolder<T> entity(String name, EntityType.Builder<T> builder) {
+        ResourceKey<EntityType<?>> id = this.key(Registries.ENTITY_TYPE, name);
+        EntityType<T> type = this.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(id));
+        return new EntityTypeHolder<>(type, id);
     }
 
     /**
      * Registers a block entity type given a block entity type builder.
      * Use {@link FabricBlockEntityTypeBuilder#create(FabricBlockEntityTypeBuilder.Factory, Block...)}
      * to create a builder.
-     * @param id the name of the block entity type
+     * @param name the name of the block entity type
      * @param builder the block entity type builder
-     * @return the built and registered block entity type
+     * @return the block entity type holder containing the built and registered block entity type and its id
      * @param <T> the type of the block entity
      */
-    default <T extends BlockEntity> BlockEntityType<T> blockEntity(ResourceKey<BlockEntityType<?>> id, FabricBlockEntityTypeBuilder<T> builder) {
-        return this.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, id, builder.build());
+    default <T extends BlockEntity> BlockEntityTypeHolder<T> blockEntity(String name, FabricBlockEntityTypeBuilder<T> builder) {
+        ResourceKey<BlockEntityType<?>> id = this.key(Registries.BLOCK_ENTITY_TYPE, name);
+        BlockEntityType<T> type = this.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, id, builder.build());
+        return new BlockEntityTypeHolder<>(type, id);
     }
 
     /**

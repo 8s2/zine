@@ -22,7 +22,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.RuleProcessor
 import java.util.List;
 
 public class Testmod implements ModInitializer {
-
     public static final String MOD_ID = "zinetest";
     public static final RegistryHelper REGISTRY = RegistryHelper.create(MOD_ID);
 
@@ -36,7 +35,7 @@ public class Testmod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        TestmodBlocks.init();
+        TestmodBlockItems.init();
         TestmodItems.init();
         TestmodBlockEntities.init();
 
@@ -48,7 +47,7 @@ public class Testmod implements ModInitializer {
                                     new ProcessorRule(
                                             new BlockMatchTest(Blocks.TUFF_BRICKS),
                                             AlwaysTrueTest.INSTANCE,
-                                            TestmodBlocks.WOOD.defaultBlockState()
+                                            TestmodBlockItems.WOOD.defaultBlockState()
                                     )
                             ))
                     );

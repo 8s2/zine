@@ -89,6 +89,7 @@ transitive-inject-interface	net/minecraft/client/resources/model/ResolvableModel
 transitive-inject-interface net/minecraft/world/level/block/state/BlockBehaviour com/eightsidedsquare/zine/common/block/ZineBlockBehaviour
 transitive-inject-interface net/minecraft/world/level/block/state/BlockBehaviour$BlockStateBase com/eightsidedsquare/zine/common/block/ZineBlockBehaviour$ZineBlockStateBase
 transitive-inject-interface net/minecraft/world/level/block/entity/BlockEntity com/eightsidedsquare/zine/common/block/entity/ZineBlockEntity
+transitive-inject-interface net/minecraft/data/tags/TagAppender com/eightsidedsquare/zine/data/tags/ZineTagAppender<TT;>
 accessible class net/minecraft/client/resources/model/ClientItemInfoLoader$PendingLoad
 accessible field net/minecraft/client/renderer/item/ClientItem model Lnet/minecraft/client/renderer/item/ItemModel$Unbaked;
 mutable field net/minecraft/client/renderer/item/ClientItem model Lnet/minecraft/client/renderer/item/ItemModel$Unbaked;

@@ -23,7 +23,7 @@ public class NestBlockEntity extends SyncingBlockEntity {
     private Holder<ChickenVariant> variant;
 
     public NestBlockEntity(BlockPos pos, BlockState state) {
-        super(TestmodBlockEntities.NEST, pos, state);
+        super(TestmodBlockEntities.NEST.type(), pos, state);
     }
 
     @Override

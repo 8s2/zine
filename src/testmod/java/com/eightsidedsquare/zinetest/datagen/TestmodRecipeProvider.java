@@ -16,7 +16,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import java.util.concurrent.CompletableFuture;
 
 public class TestmodRecipeProvider extends RecipeProvider {
-
     protected TestmodRecipeProvider(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
         super(recipeOutput, advancementOutput);
     }
@@ -24,9 +23,9 @@ public class TestmodRecipeProvider extends RecipeProvider {
     @Override
     public void buildRecipes() {
         this.trimSmithing(
-                TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE,
+                TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.asItem(),
                 Testmod.CHECKERED_TRIM_PATTERN,
-                ResourceKey.create(Registries.RECIPE, BuiltInRegistries.ITEM.getKey(TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE).withSuffix("_smithing_trim"))
+                ResourceKey.create(Registries.RECIPE, TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.id().identifier().withSuffix("_smithing_trim"))
         );
     }
 
