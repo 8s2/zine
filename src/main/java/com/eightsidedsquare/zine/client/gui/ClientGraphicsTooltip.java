@@ -13,17 +13,19 @@ public class ClientGraphicsTooltip implements ClientTooltipComponent {
     private final List<GraphicsTooltip.Text> texts;
     private final List<GraphicsTooltip.Sprite> sprites;
     private final List<GraphicsTooltip.Rectangle> rectangles;
+    private final List<GraphicsTooltip.Item> items;
     private int width;
     private int height;
 
-    public ClientGraphicsTooltip(List<GraphicsTooltip.Text> texts, List<GraphicsTooltip.Sprite> sprites, List<GraphicsTooltip.Rectangle> rectangles) {
+    public ClientGraphicsTooltip(List<GraphicsTooltip.Text> texts, List<GraphicsTooltip.Sprite> sprites, List<GraphicsTooltip.Rectangle> rectangles, List<GraphicsTooltip.Item> items) {
         this.texts = texts;
         this.sprites = sprites;
         this.rectangles = rectangles;
+        this.items = items;
     }
 
     public ClientGraphicsTooltip(GraphicsTooltip tooltip) {
-        this(tooltip.texts(), tooltip.sprites(), tooltip.rectangles());
+        this(tooltip.texts(), tooltip.sprites(), tooltip.rectangles(), tooltip.items());
     }
 
     @Override
@@ -50,6 +52,10 @@ public class ClientGraphicsTooltip implements ClientTooltipComponent {
         for (GraphicsTooltip.Rectangle rectangle : this.rectangles) {
             this.width = Math.max(rectangle.x() + rectangle.width(), this.width);
             this.height = Math.max(rectangle.y() + rectangle.height(), this.height);
+        }
+        for (GraphicsTooltip.Item item : this.items) {
+            this.width = Math.max(item.x() + 16, this.width);
+            this.height = Math.max(item.y() + 16, this.height);
         }
     }
 
@@ -91,6 +97,13 @@ public class ClientGraphicsTooltip implements ClientTooltipComponent {
                     y + rectangle.y() + rectangle.height(),
                     rectangle.fromColor(),
                     rectangle.toColor()
+            );
+        }
+        for (GraphicsTooltip.Item item : this.items) {
+            graphics.item(
+                    item.item().create(),
+                    x + item.x(),
+                    y + item.y()
             );
         }
     }
