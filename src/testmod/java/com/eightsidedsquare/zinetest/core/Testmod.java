@@ -1,6 +1,5 @@
 package com.eightsidedsquare.zinetest.core;
 
-import com.eightsidedsquare.zine.common.advancement.VanillaAdvancementModifications;
 import com.eightsidedsquare.zine.common.block.ModifyBlockSoundGroupCallback;
 import com.eightsidedsquare.zine.common.registry.RegistryHelper;
 import net.fabricmc.api.ModInitializer;
@@ -9,7 +8,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.ProcessorLists;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraft.world.level.block.Blocks;
@@ -58,8 +56,5 @@ public class Testmod implements ModInitializer {
         ModifyBlockSoundGroupCallback.EVENT.register(ctx -> {
             ctx.setSoundGroup(SoundType.TUFF_BRICKS, Blocks.STONE_BRICKS, Blocks.STONE_BRICK_STAIRS, Blocks.STONE_BRICK_SLAB);
         });
-
-        VanillaAdvancementModifications.registerTacticalFishingBucketItem(Items.AXOLOTL_BUCKET);
-        VanillaAdvancementModifications.registerTrimWithAnyArmorPatternRecipe(ResourceKey.create(Registries.RECIPE, id("checkered_armor_trim_smithing_template_smithing_trim")));
     }
 }

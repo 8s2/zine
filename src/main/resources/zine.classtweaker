@@ -1,7 +1,4 @@
 classTweaker v1 official
-transitive-inject-interface	net/minecraft/advancements/Advancement com/eightsidedsquare/zine/common/advancement/ZineAdvancement
-transitive-inject-interface	net/minecraft/advancements/AdvancementRewards com/eightsidedsquare/zine/common/advancement/ZineAdvancementRewards
-transitive-inject-interface	net/minecraft/advancements/DisplayInfo com/eightsidedsquare/zine/common/advancement/ZineDisplayInfo
 transitive-inject-interface	net/minecraft/client/Minecraft com/eightsidedsquare/zine/client/util/ZineMinecraft
 transitive-inject-interface	com/mojang/blaze3d/platform/NativeImage com/eightsidedsquare/zine/client/atlas/ZineNativeImage
 transitive-inject-interface	net/minecraft/world/item/Item com/eightsidedsquare/zine/common/item/ZineItem
@@ -39,7 +36,6 @@ transitive-inject-interface	net/minecraft/world/entity/animal/feline/CatVariant 
 transitive-inject-interface	net/minecraft/world/entity/animal/frog/FrogVariant com/eightsidedsquare/zine/common/entity/variant/ZineFrogVariant
 transitive-inject-interface	net/minecraft/client/resources/model/ModelBaker com/eightsidedsquare/zine/client/model/ZineModelBaker
 transitive-inject-interface	net/minecraft/client/renderer/texture/atlas/sources/PalettedPermutations com/eightsidedsquare/zine/client/atlas/ZinePalettedPermutations
-transitive-inject-interface	net/minecraft/advancements/AdvancementRequirements com/eightsidedsquare/zine/common/advancement/ZineAdvancementRequirements
 transitive-inject-interface	net/minecraft/core/component/DataComponentMap$Builder com/eightsidedsquare/zine/common/util/ZineDataComponentMapBuilder
 transitive-inject-interface	net/minecraft/core/component/DataComponentExactPredicate com/eightsidedsquare/zine/common/predicate/ZineDataComponentExactPredicate
 transitive-inject-interface	net/minecraft/world/entity/animal/wolf/WolfVariant com/eightsidedsquare/zine/common/entity/variant/ZineWolfVariant

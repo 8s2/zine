@@ -1,7 +1,5 @@
 package com.eightsidedsquare.zine.core;
 
-import com.eightsidedsquare.zine.common.advancement.AdvancementEventsImpl;
-import com.eightsidedsquare.zine.common.advancement.VanillaAdvancementModificationsImpl;
 import com.eightsidedsquare.zine.common.block.ModifyBlockSoundGroupContextImpl;
 import com.eightsidedsquare.zine.common.network.ClientboundBlockEntitySyncPayload;
 import com.eightsidedsquare.zine.common.registry.RegistryHelper;
@@ -23,9 +21,6 @@ public class ZineMod implements ModInitializer {
         ZineTooltipImages.init();
         ZineDataComponents.init();
         ZineSpawnConditions.init();
-
-        AdvancementEventsImpl.registerEvents();
-        VanillaAdvancementModificationsImpl.registerEvents();
 
         ModifyBlockSoundGroupContextImpl.registerEvents();
 
