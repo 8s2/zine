@@ -2,23 +2,25 @@ package com.eightsidedsquare.zine.common.util.codec;
 
 import com.eightsidedsquare.zine.common.entity.SpawnReasonIds;
 import com.mojang.datafixers.util.Either;
+import com.mojang.datafixers.util.Function3;
+import com.mojang.datafixers.util.Function4;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.phys.AABB;
 import org.apache.commons.lang3.mutable.*;
-import org.joml.Vector2i;
-import org.joml.Vector2ic;
+import org.joml.*;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public final class CodecUtil {
@@ -49,12 +51,19 @@ public final class CodecUtil {
     public static final Codec<MutableLong> MUTABLE_LONG = Codec.LONG.xmap(MutableLong::new, MutableLong::longValue);
     public static final Codec<MutableFloat> MUTABLE_FLOAT = Codec.FLOAT.xmap(MutableFloat::new, MutableFloat::floatValue);
     public static final Codec<MutableDouble> MUTABLE_DOUBLE = Codec.DOUBLE.xmap(MutableDouble::new, MutableDouble::doubleValue);
-    public static final Codec<Vector2ic> VECTOR_2I = Codec.INT.listOf()
-            .comapFlatMap(
-                    list -> Util.fixedSize(list, 2)
-                            .map(components -> new Vector2i(components.getFirst(), components.get(1))),
-                    vec -> List.of(vec.x(), vec.y())
-            );
+    public static final Codec<Vector2ic> VECTOR2I = vector2Codec(Codec.INT, Vector2i::new, Vector2ic::get);
+    public static final Codec<Vector3ic> VECTOR3I = ExtraCodecs.VECTOR3I;
+    public static final Codec<Vector4ic> VECTOR4I = vector4Codec(Codec.INT, Vector4i::new, Vector4ic::get);
+    public static final Codec<Vector2Lc> VECTOR2L = vector2Codec(Codec.LONG, Vector2L::new, Vector2Lc::get);
+    public static final Codec<Vector3Lc> VECTOR3L = vector3Codec(
+            Codec.LONG,
+            (x, y, z) -> new Vector3L().set(x, y, z),
+            Vector3Lc::get
+    );
+    public static final Codec<Vector4Lc> VECTOR4L = vector4Codec(Codec.LONG, Vector4L::new, Vector4Lc::get);
+    public static final Codec<Vector2dc> VECTOR2D = vector2Codec(Codec.DOUBLE, Vector2d::new, Vector2dc::get);
+    public static final Codec<Vector3dc> VECTOR3D = vector3Codec(Codec.DOUBLE, Vector3d::new, Vector3dc::get);
+    public static final Codec<Vector4dc> VECTOR4D = vector4Codec(Codec.DOUBLE, Vector4d::new, Vector4dc::get);
     public static final Codec<OptionalInt> OPTIONAL_INT = Codec.INT.xmap(OptionalInt::of, OptionalInt::getAsInt)
             .orElse(OptionalInt.empty());
     public static final Codec<OptionalDouble> OPTIONAL_DOUBLE = Codec.DOUBLE.xmap(OptionalDouble::of, OptionalDouble::getAsDouble)
@@ -131,18 +140,71 @@ public final class CodecUtil {
         return blockCodecWithProperties(block.getStateDefinition().getProperties().toArray(new Property<?>[0]));
     }
 
-    public static <T> void readToList(ValueInput view, String key, List<T> list, Codec<? extends Collection<? extends T>> codec) {
-        list.clear();
-        view.read(key, codec).ifPresent(list::addAll);
-    }
-
-    public static <K, V> void readToMap(ValueInput view, String key, Map<K, V> map, Codec<? extends Map<? extends K, ? extends V>> codec) {
-        map.clear();
-        view.read(key, codec).ifPresent(map::putAll);
-    }
-
     public static <T> Codec<MutableObject<T>> mutable(Codec<T> codec) {
         return codec.xmap(MutableObject::new, MutableObject::get);
+    }
+
+    public static <C, V> Codec<V> vector2Codec(
+            Codec<C> componentCodec,
+            BiFunction<C, C, ? extends V> toVector,
+            BiFunction<V, Integer, C> getter
+    ) {
+        return componentCodec
+                .listOf()
+                .comapFlatMap(
+                        list -> Util.fixedSize(list, 2).map(cs -> toVector.apply(
+                                cs.getFirst(),
+                                cs.get(1)
+                        )),
+                        v -> List.of(
+                                getter.apply(v, 0),
+                                getter.apply(v, 1)
+                        )
+                );
+    }
+
+    public static <C, V> Codec<V> vector3Codec(
+            Codec<C> componentCodec,
+            Function3<C, C, C, ? extends V> toVector,
+            BiFunction<V, Integer, C> getter
+    ) {
+        return componentCodec
+                .listOf()
+                .comapFlatMap(
+                        list -> Util.fixedSize(list, 3).map(cs -> toVector.apply(
+                                cs.getFirst(),
+                                cs.get(1),
+                                cs.get(2)
+                        )),
+                        v -> List.of(
+                                getter.apply(v, 0),
+                                getter.apply(v, 1),
+                                getter.apply(v, 2)
+                        )
+                );
+    }
+
+    public static <C, V> Codec<V> vector4Codec(
+            Codec<C> componentCodec,
+            Function4<C, C, C, C, ? extends V> toVector,
+            BiFunction<V, Integer, C> getter
+    ) {
+        return componentCodec
+                .listOf()
+                .comapFlatMap(
+                        list -> Util.fixedSize(list, 4).map(cs -> toVector.apply(
+                                cs.getFirst(),
+                                cs.get(1),
+                                cs.get(2),
+                                cs.get(3)
+                        )),
+                        v -> List.of(
+                                getter.apply(v, 0),
+                                getter.apply(v, 1),
+                                getter.apply(v, 2),
+                                getter.apply(v, 3)
+                        )
+                );
     }
 
     private CodecUtil() {

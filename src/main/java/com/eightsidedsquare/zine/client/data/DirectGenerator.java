@@ -7,7 +7,6 @@ import net.minecraft.world.level.block.Block;
 import java.util.Optional;
 
 public class DirectGenerator implements BlockModelDefinitionGenerator {
-
     private final Block block;
     private final BlockStateModelDispatcher dispatcher;
 

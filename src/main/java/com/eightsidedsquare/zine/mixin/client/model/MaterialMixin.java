@@ -11,14 +11,11 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(Material.class)
 public abstract class MaterialMixin implements ZineMaterial {
-
     @Mixin(Material.Baked.class)
     public static abstract class BakedMixin implements ZineMaterial.Baked {
-        @Shadow
-        @Final
+        @Shadow @Final
         private boolean forceTranslucent;
-        @Shadow
-        @Final
+        @Shadow @Final
         private TextureAtlasSprite sprite;
         @Unique
         private int materialFlags = -1;

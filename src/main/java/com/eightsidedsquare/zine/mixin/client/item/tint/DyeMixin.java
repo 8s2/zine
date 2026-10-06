@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Dye.class)
 public abstract class DyeMixin implements ZineDye {
-
     @Shadow @Final @Mutable
     private int defaultColor;
 

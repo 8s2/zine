@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.client.gui;
 
-import com.eightsidedsquare.zine.common.item.tooltip.CompositeTooltipData;
+import com.eightsidedsquare.zine.common.item.tooltip.CompositeTooltip;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -8,17 +8,12 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-public record CompositeTooltipComponent(List<ClientTooltipComponent> components) implements ClientTooltipComponent {
-
-    public CompositeTooltipComponent(CompositeTooltipData tooltipData) {
-        this(
-                tooltipData.data()
-                        .stream()
-                        .map(either ->
-                                either.map(text -> ClientTooltipComponent.create(text.getVisualOrderText()), ClientTooltipComponent::create)
-                        )
-                        .toList()
-        );
+public record ClientCompositeTooltip(List<ClientTooltipComponent> components) implements ClientTooltipComponent {
+    public ClientCompositeTooltip(CompositeTooltip tooltipData) {
+        this(tooltipData.tooltips()
+                .stream()
+                .map(ClientTooltipComponent::create)
+                .toList());
     }
 
     @Override

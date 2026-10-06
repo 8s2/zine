@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.Block;
  * Helper class for instantiating different types of {@link net.minecraft.client.data.models.blockstates.BlockModelDefinitionGenerator} as their names tend to be verbose
  */
 public final class BlockModelDefinitions {
-
     /**
      * Creates a {@link MultiVariantGenerator.Empty} for the given block
      */
@@ -103,5 +102,4 @@ public final class BlockModelDefinitions {
 
     private BlockModelDefinitions() {
     }
-
 }

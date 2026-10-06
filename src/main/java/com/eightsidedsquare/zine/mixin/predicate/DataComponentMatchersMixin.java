@@ -14,7 +14,6 @@ import java.util.Map;
 
 @Mixin(DataComponentMatchers.class)
 public abstract class DataComponentMatchersMixin implements ZineDataComponentMatchers {
-
     @Shadow @Final @Mutable
     private DataComponentExactPredicate exact;
 

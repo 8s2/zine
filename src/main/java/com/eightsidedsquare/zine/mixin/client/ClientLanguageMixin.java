@@ -15,11 +15,13 @@ import java.util.Map;
 @Mixin(ClientLanguage.class)
 public abstract class ClientLanguageMixin {
     @Inject(method = "loadFrom(Lnet/minecraft/server/packs/resources/ResourceManager;Ljava/util/List;Z)Lnet/minecraft/client/resources/language/ClientLanguage;", at = @At(value = "NEW", target = "(Ljava/util/Map;Z)Lnet/minecraft/client/resources/language/ClientLanguage;"))
-    private static void zine$invokeModifyTranslationsEvent(ResourceManager resourceManager,
-                                                           List<String> definitions,
-                                                           boolean rightToLeft,
-                                                           CallbackInfoReturnable<ClientLanguage> cir,
-                                                           @Local(name = "translations") Map<String, String> translations) {
+    private static void zine$invokeModifyTranslationsEvent(
+            ResourceManager resourceManager,
+            List<String> definitions,
+            boolean rightToLeft,
+            CallbackInfoReturnable<ClientLanguage> cir,
+            @Local(name = "translations") Map<String, String> translations
+    ) {
         LanguageEvents.MODIFY_TRANSLATIONS.invoker().modify(translations, definitions.getLast(), rightToLeft);
     }
 }

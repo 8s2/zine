@@ -1,10 +1,14 @@
 package com.eightsidedsquare.zine.common.registry;
 
 import com.eightsidedsquare.zine.common.item.CustomIngredientSerializerImpl;
+import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
 import com.eightsidedsquare.zine.common.recipe.RecipeTypeImpl;
+import com.eightsidedsquare.zine.common.registry.holder.*;
 import com.eightsidedsquare.zine.common.text.TextUtil;
 import com.eightsidedsquare.zine.common.text.TextUtilImpl;
 import com.eightsidedsquare.zine.common.util.codec.RegistryCodecGroup;
+import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
+import com.eightsidedsquare.zine.core.ZineBuiltinRegistries;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
@@ -111,7 +115,6 @@ import net.minecraft.world.level.block.SkullBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.DecoratedPotPattern;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
@@ -124,14 +127,11 @@ import net.minecraft.world.level.gamerules.GameRule;
 import net.minecraft.world.level.gamerules.GameRuleCategory;
 import net.minecraft.world.level.gamerules.GameRuleType;
 import net.minecraft.world.level.gamerules.GameRuleTypeVisitor;
-import net.minecraft.world.level.levelgen.DensityFunction;
-import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicateType;
-import net.minecraft.world.level.levelgen.carver.CarverConfiguration;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
+import net.minecraft.world.level.levelgen.densityfunction.DensityFunction;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSize;
 import net.minecraft.world.level.levelgen.feature.featuresize.FeatureSizeType;
 import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacer;
@@ -139,20 +139,19 @@ import net.minecraft.world.level.levelgen.feature.foliageplacers.FoliagePlacerTy
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacer;
 import net.minecraft.world.level.levelgen.feature.rootplacers.RootPlacerType;
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProviderType;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacer;
 import net.minecraft.world.level.levelgen.feature.trunkplacers.TrunkPlacerType;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProviderType;
+import net.minecraft.world.level.levelgen.material.condition.MaterialCondition;
+import net.minecraft.world.level.levelgen.material.rule.MaterialRule;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
-import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
-import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElementType;
 import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasBinding;
@@ -165,7 +164,8 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.nbt.NbtProvider;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProvider;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import net.minecraft.world.level.storage.loot.providers.score.ScoreboardNameProvider;
 import org.jspecify.annotations.Nullable;
 
@@ -204,6 +204,15 @@ public interface RegistryHelper {
      */
     default <T> ResourceKey<T> key(ResourceKey<? extends Registry<T>> registryKey, String name) {
         return ResourceKey.create(registryKey, this.id(name));
+    }
+
+    /**
+     * @param name the name of the registry
+     * @return the registry key
+     * @param <T> the type of the registry key
+     */
+    default <T> ResourceKey<Registry<T>> registryKey(String name) {
+        return ResourceKey.createRegistryKey(this.id(name));
     }
 
     /**
@@ -296,150 +305,170 @@ public interface RegistryHelper {
 
     /**
      * @param name the name of the item
-     * @param item the item to register
-     * @return the registered item
-     * @param <T> the type of the item
-     * @apiNote Prioritize the other {@code item} methods over this one,
-     * as they handle passing a required {@link ResourceKey} to the {@link Item.Properties}.
+     * @param factory the factory to instantiate the item given its properties
+     * @param properties the properties of the item
+     * @return the item holder containing the registered item and its id
      */
-    default <T extends Item> T item(String name, T item) {
-        return this.register(BuiltInRegistries.ITEM, name, item);
+    default ItemHolder item(String name, Function<Item.Properties, ? extends Item> factory, Item.Properties properties) {
+        ResourceKey<Item> id = this.key(Registries.ITEM, name);
+        Item item = this.register(BuiltInRegistries.ITEM, id, factory.apply(properties.setId(id)));
+        return new ItemHolder(item, id);
     }
 
     /**
-     *
      * @param name the name of the item
-     * @param settings the item's settings
-     * @param factory the factory to instantiate an {@link Item} of type {@code <T>} with the given settings
-     * @return the registered item created by the {@code factory} with {@code settings}
-     * @param <T> the type of the item
+     * @param properties the properties of the item
+     * @return the item holder containing the registered item and its id
      */
-    default <T extends Item> T item(String name, Item.Properties settings, Function<Item.Properties, T> factory) {
-        return this.item(name, factory.apply(settings.setId(this.key(Registries.ITEM, name))));
+    default ItemHolder item(String name, Item.Properties properties) {
+        return this.item(name, Item::new, properties);
     }
 
     /**
-     * Registers an item of type {@link Item}.
      * @param name the name of the item
-     * @param settings the item's settings
-     * @return the registered item with {@code settings}
+     * @param type the entity type that the spawn egg spawns
+     * @return the item holder containing the registered item and its id
      */
-    default Item item(String name, Item.Properties settings) {
-        return this.item(name, settings, Item::new);
-    }
-
-    /**
-     * Registers an item of type {@link Item} with the default item settings.
-     * @param name the name of the item
-     * @return the registered item
-     */
-    default Item item(String name) {
-        return this.item(name, new Item.Properties());
-    }
-
-    /**
-     * Registers a block item.
-     * @param name the name of the item
-     * @param block the block that the block item will place
-     * @param settings the item's settings
-     * @param factory the factory to instantiate a {@link BlockItem} of type {@code <T>} with the given settings
-     * @return the registered block item created by the {@code factory} with {@code settings}
-     * @param <T> the type of the block item
-     */
-    default <T extends BlockItem> T item(String name, Block block, Item.Properties settings, BiFunction<Block, Item.Properties, T> factory) {
-        return this.item(name, settings.useBlockDescriptionPrefix(), itemSettings -> factory.apply(block, itemSettings));
-    }
-
-    /**
-     * Registers an item of type {@link BlockItem}.
-     * @param name the name of the item
-     * @param block the block that the block item will place
-     * @return the registered block item
-     */
-    default BlockItem item(String name, Block block) {
-        return this.item(name, block, new Item.Properties(), BlockItem::new);
-    }
-
-    /**
-     * Registers an item of type {@link SpawnEggItem}.
-     * @param name the name of the item
-     * @param entityType the entity type to be spawned by the spawn egg
-     * @return the registered spawn egg item
-     */
-    default SpawnEggItem item(String name, EntityType<?> entityType) {
-        return this.item(name, new Item.Properties().spawnEgg(entityType), SpawnEggItem::new);
-    }
-
-    /**
-     *
-     * @param name the name of the block
-     * @param block the block to register
-     * @return the registered block
-     * @param <T> the type of the block
-     * @apiNote Prioritize the other {@code block} methods over this one,
-     * as they handle passing a required {@link ResourceKey} to the {@link net.minecraft.world.level.block.state.BlockBehaviour.Properties}.
-     */
-    default <T extends Block> T block(String name, T block) {
-        return this.register(BuiltInRegistries.BLOCK, name, block);
+    default ItemHolder spawnEggItem(String name, EntityType<?> type) {
+        return this.item(name, SpawnEggItem::new, new Item.Properties().spawnEgg(type));
     }
 
     /**
      * @param name the name of the block
-     * @param settings the block's settings
-     * @param factory the factory to instantiate a {@link Block} of type {@code <T>} with the given settings
-     * @return the registered block created by the {@code factory} with {@code settings}
-     * @param <T> the type of the block
+     * @param factory the factory to instantiate the block given its properties
+     * @param properties the properties of the block
+     * @return the block holder containing the registered block and its id
      */
-    default <T extends Block> T block(String name, BlockBehaviour.Properties settings, Function<BlockBehaviour.Properties, T> factory) {
-        return this.block(name, factory.apply(settings.setId(this.key(Registries.BLOCK, name))));
+    default BlockHolder block(
+            String name,
+            Function<BlockBehaviour.Properties, ? extends Block> factory,
+            BlockBehaviour.Properties properties
+    ) {
+        ResourceKey<Block> id = this.key(Registries.BLOCK, name);
+        Block block = this.register(BuiltInRegistries.BLOCK, id, factory.apply(properties.setId(id)));
+        return new BlockHolder(block, id);
     }
 
     /**
-     * Registers a block of type {@link Block}.
      * @param name the name of the block
-     * @param settings the block's settings
-     * @return the registered block with {@code settings}
+     * @param properties the properties of the block
+     * @return the block holder containing the registered block and its id
      */
-    default Block block(String name, BlockBehaviour.Properties settings) {
-        return this.block(name, settings, Block::new);
+    default BlockHolder block(String name, BlockBehaviour.Properties properties) {
+        return this.block(name, Block::new, properties);
     }
 
     /**
-     * Registers a {@link BlockItem} alongside the block.
-     * Use {@link Block#asItem()} to get the instance of the item.
-     * @param name the name of the block and item
-     * @param block the block to register, and the block that the block item will place
-     * @return the registered block
-     * @param <T> the type of the block
-     * @apiNote Prioritize the other {@code blockWithItem} methods over this one,
-     * as they handle passing a required {@link ResourceKey} to the {@link net.minecraft.world.level.block.state.BlockBehaviour.Properties}.
+     * @param blockName the name of the block
+     * @param blockFactory the factory to instantiate the block given its properties
+     * @param blockProperties the properties of the block
+     * @param itemName the name of the item
+     * @param itemFactory the factory to instantiate the item given its block and properties
+     * @param itemProperties the properties of the item
+     * @return the block item holder containing the registered block, item, and their ids
      */
-    default <T extends Block> T blockWithItem(String name, T block) {
-        return this.registerBlockItem(name, this.block(name, block));
+    default BlockItemHolder blockItem(
+            String blockName,
+            Function<BlockBehaviour.Properties, ? extends Block> blockFactory,
+            BlockBehaviour.Properties blockProperties,
+            String itemName,
+            BiFunction<Block, Item.Properties, ? extends Item> itemFactory,
+            Item.Properties itemProperties
+    ) {
+        BlockHolder blockHolder = this.block(blockName, blockFactory, blockProperties);
+        ItemHolder itemHolder = this.item(itemName, p -> itemFactory.apply(blockHolder.block(), p), itemProperties.useBlockDescriptionPrefix());
+        Item.BY_BLOCK.put(blockHolder.block(), itemHolder.item());
+        return new BlockItemHolder(blockHolder, itemHolder);
     }
 
     /**
-     * Registers a {@link BlockItem} alongside a block.
-     * Use {@link Block#asItem()} to get the instance of the item.
      * @param name the name of the block and item
-     * @param settings the block's settings
-     * @param factory the factory to instantiate a {@link Block} of type {@code <T>} with the given settings
-     * @return the registered block created by the {@code factory} with {@code settings}
-     * @param <T> the type of the block
+     * @param blockFactory the factory to instantiate the block given its properties
+     * @param blockProperties the properties of the block
+     * @param itemFactory the factory to instantiate the item given its block and properties
+     * @param itemProperties the properties of the item
+     * @return the block item holder containing the registered block, item, and their ids
      */
-    default <T extends Block> T blockWithItem(String name, BlockBehaviour.Properties settings, Function<BlockBehaviour.Properties, T> factory) {
-        return this.registerBlockItem(name, this.block(name, settings, factory));
+    default BlockItemHolder blockItem(
+            String name,
+            Function<BlockBehaviour.Properties, ? extends Block> blockFactory,
+            BlockBehaviour.Properties blockProperties,
+            BiFunction<Block, Item.Properties, ? extends Item> itemFactory,
+            Item.Properties itemProperties
+    ) {
+        return this.blockItem(name, blockFactory, blockProperties, name, itemFactory, itemProperties);
     }
 
     /**
-     * Registers a {@link BlockItem} alongside a block.
-     * Use {@link Block#asItem()} to get the instance of the item.
      * @param name the name of the block and item
-     * @param settings the block's settings
-     * @return the registered block with {@code settings}
+     * @param blockProperties the properties of the block
+     * @param itemFactory the factory to instantiate the item given its block and properties
+     * @param itemProperties the properties of the item
+     * @return the block item holder containing the registered block, item, and their ids
      */
-    default Block blockWithItem(String name, BlockBehaviour.Properties settings) {
-        return this.registerBlockItem(name, this.block(name, settings));
+    default BlockItemHolder blockItem(
+            String name,
+            BlockBehaviour.Properties blockProperties,
+            BiFunction<Block, Item.Properties, ? extends Item> itemFactory,
+            Item.Properties itemProperties
+    ) {
+        return this.blockItem(name, Block::new, blockProperties, itemFactory, itemProperties);
+    }
+
+    /**
+     * @param name the name of the block and item
+     * @param blockFactory the factory to instantiate the block given its properties
+     * @param blockProperties the properties of the block
+     * @param itemProperties the properties of the item
+     * @return the block item holder containing the registered block, item, and their ids
+     */
+    default BlockItemHolder blockItem(
+            String name,
+            Function<BlockBehaviour.Properties, ? extends Block> blockFactory,
+            BlockBehaviour.Properties blockProperties,
+            Item.Properties itemProperties
+    ) {
+        return this.blockItem(name, blockFactory, blockProperties, BlockItem::new, itemProperties);
+    }
+
+    /**
+     * @param name the name of the block and item
+     * @param blockProperties the properties of the block
+     * @param itemProperties the properties of the item
+     * @return the block item holder containing the registered block, item, and their ids
+     */
+    default BlockItemHolder blockItem(
+            String name,
+            BlockBehaviour.Properties blockProperties,
+            Item.Properties itemProperties
+    ) {
+        return this.blockItem(name, Block::new, blockProperties, itemProperties);
+    }
+
+    /**
+     * @param name the name of the block and item
+     * @param blockFactory the factory to instantiate the block given its properties
+     * @param blockProperties the properties of the block
+     * @return the block item holder containing the registered block, item, and their ids
+     */
+    default BlockItemHolder blockItem(
+            String name,
+            Function<BlockBehaviour.Properties, ? extends Block> blockFactory,
+            BlockBehaviour.Properties blockProperties
+    ) {
+        return this.blockItem(name, blockFactory, blockProperties, new Item.Properties());
+    }
+
+    /**
+     * @param name the name of the block and item
+     * @param blockProperties the properties of the block
+     * @return the block item holder containing the registered block, item, and their ids
+     */
+    default BlockItemHolder blockItem(
+            String name,
+            BlockBehaviour.Properties blockProperties
+    ) {
+        return this.blockItem(name, Block::new, blockProperties);
     }
 
     /**
@@ -450,11 +479,13 @@ public interface RegistryHelper {
      * to create a builder.
      * @param name the name of the entity type
      * @param builder the entity type builder
-     * @return the built and registered entity type
+     * @return the entity type holder containing the built and registered entity type and its id
      * @param <T> the type of the entity
      */
-    default <T extends Entity> EntityType<T> entity(String name, EntityType.Builder<T> builder) {
-        return this.register(BuiltInRegistries.ENTITY_TYPE, name, builder.build(this.key(Registries.ENTITY_TYPE, name)));
+    default <T extends Entity> EntityTypeHolder<T> entity(String name, EntityType.Builder<T> builder) {
+        ResourceKey<EntityType<?>> id = this.key(Registries.ENTITY_TYPE, name);
+        EntityType<T> type = this.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(id));
+        return new EntityTypeHolder<>(type, id);
     }
 
     /**
@@ -463,11 +494,13 @@ public interface RegistryHelper {
      * to create a builder.
      * @param name the name of the block entity type
      * @param builder the block entity type builder
-     * @return the built and registered block entity type
+     * @return the block entity type holder containing the built and registered block entity type and its id
      * @param <T> the type of the block entity
      */
-    default <T extends BlockEntity> BlockEntityType<T> blockEntity(String name, FabricBlockEntityTypeBuilder<T> builder) {
-        return this.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, name, builder.build());
+    default <T extends BlockEntity> BlockEntityTypeHolder<T> blockEntity(String name, FabricBlockEntityTypeBuilder<T> builder) {
+        ResourceKey<BlockEntityType<?>> id = this.key(Registries.BLOCK_ENTITY_TYPE, name);
+        BlockEntityType<T> type = this.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, id, builder.build());
+        return new BlockEntityTypeHolder<>(type, id);
     }
 
     /**
@@ -1071,10 +1104,12 @@ public interface RegistryHelper {
     /**
      * Registers a {@link VillagerType} with namespaced {@code name} as its name.
      * @param name the name of the villager type
-     * @return the registered villager type
+     * @return the registered villager type key
      */
-    default VillagerType villagerType(String name) {
-        return this.register(BuiltInRegistries.VILLAGER_TYPE, name, new VillagerType());
+    default ResourceKey<VillagerType> villagerType(String name) {
+        ResourceKey<VillagerType> key = this.key(Registries.VILLAGER_TYPE, name);
+        this.register(BuiltInRegistries.VILLAGER_TYPE, key, new VillagerType());
+        return key;
     }
 
     /**
@@ -1305,13 +1340,23 @@ public interface RegistryHelper {
     }
 
     /**
-     * @param name the name of the loot number provider
-     * @param codec the codec of the loot number provider
-     * @return the registered loot number provider codec
-     * @param <T> the type of loot number provider
+     * @param name the name of the context float provider
+     * @param codec the codec of the context float provider
+     * @return the registered context float provider codec
+     * @param <T> the type of context float provider
      */
-    default <T extends NumberProvider> MapCodec<T> lootNumberProvider(String name, MapCodec<T> codec) {
-        return this.register(BuiltInRegistries.LOOT_NUMBER_PROVIDER_TYPE, name, codec);
+    default <T extends ContextFloatProvider> MapCodec<T> contextFloatProvider(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.CONTEXT_FLOAT_PROVIDER_TYPE, name, codec);
+    }
+
+    /**
+     * @param name the name of the context int provider
+     * @param codec the codec of the context int provider
+     * @return the registered context int provider codec
+     * @param <T> the type of context int provider
+     */
+    default <T extends ContextIntProvider> MapCodec<T> contextIntProvider(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.CONTEXT_INT_PROVIDER_TYPE, name, codec);
     }
 
     /**
@@ -1394,35 +1439,23 @@ public interface RegistryHelper {
     }
 
     /**
-     * @param name the name of the carver
-     * @param carver the carver to register
-     * @return the registered carver
-     * @param <T> the type of the carver config
-     * @param <C> the type of the carver
+     * @param name the name of the carver type
+     * @param codec the codec of the carver
+     * @return the registered carver type codec
+     * @param <T> the type of the carver
      */
-    default <T extends CarverConfiguration, C extends WorldCarver<T>> C carver(String name, C carver) {
-        return this.register(BuiltInRegistries.CARVER, name, carver);
+    default <T extends WorldCarver> MapCodec<T> carver(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.CARVER_TYPE, name, codec);
     }
 
     /**
-     * @param name the name of the feature
-     * @param feature the feature to register
-     * @return the registered feature
-     * @param <T> the type of the feature config
-     * @param <F> the type of the feature
+     * @param name the name of the feature type
+     * @param codec the codec of the feature
+     * @return the registered feature type codec
+     * @param <T> the type of feature
      */
-    default <T extends FeatureConfiguration, F extends Feature<T>> F feature(String name, F feature) {
-        return this.register(BuiltInRegistries.FEATURE, name, feature);
-    }
-
-    /**
-     * @param name the name of the structure placement type
-     * @param type the structure placement type to register
-     * @return the registered structure placement type
-     * @param <T> the type of structure placement
-     */
-    default <T extends StructurePlacement> StructurePlacementType<T> structurePlacement(String name, StructurePlacementType<T> type) {
-        return this.register(BuiltInRegistries.STRUCTURE_PLACEMENT, name, type);
+    default <T extends Feature> MapCodec<T> feature(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.FEATURE_TYPE, name, codec);
     }
 
     /**
@@ -1431,8 +1464,8 @@ public interface RegistryHelper {
      * @return the registered structure placement type
      * @param <T> the type of structure placement
      */
-    default <T extends StructurePlacement> StructurePlacementType<T> structurePlacement(String name, MapCodec<T> codec) {
-        return this.structurePlacement(name, () -> codec);
+    default <T extends StructurePlacement> MapCodec<T> structurePlacement(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.STRUCTURE_PLACEMENT, name, codec);
     }
 
     /**
@@ -1489,42 +1522,22 @@ public interface RegistryHelper {
 
     /**
      * @param name the name of the placement modifier type
-     * @param type the placement modifier type to register
-     * @return the registered placement modifier type
+     * @param codec the codec of the placement modifier
+     * @return the registered placement modifier type codec
      * @param <T> the type of placement modifier
      */
-    default <T extends PlacementModifier> PlacementModifierType<T> placementModifier(String name, PlacementModifierType<T> type) {
-        return this.register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, name, type);
-    }
-
-    /**
-     * @param name the name of the placement modifier type
-     * @param codec the codec of the placemenet modifier
-     * @return the registered placement modifier type
-     * @param <T> the type of placement modifier
-     */
-    default <T extends PlacementModifier> PlacementModifierType<T> placementModifier(String name, MapCodec<T> codec) {
-        return this.placementModifier(name, () -> codec);
+    default <T extends PlacementModifier> MapCodec<T> placementModifier(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.PLACEMENT_MODIFIER_TYPE, name, codec);
     }
 
     /**
      * @param name the name of the block state provider type
-     * @param type the block state provider type to register
-     * @return the registered block state provider type
+     * @param codec the codec of the block state provider type
+     * @return the registered block state provider type codec
      * @param <T> the type of block state provider
      */
-    default <T extends BlockStateProvider> BlockStateProviderType<T> blockStateProvider(String name, BlockStateProviderType<T> type) {
-        return this.register(BuiltInRegistries.BLOCKSTATE_PROVIDER_TYPE, name, type);
-    }
-
-    /**
-     * @param name the name of the block state provider type
-     * @param codec the codec of the block state provider
-     * @return the registered block state provider type
-     * @param <T> the type of block state provider
-     */
-    default <T extends BlockStateProvider> BlockStateProviderType<T> blockStateProvider(String name, MapCodec<T> codec) {
-        return this.blockStateProvider(name, new BlockStateProviderType<>(codec));
+    default <T extends BlockStateProvider> MapCodec<T> blockStateProvider(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.BLOCK_STATE_PROVIDER_TYPE, name, codec);
     }
 
     /**
@@ -1653,8 +1666,8 @@ public interface RegistryHelper {
      * @return the registered material condition codec
      * @param <T> the type of material condition
      */
-    default <T extends SurfaceRules.ConditionSource> MapCodec<T> materialCondition(String name, MapCodec<T> codec) {
-        return this.register(BuiltInRegistries.MATERIAL_CONDITION, name, codec);
+    default <T extends MaterialCondition> MapCodec<T> materialCondition(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.MATERIAL_CONDITION_TYPE, name, codec);
     }
 
     /**
@@ -1663,8 +1676,8 @@ public interface RegistryHelper {
      * @return the registered material rule codec
      * @param <T> the type of material rule
      */
-    default <T extends SurfaceRules.RuleSource> MapCodec<T> materialRule(String name, MapCodec<T> codec) {
-        return this.register(BuiltInRegistries.MATERIAL_RULE, name, codec);
+    default <T extends MaterialRule> MapCodec<T> materialRule(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.MATERIAL_RULE_TYPE, name, codec);
     }
 
     /**
@@ -1675,16 +1688,6 @@ public interface RegistryHelper {
      */
     default <T extends DensityFunction> MapCodec<T> densityFunction(String name, MapCodec<T> codec) {
         return this.register(BuiltInRegistries.DENSITY_FUNCTION_TYPE, name, codec);
-    }
-
-    /**
-     * @param name the name of the block type
-     * @param codec the codec of the block type
-     * @return the registered block type codec
-     * @param <T> the type of block type
-     */
-    default <T extends Block> MapCodec<T> blockType(String name, MapCodec<T> codec) {
-        return this.register(BuiltInRegistries.BLOCK_TYPE, name, codec);
     }
 
     /**
@@ -1725,24 +1728,6 @@ public interface RegistryHelper {
      */
     default <T extends PoolAliasBinding> MapCodec<T> poolAliasBinding(String name, MapCodec<T> codec) {
         return this.register(BuiltInRegistries.POOL_ALIAS_BINDING_TYPE, name, codec);
-    }
-
-    /**
-     * @param name the name of the decorated pot pattern
-     * @param pattern the decorated pot pattern to register
-     * @return the registered decorated pot pattern
-     */
-    default DecoratedPotPattern decoratedPotPattern(String name, DecoratedPotPattern pattern) {
-        return this.register(BuiltInRegistries.DECORATED_POT_PATTERN, name, pattern);
-    }
-
-    /**
-     * Registers a {@link DecoratedPotPattern} using {@code name} as the pattern's asset id.
-     * @param name the name of the decorated pot pattern
-     * @return the registered decorated pot pattern
-     */
-    default DecoratedPotPattern decoratedPotPattern(String name) {
-        return this.decoratedPotPattern(name, new DecoratedPotPattern(this.id(name)));
     }
 
     /**
@@ -1796,29 +1781,14 @@ public interface RegistryHelper {
     }
 
     /**
-     * Registers a {@link MapDecorationType} wrapped in a {@link Holder.Reference}.
-     * {@code name} is used as the map decoration type's asset id.
-     * @param name the name of the map decoration type
-     * @param showOnItemFrame {@code true} for showing the map decoration on item frames
-     * @param mapColor the color of the map decoration in RGB format
-     * @param explorationMapElement {@code true} disallows the map from being expanded in a cartography table
-     * @param trackCount {@code true} for tracking the amount of this map decoration on a map
-     * @return the registered map decoration type
-     */
-    default Holder.Reference<MapDecorationType> mapDecoration(String name, boolean showOnItemFrame, int mapColor, boolean explorationMapElement, boolean trackCount) {
-        return this.mapDecoration(name, new MapDecorationType(this.id(name), showOnItemFrame, mapColor, explorationMapElement, trackCount));
-    }
-
-    /**
-     * Registers a {@link MapDecorationType} wrapped in a {@link Holder.Reference}.
-     * {@code mapColor} is defaulted to white and {@code explorationMapElement} is defaulted to {@code false}.
+     * Registers a {@link MapDecorationType} wrapped in a {@link Holder.Reference}
      * @param name the name of the map decoration type
      * @param showOnItemFrame {@code true} for showing the map decoration on item frames
      * @param trackCount {@code true} for tracking the amount of this map decoration on a map
      * @return the registered map decoration type
      */
     default Holder.Reference<MapDecorationType> mapDecoration(String name, boolean showOnItemFrame, boolean trackCount) {
-        return this.mapDecoration(name, showOnItemFrame, -1, false, trackCount);
+        return this.mapDecoration(name, new MapDecorationType(this.id(name), showOnItemFrame, trackCount));
     }
 
     /**
@@ -2121,6 +2091,27 @@ public interface RegistryHelper {
     }
 
     /**
+     * @param name the name of the tooltip image
+     * @param codec the codec of the tooltip image
+     * @param streamCodec the stream codec of the tooltip image
+     * @return the registered tooltip image synced codec
+     * @param <T> the type of tooltip image
+     */
+    default <T extends TooltipImage> SyncedCodec<T> tooltipImage(String name, MapCodec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
+        return this.tooltipImage(name, new SyncedCodec<>(codec, streamCodec));
+    }
+
+    /**
+     * @param name the name of the tooltip image
+     * @param type the synced codec of the tooltip image
+     * @return the registered tooltip image synced codec
+     * @param <T> the type of tooltip image
+     */
+    default <T extends TooltipImage> SyncedCodec<T> tooltipImage(String name, SyncedCodec<T> type) {
+        return this.register(ZineBuiltinRegistries.TOOLTIP_IMAGE, name, type);
+    }
+
+    /**
      * @param name the name of the entity data serializer
      * @param trackedDataHandler the entity data serializer to register
      * @return the registered entity data serializer
@@ -2215,10 +2206,5 @@ public interface RegistryHelper {
         CustomIngredientSerializer<T> serializer = new CustomIngredientSerializerImpl<>(this.id(name), codec, streamCodec);
         CustomIngredientSerializer.register(serializer);
         return serializer;
-    }
-
-    private <T extends Block> T registerBlockItem(String name, T block) {
-        Item.BY_BLOCK.put(block, this.item(name, block));
-        return block;
     }
 }

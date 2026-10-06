@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(NbtPredicate.class)
 public abstract class NbtPredicateMixin implements ZineNbtPredicate {
-
     @Shadow @Final @Mutable
     private CompoundTag tag;
 

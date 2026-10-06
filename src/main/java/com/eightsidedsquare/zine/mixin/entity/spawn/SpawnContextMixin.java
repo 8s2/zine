@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(SpawnContext.class)
 public abstract class SpawnContextMixin implements ZineSpawnContext {
-
     @Unique
     private EntitySpawnReason spawnReason = EntitySpawnReason.NATURAL;
 

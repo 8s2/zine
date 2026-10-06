@@ -28,7 +28,6 @@ import java.util.Map;
 
 @Mixin(ModelBakery.class)
 public abstract class ModelBakeryMixin implements ZineMappableModelHolder {
-
     @Unique
     private Map<Identifier, MappableModel.Unbaked> mappableModels;
     @Unique

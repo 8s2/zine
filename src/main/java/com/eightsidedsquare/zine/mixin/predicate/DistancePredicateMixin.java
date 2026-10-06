@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(DistancePredicate.class)
 public abstract class DistancePredicateMixin implements ZineDistancePredicate {
-
     @Shadow @Final @Mutable
     private MinMaxBounds.Doubles x;
 

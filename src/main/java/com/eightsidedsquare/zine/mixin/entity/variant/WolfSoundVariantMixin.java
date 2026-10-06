@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(WolfSoundVariant.class)
 public abstract class WolfSoundVariantMixin implements ZineAgeableMobSoundVariant<WolfSoundVariant.WolfSoundSet> {
-
     @Shadow @Final @Mutable
     private WolfSoundVariant.WolfSoundSet adultSounds;
 

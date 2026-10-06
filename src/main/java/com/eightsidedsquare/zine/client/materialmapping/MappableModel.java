@@ -79,7 +79,7 @@ public interface MappableModel {
                                         material,
                                         material.sprite().transparency(),
                                         face.tintIndex(),
-                                        element.shade(),
+                                        element.shadeDirectionOverride(),
                                         element.lightEmission()
                                 ),
                                 facing,

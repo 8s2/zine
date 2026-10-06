@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ModelBaker.class)
 public interface ModelBakerMixin extends ZineModelBaker {
-
     @Shadow
     MaterialBaker materials();
 

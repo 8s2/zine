@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class ConnectedBlockStateModel implements BlockStateModel {
-
     private final Mesh[] meshes;
     private final Material.Baked particleMaterial;
     private final EnumMap<Direction, ConnectedPatternCalculator> calculators = new EnumMap<>(Direction.class);
@@ -71,7 +70,6 @@ public class ConnectedBlockStateModel implements BlockStateModel {
     }
 
     public record Unbaked(Identifier baseTexture, boolean fancy) implements CustomMeshUnbakedBlockStateModel {
-
         public static final MapCodec<Unbaked> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 Identifier.CODEC.fieldOf("base_texture").forGetter(Unbaked::baseTexture),
                 Codec.BOOL.fieldOf("fancy").forGetter(Unbaked::fancy)
@@ -116,5 +114,4 @@ public class ConnectedBlockStateModel implements BlockStateModel {
             }
         }
     }
-
 }

@@ -16,10 +16,8 @@ import java.util.List;
 
 @Mixin(GuiGraphicsExtractor.class)
 public abstract class GuiGraphicsExtractorMixin {
-
     @Inject(method = "tooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/ClientTooltipComponent;getWidth(Lnet/minecraft/client/gui/Font;)I"))
-    private void zine$cacheTooltipDimensions(Font font, List<ClientTooltipComponent> components, int x, int y, ClientTooltipPositioner positioner, @Nullable Identifier texture, CallbackInfo ci, @Local(name = "line") ClientTooltipComponent component) {
+    private void zine$cacheTooltipDimensions(Font font, List<ClientTooltipComponent> lines, int xo, int yo, ClientTooltipPositioner positioner, @Nullable Identifier style, boolean extraSpaceAfterFirstLine, CallbackInfo ci, @Local(name = "line") ClientTooltipComponent component) {
         component.zine$cacheDimensions(font);
     }
-
 }

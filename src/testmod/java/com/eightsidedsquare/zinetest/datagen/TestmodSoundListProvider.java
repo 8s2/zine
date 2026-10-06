@@ -5,7 +5,6 @@ import com.eightsidedsquare.zine.data.sound.SoundListProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 
 public class TestmodSoundListProvider extends SoundListProvider {
-
     public TestmodSoundListProvider(FabricPackOutput output) {
         super(output);
     }

@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ConditionalItemModel.Unbaked.class)
 public abstract class UnbakedConditionItemModelMixin implements ZineUnbakedConditionalItemModel {
-
     @Shadow @Final @Mutable
     private ConditionalItemModelProperty property;
     @Shadow @Final @Mutable

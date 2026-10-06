@@ -13,7 +13,6 @@ import java.util.List;
 
 @Mixin(SelectItemModel.UnbakedSwitch.class)
 public abstract class SelectItemModelUnbakedSwitchMixin<P extends SelectItemModelProperty<T>, T> implements ZineSelectItemModelUnbakedSwitch<P, T> {
-
     @Shadow @Final @Mutable
     private P property;
 

@@ -1,19 +1,13 @@
 package com.eightsidedsquare.zinetest.core;
 
+import com.eightsidedsquare.zine.common.registry.holder.ItemHolder;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.SmithingTemplateItem;
 
 public interface TestmodItems {
-    Item TOURMALINE = Testmod.REGISTRY.item("tourmaline", new Item.Properties().trimMaterial(Testmod.TOURMALINE_TRIM_MATERIAL).zine$nameColor(0x22ff66));
-    Item CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE = Testmod.REGISTRY.item("checkered_armor_trim_smithing_template", new Item.Properties(), SmithingTemplateItem::createArmorTrimTemplate);
-
-    Item TOURMALINE_BLOCK = TestmodBlocks.TOURMALINE_BLOCK.asItem();
-    Item WOOD = TestmodBlocks.WOOD.asItem();
-    Item RAINBOW = TestmodBlocks.RAINBOW.asItem();
-    Item BIG_DIAMOND = TestmodBlocks.BIG_DIAMOND.asItem();
+    ItemHolder TOURMALINE = Testmod.REGISTRY.item("tourmaline", new Item.Properties().trimMaterial(Testmod.TOURMALINE_TRIM_MATERIAL).zine$nameColor(0x22ff66));
+    ItemHolder CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE = Testmod.REGISTRY.item("checkered_armor_trim_smithing_template", SmithingTemplateItem::createArmorTrimTemplate, new Item.Properties());
 
     static void init() {
-
     }
-
 }

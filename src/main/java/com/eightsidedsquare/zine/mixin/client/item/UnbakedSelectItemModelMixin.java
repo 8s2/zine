@@ -13,7 +13,6 @@ import java.util.function.Consumer;
 
 @Mixin(SelectItemModel.Unbaked.class)
 public abstract class UnbakedSelectItemModelMixin implements ZineUnbakedSelectItemModel {
-
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Shadow @Final @Mutable
     private Optional<net.minecraft.client.renderer.item.ItemModel.Unbaked> fallback;

@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Mixin(EntityEquipmentPredicate.class)
 public abstract class EntityEquipmentPredicateMixin implements ZineEntityEquipmentPredicate {
-
     @Shadow @Final @Mutable
     private Optional<ItemPredicate> head;
 

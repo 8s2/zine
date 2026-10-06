@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(TeamColor.class)
 public abstract class TeamColorMixin implements ZineTeamColor {
-
     @Shadow @Final @Mutable
     private int defaultColor;
 

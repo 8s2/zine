@@ -16,7 +16,6 @@ import java.util.Optional;
 
 @Mixin(RangeSelectItemModel.Unbaked.class)
 public abstract class UnbakedRangeSelectItemModelMixin implements ZineUnbakedRangeSelectItemModel {
-
     @Shadow @Final @Mutable
     private RangeSelectItemModelProperty property;
     @Shadow @Final @Mutable
@@ -24,7 +23,7 @@ public abstract class UnbakedRangeSelectItemModelMixin implements ZineUnbakedRan
     @Shadow @Final @Mutable
     private List<RangeSelectItemModel.Entry> entries;
     @Shadow @Final @Mutable
-    private Optional<net.minecraft.client.renderer.item.ItemModel.Unbaked> fallback;
+    private Optional<ItemModel.Unbaked> fallback;
 
     @Override
     public void zine$setProperty(RangeSelectItemModelProperty property) {

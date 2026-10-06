@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ModelAndTexture.class)
 public abstract class ModelAndTextureMixin<T> implements ZineModelAndTexture<T> {
-
     @Shadow @Final @Mutable
     private T model;
 

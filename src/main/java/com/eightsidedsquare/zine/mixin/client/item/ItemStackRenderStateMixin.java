@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(ItemStackRenderState.class)
 public abstract class ItemStackRenderStateMixin implements ZineItemStackRenderState {
-
     @Shadow private ItemStackRenderState.LayerRenderState[] layers;
 
     @Shadow private int activeLayerCount;

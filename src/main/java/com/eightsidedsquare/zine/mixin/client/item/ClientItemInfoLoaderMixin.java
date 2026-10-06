@@ -15,7 +15,6 @@ import java.util.Map;
 
 @Mixin(ClientItemInfoLoader.class)
 public abstract class ClientItemInfoLoaderMixin {
-
     @Inject(method = "lambda$scheduleLoad$6", at = @At(value = "INVOKE", target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"))
     private static void zine$modifyUnbakedItemModels(List<ClientItemInfoLoader.PendingLoad> definitions, CallbackInfoReturnable<ClientItemInfoLoader.LoadedClientInfos> cir, @Local(name = "load") ClientItemInfoLoader.PendingLoad load) {
         ClientItem itemAsset = load.clientItemInfo();
@@ -29,5 +28,4 @@ public abstract class ClientItemInfoLoaderMixin {
     private static void zine$addUnbakedItemModels(List<ClientItemInfoLoader.PendingLoad> definitions, CallbackInfoReturnable<ClientItemInfoLoader.LoadedClientInfos> cir, @Local(name = "resultMap") Map<Identifier, ClientItem> resultMap) {
         ItemModelEvents.ADD_UNBAKED.invoker().addUnbakedModels(resultMap::put);
     }
-
 }

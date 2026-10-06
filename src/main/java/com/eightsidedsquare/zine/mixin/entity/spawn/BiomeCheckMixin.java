@@ -18,7 +18,6 @@ import java.util.function.Function;
 
 @Mixin(BiomeCheck.class)
 public abstract class BiomeCheckMixin implements ZineBiomeCheck {
-
     @Shadow @Final @Mutable
     private HolderSet<Biome> requiredBiomes;
 

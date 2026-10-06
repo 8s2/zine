@@ -22,7 +22,6 @@ import java.util.function.Function;
 
 @Mixin(LocationPredicate.class)
 public abstract class LocationPredicateMixin implements ZineLocationPredicate {
-
     @Shadow @Final @Mutable
     private Optional<LocationPredicate.PositionPredicate> position;
 

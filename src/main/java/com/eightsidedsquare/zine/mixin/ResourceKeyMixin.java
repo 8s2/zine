@@ -1,6 +1,7 @@
 package com.eightsidedsquare.zine.mixin;
 
 import com.eightsidedsquare.zine.common.registry.ZineResourceKey;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
@@ -24,5 +25,10 @@ public abstract class ResourceKeyMixin<T> implements ZineResourceKey<T> {
     @Override
     public MutableComponent zine$getName() {
         return Component.translatable(this.zine$getTranslationKey());
+    }
+
+    @Override
+    public <U> ResourceKey<U> zine$withRegistry(ResourceKey<? extends Registry<U>> registry) {
+        return ResourceKey.create(registry, this.identifier);
     }
 }

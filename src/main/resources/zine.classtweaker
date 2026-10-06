@@ -1,7 +1,4 @@
 classTweaker v1 official
-transitive-inject-interface	net/minecraft/advancements/Advancement com/eightsidedsquare/zine/common/advancement/ZineAdvancement
-transitive-inject-interface	net/minecraft/advancements/AdvancementRewards com/eightsidedsquare/zine/common/advancement/ZineAdvancementRewards
-transitive-inject-interface	net/minecraft/advancements/DisplayInfo com/eightsidedsquare/zine/common/advancement/ZineDisplayInfo
 transitive-inject-interface	net/minecraft/client/Minecraft com/eightsidedsquare/zine/client/util/ZineMinecraft
 transitive-inject-interface	com/mojang/blaze3d/platform/NativeImage com/eightsidedsquare/zine/client/atlas/ZineNativeImage
 transitive-inject-interface	net/minecraft/world/item/Item com/eightsidedsquare/zine/common/item/ZineItem
@@ -29,8 +26,8 @@ transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templat
 transitive-inject-interface	net/minecraft/advancements/predicates/BlockPredicate com/eightsidedsquare/zine/common/predicate/ZineBlockPredicate
 transitive-inject-interface	net/minecraft/advancements/predicates/FluidPredicate com/eightsidedsquare/zine/common/predicate/ZineFluidPredicate
 transitive-inject-interface	net/minecraft/advancements/predicates/LightPredicate com/eightsidedsquare/zine/common/predicate/ZineLightPredicate
+transitive-inject-interface	net/minecraft/world/level/storage/loot/predicates/LootItemCondition com/eightsidedsquare/zine/common/predicate/ZineLootItemCondition
 transitive-inject-interface	net/minecraft/network/chat/MutableComponent com/eightsidedsquare/zine/common/text/ZineMutableComponent
-transitive-inject-interface	net/minecraft/advancements/predicates/ContextAwarePredicate com/eightsidedsquare/zine/common/predicate/ZineContextAwarePredicate
 transitive-inject-interface	net/minecraft/resources/ResourceKey com/eightsidedsquare/zine/common/registry/ZineResourceKey<TT;>
 transitive-inject-interface	net/minecraft/util/FormattedCharSequence com/eightsidedsquare/zine/common/text/ZineFormattedCharSequence
 transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templatesystem/StructureProcessorList com/eightsidedsquare/zine/common/level/structure/ZineStructureProcessorList
@@ -39,7 +36,6 @@ transitive-inject-interface	net/minecraft/world/entity/animal/feline/CatVariant 
 transitive-inject-interface	net/minecraft/world/entity/animal/frog/FrogVariant com/eightsidedsquare/zine/common/entity/variant/ZineFrogVariant
 transitive-inject-interface	net/minecraft/client/resources/model/ModelBaker com/eightsidedsquare/zine/client/model/ZineModelBaker
 transitive-inject-interface	net/minecraft/client/renderer/texture/atlas/sources/PalettedPermutations com/eightsidedsquare/zine/client/atlas/ZinePalettedPermutations
-transitive-inject-interface	net/minecraft/advancements/AdvancementRequirements com/eightsidedsquare/zine/common/advancement/ZineAdvancementRequirements
 transitive-inject-interface	net/minecraft/core/component/DataComponentMap$Builder com/eightsidedsquare/zine/common/util/ZineDataComponentMapBuilder
 transitive-inject-interface	net/minecraft/core/component/DataComponentExactPredicate com/eightsidedsquare/zine/common/predicate/ZineDataComponentExactPredicate
 transitive-inject-interface	net/minecraft/world/entity/animal/wolf/WolfVariant com/eightsidedsquare/zine/common/entity/variant/ZineWolfVariant
@@ -54,7 +50,6 @@ transitive-inject-interface	net/minecraft/client/color/item/CustomModelDataSourc
 transitive-inject-interface	net/minecraft/client/color/item/Dye com/eightsidedsquare/zine/client/item/tint/ZineDye
 transitive-inject-interface	net/minecraft/client/color/item/Firework com/eightsidedsquare/zine/client/item/tint/ZineFirework
 transitive-inject-interface	net/minecraft/client/color/item/GrassColorSource com/eightsidedsquare/zine/client/item/tint/ZineGrassColorSource
-transitive-inject-interface	net/minecraft/client/color/item/MapColor com/eightsidedsquare/zine/client/item/tint/ZineMapColor
 transitive-inject-interface	net/minecraft/client/color/item/Potion com/eightsidedsquare/zine/client/item/tint/ZinePotion
 transitive-inject-interface	net/minecraft/client/renderer/item/CuboidItemModelWrapper$Unbaked com/eightsidedsquare/zine/client/item/ZineUnbakedCuboidItemModelWrapper
 transitive-inject-interface	net/minecraft/client/renderer/item/CompositeModel$Unbaked com/eightsidedsquare/zine/client/item/ZineUnbakedCompositeModel
@@ -90,6 +85,7 @@ transitive-inject-interface	net/minecraft/client/resources/model/ResolvableModel
 transitive-inject-interface net/minecraft/world/level/block/state/BlockBehaviour com/eightsidedsquare/zine/common/block/ZineBlockBehaviour
 transitive-inject-interface net/minecraft/world/level/block/state/BlockBehaviour$BlockStateBase com/eightsidedsquare/zine/common/block/ZineBlockBehaviour$ZineBlockStateBase
 transitive-inject-interface net/minecraft/world/level/block/entity/BlockEntity com/eightsidedsquare/zine/common/block/entity/ZineBlockEntity
+transitive-inject-interface net/minecraft/data/tags/TagAppender com/eightsidedsquare/zine/data/tags/ZineTagAppender<TT;>
 accessible class net/minecraft/client/resources/model/ClientItemInfoLoader$PendingLoad
 accessible field net/minecraft/client/renderer/item/ClientItem model Lnet/minecraft/client/renderer/item/ItemModel$Unbaked;
 mutable field net/minecraft/client/renderer/item/ClientItem model Lnet/minecraft/client/renderer/item/ItemModel$Unbaked;
@@ -138,3 +134,6 @@ accessible method net/minecraft/client/resources/model/cuboid/ItemModelGenerator
 accessible method net/minecraft/client/resources/model/cuboid/FaceBakery defaultFaceUV (Lorg/joml/Vector3fc;Lorg/joml/Vector3fc;Lnet/minecraft/core/Direction;)Lnet/minecraft/client/resources/model/cuboid/CuboidFace$UVs;
 accessible class net/minecraft/client/renderer/feature/TextFeatureRenderer$GlyphRenderer
 accessible field net/minecraft/client/renderer/feature/TextFeatureRenderer$GlyphRenderer displayMode Lnet/minecraft/client/gui/Font$DisplayMode;
+accessible field net/minecraft/client/resources/model/EquipmentClientInfo$Builder layersByType Ljava/util/Map;
+accessible field net/minecraft/client/resources/model/EquipmentClientInfo$Builder trimOverrides Lcom/google/common/collect/ImmutableList$Builder;
+accessible field net/minecraft/world/level/levelgen/RandomState router Lnet/minecraft/world/level/levelgen/NoiseRouter;

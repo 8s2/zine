@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.concurrent.CompletableFuture;
 
 public class TestmodMaterialMappingProvider extends MaterialMappingProvider {
-
     public TestmodMaterialMappingProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registriesFuture) {
         super(output, registriesFuture);
     }

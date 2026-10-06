@@ -15,10 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BakedSheetGlyph.class)
 public abstract class BakedSheetGlyphMixin {
-
     @Mixin(BakedSheetGlyph.GlyphInstance.class)
     public static abstract class GlyphInstanceMixin {
-
         @Shadow
         @Final
         @Mutable
@@ -44,5 +42,4 @@ public abstract class BakedSheetGlyphMixin {
             return original.call(instance, layerType);
         }
     }
-
 }

@@ -1,6 +1,7 @@
 package com.eightsidedsquare.zine.mixin.item;
 
 import com.eightsidedsquare.zine.common.item.ZineItemProperties;
+import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
 import com.eightsidedsquare.zine.core.ZineDataComponents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentInitializers;
@@ -31,7 +32,6 @@ import java.util.List;
 
 @Mixin(Item.Properties.class)
 public abstract class ItemPropertiesMixin implements ZineItemProperties {
-
     @Unique
     @Nullable
     private ArmorType armorType;
@@ -117,6 +117,11 @@ public abstract class ItemPropertiesMixin implements ZineItemProperties {
     @Override
     public Item.Properties zine$lore(List<Component> lines) {
         return this.component(DataComponents.LORE, new ItemLore(lines));
+    }
+
+    @Override
+    public Item.Properties zine$tooltipImage(TooltipImage image) {
+        return this.component(ZineDataComponents.TOOLTIP_IMAGE, image);
     }
 
     @Override

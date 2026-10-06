@@ -61,7 +61,7 @@ public abstract class PalettedPermutationsMixin implements ZinePalettedPermutati
     }
 
     @ModifyExpressionValue(method = "run", at = @At(value = "INVOKE", target = "Lnet/minecraft/resources/Identifier;withSuffix(Ljava/lang/String;)Lnet/minecraft/resources/Identifier;"))
-    private Identifier zine$swapPermutationNamespace(Identifier original, @Local Map.Entry<String, Supplier<IntUnaryOperator>> entry) {
+    private Identifier zine$swapPermutationNamespace(Identifier original, @Local(name = "entry") Map.Entry<String, Supplier<IntUnaryOperator>> entry) {
         String permutation = entry.getKey();
         if(this.namespacedPermutations.contains(permutation)) {
             return Identifier.fromNamespaceAndPath(this.permutations.get(permutation).getNamespace(), original.getPath());

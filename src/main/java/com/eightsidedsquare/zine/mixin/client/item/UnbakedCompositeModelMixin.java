@@ -12,7 +12,6 @@ import java.util.List;
 
 @Mixin(CompositeModel.Unbaked.class)
 public abstract class UnbakedCompositeModelMixin implements ZineUnbakedCompositeModel {
-
     @Shadow @Final @Mutable
     private List<net.minecraft.client.renderer.item.ItemModel.Unbaked> models;
 

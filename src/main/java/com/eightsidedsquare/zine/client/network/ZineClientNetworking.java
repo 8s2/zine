@@ -3,6 +3,7 @@ package com.eightsidedsquare.zine.client.network;
 import com.eightsidedsquare.zine.common.network.ClientboundBlockEntitySyncPayload;
 import com.eightsidedsquare.zine.common.util.codec.DataHelper;
 import com.mojang.logging.LogUtils;
+import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.FriendlyByteBufs;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -22,9 +23,7 @@ public final class ZineClientNetworking {
                 if(dataHelper != null) {
                     ProblemReporter.ScopedCollector reporter = new ProblemReporter.ScopedCollector(blockEntity.problemPath(), LOGGER);
                     try {
-                        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(FriendlyByteBufs.create(), level.registryAccess());
-                        buf.writeBytes(payload.data());
-                        dataHelper.readUnchecked(buf, blockEntity);
+                        dataHelper.readUnchecked(payload.buf(), blockEntity);
                     } catch (Throwable e) {
                         try {
                             reporter.close();

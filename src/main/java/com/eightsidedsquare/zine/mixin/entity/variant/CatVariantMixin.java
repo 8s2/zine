@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(CatVariant.class)
 public abstract class CatVariantMixin implements ZineCatVariant {
-
     @Shadow @Final @Mutable
     private ClientAsset.ResourceTexture adultAssetInfo;
 

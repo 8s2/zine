@@ -7,7 +7,6 @@ import net.minecraft.client.gui.ItemSlotMouseAction;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
 public interface ItemSlotMouseActionInitializationCallback {
-
     Event<Callback> EVENT = EventFactory.createArrayBacked(
             Callback.class,
             callbacks -> ctx -> {
@@ -18,20 +17,15 @@ public interface ItemSlotMouseActionInitializationCallback {
     );
 
     interface Context {
-
         void accept(ItemSlotMouseAction itemSlotMouseAction);
 
         AbstractContainerScreen<?> screen();
 
         Minecraft client();
-
     }
 
     @FunctionalInterface
     interface Callback {
-
         void addItemSlotMouseActions(Context ctx);
-
     }
-
 }

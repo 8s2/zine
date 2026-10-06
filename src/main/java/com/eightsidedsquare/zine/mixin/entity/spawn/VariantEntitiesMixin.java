@@ -20,10 +20,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(value = {Cat.class, Chicken.class, Cow.class, Frog.class, Pig.class, Wolf.class, ZombieNautilus.class})
 public abstract class VariantEntitiesMixin {
-
     @ModifyExpressionValue(method = "finalizeSpawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/variant/SpawnContext;create(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/entity/variant/SpawnContext;"))
     private SpawnContext zine$configure(SpawnContext ctx, ServerLevelAccessor world, DifficultyInstance difficulty, EntitySpawnReason spawnReason, @Nullable SpawnGroupData entityData) {
         return ZineSpawnContext.of(ctx, spawnReason);
     }
-
 }

@@ -17,7 +17,6 @@ import java.util.Optional;
 
 @Mixin(CuboidItemModelWrapper.Unbaked.class)
 public abstract class UnbakedCuboidItemModelWrapperMixin implements ZineUnbakedCuboidItemModelWrapper {
-
     @Shadow @Final @Mutable
     private Identifier model;
     @Shadow @Final @Mutable

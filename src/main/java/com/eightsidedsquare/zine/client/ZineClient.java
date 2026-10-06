@@ -6,18 +6,22 @@ import com.eightsidedsquare.zine.client.atlas.RemapSpriteSource;
 import com.eightsidedsquare.zine.client.atlas.gradient.Gradient;
 import com.eightsidedsquare.zine.client.block.ConnectedBlockStateModel;
 import com.eightsidedsquare.zine.client.block.TessellatingBlockStateModel;
-import com.eightsidedsquare.zine.client.gui.CompositeTooltipComponent;
+import com.eightsidedsquare.zine.client.gui.ClientCompositeTooltip;
+import com.eightsidedsquare.zine.client.gui.ClientGraphicsTooltip;
 import com.eightsidedsquare.zine.client.gui.TooltipComponentWrapper;
 import com.eightsidedsquare.zine.client.item.ItemModelEvents;
 import com.eightsidedsquare.zine.client.model.ModelEvents;
 import com.eightsidedsquare.zine.client.network.ZineClientNetworking;
 import com.eightsidedsquare.zine.client.registry.ClientRegistryHelper;
 import com.eightsidedsquare.zine.client.trim.ArmorTrimRegistryImpl;
-import com.eightsidedsquare.zine.common.item.tooltip.CompositeTooltipData;
+import com.eightsidedsquare.zine.common.item.tooltip.CompositeTooltip;
+import com.eightsidedsquare.zine.common.item.tooltip.GraphicsTooltip;
+import com.eightsidedsquare.zine.common.item.tooltip.TextTooltip;
 import com.eightsidedsquare.zine.core.ZineMod;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.ClientTooltipComponentCallback;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
 public class ZineClient implements ClientModInitializer {
@@ -44,12 +48,13 @@ public class ZineClient implements ClientModInitializer {
 
     private void registerEvents() {
         AtlasEvents.modifySourcesEvent(Identifier.withDefaultNamespace("items")).register(ArmorTrimRegistryImpl::modifyItemsAtlas);
-        AtlasEvents.modifySourcesEvent(Identifier.withDefaultNamespace("armor_trims")).register(ArmorTrimRegistryImpl::modifyArmorTrimsAtlas);
         ModelEvents.ADD_UNBAKED.register(ArmorTrimRegistryImpl::addUnbakedModels);
         ItemModelEvents.BEFORE_BAKE.register(ArmorTrimRegistryImpl::modifyItemModels);
-        ClientTooltipComponentCallback.EVENT.register(tooltipData -> switch (tooltipData) {
-            case CompositeTooltipData compositeTooltipData -> new CompositeTooltipComponent(compositeTooltipData);
+        ClientTooltipComponentCallback.EVENT.register(tooltipComponent -> switch (tooltipComponent) {
+            case CompositeTooltip compositeTooltip -> new ClientCompositeTooltip(compositeTooltip);
             case TooltipComponentWrapper(ClientTooltipComponent component) -> component;
+            case GraphicsTooltip tooltip -> new ClientGraphicsTooltip(tooltip);
+            case TextTooltip(Component text) -> ClientTooltipComponent.create(text.getVisualOrderText());
             default -> null;
         });
     }

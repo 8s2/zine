@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(MovementPredicate.class)
 public abstract class MovementPredicateMixin implements ZineMovementPredicate {
-
     @Shadow @Final @Mutable
     private MinMaxBounds.Doubles x;
 
@@ -66,5 +65,4 @@ public abstract class MovementPredicateMixin implements ZineMovementPredicate {
     public void zine$setFallDistance(MinMaxBounds.Doubles fallDistance) {
         this.fallDistance = fallDistance;
     }
-
 }

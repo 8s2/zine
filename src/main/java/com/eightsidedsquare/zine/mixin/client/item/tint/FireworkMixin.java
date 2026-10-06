@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Firework.class)
 public abstract class FireworkMixin implements ZineFirework {
-
     @Shadow @Final @Mutable
     private int defaultColor;
 

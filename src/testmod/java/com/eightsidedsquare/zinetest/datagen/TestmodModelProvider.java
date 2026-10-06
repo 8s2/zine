@@ -4,8 +4,8 @@ import com.eightsidedsquare.zine.client.block.BlockStateModels;
 import com.eightsidedsquare.zine.client.data.BlockModelDefinitions;
 import com.eightsidedsquare.zinetest.client.NestBlockStateModel;
 import com.eightsidedsquare.zinetest.client.UnbakedNestItemModel;
-import com.eightsidedsquare.zinetest.core.TestmodBlocks;
 import com.eightsidedsquare.zinetest.core.Testmod;
+import com.eightsidedsquare.zinetest.core.TestmodBlockItems;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -28,34 +28,34 @@ public class TestmodModelProvider extends FabricModelProvider {
     public void generateBlockStateModels(BlockModelGenerators generator) {
         generator.blockStateOutput.accept(
                 BlockModelDefinitions.customVariants(
-                        TestmodBlocks.WOOD,
+                        TestmodBlockItems.WOOD.block(),
                         BlockStateModels.connected(
-                                ModelLocationUtils.getModelLocation(TestmodBlocks.WOOD),
+                                ModelLocationUtils.getModelLocation(TestmodBlockItems.WOOD.block()),
                                 true
                         )
                 )
         );
         generator.blockStateOutput.accept(
                 BlockModelDefinitions.customVariants(
-                        TestmodBlocks.RAINBOW,
+                        TestmodBlockItems.RAINBOW.block(),
                         BlockStateModels.tessellating(
-                                ModelLocationUtils.getModelLocation(TestmodBlocks.RAINBOW),
+                                ModelLocationUtils.getModelLocation(TestmodBlockItems.RAINBOW.block()),
                                 4
                         )
                 )
         );
         generator.blockStateOutput.accept(
                 BlockModelDefinitions.customVariants(
-                        TestmodBlocks.BIG_DIAMOND,
+                        TestmodBlockItems.BIG_DIAMOND.block(),
                         BlockStateModels.tessellating(
-                                ModelLocationUtils.getModelLocation(TestmodBlocks.BIG_DIAMOND),
+                                ModelLocationUtils.getModelLocation(TestmodBlockItems.BIG_DIAMOND.block()),
                                 7
                         )
                 )
         );
         generator.blockStateOutput.accept(
                 BlockModelDefinitions.customVariants(
-                        TestmodBlocks.NEST,
+                        TestmodBlockItems.NEST.block(),
                         new NestBlockStateModel.Unbaked(Testmod.id("nest"))
                 )
         );
@@ -63,7 +63,7 @@ public class TestmodModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerators generator) {
-        generator.itemModelOutput.accept(TestmodBlocks.NEST.asItem(), new UnbakedNestItemModel(
+        generator.itemModelOutput.accept(TestmodBlockItems.NEST.asItem(), new UnbakedNestItemModel(
                 ItemModelGenerator.GENERATED_ITEM_MODEL_ID,
                 Identifier.withDefaultNamespace("item/generated"),
                 Optional.empty(),

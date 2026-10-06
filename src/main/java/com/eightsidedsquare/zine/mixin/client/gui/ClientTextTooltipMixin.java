@@ -11,8 +11,8 @@ import java.util.List;
 
 @Mixin(ClientTextTooltip.class)
 public abstract class ClientTextTooltipMixin implements ClientTooltipComponentMixin {
-
-    @Shadow @Final private FormattedCharSequence text;
+    @Shadow @Final
+    private FormattedCharSequence text;
 
     @Override
     public void zine$appendSearchableText(List<Component> texts) {

@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @Mixin(SpecialModelWrapper.Unbaked.class)
 public abstract class UnbakedSpecialModelWrapperMixin implements ZineUnbakedSpecialModelWrapper {
-
     @Shadow @Final @Mutable
     private Identifier base;
     @Shadow @Final @Mutable

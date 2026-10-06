@@ -7,7 +7,6 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.world.item.equipment.trim.MaterialAssetGroup;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
 
@@ -27,11 +26,11 @@ public class TestmodDatagen implements DataGeneratorEntrypoint {
     public void buildRegistry(RegistrySetBuilder registryBuilder) {
         registryBuilder.add(Registries.TRIM_MATERIAL, registerable -> {
             registerable.register(Testmod.TOURMALINE_TRIM_MATERIAL, new TrimMaterial(
-                    MaterialAssetGroup.create("tourmaline"),
+                    Testmod.TOURMALINE_TRIM_MATERIAL.identifier().withPrefix("trim/"),
                     Component.literal("Tourmaline").withStyle(Style.EMPTY.withColor(0x71f3bb))
             ));
             registerable.register(Testmod.OBSIDIAN_TRIM_MATERIAL, new TrimMaterial(
-                    MaterialAssetGroup.create("obsidian"),
+                    Testmod.OBSIDIAN_TRIM_MATERIAL.identifier().withPrefix("trim/"),
                     Component.literal("Obsidian").withStyle(Style.EMPTY.withColor(0x3b2754))
             ));
         });

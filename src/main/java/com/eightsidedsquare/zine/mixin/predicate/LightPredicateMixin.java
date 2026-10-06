@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(LightPredicate.class)
 public abstract class LightPredicateMixin implements ZineLightPredicate {
-
     @Shadow @Final @Mutable
     private MinMaxBounds.Ints composite;
 

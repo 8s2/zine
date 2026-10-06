@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(GrassColorSource.class)
 public abstract class GrassColorSourceMixin implements ZineGrassColorSource {
-
     @Shadow @Final @Mutable
     private float downfall;
 

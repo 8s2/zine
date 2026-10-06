@@ -1,7 +1,7 @@
 {
-  "asset_name": "tourmaline",
   "description": {
     "color": "#71F3BB",
     "text": "Tourmaline"
-  }
+  },
+  "palette_id": "zinetest:trim/tourmaline"
 }

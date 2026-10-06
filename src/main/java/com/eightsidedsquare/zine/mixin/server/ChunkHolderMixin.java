@@ -34,7 +34,7 @@ public abstract class ChunkHolderMixin {
             this.broadcast(
                     players,
                     new ClientboundCustomPayloadPacket(
-                            new ClientboundBlockEntitySyncPayload(blockPos.immutable(), blockEntity.getType(), buf.array())
+                            new ClientboundBlockEntitySyncPayload(blockPos.immutable(), blockEntity.getType(), buf)
                     )
             );
             ci.cancel();

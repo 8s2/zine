@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(FrogVariant.class)
 public abstract class FrogVariantMixin implements ZineFrogVariant {
-
     @Shadow @Final @Mutable
     private ClientAsset.ResourceTexture assetInfo;
 
@@ -27,5 +26,4 @@ public abstract class FrogVariantMixin implements ZineFrogVariant {
     public void zine$setSpawnConditions(SpawnPrioritySelectors spawnConditions) {
         this.spawnConditions = spawnConditions;
     }
-
 }

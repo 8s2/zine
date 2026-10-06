@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(PigSoundVariant.class)
 public abstract class PigSoundVariantMixin implements ZineAgeableMobSoundVariant<PigSoundVariant.PigSoundSet> {
-
     @Shadow @Final @Mutable
     private PigSoundVariant.PigSoundSet adultSounds;
 
@@ -31,7 +30,6 @@ public abstract class PigSoundVariantMixin implements ZineAgeableMobSoundVariant
 
     @Mixin(PigSoundVariant.PigSoundSet.class)
     public static abstract class PigSoundSetMixin implements ZineSoundSet {
-
         @Shadow @Final @Mutable
         private Holder<SoundEvent> ambientSound;
 

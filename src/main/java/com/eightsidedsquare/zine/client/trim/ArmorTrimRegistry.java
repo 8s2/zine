@@ -53,23 +53,6 @@ public final class ArmorTrimRegistry {
     }
 
     /**
-     * Registers a pattern.
-     * @param key the registry key of the armor trim pattern
-     * @param equipmentTextures a map that supplies the equipment texture given an equipment type
-     */
-    public void registerPattern(ResourceKey<TrimPattern> key, Map<EquipmentClientInfo.LayerType, Identifier> equipmentTextures) {
-        ArmorTrimRegistryImpl.registerPattern(key, equipmentTextures);
-    }
-
-    /**
-     * Registers a pattern with standard naming schemes.
-     * @param key the registry key of the armor trim pattern
-     */
-    public static void registerPattern(ResourceKey<TrimPattern> key) {
-        ArmorTrimRegistryImpl.registerPattern(key);
-    }
-
-    /**
      * @param ids identifiers of item models that should be excluded for item model modification,
      *            in which the trim overlay is added
      */

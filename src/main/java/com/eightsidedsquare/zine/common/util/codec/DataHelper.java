@@ -154,7 +154,6 @@ public interface DataHelper<T> {
     }
 
     interface Builder<T> {
-
         /**
          * Adds a field to the data helper builder.
          * @param codec the codec of the field

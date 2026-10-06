@@ -2,10 +2,15 @@ package com.eightsidedsquare.zine.common.util.network;
 
 import com.google.common.collect.ImmutableList;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import net.minecraft.advancements.predicates.DataComponentMatchers;
+import net.minecraft.advancements.predicates.ItemPredicate;
+import net.minecraft.advancements.predicates.MinMaxBounds;
 import net.minecraft.core.IdMapper;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.TypedDataComponent;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.SkipPacketDecoderException;
@@ -23,8 +28,10 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import org.apache.commons.lang3.mutable.*;
+import org.joml.*;
 import org.jspecify.annotations.Nullable;
 
+import java.lang.Math;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -72,6 +79,141 @@ public final class StreamCodecUtil {
             BoundingBox::maxZ,
             BoundingBox::new
     );
+    public static final StreamCodec<ByteBuf, Vector2fc> VECTOR2F = StreamCodec.composite(
+            ByteBufCodecs.FLOAT,
+            Vector2fc::x,
+            ByteBufCodecs.FLOAT,
+            Vector2fc::y,
+            Vector2f::new
+    );
+    public static final StreamCodec<ByteBuf, Vector4fc> VECTOR4F = StreamCodec.composite(
+            ByteBufCodecs.FLOAT,
+            Vector4fc::x,
+            ByteBufCodecs.FLOAT,
+            Vector4fc::y,
+            ByteBufCodecs.FLOAT,
+            Vector4fc::z,
+            ByteBufCodecs.FLOAT,
+            Vector4fc::w,
+            Vector4f::new
+    );
+    public static final StreamCodec<ByteBuf, Vector2ic> VECTOR2I = StreamCodec.composite(
+            ByteBufCodecs.INT,
+            Vector2ic::x,
+            ByteBufCodecs.INT,
+            Vector2ic::y,
+            Vector2i::new
+    );
+    public static final StreamCodec<ByteBuf, Vector3ic> VECTOR3I = StreamCodec.composite(
+            ByteBufCodecs.INT,
+            Vector3ic::x,
+            ByteBufCodecs.INT,
+            Vector3ic::y,
+            ByteBufCodecs.INT,
+            Vector3ic::z,
+            Vector3i::new
+    );
+    public static final StreamCodec<ByteBuf, Vector4ic> VECTOR4I = StreamCodec.composite(
+            ByteBufCodecs.INT,
+            Vector4ic::x,
+            ByteBufCodecs.INT,
+            Vector4ic::y,
+            ByteBufCodecs.INT,
+            Vector4ic::z,
+            ByteBufCodecs.INT,
+            Vector4ic::w,
+            Vector4i::new
+    );
+    public static final StreamCodec<ByteBuf, Vector2ic> VAR_VECTOR2I = StreamCodec.composite(
+            ByteBufCodecs.VAR_INT,
+            Vector2ic::x,
+            ByteBufCodecs.VAR_INT,
+            Vector2ic::y,
+            Vector2i::new
+    );
+    public static final StreamCodec<ByteBuf, Vector3ic> VAR_VECTOR3I = StreamCodec.composite(
+            ByteBufCodecs.VAR_INT,
+            Vector3ic::x,
+            ByteBufCodecs.VAR_INT,
+            Vector3ic::y,
+            ByteBufCodecs.VAR_INT,
+            Vector3ic::z,
+            Vector3i::new
+    );
+    public static final StreamCodec<ByteBuf, Vector4ic> VAR_VECTOR4I = StreamCodec.composite(
+            ByteBufCodecs.VAR_INT,
+            Vector4ic::x,
+            ByteBufCodecs.VAR_INT,
+            Vector4ic::y,
+            ByteBufCodecs.VAR_INT,
+            Vector4ic::z,
+            ByteBufCodecs.VAR_INT,
+            Vector4ic::w,
+            Vector4i::new
+    );
+    public static final StreamCodec<ByteBuf, Vector2Lc> VECTOR2L = StreamCodec.composite(
+            ByteBufCodecs.LONG,
+            Vector2Lc::x,
+            ByteBufCodecs.LONG,
+            Vector2Lc::y,
+            Vector2L::new
+    );
+    public static final StreamCodec<ByteBuf, Vector3Lc> VECTOR3L = StreamCodec.composite(
+            ByteBufCodecs.LONG,
+            Vector3Lc::x,
+            ByteBufCodecs.LONG,
+            Vector3Lc::y,
+            ByteBufCodecs.LONG,
+            Vector3Lc::z,
+            StreamCodecUtil::createVector3L
+    );
+    public static final StreamCodec<ByteBuf, Vector4Lc> VECTOR4L = StreamCodec.composite(
+            ByteBufCodecs.LONG,
+            Vector4Lc::x,
+            ByteBufCodecs.LONG,
+            Vector4Lc::y,
+            ByteBufCodecs.LONG,
+            Vector4Lc::z,
+            ByteBufCodecs.LONG,
+            Vector4Lc::w,
+            Vector4L::new
+    );
+    public static final StreamCodec<ByteBuf, Vector2Lc> VAR_VECTOR2L = StreamCodec.composite(
+            ByteBufCodecs.VAR_LONG,
+            Vector2Lc::x,
+            ByteBufCodecs.VAR_LONG,
+            Vector2Lc::y,
+            Vector2L::new
+    );
+    public static final StreamCodec<ByteBuf, Vector3Lc> VAR_VECTOR3L = StreamCodec.composite(
+            ByteBufCodecs.VAR_LONG,
+            Vector3Lc::x,
+            ByteBufCodecs.VAR_LONG,
+            Vector3Lc::y,
+            ByteBufCodecs.VAR_LONG,
+            Vector3Lc::z,
+            StreamCodecUtil::createVector3L
+    );
+    public static final StreamCodec<ByteBuf, Vector4Lc> VAR_VECTOR4L = StreamCodec.composite(
+            ByteBufCodecs.VAR_LONG,
+            Vector4Lc::x,
+            ByteBufCodecs.VAR_LONG,
+            Vector4Lc::y,
+            ByteBufCodecs.VAR_LONG,
+            Vector4Lc::z,
+            ByteBufCodecs.VAR_LONG,
+            Vector4Lc::w,
+            Vector4L::new
+    );
+    public static final StreamCodec<RegistryFriendlyByteBuf, ItemPredicate> ITEM_PREDICATE = StreamCodec.composite(
+            ByteBufCodecs.holderSet(Registries.ITEM).apply(ByteBufCodecs::optional),
+            ItemPredicate::items,
+            MinMaxBounds.Ints.STREAM_CODEC,
+            ItemPredicate::count,
+            DataComponentMatchers.STREAM_CODEC,
+            ItemPredicate::components,
+            ItemPredicate::new
+    );
     public static final StreamCodec<ByteBuf, MutableBoolean> MUTABLE_BOOLEAN = ByteBufCodecs.BOOL.map(MutableBoolean::new, MutableBoolean::booleanValue);
     public static final StreamCodec<ByteBuf, MutableByte> MUTABLE_BYTE = ByteBufCodecs.BYTE.map(MutableByte::new, MutableByte::byteValue);
     public static final StreamCodec<ByteBuf, MutableShort> MUTABLE_SHORT = ByteBufCodecs.SHORT.map(MutableShort::new, MutableShort::shortValue);
@@ -88,6 +230,11 @@ public final class StreamCodecUtil {
     public static final StreamCodec<ByteBuf, OptionalDouble> OPTIONAL_DOUBLE = primitiveOptional(ByteBufCodecs.DOUBLE, OptionalDouble::of, OptionalDouble::empty, OptionalDouble::isPresent, OptionalDouble::getAsDouble);
     public static final StreamCodec<ByteBuf, Identifier> SHORT_IDENTIFIER = ByteBufCodecs.STRING_UTF8.map(Identifier::parse, Identifier::toShortString);
     public static final StreamCodec<ByteBuf, ResourceKey<? extends Registry<?>>> SHORT_REGISTRY_KEY = SHORT_IDENTIFIER.map(ResourceKey::createRegistryKey, ResourceKey::identifier);
+    public static final StreamCodec<ByteBuf, ByteBuf> BYTE_BUF = ByteBufCodecs.BYTE_ARRAY.map(Unpooled::wrappedBuffer, ByteBuf::array);
+    public static final StreamCodec<RegistryFriendlyByteBuf, RegistryFriendlyByteBuf> REGISTRY_FRIENDLY_BYTE_BUF = StreamCodec.of(
+            (output, value) -> ByteBufCodecs.BYTE_ARRAY.encode(output, value.array()),
+            input -> new RegistryFriendlyByteBuf(Unpooled.wrappedBuffer(ByteBufCodecs.BYTE_ARRAY.decode(input)), input.registryAccess())
+    );
 
     public static <B, V> StreamCodec<B, MutableObject<V>> mutable(StreamCodec<B, V> streamCodec) {
         return streamCodec.map(MutableObject::new, MutableObject::get);
@@ -200,6 +347,10 @@ public final class StreamCodecUtil {
                 }
             }
         };
+    }
+
+    private static Vector3Lc createVector3L(long x, long y, long z) {
+        return new Vector3L().set(x, y, z);
     }
 
     private StreamCodecUtil() {

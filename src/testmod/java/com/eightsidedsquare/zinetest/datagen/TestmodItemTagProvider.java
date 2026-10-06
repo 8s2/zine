@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zinetest.datagen;
 
-import com.eightsidedsquare.zinetest.core.references.TestmodItemIds;
+import com.eightsidedsquare.zinetest.core.TestmodItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
@@ -18,7 +18,7 @@ public class TestmodItemTagProvider extends FabricTagsProvider.ItemTagsProvider 
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
         this.builder(ItemTags.TRIM_MATERIALS)
-                .add(TestmodItemIds.TOURMALINE)
+                .zine$add(TestmodItems.TOURMALINE)
                 .add(BlockItemIds.OBSIDIAN.item());
     }
 }

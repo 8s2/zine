@@ -47,7 +47,7 @@ public class GraphCodec<N> extends BaseGraphCodec<N, GraphCodec.Edge, MutableGra
     }
 
     public record Edge(int u, int v) implements BaseGraphCodec.Edge {
-        private static final Codec<Edge> CODEC = CodecUtil.VECTOR_2I.xmap(Edge::new, edge -> new Vector2i(edge.u, edge.v));
+        private static final Codec<Edge> CODEC = CodecUtil.VECTOR2I.xmap(Edge::new, edge -> new Vector2i(edge.u, edge.v));
 
         public Edge(Vector2ic vec2i) {
             this(vec2i.x(), vec2i.y());
