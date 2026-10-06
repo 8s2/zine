@@ -19,7 +19,7 @@ public abstract class ResourceKeyMixin<T> implements ZineResourceKey<T> {
 
     @Override
     public String zine$getTranslationKey() {
-        return Util.makeDescriptionId(this.registryName.getPath(), this.identifier);
+        return Util.makeDescriptionId(this.registryName.toShortLanguageKey(), this.identifier);
     }
 
     @Override
