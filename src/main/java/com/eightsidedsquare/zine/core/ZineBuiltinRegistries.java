@@ -3,6 +3,7 @@ package com.eightsidedsquare.zine.core;
 import com.eightsidedsquare.zine.common.item.ondestroyedaction.OnDestroyedItemAction;
 import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
 import com.eightsidedsquare.zine.common.item.useaction.UseItemAction;
+import com.eightsidedsquare.zine.common.item.usecondition.ItemUseCondition;
 import com.eightsidedsquare.zine.common.item.useonaction.UseOnItemAction;
 import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -15,6 +16,7 @@ public final class ZineBuiltinRegistries {
     public static final Registry<SyncedCodec<? extends UseItemAction>> USE_ITEM_ACTION = synced(ZineRegistries.USE_ITEM_ACTION);
     public static final Registry<SyncedCodec<? extends UseOnItemAction>> USE_ON_ITEM_ACTION = synced(ZineRegistries.USE_ON_ITEM_ACTION);
     public static final Registry<SyncedCodec<? extends OnDestroyedItemAction>> ON_DESTROYED_ITEM_ACTION = synced(ZineRegistries.ON_DESTROYED_ITEM_ACTION);
+    public static final Registry<SyncedCodec<? extends ItemUseCondition>> ITEM_USE_CONDITION = synced(ZineRegistries.ITEM_USE_CONDITION);
 
     static void init() {
     }

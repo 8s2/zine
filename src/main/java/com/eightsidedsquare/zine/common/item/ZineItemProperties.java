@@ -1,7 +1,11 @@
 package com.eightsidedsquare.zine.common.item;
 
+import com.eightsidedsquare.zine.common.item.ondestroyedaction.OnDestroyedItemAction;
 import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
+import com.eightsidedsquare.zine.common.item.useaction.UseItemAction;
+import com.eightsidedsquare.zine.common.item.useonaction.UseOnItemAction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentInitializers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
@@ -20,6 +24,30 @@ import java.util.List;
 
 public interface ZineItemProperties {
     default Item.Properties zine$nameColor(int color) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$useAction(UseItemAction useAction) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$useAction(DataComponentInitializers.SingleComponentInitializer<UseItemAction> useAction) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$useOnAction(UseOnItemAction useOnAction) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$useOnAction(DataComponentInitializers.SingleComponentInitializer<UseOnItemAction> useOnAction) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$onDestroyedAction(OnDestroyedItemAction onDestroyedAction) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$onDestroyedAction(DataComponentInitializers.SingleComponentInitializer<OnDestroyedItemAction> onDestroyedAction) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 

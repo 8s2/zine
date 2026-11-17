@@ -1,6 +1,5 @@
 package com.eightsidedsquare.zine.common.item.useonaction;
 
-import com.eightsidedsquare.zine.common.item.useaction.ConstantUse;
 import com.eightsidedsquare.zine.common.util.InteractionResultSerialization;
 import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

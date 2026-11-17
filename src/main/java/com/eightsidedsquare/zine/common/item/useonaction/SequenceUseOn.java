@@ -26,6 +26,10 @@ public record SequenceUseOn(List<UseOnItemAction> actions, InteractionResult fal
             )
     );
 
+    public SequenceUseOn(List<UseOnItemAction> actions) {
+        this(actions, InteractionResult.PASS);
+    }
+
     @Override
     public InteractionResult useOn(UseOnContext context) {
         for (UseOnItemAction action : this.actions) {

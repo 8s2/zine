@@ -28,6 +28,10 @@ public record SequenceUse(List<UseItemAction> actions, InteractionResult fallbac
             )
     );
 
+    public SequenceUse(List<UseItemAction> actions) {
+        this(actions, InteractionResult.PASS);
+    }
+
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         for (UseItemAction action : this.actions) {

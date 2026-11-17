@@ -137,3 +137,4 @@ accessible field net/minecraft/client/renderer/feature/TextFeatureRenderer$Glyph
 accessible field net/minecraft/client/resources/model/EquipmentClientInfo$Builder layersByType Ljava/util/Map;
 accessible field net/minecraft/client/resources/model/EquipmentClientInfo$Builder trimOverrides Lcom/google/common/collect/ImmutableList$Builder;
 accessible field net/minecraft/world/level/levelgen/RandomState router Lnet/minecraft/world/level/levelgen/NoiseRouter;
+accessible method net/minecraft/world/item/context/UseOnContext getHitResult ()Lnet/minecraft/world/phys/BlockHitResult;

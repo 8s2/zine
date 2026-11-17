@@ -1,5 +1,6 @@
 {
   "required": true,
+  "mixinextras": {"minVersion": "0.5.4"},
   "package": "com.eightsidedsquare.zine.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [

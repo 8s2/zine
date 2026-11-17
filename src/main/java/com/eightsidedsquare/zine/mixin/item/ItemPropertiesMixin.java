@@ -1,7 +1,10 @@
 package com.eightsidedsquare.zine.mixin.item;
 
 import com.eightsidedsquare.zine.common.item.ZineItemProperties;
+import com.eightsidedsquare.zine.common.item.ondestroyedaction.OnDestroyedItemAction;
 import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
+import com.eightsidedsquare.zine.common.item.useaction.UseItemAction;
+import com.eightsidedsquare.zine.common.item.useonaction.UseOnItemAction;
 import com.eightsidedsquare.zine.core.ZineDataComponents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentInitializers;
@@ -44,6 +47,36 @@ public abstract class ItemPropertiesMixin implements ZineItemProperties {
     @Override
     public Item.Properties zine$nameColor(int color) {
         return this.component(ZineDataComponents.ITEM_NAME_COLOR, color);
+    }
+
+    @Override
+    public Item.Properties zine$useAction(UseItemAction useAction) {
+        return this.component(ZineDataComponents.USE_ITEM_ACTION, useAction);
+    }
+
+    @Override
+    public Item.Properties zine$useAction(DataComponentInitializers.SingleComponentInitializer<UseItemAction> useAction) {
+        return this.delayedComponent(ZineDataComponents.USE_ITEM_ACTION, useAction);
+    }
+
+    @Override
+    public Item.Properties zine$useOnAction(UseOnItemAction useOnAction) {
+        return this.component(ZineDataComponents.USE_ON_ITEM_ACTION, useOnAction);
+    }
+
+    @Override
+    public Item.Properties zine$useOnAction(DataComponentInitializers.SingleComponentInitializer<UseOnItemAction> useOnAction) {
+        return this.delayedComponent(ZineDataComponents.USE_ON_ITEM_ACTION, useOnAction);
+    }
+
+    @Override
+    public Item.Properties zine$onDestroyedAction(OnDestroyedItemAction onDestroyedAction) {
+        return this.component(ZineDataComponents.ON_DESTROYED_ITEM_ACTION, onDestroyedAction);
+    }
+
+    @Override
+    public Item.Properties zine$onDestroyedAction(DataComponentInitializers.SingleComponentInitializer<OnDestroyedItemAction> onDestroyedAction) {
+        return this.delayedComponent(ZineDataComponents.ON_DESTROYED_ITEM_ACTION, onDestroyedAction);
     }
 
     @Override

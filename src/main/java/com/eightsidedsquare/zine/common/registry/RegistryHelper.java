@@ -4,6 +4,7 @@ import com.eightsidedsquare.zine.common.item.CustomIngredientSerializerImpl;
 import com.eightsidedsquare.zine.common.item.ondestroyedaction.OnDestroyedItemAction;
 import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
 import com.eightsidedsquare.zine.common.item.useaction.UseItemAction;
+import com.eightsidedsquare.zine.common.item.usecondition.ItemUseCondition;
 import com.eightsidedsquare.zine.common.item.useonaction.UseOnItemAction;
 import com.eightsidedsquare.zine.common.recipe.RecipeTypeImpl;
 import com.eightsidedsquare.zine.common.registry.holder.*;
@@ -2133,6 +2134,16 @@ public interface RegistryHelper {
      */
     default <T extends OnDestroyedItemAction> SyncedCodec<T> onDestroyedItemAction(String name, SyncedCodec<T> type) {
         return this.register(ZineBuiltinRegistries.ON_DESTROYED_ITEM_ACTION, name, type);
+    }
+
+    /**
+     * @param name the name of the item use condition
+     * @param type the synced codec of the item use condition
+     * @return the registered item use condition synced codec
+     * @param <T> the type of item use condition
+     */
+    default <T extends ItemUseCondition> SyncedCodec<T> itemUseCondition(String name, SyncedCodec<T> type) {
+        return this.register(ZineBuiltinRegistries.ITEM_USE_CONDITION, name, type);
     }
 
     /**

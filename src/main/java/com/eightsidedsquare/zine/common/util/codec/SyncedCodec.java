@@ -11,6 +11,10 @@ public record SyncedCodec<T>(MapCodec<T> codec, StreamCodec<? super RegistryFrie
         return new SyncedCodec<>(this.codec.xmap(to, from), this.streamCodec.map(to, from));
     }
 
+    public static <T> SyncedCodec<T> unit(T instance) {
+        return new SyncedCodec<>(MapCodec.unit(instance), StreamCodec.unit(instance));
+    }
+
     public interface Type<T> {
         SyncedCodec<? extends T> type();
     }
