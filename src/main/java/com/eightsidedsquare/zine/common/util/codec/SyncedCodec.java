@@ -10,4 +10,8 @@ public record SyncedCodec<T>(MapCodec<T> codec, StreamCodec<? super RegistryFrie
     public <U> SyncedCodec<U> map(Function<? super T, ? extends U> to, Function<? super U, ? extends T> from) {
         return new SyncedCodec<>(this.codec.xmap(to, from), this.streamCodec.map(to, from));
     }
+
+    public interface Type<T> {
+        SyncedCodec<? extends T> type();
+    }
 }

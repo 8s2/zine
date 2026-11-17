@@ -50,17 +50,17 @@ public class ConnectedPatternCalculator {
         return new InstructionBuilder();
     }
 
-    public ConnectedPattern calculate(BlockAndTintGetter world, BlockPos pos, BlockState state, AppearancePredicate predicate) {
+    public ConnectedPattern calculate(BlockAndTintGetter level, BlockPos pos, BlockState state, AppearancePredicate predicate) {
         BlockPos.MutableBlockPos mutable = pos.mutable();
         ConnectedPattern pattern = ConnectedPattern.NNNN;
         for (Instruction instruction : this.instructions) {
-            pattern = instruction.apply(pattern, pos, state, mutable, world, predicate);
+            pattern = instruction.apply(pattern, pos, state, mutable, level, predicate);
         }
         return pattern;
     }
 
-    public ConnectedPattern calculate(BlockAndTintGetter world, BlockPos pos, BlockState state) {
-        return this.calculate(world, pos, state, AppearancePredicate.block(state.getBlock()));
+    public ConnectedPattern calculate(BlockAndTintGetter level, BlockPos pos, BlockState state) {
+        return this.calculate(level, pos, state, AppearancePredicate.block(state.getBlock()));
     }
 
     public static ConnectedPatternCalculator create(Direction face, Direction up, Direction right) {
@@ -120,15 +120,15 @@ public class ConnectedPatternCalculator {
     }
 
     interface Instruction {
-        ConnectedPattern apply(ConnectedPattern pattern, BlockPos origin, BlockState state, BlockPos.MutableBlockPos mutable, BlockAndTintGetter world, AppearancePredicate predicate);
+        ConnectedPattern apply(ConnectedPattern pattern, BlockPos origin, BlockState state, BlockPos.MutableBlockPos mutable, BlockAndTintGetter level, AppearancePredicate predicate);
     }
 
     @FunctionalInterface
     public interface AppearancePredicate {
-        boolean test(BlockPos origin, BlockState originState, BlockPos.MutableBlockPos mutable, BlockState appearanceState, BlockAndTintGetter world);
+        boolean test(BlockPos origin, BlockState originState, BlockPos.MutableBlockPos mutable, BlockState appearanceState, BlockAndTintGetter level);
 
         static AppearancePredicate block(Block block) {
-            return (origin, originState, mutable, appearanceState, world) ->
+            return (origin, originState, mutable, appearanceState, level) ->
                     appearanceState.is(block);
         }
     }
@@ -207,21 +207,21 @@ public class ConnectedPatternCalculator {
             final boolean inverted = this.inverted;
             if(this.faces.length == 1) {
                 Direction face = this.faces[0];
-                return (pattern, origin, state, mutable, world, predicate) -> {
+                return (pattern, origin, state, mutable, level, predicate) -> {
                     mutable.setWithOffset(origin, x, y, z);
-                    BlockState appearanceState = world.getBlockState(mutable).getAppearance(world, mutable, face, state, origin);
-                    if(predicate.test(origin, state, mutable, appearanceState, world) != inverted) {
+                    BlockState appearanceState = level.getBlockState(mutable).getAppearance(level, mutable, face, state, origin);
+                    if(predicate.test(origin, state, mutable, appearanceState, level) != inverted) {
                         return or ? pattern.or(connectedPattern) : pattern.and(connectedPattern);
                     }
                     return pattern;
                 };
             }
             final Direction[] faces = this.faces;
-            return (pattern, origin, state, mutable, world, predicate) -> {
+            return (pattern, origin, state, mutable, level, predicate) -> {
                 mutable.setWithOffset(origin, x, y, z);
                 for (Direction face : faces) {
-                    BlockState appearanceState = world.getBlockState(mutable).getAppearance(world, mutable, face, state, origin);
-                    if(predicate.test(origin, state, mutable, appearanceState, world) != inverted) {
+                    BlockState appearanceState = level.getBlockState(mutable).getAppearance(level, mutable, face, state, origin);
+                    if(predicate.test(origin, state, mutable, appearanceState, level) != inverted) {
                         return or ? pattern.or(connectedPattern) : pattern.and(connectedPattern);
                     }
                 }
