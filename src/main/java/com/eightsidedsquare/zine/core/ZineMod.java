@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zine.core;
 
-import com.eightsidedsquare.zine.common.block.ModifyBlockSoundGroupContextImpl;
+import com.eightsidedsquare.zine.common.block.ModifyBlockSoundSetContextImpl;
 import com.eightsidedsquare.zine.common.network.ClientboundBlockEntitySyncPayload;
 import com.eightsidedsquare.zine.common.registry.RegistryHelper;
 import net.fabricmc.api.ModInitializer;
@@ -22,7 +22,7 @@ public class ZineMod implements ModInitializer {
         ZineDataComponents.init();
         ZineSpawnConditions.init();
 
-        ModifyBlockSoundGroupContextImpl.registerEvents();
+        ModifyBlockSoundSetContextImpl.registerEvents();
 
         PayloadTypeRegistry.clientboundPlay()
                 .register(ClientboundBlockEntitySyncPayload.TYPE, ClientboundBlockEntitySyncPayload.STREAM_CODEC);

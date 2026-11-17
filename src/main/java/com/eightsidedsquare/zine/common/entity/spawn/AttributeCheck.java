@@ -12,7 +12,7 @@ import net.minecraft.world.entity.variant.SpawnContext;
 
 import java.util.function.Function;
 
-public class AttributeCheck implements SpawnCondition {
+public record AttributeCheck(EnvironmentAttribute<? extends Number> attribute, MinMaxBounds.Doubles range) implements SpawnCondition {
     @SuppressWarnings("unchecked")
     private static final Codec<EnvironmentAttribute<? extends Number>> ATTRIBUTE_CODEC = EnvironmentAttributes.CODEC.comapFlatMap(
             attribute -> attribute.defaultValue() instanceof Number ?
@@ -21,32 +21,9 @@ public class AttributeCheck implements SpawnCondition {
             Function.identity()
     );
     public static final MapCodec<AttributeCheck> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
-            ATTRIBUTE_CODEC.fieldOf("attribute").forGetter(AttributeCheck::getAttribute),
-            MinMaxBounds.Doubles.CODEC.fieldOf("range").forGetter(AttributeCheck::getRange)
+            ATTRIBUTE_CODEC.fieldOf("attribute").forGetter(AttributeCheck::attribute),
+            MinMaxBounds.Doubles.CODEC.fieldOf("range").forGetter(AttributeCheck::range)
     ).apply(i, AttributeCheck::new));
-    private EnvironmentAttribute<? extends Number> attribute;
-    private MinMaxBounds.Doubles range;
-
-    public AttributeCheck(EnvironmentAttribute<? extends Number> attribute, MinMaxBounds.Doubles range) {
-        this.attribute = attribute;
-        this.range = range;
-    }
-
-    public EnvironmentAttribute<? extends Number> getAttribute() {
-        return this.attribute;
-    }
-
-    public void setAttribute(EnvironmentAttribute<? extends Number> attribute) {
-        this.attribute = attribute;
-    }
-
-    public MinMaxBounds.Doubles getRange() {
-        return this.range;
-    }
-
-    public void setRange(MinMaxBounds.Doubles range) {
-        this.range = range;
-    }
 
     @Override
     public MapCodec<? extends SpawnCondition> codec() {

@@ -213,8 +213,8 @@ public class RemapSpriteSource implements SpriteSource {
                 int offset = pixelData[(sU / width) + (sV / height) * width];
                 int offsetU = Mth.lerpInt((offset >> 16 & 0xFF) / 255f, this.min, this.max);
                 int offsetV = Mth.lerpInt((offset >> 8 & 0xFF) / 255f, this.min, this.max);
-                sU = Mth.clamp(sU + offsetU, 0, 255);
-                sV = Mth.clamp(sV + offsetV, 0, 255);
+                sU = Math.clamp(sU + offsetU, 0, 255);
+                sV = Math.clamp(sV + offsetV, 0, 255);
                 return sampler.sample((uvw & 0xff0000ff) | (sU << 16) | (sV << 8), u, v);
             };
         }

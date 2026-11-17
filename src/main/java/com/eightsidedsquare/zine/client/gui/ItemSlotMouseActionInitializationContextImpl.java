@@ -7,7 +7,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 public record ItemSlotMouseActionInitializationContextImpl(AbstractContainerScreen<?> screen) implements ItemSlotMouseActionInitializationCallback.Context {
     @Override
     public void accept(ItemSlotMouseAction itemSlotMouseAction) {
-        this.screen.addItemSlotMouseAction(itemSlotMouseAction);
+//        this.screen.addItemSlotMouseAction(itemSlotMouseAction);
     }
 
     @Override

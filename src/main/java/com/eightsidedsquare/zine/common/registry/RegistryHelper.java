@@ -19,8 +19,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.object.builder.v1.block.type.BlockSetTypeBuilder;
-import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityDataRegistry;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
@@ -112,7 +110,6 @@ import net.minecraft.world.item.trading.TradeSet;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SkullBlock;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -541,26 +538,6 @@ public interface RegistryHelper {
     }
 
     /**
-     * Creates a {@link SoundType} with its break, step, place, hit, and fall sounds automatically registered.
-     * These individual sounds can be accessed with {@link SoundType#getBreakSound()}, {@link SoundType#getStepSound()}, etc.
-     * @param name the base name of the sound events of the block sound group
-     * @param volume the volume of the block sound group's sounds
-     * @param pitch the pitch of the block sound group's sounds
-     * @return the block sound group, containing all registered sound events
-     */
-    default SoundType blockSoundGroup(String name, float volume, float pitch) {
-        return new SoundType(
-                volume,
-                pitch,
-                this.sound("block." + name + ".break"),
-                this.sound("block." + name + ".step"),
-                this.sound("block." + name + ".place"),
-                this.sound("block." + name + ".hit"),
-                this.sound("block." + name + ".fall")
-        );
-    }
-
-    /**
      * Registers a data component type, which is used by items and block entities.
      * @param name the name of the component type
      * @param componentType the component type to register
@@ -968,22 +945,12 @@ public interface RegistryHelper {
 
     /**
      * @param name the name of the rule test type
-     * @param type the rule test type to register
-     * @return the registered rule test type
+     * @param codec the codec of the rule test
+     * @return the registered rule test type codec
      * @param <T> the type of rule test
      */
-    default <T extends RuleTest> RuleTestType<T> ruleTest(String name, RuleTestType<T> type) {
-        return this.register(BuiltInRegistries.RULE_TEST, name, type);
-    }
-
-    /**
-     * @param name the name of the rule test type
-     * @param codec the codec of the rule test
-     * @return the registered rule test type
-     * @param <T> the type of the rule test
-     */
-    default <T extends RuleTest> RuleTestType<T> ruleTest(String name, MapCodec<T> codec) {
-        return this.ruleTest(name, () -> codec);
+    default <T extends RuleTest> MapCodec<T> ruleTest(String name, MapCodec<T> codec) {
+        return this.register(BuiltInRegistries.RULE_TEST_TYPE, name, codec);
     }
 
     /**
@@ -2174,25 +2141,6 @@ public interface RegistryHelper {
         SkullBlock.Type skullType = () -> skullName;
         SkullBlock.Type.TYPES.put(skullName, skullType);
         return skullType;
-    }
-
-    /**
-     * @param name the name of the block set type
-     * @param builder the builder for the block set type
-     * @return the registered block set type
-     */
-    default BlockSetType blockSetType(String name, BlockSetTypeBuilder builder) {
-        return builder.register(this.id(name));
-    }
-
-    /**
-     * @param name the name of the wood type
-     * @param builder the builder for the wood type
-     * @param blockSetType the block set type for the wood type
-     * @return the registered wood type
-     */
-    default WoodType woodType(String name, WoodTypeBuilder builder, BlockSetType blockSetType) {
-        return builder.register(this.id(name), blockSetType);
     }
 
     /**

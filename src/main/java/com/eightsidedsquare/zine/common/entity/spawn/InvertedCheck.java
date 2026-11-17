@@ -5,23 +5,10 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.variant.SpawnCondition;
 import net.minecraft.world.entity.variant.SpawnContext;
 
-public class InvertedCheck implements SpawnCondition {
+public record InvertedCheck(SpawnCondition condition) implements SpawnCondition {
     public static final MapCodec<InvertedCheck> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
-            SpawnCondition.CODEC.fieldOf("condition").forGetter(InvertedCheck::getCondition)
+            SpawnCondition.CODEC.fieldOf("condition").forGetter(InvertedCheck::condition)
     ).apply(i, InvertedCheck::new));
-    private SpawnCondition condition;
-
-    public InvertedCheck(SpawnCondition condition) {
-        this.condition = condition;
-    }
-
-    public SpawnCondition getCondition() {
-        return this.condition;
-    }
-
-    public void setCondition(SpawnCondition condition) {
-        this.condition = condition;
-    }
 
     @Override
     public MapCodec<? extends SpawnCondition> codec() {

@@ -32,14 +32,10 @@ transitive-inject-interface	net/minecraft/resources/ResourceKey com/eightsidedsq
 transitive-inject-interface	net/minecraft/util/FormattedCharSequence com/eightsidedsquare/zine/common/text/ZineFormattedCharSequence
 transitive-inject-interface	net/minecraft/world/level/levelgen/structure/templatesystem/StructureProcessorList com/eightsidedsquare/zine/common/level/structure/ZineStructureProcessorList
 transitive-inject-interface	net/minecraft/client/gui/screens/inventory/tooltip/ClientTooltipComponent com/eightsidedsquare/zine/client/gui/ZineClientTooltipComponent
-transitive-inject-interface	net/minecraft/world/entity/animal/feline/CatVariant com/eightsidedsquare/zine/common/entity/variant/ZineCatVariant
-transitive-inject-interface	net/minecraft/world/entity/animal/frog/FrogVariant com/eightsidedsquare/zine/common/entity/variant/ZineFrogVariant
 transitive-inject-interface	net/minecraft/client/resources/model/ModelBaker com/eightsidedsquare/zine/client/model/ZineModelBaker
 transitive-inject-interface	net/minecraft/client/renderer/texture/atlas/sources/PalettedPermutations com/eightsidedsquare/zine/client/atlas/ZinePalettedPermutations
 transitive-inject-interface	net/minecraft/core/component/DataComponentMap$Builder com/eightsidedsquare/zine/common/util/ZineDataComponentMapBuilder
 transitive-inject-interface	net/minecraft/core/component/DataComponentExactPredicate com/eightsidedsquare/zine/common/predicate/ZineDataComponentExactPredicate
-transitive-inject-interface	net/minecraft/world/entity/animal/wolf/WolfVariant com/eightsidedsquare/zine/common/entity/variant/ZineWolfVariant
-transitive-inject-interface	net/minecraft/world/entity/animal/wolf/WolfVariant$AssetInfo com/eightsidedsquare/zine/common/entity/variant/ZineWolfVariant$ZineAssetInfo
 transitive-inject-interface	net/minecraft/advancements/predicates/SlotsPredicate com/eightsidedsquare/zine/common/predicate/ZineSlotsPredicate
 transitive-inject-interface	net/minecraft/advancements/predicates/entity/MovementPredicate com/eightsidedsquare/zine/common/predicate/ZineMovementPredicate
 transitive-inject-interface	net/minecraft/client/resources/model/sprite/MaterialBaker com/eightsidedsquare/zine/client/model/ZineMaterialBaker
@@ -61,25 +57,8 @@ transitive-inject-interface	net/minecraft/client/renderer/item/SelectItemModel$U
 transitive-inject-interface	net/minecraft/client/renderer/item/SelectItemModel$UnbakedSwitch com/eightsidedsquare/zine/client/item/ZineSelectItemModelUnbakedSwitch<TP;TT;>
 transitive-inject-interface	net/minecraft/client/renderer/item/SpecialModelWrapper$Unbaked com/eightsidedsquare/zine/client/item/ZineUnbakedSpecialModelWrapper
 transitive-inject-interface	net/minecraft/client/color/item/TeamColor com/eightsidedsquare/zine/client/item/tint/ZineTeamColor
-transitive-inject-interface	net/minecraft/world/entity/animal/pig/PigVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobVariant<Lnet/minecraft/world/entity/animal/pig/PigVariant$ModelType;>
-transitive-inject-interface	net/minecraft/world/entity/variant/BiomeCheck com/eightsidedsquare/zine/common/entity/spawn/ZineBiomeCheck
-transitive-inject-interface	net/minecraft/world/entity/variant/ModelAndTexture com/eightsidedsquare/zine/common/entity/variant/ZineModelAndTexture<TT;>
-transitive-inject-interface	net/minecraft/world/entity/variant/MoonBrightnessCheck com/eightsidedsquare/zine/common/entity/spawn/ZineMoonBrightnessCheck
 transitive-inject-interface	net/minecraft/world/entity/variant/SpawnContext com/eightsidedsquare/zine/common/entity/spawn/ZineSpawnContext
-transitive-inject-interface	net/minecraft/world/entity/variant/StructureCheck com/eightsidedsquare/zine/common/entity/spawn/ZineStructureCheck
-transitive-inject-interface	net/minecraft/world/entity/animal/cow/CowVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobVariant<Lnet/minecraft/world/entity/animal/cow/CowVariant$ModelType;>
-transitive-inject-interface	net/minecraft/world/entity/animal/chicken/ChickenVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobVariant<Lnet/minecraft/world/entity/animal/chicken/ChickenVariant$ModelType;>
-transitive-inject-interface	net/minecraft/world/entity/animal/wolf/WolfSoundVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobSoundVariant<Lnet/minecraft/world/entity/animal/wolf/WolfSoundVariant$WolfSoundSet;>
-transitive-inject-interface	net/minecraft/world/entity/animal/wolf/WolfSoundVariant$WolfSoundSet com/eightsidedsquare/zine/common/entity/variant/ZineWolfSoundSet
-transitive-inject-interface	net/minecraft/world/entity/animal/pig/PigSoundVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobSoundVariant<Lnet/minecraft/world/entity/animal/pig/PigSoundVariant$PigSoundSet;>
-transitive-inject-interface	net/minecraft/world/entity/animal/pig/PigSoundVariant$PigSoundSet com/eightsidedsquare/zine/common/entity/variant/ZineSoundSet
-transitive-inject-interface	net/minecraft/world/entity/animal/chicken/ChickenSoundVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobSoundVariant<Lnet/minecraft/world/entity/animal/chicken/ChickenSoundVariant$ChickenSoundSet;>
-transitive-inject-interface	net/minecraft/world/entity/animal/chicken/ChickenSoundVariant$ChickenSoundSet com/eightsidedsquare/zine/common/entity/variant/ZineSoundSet
-transitive-inject-interface	net/minecraft/world/entity/animal/cow/CowSoundVariant com/eightsidedsquare/zine/common/entity/variant/ZineSoundSet
-transitive-inject-interface	net/minecraft/world/entity/animal/feline/CatSoundVariant com/eightsidedsquare/zine/common/entity/variant/ZineAgeableMobSoundVariant<Lnet/minecraft/world/entity/animal/feline/CatSoundVariant$CatSoundSet;>
-transitive-inject-interface	net/minecraft/world/entity/animal/feline/CatSoundVariant$CatSoundSet com/eightsidedsquare/zine/common/entity/variant/ZineCatSoundSet
 transitive-inject-interface	net/minecraft/advancements/predicates/DataComponentMatchers com/eightsidedsquare/zine/common/predicate/ZineDataComponentMatchers
-transitive-inject-interface	net/minecraft/core/ClientAsset$ResourceTexture com/eightsidedsquare/zine/common/entity/variant/ZineClientAssetResourceTexture
 transitive-inject-interface	net/minecraft/client/renderer/texture/SpriteLoader$Preparations com/eightsidedsquare/zine/client/util/ZineSpriteLoaderPreparations
 transitive-inject-interface	net/minecraft/client/resources/model/ResolvableModel$Resolver com/eightsidedsquare/zine/client/model/ZineResolvableModelResolver
 transitive-inject-interface net/minecraft/world/level/block/state/BlockBehaviour com/eightsidedsquare/zine/common/block/ZineBlockBehaviour
@@ -105,9 +84,8 @@ accessible method net/minecraft/client/renderer/entity/LivingEntityRenderer addL
 accessible field net/minecraft/client/renderer/entity/LivingEntityRenderer itemModelResolver Lnet/minecraft/client/renderer/item/ItemModelResolver;
 accessible field net/minecraft/client/renderer/entity/EntityRenderer entityRenderDispatcher Lnet/minecraft/client/renderer/entity/EntityRenderDispatcher;
 accessible field net/minecraft/client/gui/screens/Screen minecraft Lnet/minecraft/client/Minecraft;
-accessible method net/minecraft/client/gui/screens/inventory/AbstractContainerScreen addItemSlotMouseAction (Lnet/minecraft/client/gui/ItemSlotMouseAction;)V
-accessible field net/minecraft/world/level/block/state/BlockBehaviour soundType Lnet/minecraft/world/level/block/SoundType;
-mutable field net/minecraft/world/level/block/state/BlockBehaviour soundType Lnet/minecraft/world/level/block/SoundType;
+accessible field net/minecraft/world/level/block/state/BlockBehaviour blockSoundSet Ljava/util/Optional;
+mutable field net/minecraft/world/level/block/state/BlockBehaviour blockSoundSet Ljava/util/Optional;
 accessible field net/minecraft/client/multiplayer/PlayerInfo skinLookup Ljava/util/function/Supplier;
 accessible class net/minecraft/client/gui/font/glyphs/BakedSheetGlyph$GlyphInstance
 accessible field net/minecraft/network/chat/contents/objects/ObjectInfos ID_MAPPER Lnet/minecraft/util/ExtraCodecs$LateBoundIdMapper;

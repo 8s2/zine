@@ -1,29 +1,32 @@
 package com.eightsidedsquare.zine.data.sound;
 
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.sounds.BlockSoundSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.EnumMap;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class BlockSoundEntriesBuilder {
-    private final SoundType blockSoundGroup;
+    private final ResourceKey<BlockSoundSet> blockSoundSet;
     private final EnumMap<Type, SoundEntryBuilder> entryBuilders;
 
-    private BlockSoundEntriesBuilder(SoundType blockSoundGroup) {
-        this.blockSoundGroup = blockSoundGroup;
+    private BlockSoundEntriesBuilder(ResourceKey<BlockSoundSet> blockSoundSet) {
+        this.blockSoundSet = blockSoundSet;
         this.entryBuilders = new EnumMap<>(Type.class);
         for(Type type : Type.values()) {
             this.entryBuilders.put(type, SoundEntryBuilder
-                    .of(type.get(this.blockSoundGroup))
+                    .of(type.get(this.blockSoundSet))
                     .subtitle(type.getSubtitle()));
         }
     }
 
-    public static BlockSoundEntriesBuilder of(SoundType blockSoundGroup) {
-        return new BlockSoundEntriesBuilder(blockSoundGroup);
+    public static BlockSoundEntriesBuilder of(ResourceKey<BlockSoundSet> blockSoundSet) {
+        return new BlockSoundEntriesBuilder(blockSoundSet);
     }
 
     private BlockSoundEntriesBuilder apply(Type type, Consumer<SoundEntryBuilder> consumer) {
@@ -91,11 +94,11 @@ public class BlockSoundEntriesBuilder {
     }
 
     public BlockSoundEntriesBuilder with(Type type, Type source) {
-        return this.apply(type, SoundEntryBuilder::with, source.get(this.blockSoundGroup));
+        return this.apply(type, SoundEntryBuilder::with, source.get(this.blockSoundSet));
     }
 
     public BlockSoundEntriesBuilder with(Type type, Type source, Consumer<SoundBuilder> consumer) {
-        return this.apply(type, SoundEntryBuilder::with, source.get(this.blockSoundGroup), consumer);
+        return this.apply(type, SoundEntryBuilder::with, source.get(this.blockSoundSet), consumer);
     }
 
     public BlockSoundEntriesBuilder withSuffixed(Type type, String name, String suffix) {
@@ -123,11 +126,11 @@ public class BlockSoundEntriesBuilder {
     }
 
     public BlockSoundEntriesBuilder withSuffixed(Type type, Type source, String suffix) {
-        return this.apply(type, SoundEntryBuilder::withSuffixed, source.get(this.blockSoundGroup), suffix);
+        return this.apply(type, SoundEntryBuilder::withSuffixed, source.get(this.blockSoundSet), suffix);
     }
 
     public BlockSoundEntriesBuilder withSuffixed(Type type, Type source, String suffix, Consumer<SoundBuilder> consumer) {
-        return this.apply(type, SoundEntryBuilder::withSuffixed, source.get(this.blockSoundGroup), suffix, consumer);
+        return this.apply(type, SoundEntryBuilder::withSuffixed, source.get(this.blockSoundSet), suffix, consumer);
     }
 
     public BlockSoundEntriesBuilder withVariants(Type type, String name, int variants) {
@@ -155,11 +158,11 @@ public class BlockSoundEntriesBuilder {
     }
 
     public BlockSoundEntriesBuilder withVariants(Type type, Type source, int variants) {
-        return this.apply(type, SoundEntryBuilder::withVariants, source.get(this.blockSoundGroup), variants);
+        return this.apply(type, SoundEntryBuilder::withVariants, source.get(this.blockSoundSet), variants);
     }
 
     public BlockSoundEntriesBuilder withVariants(Type type, Type source, int variants, Consumer<SoundBuilder> consumer) {
-        return this.apply(type, SoundEntryBuilder::withVariants, source.get(this.blockSoundGroup), variants, consumer);
+        return this.apply(type, SoundEntryBuilder::withVariants, source.get(this.blockSoundSet), variants, consumer);
     }
 
     public BlockSoundEntriesBuilder withVariants(Type type, SoundEvent event) {
@@ -177,22 +180,22 @@ public class BlockSoundEntriesBuilder {
     }
 
     public enum Type {
-        BREAK("block.generic.break", SoundType::getBreakSound),
-        PLACE("block.generic.place", SoundType::getPlaceSound),
-        HIT("block.generic.hit", SoundType::getHitSound),
-        STEP("block.generic.footsteps", SoundType::getStepSound),
-        FALL(SoundType::getFallSound);
+        BREAK("block.generic.break", BlockSoundSet::breakSound),
+        PLACE("block.generic.place", BlockSoundSet::placeSound),
+        HIT("block.generic.hit", BlockSoundSet::hitSound),
+        STEP("block.generic.footsteps", BlockSoundSet::stepSound),
+        FALL(BlockSoundSet::fallSound);
 
         @Nullable
         private final String subtitle;
-        private final Function<SoundType, SoundEvent> soundEventGetter;
+        private final Function<BlockSoundSet, Optional<Holder<SoundEvent>>> soundEventGetter;
 
-        Type(@Nullable String subtitle, Function<SoundType, SoundEvent> soundEventGetter) {
+        Type(@Nullable String subtitle, Function<BlockSoundSet, Optional<Holder<SoundEvent>>> soundEventGetter) {
             this.subtitle = subtitle;
             this.soundEventGetter = soundEventGetter;
         }
 
-        Type(Function<SoundType, SoundEvent> soundEventGetter) {
+        Type(Function<BlockSoundSet, Optional<Holder<SoundEvent>>> soundEventGetter) {
             this(null, soundEventGetter);
         }
 
@@ -201,8 +204,9 @@ public class BlockSoundEntriesBuilder {
             return this.subtitle;
         }
 
-        public SoundEvent get(SoundType blockSoundGroup) {
-            return this.soundEventGetter.apply(blockSoundGroup);
+        public SoundEvent get(ResourceKey<BlockSoundSet> blockSoundSet) {
+            return null;
+//            return this.soundEventGetter.apply(blockSoundSet);
         }
     }
 

@@ -3,8 +3,8 @@ package com.eightsidedsquare.zine.client.gui;
 import com.eightsidedsquare.zine.common.item.tooltip.GraphicsTooltip;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiPipeline;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
@@ -80,7 +80,7 @@ public class ClientGraphicsTooltip implements ClientTooltipComponent {
         }
         for (GraphicsTooltip.Sprite sprite : this.sprites) {
             graphics.blitSprite(
-                    RenderPipelines.GUI_TEXTURED,
+                    GuiPipeline.TEXTURED,
                     sprite.sprite(),
                     x + sprite.x(),
                     y + sprite.y(),

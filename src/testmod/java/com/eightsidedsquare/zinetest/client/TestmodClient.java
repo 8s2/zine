@@ -119,11 +119,11 @@ public class TestmodClient implements ClientModInitializer {
         REGISTRY.blockStateModel("nest", NestBlockStateModel.Unbaked.CODEC);
 
         if(SHOW_TEST_HUD) {
-            HudElementRegistry.attachElementAfter(VanillaHudElements.TITLE_AND_SUBTITLE, Testmod.id("test"), (ctx, tickCounter) -> {
+            HudElementRegistry.attachElementAfter(VanillaHudElements.TITLE_AND_SUBTITLE, Testmod.id("test"), graphics -> {
                 Font font = Minecraft.getInstance().font;
                 MutableComponent text = Component.literal("ABC 123").withStyle(ChatFormatting.ITALIC, ChatFormatting.BOLD);
-                ctx.text(font, text, 10, 10, -1, false);
-                ctx.text(font, text, 10, 20, -1, false);
+                graphics.text(font, text, 10, 10, -1, false);
+                graphics.text(font, text, 10, 20, -1, false);
             });
         }
     }

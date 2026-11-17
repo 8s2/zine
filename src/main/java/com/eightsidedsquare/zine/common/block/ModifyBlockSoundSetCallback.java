@@ -4,15 +4,17 @@ import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.sounds.BlockSoundSet;
+import org.jspecify.annotations.Nullable;
 
 @FunctionalInterface
-public interface ModifyBlockSoundGroupCallback {
-    Event<ModifyBlockSoundGroupCallback> EVENT = EventFactory.createArrayBacked(
-            ModifyBlockSoundGroupCallback.class,
+public interface ModifyBlockSoundSetCallback {
+    Event<ModifyBlockSoundSetCallback> EVENT = EventFactory.createArrayBacked(
+            ModifyBlockSoundSetCallback.class,
             callbacks -> ctx -> {
-                for (ModifyBlockSoundGroupCallback callback : callbacks) {
+                for (ModifyBlockSoundSetCallback callback : callbacks) {
                     callback.modify(ctx);
                 }
             }
@@ -21,11 +23,11 @@ public interface ModifyBlockSoundGroupCallback {
     void modify(Context ctx);
 
     interface Context {
-        void setSoundGroup(Block block, SoundType soundGroup);
+        void setSoundSet(Block block, @Nullable ResourceKey<BlockSoundSet> blockSoundSet);
 
-        default void setSoundGroup(SoundType soundGroup, Block... blocks) {
+        default void setSoundSet(@Nullable ResourceKey<BlockSoundSet> blockSoundSet, Block... blocks) {
             for (Block block : blocks) {
-                this.setSoundGroup(block, soundGroup);
+                this.setSoundSet(block, blockSoundSet);
             }
         }
 

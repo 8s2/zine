@@ -23,7 +23,7 @@ public class TestmodRecipeProvider extends RecipeProvider {
     @Override
     public void buildRecipes() {
         this.trimSmithing(
-                TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.asItem(),
+                TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.id(),
                 Testmod.CHECKERED_TRIM_PATTERN,
                 ResourceKey.create(Registries.RECIPE, TestmodItems.CHECKERED_ARMOR_TRIM_SMITHING_TEMPLATE.id().identifier().withSuffix("_smithing_trim"))
         );

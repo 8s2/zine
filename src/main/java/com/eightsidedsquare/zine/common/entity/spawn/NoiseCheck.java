@@ -14,38 +14,15 @@ import net.minecraft.world.level.levelgen.densityfunction.SamplerContext;
 
 import java.util.List;
 
-public class NoiseCheck implements SpawnCondition {
+public record NoiseCheck(NoiseRouterNoise noise, List<MinMaxBounds.Doubles> ranges) implements SpawnCondition {
     public static final MapCodec<NoiseCheck> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
-            NoiseRouterNoise.CODEC.fieldOf("noise").forGetter(NoiseCheck::getNoise),
-            CodecUtil.nonEmptyListCodec(MinMaxBounds.Doubles.CODEC).fieldOf("ranges").forGetter(NoiseCheck::getRanges)
+            NoiseRouterNoise.CODEC.fieldOf("noise").forGetter(NoiseCheck::noise),
+            CodecUtil.nonEmptyListCodec(MinMaxBounds.Doubles.CODEC).fieldOf("ranges").forGetter(NoiseCheck::ranges)
     ).apply(i, NoiseCheck::new));
-    private NoiseRouterNoise noise;
-    private List<MinMaxBounds.Doubles> ranges;
-
-    public NoiseCheck(NoiseRouterNoise noise, List<MinMaxBounds.Doubles> ranges) {
-        this.noise = noise;
-        this.ranges = ranges;
-    }
 
     @Override
     public MapCodec<? extends SpawnCondition> codec() {
         return CODEC;
-    }
-
-    public NoiseRouterNoise getNoise() {
-        return this.noise;
-    }
-
-    public void setNoise(NoiseRouterNoise noise) {
-        this.noise = noise;
-    }
-
-    public List<MinMaxBounds.Doubles> getRanges() {
-        return this.ranges;
-    }
-
-    public void setRanges(List<MinMaxBounds.Doubles> ranges) {
-        this.ranges = ranges;
     }
 
     @Override

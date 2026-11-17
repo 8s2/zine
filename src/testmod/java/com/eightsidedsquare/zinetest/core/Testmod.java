@@ -1,6 +1,6 @@
 package com.eightsidedsquare.zinetest.core;
 
-import com.eightsidedsquare.zine.common.block.ModifyBlockSoundGroupCallback;
+import com.eightsidedsquare.zine.common.block.ModifyBlockSoundSetCallback;
 import com.eightsidedsquare.zine.common.registry.RegistryHelper;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.registry.DynamicRegistrySetupCallback;
@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.sounds.BlockSoundSets;
 import net.minecraft.world.level.levelgen.structure.templatesystem.AlwaysTrueTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.BlockMatchTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.ProcessorRule;
@@ -53,8 +53,8 @@ public class Testmod implements ModInitializer {
             });
         });
 
-        ModifyBlockSoundGroupCallback.EVENT.register(ctx -> {
-            ctx.setSoundGroup(SoundType.TUFF_BRICKS, Blocks.STONE_BRICKS, Blocks.STONE_BRICK_STAIRS, Blocks.STONE_BRICK_SLAB);
+        ModifyBlockSoundSetCallback.EVENT.register(ctx -> {
+            ctx.setSoundSet(BlockSoundSets.TUFF_BRICKS, Blocks.STONE_BRICKS, Blocks.STONE_BRICK_STAIRS, Blocks.STONE_BRICK_SLAB);
         });
     }
 }

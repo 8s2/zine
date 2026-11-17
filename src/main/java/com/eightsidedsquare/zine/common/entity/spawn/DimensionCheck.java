@@ -11,24 +11,10 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-public class DimensionCheck implements SpawnCondition {
+public record DimensionCheck(List<ResourceKey<Level>> dimensions) implements SpawnCondition {
     public static final MapCodec<DimensionCheck> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
-            CodecUtil.nonEmptyListCodec(ResourceKey.codec(Registries.DIMENSION)).fieldOf("dimensions").forGetter(DimensionCheck::getDimensions)
+            CodecUtil.nonEmptyListCodec(ResourceKey.codec(Registries.DIMENSION)).fieldOf("dimensions").forGetter(DimensionCheck::dimensions)
     ).apply(i, DimensionCheck::new));
-
-    private List<ResourceKey<Level>> dimensions;
-
-    public DimensionCheck(List<ResourceKey<Level>> dimensions) {
-        this.dimensions = dimensions;
-    }
-
-    public void setDimensions(List<ResourceKey<Level>> dimensions) {
-        this.dimensions = dimensions;
-    }
-
-    public List<ResourceKey<Level>> getDimensions() {
-        return this.dimensions;
-    }
 
     @Override
     public MapCodec<? extends SpawnCondition> codec() {

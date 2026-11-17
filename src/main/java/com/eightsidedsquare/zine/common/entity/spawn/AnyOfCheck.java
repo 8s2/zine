@@ -1,21 +1,17 @@
 package com.eightsidedsquare.zine.common.entity.spawn;
 
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.variant.SpawnCondition;
 import net.minecraft.world.entity.variant.SpawnContext;
 
 import java.util.List;
 
-public class AnyOfCheck extends CompositeCheck {
-    public static final MapCodec<AnyOfCheck> CODEC = createCodec(AnyOfCheck::new);
-
-    public AnyOfCheck(List<SpawnCondition> conditions) {
-        super(conditions);
-    }
-
-    public AnyOfCheck(SpawnCondition... conditions) {
-        super(conditions);
-    }
+public record AnyOfCheck(List<SpawnCondition> conditions) implements SpawnCondition {
+    public static final MapCodec<AnyOfCheck> CODEC = RecordCodecBuilder.mapCodec(i -> i.group(
+            ExtraCodecs.nonEmptyList(SpawnCondition.CODEC.listOf()).fieldOf("conditions").forGetter(AnyOfCheck::conditions)
+    ).apply(i, AnyOfCheck::new));
 
     @Override
     public MapCodec<? extends SpawnCondition> codec() {

@@ -7,21 +7,16 @@ import net.fabricmc.fabric.api.client.model.loading.v1.ExtraModelKey;
 import net.fabricmc.fabric.api.client.model.loading.v1.UnbakedModelDeserializer;
 import net.fabricmc.fabric.api.client.rendering.v1.SpriteSourceRegistry;
 import net.minecraft.client.color.item.ItemTintSource;
-import net.minecraft.client.color.item.ItemTintSources;
-import net.minecraft.client.gui.components.debug.DebugScreenEntries;
+import net.minecraft.client.core.registries.BuiltInClientRegistries;
 import net.minecraft.client.gui.components.debug.DebugScreenEntry;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.item.ItemModel;
-import net.minecraft.client.renderer.item.ItemModels;
-import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperty;
-import net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemModelProperties;
 import net.minecraft.client.renderer.item.properties.numeric.RangeSelectItemModelProperty;
-import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperties;
 import net.minecraft.client.renderer.item.properties.select.SelectItemModelProperty;
 import net.minecraft.client.renderer.special.SpecialModelRenderer;
-import net.minecraft.client.renderer.special.SpecialModelRenderers;
 import net.minecraft.client.renderer.texture.atlas.SpriteSource;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;
 
 import java.util.function.BiConsumer;
@@ -53,6 +48,17 @@ public interface ClientRegistryHelper {
     }
 
     /**
+     * Registers a value to the given registry.
+     * @param registry the static registry to register {@code value} to
+     * @param name the path of the registered value's identifier
+     * @param value the value to register
+     * @return {@code value}, now registered
+     */
+    default <T, V extends T> V register(Registry<T> registry, String name, V value) {
+        return Registry.register(registry, this.id(name), value);
+    }
+
+    /**
      * @param name the name of the sprite source
      * @param codec the codec of the sprite source
      * @return the registered sprite source codec
@@ -71,12 +77,12 @@ public interface ClientRegistryHelper {
     }
 
     /**
-     * @param name the name of the boolean property
-     * @param codec the codec of the boolean property
-     * @return the registered boolean property codec
+     * @param name the name of the conditional item model property
+     * @param codec the codec of the conditional item model property
+     * @return the registered conditional item model property codec
      */
-    default <T extends ConditionalItemModelProperty> MapCodec<T> booleanProperty(String name, MapCodec<T> codec) {
-        return this.register(name, codec, ConditionalItemModelProperties.ID_MAPPER::put);
+    default <T extends ConditionalItemModelProperty> MapCodec<T> conditionalItemModelProperty(String name, MapCodec<T> codec) {
+        return this.register(BuiltInClientRegistries.CONDITIONAL_ITEM_MODEL_PROPERTY_TYPE, name, codec);
     }
 
     /**
@@ -86,7 +92,7 @@ public interface ClientRegistryHelper {
      * @param <T> the type of the debug screen entry
      */
     default <T extends DebugScreenEntry> T debugScreenEntry(String name, T debugScreenEntry) {
-        return this.register(name, debugScreenEntry, DebugScreenEntries::register);
+        return this.register(BuiltInClientRegistries.DEBUG_SCREEN_ENTRY, name, debugScreenEntry);
     }
 
     /**
@@ -113,7 +119,7 @@ public interface ClientRegistryHelper {
      * @return the registered unbaked item model codec
      */
     default <T extends ItemModel.Unbaked> MapCodec<T> itemModel(String name, MapCodec<T> codec) {
-        return this.register(name, codec, ItemModels.ID_MAPPER::put);
+        return this.register(BuiltInClientRegistries.ITEM_MODEL_TYPE, name, codec);
     }
 
     /**
@@ -139,7 +145,7 @@ public interface ClientRegistryHelper {
      * @return the registered range select property codec
      */
     default <T extends RangeSelectItemModelProperty> MapCodec<T> rangeSelectProperty(String name, MapCodec<T> codec) {
-        return this.register(name, codec, RangeSelectItemModelProperties.ID_MAPPER::put);
+        return this.register(BuiltInClientRegistries.RANGE_SELECT_ITEM_MODEL_PROPERTY_TYPE, name, codec);
     }
 
     /**
@@ -148,7 +154,7 @@ public interface ClientRegistryHelper {
      * @return the registered select property type
      */
     default <P extends SelectItemModelProperty<T>, T> SelectItemModelProperty.Type<P, T> selectProperty(String name, SelectItemModelProperty.Type<P, T> type) {
-        return this.register(name, type, SelectItemModelProperties.ID_MAPPER::put);
+        return this.register(BuiltInClientRegistries.SELECT_ITEM_MODEL_PROPERTY_TYPE, name, type);
     }
 
     /**
@@ -157,7 +163,7 @@ public interface ClientRegistryHelper {
      * @return the registered unbaked special model renderer codec
      */
     default <T extends SpecialModelRenderer.Unbaked<?>> MapCodec<T> specialModel(String name, MapCodec<T> codec) {
-        return this.register(name, codec, SpecialModelRenderers.ID_MAPPER::put);
+        return this.register(BuiltInClientRegistries.SPECIAL_MODEL_RENDERER_TYPE, name, codec);
     }
 
     /**
@@ -166,7 +172,7 @@ public interface ClientRegistryHelper {
      * @return the registered tint source codec
      */
     default <T extends ItemTintSource> MapCodec<T> tintSource(String name, MapCodec<T> codec) {
-        return this.register(name, codec, ItemTintSources.ID_MAPPER::put);
+        return this.register(BuiltInClientRegistries.ITEM_TINT_SOURCE_TYPE, name, codec);
     }
 
     /**
