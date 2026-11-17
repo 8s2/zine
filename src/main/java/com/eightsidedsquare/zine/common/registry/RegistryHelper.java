@@ -1,7 +1,10 @@
 package com.eightsidedsquare.zine.common.registry;
 
 import com.eightsidedsquare.zine.common.item.CustomIngredientSerializerImpl;
+import com.eightsidedsquare.zine.common.item.ondestroyedaction.OnDestroyedItemAction;
 import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
+import com.eightsidedsquare.zine.common.item.useaction.UseItemAction;
+import com.eightsidedsquare.zine.common.item.useonaction.UseOnItemAction;
 import com.eightsidedsquare.zine.common.recipe.RecipeTypeImpl;
 import com.eightsidedsquare.zine.common.registry.holder.*;
 import com.eightsidedsquare.zine.common.text.TextUtil;
@@ -16,6 +19,8 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
+import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -787,22 +792,22 @@ public interface RegistryHelper {
     }
 
     /**
-     * @param name the name of the item group
-     * @param itemGroup the item group to register
-     * @return the registered item group
+     * @param name the name of the creative mode tab
+     * @param creativeModeTab the creative mode tab to register
+     * @return the registered creative mode tab
      */
-    default CreativeModeTab itemGroup(String name, CreativeModeTab itemGroup) {
-        return this.register(BuiltInRegistries.CREATIVE_MODE_TAB, name, itemGroup);
+    default CreativeModeTab creativeModeTab(String name, CreativeModeTab creativeModeTab) {
+        return this.register(BuiltInRegistries.CREATIVE_MODE_TAB, name, creativeModeTab);
     }
 
     /**
      * Use {@link FabricCreativeModeTab#builder()}
-     * @param name the name of the item group
-     * @param builder the builder of the item group to register
-     * @return the registered and built item group
+     * @param name the name of the creative mode tab
+     * @param builder the builder of the creative mode tab to register
+     * @return the registered and built creative mode tab
      */
-    default CreativeModeTab itemGroup(String name, CreativeModeTab.Builder builder) {
-        return this.itemGroup(name, builder.build());
+    default CreativeModeTab creativeModeTab(String name, CreativeModeTab.Builder builder) {
+        return this.creativeModeTab(name, builder.build());
     }
 
     /**
@@ -1731,13 +1736,13 @@ public interface RegistryHelper {
     }
 
     /**
-     * @param name the name of the criterion
-     * @param criterion the criterion to register
-     * @return the registered criterion
-     * @param <T> the type of the criterion
+     * @param name the name of the criteria trigger
+     * @param criteriaTrigger the criteria trigger to register
+     * @return the registered criteria trigger
+     * @param <T> the type of the criteria trigger
      */
-    default <T extends CriterionTrigger<?>> T criterion(String name, T criterion) {
-        return this.register(BuiltInRegistries.TRIGGER_TYPES, name, criterion);
+    default <T extends CriterionTrigger<?>> T criteriaTrigger(String name, T criteriaTrigger) {
+        return this.register(BuiltInRegistries.TRIGGER_TYPES, name, criteriaTrigger);
     }
 
     /**
@@ -2092,23 +2097,42 @@ public interface RegistryHelper {
 
     /**
      * @param name the name of the tooltip image
-     * @param codec the codec of the tooltip image
-     * @param streamCodec the stream codec of the tooltip image
-     * @return the registered tooltip image synced codec
-     * @param <T> the type of tooltip image
-     */
-    default <T extends TooltipImage> SyncedCodec<T> tooltipImage(String name, MapCodec<T> codec, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec) {
-        return this.tooltipImage(name, new SyncedCodec<>(codec, streamCodec));
-    }
-
-    /**
-     * @param name the name of the tooltip image
      * @param type the synced codec of the tooltip image
      * @return the registered tooltip image synced codec
      * @param <T> the type of tooltip image
      */
     default <T extends TooltipImage> SyncedCodec<T> tooltipImage(String name, SyncedCodec<T> type) {
         return this.register(ZineBuiltinRegistries.TOOLTIP_IMAGE, name, type);
+    }
+
+    /**
+     * @param name the name of the use item action
+     * @param type the synced codec of the use item action
+     * @return the registered use item action synced codec
+     * @param <T> the type of use item action
+     */
+    default <T extends UseItemAction> SyncedCodec<T> useItemAction(String name, SyncedCodec<T> type) {
+        return this.register(ZineBuiltinRegistries.USE_ITEM_ACTION, name, type);
+    }
+
+    /**
+     * @param name the name of the use on item action
+     * @param type the synced codec of the use on item action
+     * @return the registered use on item action synced codec
+     * @param <T> the type of use on item action
+     */
+    default <T extends UseOnItemAction> SyncedCodec<T> useOnItemAction(String name, SyncedCodec<T> type) {
+        return this.register(ZineBuiltinRegistries.USE_ON_ITEM_ACTION, name, type);
+    }
+
+    /**
+     * @param name the name of the on destroyed item action
+     * @param type the synced codec of the on destroyed item action
+     * @return the registered on destroyed item action synced codec
+     * @param <T> the type of on destroyed item action
+     */
+    default <T extends OnDestroyedItemAction> SyncedCodec<T> onDestroyedItemAction(String name, SyncedCodec<T> type) {
+        return this.register(ZineBuiltinRegistries.ON_DESTROYED_ITEM_ACTION, name, type);
     }
 
     /**
@@ -2206,5 +2230,25 @@ public interface RegistryHelper {
         CustomIngredientSerializer<T> serializer = new CustomIngredientSerializerImpl<>(this.id(name), codec, streamCodec);
         CustomIngredientSerializer.register(serializer);
         return serializer;
+    }
+
+    /**
+     * @param name the name of the attachment type
+     * @return the registered attachment type
+     * @param <T> the type of attachment
+     */
+    default <T> AttachmentType<T> attachmentType(String name) {
+        return AttachmentRegistry.create(this.id(name));
+    }
+
+    /**
+     *
+     * @param name the name of the attachment type
+     * @param consumer the consumer that configures the attribute builder
+     * @return the registered attachment type
+     * @param <T> the type of attachment
+     */
+    default <T> AttachmentType<T> attachmentType(String name, Consumer<AttachmentRegistry.Builder<T>> consumer) {
+        return AttachmentRegistry.create(this.id(name), consumer);
     }
 }

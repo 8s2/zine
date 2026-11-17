@@ -20,9 +20,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public interface TooltipImage {
+public interface TooltipImage extends SyncedCodec.Type<TooltipImage> {
     Codec<TooltipImage> CODEC = Codec.lazyInitialized(TooltipImage::createCodec);
-    StreamCodec<RegistryFriendlyByteBuf, TooltipImage> STREAM_CODEC = ByteBufCodecs.registry(ZineRegistries.TOOLTIP_IMAGE).dispatch(TooltipImage::type, SyncedCodec::streamCodec);
+    StreamCodec<RegistryFriendlyByteBuf, TooltipImage> STREAM_CODEC = ByteBufCodecs.registry(ZineRegistries.TOOLTIP_IMAGE)
+            .dispatch(TooltipImage::type, SyncedCodec::streamCodec);
 
     @Nullable
     TooltipComponent getTooltip(ItemStack itemStack, TooltipDisplay display);
@@ -30,8 +31,6 @@ public interface TooltipImage {
     default boolean canShow(TooltipDisplay display) {
         return true;
     }
-
-    SyncedCodec<? extends TooltipImage> type();
 
     static Optional<TooltipComponent> getTooltip(Optional<TooltipImage> optional, ItemStack itemStack, TooltipDisplay display) {
         return optional.flatMap(image -> Optional.ofNullable(image.getTooltip(itemStack, display)));

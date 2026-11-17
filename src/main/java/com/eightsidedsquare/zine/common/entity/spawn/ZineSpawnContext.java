@@ -6,8 +6,8 @@ import net.minecraft.world.entity.variant.SpawnContext;
 import net.minecraft.world.level.ServerLevelAccessor;
 
 public interface ZineSpawnContext {
-    static SpawnContext of(ServerLevelAccessor world, BlockPos pos, EntitySpawnReason spawnReason) {
-        SpawnContext ctx = SpawnContext.create(world, pos);
+    static SpawnContext of(ServerLevelAccessor level, BlockPos pos, EntitySpawnReason spawnReason) {
+        SpawnContext ctx = SpawnContext.create(level, pos);
         ctx.zine$setSpawnReason(spawnReason);
         return ctx;
     }
