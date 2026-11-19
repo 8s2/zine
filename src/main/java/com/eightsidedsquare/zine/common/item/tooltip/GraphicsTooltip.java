@@ -37,24 +37,20 @@ public record GraphicsTooltip(
             List<Rectangle> rectangles,
             List<Item> items
     ) implements TooltipImage {
-        public static final SyncedCodec<Image> TYPE = new SyncedCodec<>(
-                RecordCodecBuilder.mapCodec(i -> i.group(
-                        Text.CODEC.listOf().optionalFieldOf("texts", List.of()).forGetter(Image::texts),
-                        Sprite.CODEC.listOf().optionalFieldOf("sprites", List.of()).forGetter(Image::sprites),
-                        Rectangle.CODEC.listOf().optionalFieldOf("rectangles", List.of()).forGetter(Image::rectangles),
-                        Item.CODEC.listOf().optionalFieldOf("items", List.of()).forGetter(Image::items)
-                ).apply(i, Image::new)),
-                StreamCodec.composite(
-                        Text.STREAM_CODEC.apply(ByteBufCodecs.list()),
-                        Image::texts,
-                        Sprite.STREAM_CODEC.apply(ByteBufCodecs.list()),
-                        Image::sprites,
-                        Rectangle.STREAM_CODEC.apply(ByteBufCodecs.list()),
-                        Image::rectangles,
-                        Item.STREAM_CODEC.apply(ByteBufCodecs.list()),
-                        Image::items,
-                        Image::new
-                )
+        public static final SyncedCodec<Image> TYPE = SyncedCodec.create(
+                Text.CODEC.listOf().optionalFieldOf("texts", List.of()),
+                Text.STREAM_CODEC.apply(ByteBufCodecs.list()),
+                Image::texts,
+                Sprite.CODEC.listOf().optionalFieldOf("sprites", List.of()),
+                Sprite.STREAM_CODEC.apply(ByteBufCodecs.list()),
+                Image::sprites,
+                Rectangle.CODEC.listOf().optionalFieldOf("rectangles", List.of()),
+                Rectangle.STREAM_CODEC.apply(ByteBufCodecs.list()),
+                Image::rectangles,
+                Item.CODEC.listOf().optionalFieldOf("items", List.of()),
+                Item.STREAM_CODEC.apply(ByteBufCodecs.list()),
+                Image::items,
+                Image::new
         );
         @Override
         public TooltipComponent getTooltip(ItemStack itemStack, TooltipDisplay display) {

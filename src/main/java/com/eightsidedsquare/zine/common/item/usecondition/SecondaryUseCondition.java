@@ -1,6 +1,7 @@
 package com.eightsidedsquare.zine.common.item.usecondition;
 
 import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -14,8 +15,8 @@ public final class SecondaryUseCondition implements ItemUseCondition {
     public static final SyncedCodec<SecondaryUseCondition> TYPE = SyncedCodec.unit(INSTANCE);
 
     @Override
-    public boolean test(Level level, @Nullable Player player, ItemStack stack, Supplier<BlockHitResult> hitResultSupplier) {
-        return player != null && player.isSecondaryUseActive();
+    public boolean test(Level level, @Nullable LivingEntity livingEntity, ItemStack stack, Supplier<BlockHitResult> hitResultSupplier) {
+        return livingEntity instanceof Player player && player.isSecondaryUseActive();
     }
 
     @Override

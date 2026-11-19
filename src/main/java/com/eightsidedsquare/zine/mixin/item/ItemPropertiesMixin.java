@@ -1,10 +1,12 @@
 package com.eightsidedsquare.zine.mixin.item;
 
 import com.eightsidedsquare.zine.common.item.ZineItemProperties;
-import com.eightsidedsquare.zine.common.item.ondestroyedaction.OnDestroyedItemAction;
+import com.eightsidedsquare.zine.common.item.destroyedaction.ItemDestroyedAction;
 import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
-import com.eightsidedsquare.zine.common.item.useaction.UseItemAction;
-import com.eightsidedsquare.zine.common.item.useonaction.UseOnItemAction;
+import com.eightsidedsquare.zine.common.item.useaction.ItemUseAction;
+import com.eightsidedsquare.zine.common.item.useduration.ItemUseDuration;
+import com.eightsidedsquare.zine.common.item.useonaction.ItemUseOnAction;
+import com.eightsidedsquare.zine.common.item.usetickaction.ItemUseTickAction;
 import com.eightsidedsquare.zine.core.ZineDataComponents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentInitializers;
@@ -17,6 +19,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.component.*;
 import net.minecraft.world.item.equipment.ArmorMaterial;
@@ -50,33 +53,63 @@ public abstract class ItemPropertiesMixin implements ZineItemProperties {
     }
 
     @Override
-    public Item.Properties zine$useAction(UseItemAction useAction) {
-        return this.component(ZineDataComponents.USE_ITEM_ACTION, useAction);
+    public Item.Properties zine$useAction(ItemUseAction useAction) {
+        return this.component(ZineDataComponents.USE_ACTION, useAction);
     }
 
     @Override
-    public Item.Properties zine$useAction(DataComponentInitializers.SingleComponentInitializer<UseItemAction> useAction) {
-        return this.delayedComponent(ZineDataComponents.USE_ITEM_ACTION, useAction);
+    public Item.Properties zine$useAction(DataComponentInitializers.SingleComponentInitializer<ItemUseAction> useAction) {
+        return this.delayedComponent(ZineDataComponents.USE_ACTION, useAction);
     }
 
     @Override
-    public Item.Properties zine$useOnAction(UseOnItemAction useOnAction) {
-        return this.component(ZineDataComponents.USE_ON_ITEM_ACTION, useOnAction);
+    public Item.Properties zine$useOnAction(ItemUseOnAction useOnAction) {
+        return this.component(ZineDataComponents.USE_ON_ACTION, useOnAction);
     }
 
     @Override
-    public Item.Properties zine$useOnAction(DataComponentInitializers.SingleComponentInitializer<UseOnItemAction> useOnAction) {
-        return this.delayedComponent(ZineDataComponents.USE_ON_ITEM_ACTION, useOnAction);
+    public Item.Properties zine$useOnAction(DataComponentInitializers.SingleComponentInitializer<ItemUseOnAction> useOnAction) {
+        return this.delayedComponent(ZineDataComponents.USE_ON_ACTION, useOnAction);
     }
 
     @Override
-    public Item.Properties zine$onDestroyedAction(OnDestroyedItemAction onDestroyedAction) {
-        return this.component(ZineDataComponents.ON_DESTROYED_ITEM_ACTION, onDestroyedAction);
+    public Item.Properties zine$destroyedAction(ItemDestroyedAction destroyedAction) {
+        return this.component(ZineDataComponents.DESTROYED_ACTION, destroyedAction);
     }
 
     @Override
-    public Item.Properties zine$onDestroyedAction(DataComponentInitializers.SingleComponentInitializer<OnDestroyedItemAction> onDestroyedAction) {
-        return this.delayedComponent(ZineDataComponents.ON_DESTROYED_ITEM_ACTION, onDestroyedAction);
+    public Item.Properties zine$destroyedAction(DataComponentInitializers.SingleComponentInitializer<ItemDestroyedAction> destroyedAction) {
+        return this.delayedComponent(ZineDataComponents.DESTROYED_ACTION, destroyedAction);
+    }
+
+    @Override
+    public Item.Properties zine$useTickAction(ItemUseTickAction useTickAction) {
+        return this.component(ZineDataComponents.USE_TICK_ACTION, useTickAction);
+    }
+
+    @Override
+    public Item.Properties zine$useTickAction(DataComponentInitializers.SingleComponentInitializer<ItemUseTickAction> useTickAction) {
+        return this.delayedComponent(ZineDataComponents.USE_TICK_ACTION, useTickAction);
+    }
+
+    @Override
+    public Item.Properties zine$useDuration(ItemUseDuration useDuration) {
+        return this.component(ZineDataComponents.USE_DURATION, useDuration);
+    }
+
+    @Override
+    public Item.Properties zine$useDuration(DataComponentInitializers.SingleComponentInitializer<ItemUseDuration> useDuration) {
+        return this.delayedComponent(ZineDataComponents.USE_DURATION, useDuration);
+    }
+
+    @Override
+    public Item.Properties zine$useAnimation(ItemUseAnimation animation) {
+        return this.component(ZineDataComponents.USE_ANIMATION, animation);
+    }
+
+    @Override
+    public Item.Properties zine$usedOnRelease() {
+        return this.component(ZineDataComponents.USED_ON_RELEASE, Unit.INSTANCE);
     }
 
     @Override

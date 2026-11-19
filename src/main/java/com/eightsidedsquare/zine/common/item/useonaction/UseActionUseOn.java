@@ -1,30 +1,23 @@
 package com.eightsidedsquare.zine.common.item.useonaction;
 
-import com.eightsidedsquare.zine.common.item.useaction.UseItemAction;
+import com.eightsidedsquare.zine.common.item.useaction.ItemUseAction;
 import com.eightsidedsquare.zine.common.util.InteractionResultSerialization;
 import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.UseOnContext;
 
-public record UseActionUseOn(UseItemAction useAction, InteractionResult fallback) implements UseOnItemAction {
-    public static final SyncedCodec<UseActionUseOn> TYPE = new SyncedCodec<>(
-            RecordCodecBuilder.mapCodec(i -> i.group(
-                    UseItemAction.CODEC.fieldOf("use_action").forGetter(UseActionUseOn::useAction),
-                    InteractionResultSerialization.CODEC.optionalFieldOf("fallback", InteractionResult.PASS)
-                            .forGetter(UseActionUseOn::fallback)
-            ).apply(i, UseActionUseOn::new)),
-            StreamCodec.composite(
-                    UseItemAction.STREAM_CODEC,
-                    UseActionUseOn::useAction,
-                    InteractionResultSerialization.STREAM_CODEC,
-                    UseActionUseOn::fallback,
-                    UseActionUseOn::new
-            )
+public record UseActionUseOn(ItemUseAction useAction, InteractionResult fallback) implements ItemUseOnAction {
+    public static final SyncedCodec<UseActionUseOn> TYPE = SyncedCodec.create(
+            ItemUseAction.CODEC.fieldOf("use_action"),
+            ItemUseAction.STREAM_CODEC,
+            UseActionUseOn::useAction,
+            InteractionResultSerialization.CODEC.optionalFieldOf("fallback", InteractionResult.PASS),
+            InteractionResultSerialization.STREAM_CODEC,
+            UseActionUseOn::fallback,
+            UseActionUseOn::new
     );
 
-    public UseActionUseOn(UseItemAction useAction) {
+    public UseActionUseOn(ItemUseAction useAction) {
         this(useAction, InteractionResult.PASS);
     }
 
@@ -37,7 +30,7 @@ public record UseActionUseOn(UseItemAction useAction, InteractionResult fallback
     }
 
     @Override
-    public SyncedCodec<? extends UseOnItemAction> type() {
+    public SyncedCodec<? extends ItemUseOnAction> type() {
         return TYPE;
     }
 }

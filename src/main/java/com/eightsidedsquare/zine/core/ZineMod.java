@@ -20,9 +20,11 @@ public class ZineMod implements ModInitializer {
         ZineBuiltinRegistries.init();
         ZineTooltipImages.init();
         ZineItemUseConditions.init();
-        ZineUseItemActions.init();
-        ZineUseOnItemActions.init();
-        ZineOnDestroyedItemActions.init();
+        ZineItemUseActions.init();
+        ZineItemUseOnActions.init();
+        ZineItemDestroyedActions.init();
+        ZineItemUseTickActions.init();
+        ZineItemUseDurations.init();
         ZineDataComponents.init();
         ZineSpawnConditions.init();
 

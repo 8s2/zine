@@ -1,10 +1,8 @@
 package com.eightsidedsquare.zine.common.item.tooltip;
 
 import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.inventory.tooltip.BundleTooltip;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
@@ -15,15 +13,11 @@ import org.jspecify.annotations.Nullable;
 import java.util.Optional;
 
 public record BundleTooltipImage(Optional<BundleContents> contentsOverride) implements TooltipImage {
-    public static final SyncedCodec<BundleTooltipImage> TYPE = new SyncedCodec<>(
-            RecordCodecBuilder.mapCodec(i -> i.group(
-                    BundleContents.CODEC.optionalFieldOf("contents_override").forGetter(BundleTooltipImage::contentsOverride)
-            ).apply(i, BundleTooltipImage::new)),
-            StreamCodec.composite(
-                    BundleContents.STREAM_CODEC.apply(ByteBufCodecs::optional),
-                    BundleTooltipImage::contentsOverride,
-                    BundleTooltipImage::new
-            )
+    public static final SyncedCodec<BundleTooltipImage> TYPE = SyncedCodec.create(
+            BundleContents.CODEC.optionalFieldOf("contents_override"),
+            BundleContents.STREAM_CODEC.apply(ByteBufCodecs::optional),
+            BundleTooltipImage::contentsOverride,
+            BundleTooltipImage::new
     );
 
     @Override

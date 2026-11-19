@@ -10,11 +10,11 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.UseOnContext;
 
-public interface UseOnItemAction extends SyncedCodec.Type<UseOnItemAction> {
-    Codec<UseOnItemAction> CODEC = ZineBuiltinRegistries.USE_ON_ITEM_ACTION.byNameCodec()
-            .dispatch(UseOnItemAction::type, SyncedCodec::codec);
-    StreamCodec<RegistryFriendlyByteBuf, UseOnItemAction> STREAM_CODEC = ByteBufCodecs.registry(ZineRegistries.USE_ON_ITEM_ACTION)
-            .dispatch(UseOnItemAction::type, SyncedCodec::streamCodec);
+public interface ItemUseOnAction extends SyncedCodec.Type<ItemUseOnAction> {
+    Codec<ItemUseOnAction> CODEC = ZineBuiltinRegistries.ITEM_USE_ON_ACTION_TYPE.byNameCodec()
+            .dispatch(ItemUseOnAction::type, SyncedCodec::codec);
+    StreamCodec<RegistryFriendlyByteBuf, ItemUseOnAction> STREAM_CODEC = ByteBufCodecs.registry(ZineRegistries.ITEM_USE_ON_ACTION_TYPE)
+            .dispatch(ItemUseOnAction::type, SyncedCodec::streamCodec);
 
     InteractionResult useOn(UseOnContext context);
 }

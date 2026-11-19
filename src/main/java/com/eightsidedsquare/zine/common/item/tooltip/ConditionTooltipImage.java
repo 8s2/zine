@@ -1,5 +1,6 @@
 package com.eightsidedsquare.zine.common.item.tooltip;
 
+import com.eightsidedsquare.zine.common.util.codec.CodecUtil;
 import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
 import com.eightsidedsquare.zine.common.util.network.StreamCodecUtil;
 import com.google.common.collect.ImmutableList;
@@ -9,7 +10,6 @@ import net.minecraft.advancements.predicates.ItemPredicate;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.TooltipDisplay;
@@ -19,18 +19,14 @@ import java.util.List;
 import java.util.Optional;
 
 public record ConditionTooltipImage(List<ConditionCase> cases, Optional<TooltipImage> fallback) implements TooltipImage {
-    public static final SyncedCodec<ConditionTooltipImage> TYPE = new SyncedCodec<>(
-            RecordCodecBuilder.mapCodec(i -> i.group(
-                    ExtraCodecs.nonEmptyList(ConditionCase.CODEC.listOf()).fieldOf("cases").forGetter(ConditionTooltipImage::cases),
-                    TooltipImage.CODEC.optionalFieldOf("fallback").forGetter(ConditionTooltipImage::fallback)
-            ).apply(i, ConditionTooltipImage::new)),
-            StreamCodec.composite(
-                    ConditionCase.STREAM_CODEC.apply(ByteBufCodecs.list()),
-                    ConditionTooltipImage::cases,
-                    TooltipImage.STREAM_CODEC.apply(ByteBufCodecs::optional),
-                    ConditionTooltipImage::fallback,
-                    ConditionTooltipImage::new
-            )
+    public static final SyncedCodec<ConditionTooltipImage> TYPE = SyncedCodec.create(
+            CodecUtil.nonEmptyListCodec(ConditionCase.CODEC).fieldOf("cases"),
+            ConditionCase.STREAM_CODEC.apply(ByteBufCodecs.list()),
+            ConditionTooltipImage::cases,
+            TooltipImage.CODEC.optionalFieldOf("fallback"),
+            TooltipImage.STREAM_CODEC.apply(ByteBufCodecs::optional),
+            ConditionTooltipImage::fallback,
+            ConditionTooltipImage::new
     );
 
     public ConditionTooltipImage(List<ConditionCase> cases, TooltipImage fallback) {

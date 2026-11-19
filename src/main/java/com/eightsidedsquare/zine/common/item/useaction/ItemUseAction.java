@@ -15,11 +15,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public interface UseItemAction extends SyncedCodec.Type<UseItemAction> {
-    Codec<UseItemAction> CODEC = ZineBuiltinRegistries.USE_ITEM_ACTION.byNameCodec()
-            .dispatch(UseItemAction::type, SyncedCodec::codec);
-    StreamCodec<RegistryFriendlyByteBuf, UseItemAction> STREAM_CODEC = ByteBufCodecs.registry(ZineRegistries.USE_ITEM_ACTION)
-            .dispatch(UseItemAction::type, SyncedCodec::streamCodec);
+public interface ItemUseAction extends SyncedCodec.Type<ItemUseAction> {
+    Codec<ItemUseAction> CODEC = ZineBuiltinRegistries.ITEM_USE_ACTION_TYPE.byNameCodec()
+            .dispatch(ItemUseAction::type, SyncedCodec::codec);
+    StreamCodec<RegistryFriendlyByteBuf, ItemUseAction> STREAM_CODEC = ByteBufCodecs.registry(ZineRegistries.ITEM_USE_ACTION_TYPE)
+            .dispatch(ItemUseAction::type, SyncedCodec::streamCodec);
 
     InteractionResult use(Level level, Player player, InteractionHand hand);
 

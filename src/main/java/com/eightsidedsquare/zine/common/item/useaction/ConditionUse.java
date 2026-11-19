@@ -4,8 +4,6 @@ import com.eightsidedsquare.zine.common.item.usecondition.ItemUseCondition;
 import com.eightsidedsquare.zine.common.util.ClipContextSerialization;
 import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -17,37 +15,31 @@ import java.util.function.Supplier;
 
 public record ConditionUse(
         ItemUseCondition condition,
-        UseItemAction onTrue,
-        UseItemAction onFalse,
+        ItemUseAction onTrue,
+        ItemUseAction onFalse,
         ClipContext.Block blockShapeHandling,
         ClipContext.Fluid fluidShapeHandling
-) implements UseItemAction {
-    public static final SyncedCodec<ConditionUse> TYPE = new SyncedCodec<>(
-            RecordCodecBuilder.mapCodec(i -> i.group(
-                    ItemUseCondition.CODEC.fieldOf("condition").forGetter(ConditionUse::condition),
-                    UseItemAction.CODEC.fieldOf("on_true").forGetter(ConditionUse::onTrue),
-                    UseItemAction.CODEC.fieldOf("on_false").forGetter(ConditionUse::onFalse),
-                    ClipContextSerialization.BLOCK_CODEC.optionalFieldOf("block_shape_handling", ClipContext.Block.OUTLINE)
-                            .forGetter(ConditionUse::blockShapeHandling),
-                    ClipContextSerialization.FLUID_CODEC.optionalFieldOf("fluid_shape_handling", ClipContext.Fluid.NONE)
-                            .forGetter(ConditionUse::fluidShapeHandling)
-            ).apply(i, ConditionUse::new)),
-            StreamCodec.composite(
-                    ItemUseCondition.STREAM_CODEC,
-                    ConditionUse::condition,
-                    UseItemAction.STREAM_CODEC,
-                    ConditionUse::onTrue,
-                    UseItemAction.STREAM_CODEC,
-                    ConditionUse::onFalse,
-                    ClipContextSerialization.BLOCK_STREAM_CODEC,
-                    ConditionUse::blockShapeHandling,
-                    ClipContextSerialization.FLUID_STREAM_CODEC,
-                    ConditionUse::fluidShapeHandling,
-                    ConditionUse::new
-            )
+) implements ItemUseAction {
+    public static final SyncedCodec<ConditionUse> TYPE = SyncedCodec.create(
+            ItemUseCondition.CODEC.fieldOf("condition"),
+            ItemUseCondition.STREAM_CODEC,
+            ConditionUse::condition,
+            ItemUseAction.CODEC.fieldOf("on_true"),
+            ItemUseAction.STREAM_CODEC,
+            ConditionUse::onTrue,
+            ItemUseAction.CODEC.fieldOf("on_false"),
+            ItemUseAction.STREAM_CODEC,
+            ConditionUse::onFalse,
+            ClipContextSerialization.BLOCK_CODEC.optionalFieldOf("block_shape_handling", ClipContext.Block.OUTLINE),
+            ClipContextSerialization.BLOCK_STREAM_CODEC,
+            ConditionUse::blockShapeHandling,
+            ClipContextSerialization.FLUID_CODEC.optionalFieldOf("fluid_shape_handling", ClipContext.Fluid.NONE),
+            ClipContextSerialization.FLUID_STREAM_CODEC,
+            ConditionUse::fluidShapeHandling,
+            ConditionUse::new
     );
 
-    public ConditionUse(ItemUseCondition condition, UseItemAction onTrue, UseItemAction onFalse) {
+    public ConditionUse(ItemUseCondition condition, ItemUseAction onTrue, ItemUseAction onFalse) {
         this(condition, onTrue, onFalse, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE);
     }
 
@@ -61,11 +53,11 @@ public record ConditionUse(
     }
 
     private BlockHitResult getHitResult(Level level, Player player) {
-        return UseItemAction.getHitResult(level, player, this.blockShapeHandling, this.fluidShapeHandling);
+        return ItemUseAction.getHitResult(level, player, this.blockShapeHandling, this.fluidShapeHandling);
     }
 
     @Override
-    public SyncedCodec<? extends UseItemAction> type() {
+    public SyncedCodec<? extends ItemUseAction> type() {
         return TYPE;
     }
 }

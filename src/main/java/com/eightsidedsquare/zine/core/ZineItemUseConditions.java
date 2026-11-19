@@ -7,6 +7,7 @@ public final class ZineItemUseConditions {
         ZineMod.REGISTRY.itemUseCondition("all_of", AllOfCondition.TYPE);
         ZineMod.REGISTRY.itemUseCondition("any_of", AnyOfCondition.TYPE);
         ZineMod.REGISTRY.itemUseCondition("block", BlockCondition.TYPE);
+        ZineMod.REGISTRY.itemUseCondition("inverse", InverseUseCondition.TYPE);
         ZineMod.REGISTRY.itemUseCondition("item", ItemCondition.TYPE);
         ZineMod.REGISTRY.itemUseCondition("secondary_use", SecondaryUseCondition.TYPE);
     }

@@ -1,9 +1,11 @@
 package com.eightsidedsquare.zine.common.item;
 
-import com.eightsidedsquare.zine.common.item.ondestroyedaction.OnDestroyedItemAction;
+import com.eightsidedsquare.zine.common.item.destroyedaction.ItemDestroyedAction;
 import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
-import com.eightsidedsquare.zine.common.item.useaction.UseItemAction;
-import com.eightsidedsquare.zine.common.item.useonaction.UseOnItemAction;
+import com.eightsidedsquare.zine.common.item.useaction.ItemUseAction;
+import com.eightsidedsquare.zine.common.item.useduration.ItemUseDuration;
+import com.eightsidedsquare.zine.common.item.useonaction.ItemUseOnAction;
+import com.eightsidedsquare.zine.common.item.usetickaction.ItemUseTickAction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentInitializers;
 import net.minecraft.network.chat.Component;
@@ -12,6 +14,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -27,27 +30,51 @@ public interface ZineItemProperties {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default Item.Properties zine$useAction(UseItemAction useAction) {
+    default Item.Properties zine$useAction(ItemUseAction useAction) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default Item.Properties zine$useAction(DataComponentInitializers.SingleComponentInitializer<UseItemAction> useAction) {
+    default Item.Properties zine$useAction(DataComponentInitializers.SingleComponentInitializer<ItemUseAction> useAction) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default Item.Properties zine$useOnAction(UseOnItemAction useOnAction) {
+    default Item.Properties zine$useOnAction(ItemUseOnAction useOnAction) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default Item.Properties zine$useOnAction(DataComponentInitializers.SingleComponentInitializer<UseOnItemAction> useOnAction) {
+    default Item.Properties zine$useOnAction(DataComponentInitializers.SingleComponentInitializer<ItemUseOnAction> useOnAction) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default Item.Properties zine$onDestroyedAction(OnDestroyedItemAction onDestroyedAction) {
+    default Item.Properties zine$destroyedAction(ItemDestroyedAction destroyedAction) {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 
-    default Item.Properties zine$onDestroyedAction(DataComponentInitializers.SingleComponentInitializer<OnDestroyedItemAction> onDestroyedAction) {
+    default Item.Properties zine$destroyedAction(DataComponentInitializers.SingleComponentInitializer<ItemDestroyedAction> destroyedAction) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$useTickAction(ItemUseTickAction useTickAction) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$useTickAction(DataComponentInitializers.SingleComponentInitializer<ItemUseTickAction> useTickAction) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$useDuration(ItemUseDuration useDuration) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$useDuration(DataComponentInitializers.SingleComponentInitializer<ItemUseDuration> useDuration) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$useAnimation(ItemUseAnimation animation) {
+        throw new UnsupportedOperationException("Implemented via mixin.");
+    }
+
+    default Item.Properties zine$usedOnRelease() {
         throw new UnsupportedOperationException("Implemented via mixin.");
     }
 

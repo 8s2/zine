@@ -14,10 +14,12 @@ import java.util.Objects;
 
 public record CompositeTooltip(List<TooltipComponent> tooltips) implements TooltipComponent {
     public record Image(List<TooltipImage> contents) implements TooltipImage {
-        public static final SyncedCodec<Image> TYPE = new SyncedCodec<>(
+        public static final SyncedCodec<Image> TYPE = SyncedCodec.create(
                 ExtraCodecs.nonEmptyList(TooltipImage.CODEC.listOf()).fieldOf("contents"),
-                TooltipImage.STREAM_CODEC.apply(ByteBufCodecs.list())
-        ).map(Image::new, Image::contents);
+                TooltipImage.STREAM_CODEC.apply(ByteBufCodecs.list()),
+                Image::contents,
+                Image::new
+        );
 
         @Override
         public @Nullable TooltipComponent getTooltip(ItemStack itemStack, TooltipDisplay display) {

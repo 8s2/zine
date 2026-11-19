@@ -1,11 +1,13 @@
 package com.eightsidedsquare.zine.common.registry;
 
 import com.eightsidedsquare.zine.common.item.CustomIngredientSerializerImpl;
-import com.eightsidedsquare.zine.common.item.ondestroyedaction.OnDestroyedItemAction;
+import com.eightsidedsquare.zine.common.item.destroyedaction.ItemDestroyedAction;
 import com.eightsidedsquare.zine.common.item.tooltip.TooltipImage;
-import com.eightsidedsquare.zine.common.item.useaction.UseItemAction;
+import com.eightsidedsquare.zine.common.item.useaction.ItemUseAction;
 import com.eightsidedsquare.zine.common.item.usecondition.ItemUseCondition;
-import com.eightsidedsquare.zine.common.item.useonaction.UseOnItemAction;
+import com.eightsidedsquare.zine.common.item.useduration.ItemUseDuration;
+import com.eightsidedsquare.zine.common.item.useonaction.ItemUseOnAction;
+import com.eightsidedsquare.zine.common.item.usetickaction.ItemUseTickAction;
 import com.eightsidedsquare.zine.common.recipe.RecipeTypeImpl;
 import com.eightsidedsquare.zine.common.registry.holder.*;
 import com.eightsidedsquare.zine.common.text.TextUtil;
@@ -2103,37 +2105,57 @@ public interface RegistryHelper {
      * @param <T> the type of tooltip image
      */
     default <T extends TooltipImage> SyncedCodec<T> tooltipImage(String name, SyncedCodec<T> type) {
-        return this.register(ZineBuiltinRegistries.TOOLTIP_IMAGE, name, type);
+        return this.register(ZineBuiltinRegistries.TOOLTIP_IMAGE_TYPE, name, type);
     }
 
     /**
-     * @param name the name of the use item action
-     * @param type the synced codec of the use item action
-     * @return the registered use item action synced codec
-     * @param <T> the type of use item action
+     * @param name the name of the item use action
+     * @param type the synced codec of the item use action
+     * @return the registered item use action synced codec
+     * @param <T> the type of item use action
      */
-    default <T extends UseItemAction> SyncedCodec<T> useItemAction(String name, SyncedCodec<T> type) {
-        return this.register(ZineBuiltinRegistries.USE_ITEM_ACTION, name, type);
+    default <T extends ItemUseAction> SyncedCodec<T> itemUseAction(String name, SyncedCodec<T> type) {
+        return this.register(ZineBuiltinRegistries.ITEM_USE_ACTION_TYPE, name, type);
     }
 
     /**
-     * @param name the name of the use on item action
-     * @param type the synced codec of the use on item action
-     * @return the registered use on item action synced codec
-     * @param <T> the type of use on item action
+     * @param name the name of the item use on action
+     * @param type the synced codec of the item use on action
+     * @return the registered item use on action synced codec
+     * @param <T> the type of item use on action
      */
-    default <T extends UseOnItemAction> SyncedCodec<T> useOnItemAction(String name, SyncedCodec<T> type) {
-        return this.register(ZineBuiltinRegistries.USE_ON_ITEM_ACTION, name, type);
+    default <T extends ItemUseOnAction> SyncedCodec<T> itemUseOnAction(String name, SyncedCodec<T> type) {
+        return this.register(ZineBuiltinRegistries.ITEM_USE_ON_ACTION_TYPE, name, type);
     }
 
     /**
-     * @param name the name of the on destroyed item action
-     * @param type the synced codec of the on destroyed item action
-     * @return the registered on destroyed item action synced codec
-     * @param <T> the type of on destroyed item action
+     * @param name the name of the item destroyed action
+     * @param type the synced codec of the item destroyed action
+     * @return the registered item destroyed action synced codec
+     * @param <T> the type of item destroyed action
      */
-    default <T extends OnDestroyedItemAction> SyncedCodec<T> onDestroyedItemAction(String name, SyncedCodec<T> type) {
-        return this.register(ZineBuiltinRegistries.ON_DESTROYED_ITEM_ACTION, name, type);
+    default <T extends ItemDestroyedAction> SyncedCodec<T> itemDestroyedAction(String name, SyncedCodec<T> type) {
+        return this.register(ZineBuiltinRegistries.ITEM_DESTROYED_ACTION_TYPE, name, type);
+    }
+
+    /**
+     * @param name the name of the item use tick action
+     * @param type the synced codec of the item use tick action
+     * @return the registered item use tick action synced codec
+     * @param <T> the type of item use tick action
+     */
+    default <T extends ItemUseTickAction> SyncedCodec<T> itemUseTickAction(String name, SyncedCodec<T> type) {
+        return this.register(ZineBuiltinRegistries.ITEM_USE_TICK_ACTION_TYPE, name, type);
+    }
+
+    /**
+     * @param name the name of the use item use duration
+     * @param type the synced codec of the use item use duration
+     * @return the registered use item use duration synced codec
+     * @param <T> the type of use item use duration
+     */
+    default <T extends ItemUseDuration> SyncedCodec<T> itemUseDuration(String name, SyncedCodec<T> type) {
+        return this.register(ZineBuiltinRegistries.ITEM_USE_DURATION_TYPE, name, type);
     }
 
     /**
@@ -2143,7 +2165,7 @@ public interface RegistryHelper {
      * @param <T> the type of item use condition
      */
     default <T extends ItemUseCondition> SyncedCodec<T> itemUseCondition(String name, SyncedCodec<T> type) {
-        return this.register(ZineBuiltinRegistries.ITEM_USE_CONDITION, name, type);
+        return this.register(ZineBuiltinRegistries.ITEM_USE_CONDITION_TYPE, name, type);
     }
 
     /**

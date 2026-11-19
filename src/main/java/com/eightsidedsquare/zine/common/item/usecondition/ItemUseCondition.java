@@ -7,7 +7,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -16,10 +16,10 @@ import org.jspecify.annotations.Nullable;
 import java.util.function.Supplier;
 
 public interface ItemUseCondition extends SyncedCodec.Type<ItemUseCondition> {
-    Codec<ItemUseCondition> CODEC = ZineBuiltinRegistries.ITEM_USE_CONDITION.byNameCodec()
+    Codec<ItemUseCondition> CODEC = ZineBuiltinRegistries.ITEM_USE_CONDITION_TYPE.byNameCodec()
             .dispatch(ItemUseCondition::type, SyncedCodec::codec);
-    StreamCodec<RegistryFriendlyByteBuf, ItemUseCondition> STREAM_CODEC = ByteBufCodecs.registry(ZineRegistries.ITEM_USE_CONDITION)
+    StreamCodec<RegistryFriendlyByteBuf, ItemUseCondition> STREAM_CODEC = ByteBufCodecs.registry(ZineRegistries.ITEM_USE_CONDITION_TYPE)
             .dispatch(ItemUseCondition::type, SyncedCodec::streamCodec);
 
-    boolean test(Level level, @Nullable Player player, ItemStack stack, Supplier<BlockHitResult> hitResultSupplier);
+    boolean test(Level level, @Nullable LivingEntity livingEntity, ItemStack stack, Supplier<BlockHitResult> hitResultSupplier);
 }

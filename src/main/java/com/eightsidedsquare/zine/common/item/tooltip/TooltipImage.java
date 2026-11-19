@@ -22,7 +22,7 @@ import java.util.function.Function;
 
 public interface TooltipImage extends SyncedCodec.Type<TooltipImage> {
     Codec<TooltipImage> CODEC = Codec.lazyInitialized(TooltipImage::createCodec);
-    StreamCodec<RegistryFriendlyByteBuf, TooltipImage> STREAM_CODEC = ByteBufCodecs.registry(ZineRegistries.TOOLTIP_IMAGE)
+    StreamCodec<RegistryFriendlyByteBuf, TooltipImage> STREAM_CODEC = ByteBufCodecs.registry(ZineRegistries.TOOLTIP_IMAGE_TYPE)
             .dispatch(TooltipImage::type, SyncedCodec::streamCodec);
 
     @Nullable
@@ -37,7 +37,7 @@ public interface TooltipImage extends SyncedCodec.Type<TooltipImage> {
     }
 
     private static Codec<TooltipImage> createCodec() {
-        Codec<TooltipImage> dispatched = ZineBuiltinRegistries.TOOLTIP_IMAGE.byNameCodec()
+        Codec<TooltipImage> dispatched = ZineBuiltinRegistries.TOOLTIP_IMAGE_TYPE.byNameCodec()
                 .dispatch(TooltipImage::type, SyncedCodec::codec);
         return Codec.recursive("tooltip_image", codec ->
                 Codec.either(

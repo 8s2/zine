@@ -1,4 +1,4 @@
-package com.eightsidedsquare.zine.common.item.ondestroyedaction;
+package com.eightsidedsquare.zine.common.item.destroyedaction;
 
 import com.eightsidedsquare.zine.common.util.codec.SyncedCodec;
 import net.minecraft.core.component.DataComponents;
@@ -6,9 +6,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.component.ItemContainerContents;
 
-public final class ContainerOnDestroyed implements OnDestroyedItemAction {
-    public static final ContainerOnDestroyed INSTANCE = new ContainerOnDestroyed();
-    public static final SyncedCodec<ContainerOnDestroyed> TYPE = SyncedCodec.unit(INSTANCE);
+public final class ContainerDestroyed implements ItemDestroyedAction {
+    public static final ContainerDestroyed INSTANCE = new ContainerDestroyed();
+    public static final SyncedCodec<ContainerDestroyed> TYPE = SyncedCodec.unit(INSTANCE);
 
     @Override
     public void onDestroyed(ItemEntity itemEntity) {
@@ -22,10 +22,10 @@ public final class ContainerOnDestroyed implements OnDestroyedItemAction {
     }
 
     @Override
-    public SyncedCodec<? extends OnDestroyedItemAction> type() {
+    public SyncedCodec<? extends ItemDestroyedAction> type() {
         return TYPE;
     }
 
-    private ContainerOnDestroyed() {
+    private ContainerDestroyed() {
     }
 }
